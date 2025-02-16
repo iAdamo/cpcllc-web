@@ -7,6 +7,7 @@ import PreFooter from "@/screens/layout/PreFooter";
 import Footer from "@/screens/layout/Footer";
 import ForClient from "./ForClient";
 import ForCompany from "./ForCompany";
+import WhyChooseUs from "./WhyChooseUs";
 
 import type { Metadata } from "next";
 
@@ -23,6 +24,7 @@ const HomePage = () => {
       <Categories />
       <BrowseCompanies />
       <ForClient />
+      <WhyChooseUs />
       <ForCompany />
       <PreFooter />
       <Footer />
