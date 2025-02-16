@@ -42,6 +42,12 @@ const Categories = () => {
   ];
   return (
     <VStack className="md:p-0 md:mt-12 p-4 md:mx-0">
+      <VStack className="justify-center items-center gap-4">
+        <Heading className="text-xl md:text-3xl">Featured Companies </Heading>
+        <Text size="md" className="hidden md:inline">
+          Meet our diverse set of companies that makes the magic happen
+        </Text>
+      </VStack>
       <HStack className="flex-wrap justify-center md:gap-14 gap-2 py-10 rounded-lg">
         {categories.map((category, index) => (
           <Link
@@ -52,18 +58,17 @@ const Categories = () => {
             <Card className="md:w-60 h-full justify-between items-center rounded-3xl shadow-hard-5 gap-2">
               <HStack className="">
                 <Image
-                  className="object-fill w-full md:h-40 h-24 rounded-3xl"
+                  className="object-cover w-full md:h-60 h-24 rounded-3xl"
                   src={category.image}
                   alt={category.title}
                   width={1900}
                   height={1900}
                 />
               </HStack>
-              <HStack className="md:h-40 flex-wrap border-0 justify-center items-center drop-shadow-lg">
+              <HStack className="md:h-20 flex-wrap border-0 justify-center items-center drop-shadow-lg">
                 <Heading size="md" className="hidden md:inline text-center">
                   {category.title}
                 </Heading>
-                <Text>{category.description}</Text>
               </HStack>
               <Icon
                 as={ChevronRightIcon}

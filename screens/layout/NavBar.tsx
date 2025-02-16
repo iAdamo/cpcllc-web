@@ -6,17 +6,18 @@ import { useRouter, usePathname } from "next/navigation";
 import { logowhite } from "@/public/assets/icons";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
+import { Input, InputField } from "@/components/ui/input";
 
 const NavBar = () => {
   const router = useRouter();
   const currentPath = usePathname();
 
   const options = [
-    { name: "Services", href: "/services" },
-    { name: "Results", href: "/results" },
+    { name: "Home", href: "/services" },
     { name: "About", href: "/about" },
-    { name: "Blog", href: "/blog" },
+    { name: "Hire", href: "/hire" },
+
     { name: "Contact", href: "/contact" },
   ];
 
@@ -25,14 +26,11 @@ const NavBar = () => {
     const isContactPage = currentPath === "/contact";
 
     return {
-      navBarClass: isContactPage ? "bg-brand-0" : "bg-transparent",
-      navBarLogo: isContactPage ? logowhite : "/assets/homepage/logo.png",
+      navBarClass: isContactPage ? "bg-brand-primary" : "bg-brand-primary",
+      navBarLogo: isContactPage ? logowhite : "/assets/logo-color.png",
       linkClass: isContactPage
         ? "no-underline text-white text-lg font-bold hover:text-brand-1"
-        : "no-underline text-text-primary text-lg font-bold hover:text-brand-0",
-      buttonClass: isContactPage
-        ? "bg-white"
-        : "bg-brand-0",
+        : "no-underline text-text-primary text-lg font-bold hover:text-brand-primary",
     };
   }, [currentPath]);
 
@@ -41,9 +39,32 @@ const NavBar = () => {
       className={`items-center justify-center z-10 w-full ${styles.navBarClass}`}
     >
       <HStack className="py-10 w-full items-center justify-between px-10">
-        <Button onPress={() => router.replace("/")} className="p-0">
-          <Image src={styles.navBarLogo} alt="Logo" width={360} height={176} />
-        </Button>
+        <HStack className="">
+          <Button onPress={() => router.replace("/")} className="p-0">
+            <Image
+              src={styles.navBarLogo}
+              alt="Logo"
+              width={200}
+              height={80}
+            />
+          </Button>
+
+          {/** Language */}
+          <Button>
+            <ButtonText className="text-text-primary">English</ButtonText>
+          </Button>
+        </HStack>
+
+        {/** Search */}
+        <Input className="hidden md:flex w-1/4 bg-white border-none rounded-3xl">
+          <InputField
+            type="text"
+            className="bg-transparent text-text-primary border-b border-text-primary"
+          />
+          <Button className="bg-btn-primary border-none rounded-3xl">
+            <ButtonText>Search</ButtonText>
+          </Button>
+        </Input>
 
         {/* Desktop Navigation */}
         <HStack className="items-center gap-6 hidden md:flex ml-8">
@@ -60,8 +81,11 @@ const NavBar = () => {
           ))}
         </HStack>
 
-        <Link href="#" className={`text-txt-0 font-bold py-2 px-6 text-center rounded-3xl hover:bg-brand-1 active:bg-brand-0 ${styles.buttonClass}`}>
-          Get in touch
+        <Link
+          href="#"
+          className="text-text-primary bg-btn-primary border border-btn-outline font-bold py-2 px-6 text-center rounded-3xl hover:bg-btn-secondary"
+        >
+          Get Started
         </Link>
 
         <MobileSideBar />

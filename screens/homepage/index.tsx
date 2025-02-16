@@ -2,14 +2,12 @@ import { SafeAreaView } from "@/components/ui/safe-area-view";
 import NavBar from "@/screens/layout/NavBar";
 import HomeHeader from "@/screens/homepage/HomeHeader";
 import Categories from "@/screens/homepage/Categories";
-import ReviewsSection from "@/screens/homepage/ReviewsSection";
-import ReviewsSection2 from "@/screens/homepage/ReviewsSection2";
-
+import BrowseCompanies from "@/screens/homepage/BrowseCompanies";
 import PreFooter from "@/screens/layout/PreFooter";
 import Footer from "@/screens/layout/Footer";
-import FaqSection from "@/screens/homepage/FaqSection";
-import MoreInfo from "@/screens/homepage/MoreInfo";
-import MarketingSolution from "./MaketingSolution";
+import ForClient from "./ForClient";
+import ForCompany from "./ForCompany";
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -22,12 +20,10 @@ const HomePage = () => {
     <SafeAreaView>
       <NavBar />
       <HomeHeader />
-      <MoreInfo />
-      <MarketingSolution />
       <Categories />
-      <ReviewsSection />
-      <ReviewsSection2 />
-      <FaqSection />
+      <BrowseCompanies />
+      <ForClient />
+      <ForCompany />
       <PreFooter />
       <Footer />
     </SafeAreaView>

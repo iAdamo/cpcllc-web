@@ -3,8 +3,8 @@ import StyledJsxRegistry from "./registry";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 
 export const metadata: Metadata = {
-  title: "Nextlevity",
-  description: "Multi-service marketing app",
+  title: "Companies Center",
+  description: "Your one-top hub for connecting with top companies",
 };
 
 export default function RootLayout({

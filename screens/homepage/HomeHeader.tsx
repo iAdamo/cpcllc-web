@@ -1,75 +1,40 @@
 import Image from "next/image";
-import { spirals, chart } from "@/public/assets/icons";
-import { Button, ButtonText } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { Link, LinkText } from "@/components/ui/link";
+import { Heading } from "@/components/ui/heading";
+import Link from "next/link"
 
 const HomeHeader = () => {
   return (
-    <VStack className="-mt-32 w-full relative bg-transparent">
-      <VStack className="justify-center bg-transparent">
-        <Image
-          className="object-cover w-full"
-          src={spirals}
-          alt="Hero Image"
-          width={900}
-          height={900}
-        />
-      </VStack>
-      <VStack className="absolute top-0 w-full h-[55rem] bg-red-600 bg-opacity-10">
-        <HStack className="absolute bottom-[5rem] right-0">
-          <Image
-            className="object-cover"
-            src="/assets/homepage/header.png"
-            alt="Hero Image"
-            width={900}
-            height={900}
-          />
-        </HStack>
-        <HStack className="absolute top-[38rem] left-[40rem]">
-          <Image
-            className="object-cover"
-            src={chart}
-            alt="Hero Image"
-            width={150}
-            height={150}
-          />
-        </HStack>
-
-        <HStack className="w-full md:pl-20 absolute bottom-72 items-center">
-          <VStack className="w-1/2 h-full px-6 py-8 md:p-0 md:py-0 justify-center gap-8">
-            <VStack>
-              <Text className="md:text-5xl text-xl font-extrabold text-txt-0">
-                Your Vision,
-              </Text>
-              <Text className="md:text-5xl text-xl font-extrabold text-txt-0">
-                Our Strategy,
-              </Text>
-              <Link className="inline space-x-2 md:text-5xl text-xl font-extrabold text-txt-0">
-                <Text className="md:text-5xl text-xl font-extrabold text-txt-0">
-                  Unmatched
-                </Text>
-                <LinkText className="text-brand-1 md:text-5xl text-xl font-extrabold">
-                  Results
-                </LinkText>
-              </Link>
-            </VStack>
-            <Text className="text-text-primary">
-              At Nextlevity, we specialize in turning your vision into reality.
-              Our innovative strategies and creative solutions ensure your brand
-              stands out in the digital landscape
+    <VStack className="p-20 my-10">
+      <HStack className="justify-between flex-col-reverse lg:flex-row items-start h-full gap-4">
+        <VStack className="w-full pl-6 lg:pl-0 pb-6 gap-6 h-full">
+            <Heading className="md:text-5xl text-4xl font-extrabold text-brand-secondary">
+              Welcome to companiescenterllc.com
+            </Heading>
+            <Text size="lg" className="font-semibold leading-6 text-text-secondary">
+              Your Trusted Platform for Connecting with Leading Companies.
+              Whether you&apos;re looking to hire or get hired, we provide a
+              comprehensive marketplace for businesses and job seekers. Explore
+              job opportunities, read reviews, and connect with companies that
+              meet your needs.
             </Text>
-            <Button
-              variant="outline"
-              className="w-40 h-12 mt-8 ml-10 rounded-xl border-0 bg-brand-0 data-[hover=true]:bg-brand-1 data-[active=true]:bg-brand-0"
-            >
-              <ButtonText className="text-txt-0">Get in touch</ButtonText>
-            </Button>
-          </VStack>
-        </HStack>
-      </VStack>
+            <Link href="#" className="w-44 rounded-full text-center py-2 text-text-primary text-xl font-semibold bg-btn-primary hover:bg-btn-secondary active:bg-btn-primary">
+              Join us today
+            </Link>
+
+        </VStack>
+        <VStack className="items-center h-full w-full">
+          <Image
+            className="object-cover rounded-lg"
+            src="/assets/homepages/home-header.jpg"
+            alt="home_header"
+            width={1920}
+            height={1080}
+          />
+        </VStack>
+      </HStack>
     </VStack>
   );
 };
