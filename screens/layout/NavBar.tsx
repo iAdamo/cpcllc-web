@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MobileSideBar from "../../components/Overlays/MobileSideBar";
@@ -8,8 +8,11 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
+import SignInModal from "@/screens/signin";
 
 const NavBar = () => {
+  const [showSignInModal, setShowSignInModal] = useState(false);
+
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -35,18 +38,14 @@ const NavBar = () => {
   }, [currentPath]);
 
   return (
+    <>
     <VStack
       className={`items-center justify-center z-10 w-full ${styles.navBarClass}`}
     >
       <HStack className="py-10 w-full items-center justify-between px-10">
         <HStack className="">
           <Button onPress={() => router.replace("/")} className="p-0">
-            <Image
-              src={styles.navBarLogo}
-              alt="Logo"
-              width={200}
-              height={80}
-            />
+            <Image src={styles.navBarLogo} alt="Logo" width={200} height={80} />
           </Button>
 
           {/** Language */}
@@ -81,16 +80,18 @@ const NavBar = () => {
           ))}
         </HStack>
 
-        <Link
-          href="#"
-          className="text-text-primary bg-btn-primary border border-btn-outline font-bold py-2 px-6 text-center rounded-3xl hover:bg-btn-secondary"
+        <Button
+          onPress={() => setShowSignInModal(true)}
+          className="bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary"
         >
-          Get Started
-        </Link>
+          <ButtonText className="text-text-primary">Get Started</ButtonText>
+        </Button>
 
         <MobileSideBar />
       </HStack>
     </VStack>
+    <SignInModal isOpen={showSignInModal} onClose={() => setShowSignInModal(false)} />
+    </>
   );
 };
 

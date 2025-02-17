@@ -1,9 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Box } from "@/components/ui/box";
 import { Fab, FabIcon, FabLabel } from "@/components/ui/fab";
 import { Heading } from "@/components/ui/heading";
-import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import {
@@ -21,7 +19,6 @@ import {
 } from "@/components/ui/drawer";
 import { FormControl } from "@/components/ui/form-control";
 import { Input, InputField, InputSlot, InputIcon } from "@/components/ui/input";
-import { Button, ButtonText } from "@/components/ui/button";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Keyboard } from "react-native";
 
