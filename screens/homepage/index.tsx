@@ -9,6 +9,7 @@ import ForClient from "./ForClient";
 import ForCompany from "./ForCompany";
 import WhyChooseUs from "./WhyChooseUs";
 import AiChat from "@/components/Overlays/AiChatFab";
+import Categories from "./Categories";
 
 
 import type { Metadata } from "next";
@@ -23,6 +24,7 @@ const HomePage = () => {
     <SafeAreaView>
       <NavBar />
       <HomeHeader />
+      <Categories />
       <FeaturedCompanies />
       <BrowseCompanies />
       <ForClient />
