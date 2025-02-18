@@ -11,7 +11,6 @@ import WhyChooseUs from "./WhyChooseUs";
 import AiChat from "@/components/Overlays/AiChatFab";
 import Categories from "./Categories";
 
-
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -1,19 +1,16 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
-import { useStorageState } from "@/hooks/useStorageState";
-
 
 const createClient = () => {
-  // const [[_, token], setToken] = useStorageState<string>("token");
   const apiClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
     headers: {
       "Content-Type": "application/json",
     },
+    withCredentials: true,
   });
 
   apiClient.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
-
       return config;
     }
   );
@@ -22,6 +19,7 @@ const createClient = () => {
     (response) => response,
     async (error) => {
       if (error.response?.status === 403) {
+        window.location.href = "/";
       } else if (error.message === "Network Error") {
         console.error("Network Error: Please check your internet connection.");
       } else if (!error.response) {
@@ -30,6 +28,7 @@ const createClient = () => {
       return Promise.reject(error);
     }
   );
+
   return apiClient;
 };
 

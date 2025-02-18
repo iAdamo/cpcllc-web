@@ -8,10 +8,10 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
-import SignInModal from "@/screens/signin";
+import AuthModalManager from "../auth/AuthModalManager";
 
 const NavBar = () => {
-  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
 
   const router = useRouter();
   const currentPath = usePathname();
@@ -39,58 +39,67 @@ const NavBar = () => {
 
   return (
     <>
-    <VStack
-      className={`items-center justify-center z-10 w-full ${styles.navBarClass}`}
-    >
-      <HStack className="py-10 w-full items-center justify-between px-10">
-        <HStack className="">
-          <Button onPress={() => router.replace("/")} className="p-0">
-            <Image src={styles.navBarLogo} alt="Logo" width={200} height={80} />
+      <VStack
+        className={`items-center justify-center z-10 w-full ${styles.navBarClass}`}
+      >
+        <HStack className="py-10 w-full items-center justify-between px-10">
+          <HStack className="">
+            <Button onPress={() => router.replace("/")} className="p-0">
+              <Image
+                src={styles.navBarLogo}
+                alt="Logo"
+                width={200}
+                height={80}
+              />
+            </Button>
+
+            {/** Language */}
+            <Button>
+              <ButtonText className="text-text-primary">English</ButtonText>
+            </Button>
+          </HStack>
+
+          {/** Search */}
+          <Input className="hidden md:flex w-1/4 bg-white border-none rounded-3xl">
+            <InputField
+              type="text"
+              className="bg-transparent text-text-primary border-b border-text-primary"
+            />
+            <Button className="bg-btn-primary border-none rounded-3xl">
+              <ButtonText>Search</ButtonText>
+            </Button>
+          </Input>
+
+          {/* Desktop Navigation */}
+          <HStack className="items-center gap-6 hidden md:flex ml-8">
+            {options.map((option) => (
+              <Link
+                key={option.name}
+                href={option.href}
+                className={`${styles.linkClass} ${
+                  currentPath === option.href ? "font-extrabold" : ""
+                }`}
+              >
+                {option.name}
+              </Link>
+            ))}
+          </HStack>
+
+          <Button
+            onPress={() => setIsAuthodalOpen(true)}
+            className="bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary"
+          >
+            <ButtonText className="text-text-primary">Get Started</ButtonText>
           </Button>
 
-          {/** Language */}
-          <Button>
-            <ButtonText className="text-text-primary">English</ButtonText>
-          </Button>
+          <MobileSideBar />
         </HStack>
+      </VStack>
 
-        {/** Search */}
-        <Input className="hidden md:flex w-1/4 bg-white border-none rounded-3xl">
-          <InputField
-            type="text"
-            className="bg-transparent text-text-primary border-b border-text-primary"
-          />
-          <Button className="bg-btn-primary border-none rounded-3xl">
-            <ButtonText>Search</ButtonText>
-          </Button>
-        </Input>
-
-        {/* Desktop Navigation */}
-        <HStack className="items-center gap-6 hidden md:flex ml-8">
-          {options.map((option) => (
-            <Link
-              key={option.name}
-              href={option.href}
-              className={`${styles.linkClass} ${
-                currentPath === option.href ? "font-extrabold" : ""
-              }`}
-            >
-              {option.name}
-            </Link>
-          ))}
-        </HStack>
-
-        <Button
-          onPress={() => setShowSignInModal(true)}
-          className="bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary"
-        >
-          <ButtonText className="text-text-primary">Get Started</ButtonText>
-        </Button>
-
-        <MobileSideBar />
-      </HStack>
-    </VStack>
-    <SignInModal isOpen={showSignInModal} onClose={() => setShowSignInModal(false)} />
+      <AuthModalManager
+        isModalOpen={isAuthodalOpen}
+        onClose={() => setIsAuthodalOpen(false)}
+      />
     </>
   );
 };
