@@ -1,22 +1,15 @@
 import { SafeAreaView } from "@/components/ui/safe-area-view";
-import NavBar from "@/screens/layout/NavBar";
+import NavBar from "@/components/layout/NavBar";
+import PreFooter from "@/components/layout/PreFooter";
+import Footer from "@/components/layout/Footer";
 import HomeHeader from "@/screens/homepage/HomeHeader";
 import FeaturedCompanies from "@/screens/homepage/FeaturedCompanies";
 import BrowseCompanies from "@/screens/homepage/BrowseCompanies";
-import PreFooter from "@/screens/layout/PreFooter";
-import Footer from "@/screens/layout/Footer";
 import ForClient from "./ForClient";
 import ForCompany from "./ForCompany";
 import WhyChooseUs from "./WhyChooseUs";
-import AiChat from "@/components/Overlays/AiChatFab";
 import Categories from "./Categories";
-
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Nextlevity",
-  description: "Multi-service marketing app",
-};
+import AiChat from "@/components/Overlays/AiChatFab";
 
 const HomePage = () => {
   return (
@@ -29,9 +22,9 @@ const HomePage = () => {
       <ForClient />
       <WhyChooseUs />
       <ForCompany />
+      <AiChat />
       <PreFooter />
       <Footer />
-      <AiChat />
     </SafeAreaView>
   );
 };

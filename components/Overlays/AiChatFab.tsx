@@ -99,7 +99,7 @@ const AiChat = () => {
       <Fab
         size="lg"
         placement="bottom right"
-        className="bg-white border-4 border-brand-primary fixed w-32 h-16 shadow-lg shadow-brand-secondary hover:shadow-xl hover:border-btn-primary hover:shadow-btn-primary transition-shadow duration-300 group"
+        className="bg-white hover:bg-white border-4 border-brand-primary fixed w-32 h-16 shadow-lg shadow-brand-secondary hover:shadow-xl hover:border-btn-primary hover:shadow-btn-primary transition-shadow duration-300 group"
         onPress={() => setShowChatDrawer(true)}
       >
         <FabLabel className="text-btn-primary mr-1 group-hover:text-brand-primary transition-colors duration-300">
@@ -131,15 +131,17 @@ const AiChat = () => {
             </Text>
           </DrawerHeader>
           <DrawerBody className="">
-            <ScrollView
-              className="h-96 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
-            >
+            <ScrollView className="h-96 overflow-y-scroll [&::-webkit-scrollbar]:hidden">
               <VStack className="gap-4">
                 <VStack className="h-full gap-4 items-end">
                   {conversation.map((msg, index) => (
                     <Box
                       key={index}
-                      ref={index === conversation.length - 1 ? lastMessageRef : null}
+                      ref={
+                        index === conversation.length - 1
+                          ? lastMessageRef
+                          : null
+                      }
                       className={`p-4 rounded-lg max-w-[80%] ${
                         msg.sender === "ai"
                           ? "bg-brand-secondary text-white mr-auto"
