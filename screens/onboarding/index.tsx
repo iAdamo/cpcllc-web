@@ -1,3 +1,5 @@
+"use client"
+
 import PageOne from "./pageOne";
 
 const Onboarding = () => {

@@ -1,11 +1,7 @@
-import type { Metadata } from "next";
+"use client"
 import StyledJsxRegistry from "./registry";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-
-export const metadata: Metadata = {
-  title: "CompanyCenterLLC",
-  description: "Multi-service app",
-};
+import { SessionProvider } from "@/context/AuthContext";
 
 export default function RootLayout({
   children,
@@ -13,12 +9,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="h-screen m-0 p-0">
-        <StyledJsxRegistry>
-          <GluestackUIProvider mode="light">{children}</GluestackUIProvider>
-        </StyledJsxRegistry>
-      </body>
-    </html>
+    <SessionProvider>
+      <html lang="en">
+        <body className="h-screen m-0 p-0">
+          <StyledJsxRegistry>
+            <GluestackUIProvider mode="light">{children}</GluestackUIProvider>
+          </StyledJsxRegistry>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

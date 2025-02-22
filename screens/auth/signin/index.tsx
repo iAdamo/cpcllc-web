@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Keyboard } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,8 +28,8 @@ import { Heading } from "@/components/ui/heading";
 import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
-import { login } from "@/axios/auth";
 import ForgotPasswordModal from "@/screens/auth/ForgetPassword";
+import { useSession } from "@/context/AuthContext";
 
 type ControllerRenderType = {
   field: {
@@ -61,7 +59,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
-  const navigate = useRouter();
+  const { login } = useSession();
   const toast = useToast();
 
   // handle form submission
@@ -75,12 +73,6 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
       FormSchema.omit({ confirmPassword: true, code: true })
     ),
   });
-
-  useEffect(() => {
-    if (Cookies.get("token") !== undefined) {
-      navigate.replace("/dashboard");
-    }
-  }, [navigate]);
 
   // handle form validation
   const [validated, setValidated] = useState<ValidatedState>({
@@ -102,13 +94,8 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
         duration: 5000,
         render: ({ id }: RenderProps) => {
           return (
-            <Toast
-              nativeID={id}
-              variant="outline"
-              action="error"
-              className="bg-[#EF444450] border-red-400"
-            >
-              <ToastTitle className="text-red-100">
+            <Toast nativeID={id} variant="outline" action="error">
+              <ToastTitle>
                 {(error as any).response?.data?.message ||
                   "An unexpected error occurred"}
               </ToastTitle>
@@ -162,7 +149,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                 <Heading size="2xl">Sign In</Heading>
               </ModalHeader>
               <ModalBody>
-                <VStack className="gap-8 items-center pt-14 justify-center w-full h-full">
+                <VStack className="gap-6 items-center pt-14 justify-center w-full h-full">
                   {/** Email */}
                   <FormControl
                     className="w-96"
@@ -257,7 +244,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                     <Button
                       variant="link"
                       onPress={() => setShowForgotPasswordModal(true)}
-                      className=""
+                      className="ml-auto"
                     >
                       <ButtonText className="text-md text-text-secondary text-end underline hover:text-brand-primary">
                         Forget Password

@@ -74,12 +74,9 @@ const NavBar = () => {
             </Button>
           </HStack>
 
-          <Button
-            onPress={() => setIsAuthodalOpen(true)}
-            className="bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary"
-          >
-            <ButtonText className="text-text-primary">Get Started</ButtonText>
-          </Button>
+          <Link href="/onboarding" className="px-4 py-2 font-bold bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary text-text-primary">
+            Get Started
+          </Link>
 
           <MobileSideBar />
         </HStack>

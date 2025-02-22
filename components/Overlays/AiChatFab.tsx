@@ -137,6 +137,7 @@ const AiChat = () => {
                   {conversation.map((msg, index) => (
                     <Box
                       key={index}
+                      // @ts-expect-error: Ignore the error on the next line
                       ref={
                         index === conversation.length - 1
                           ? lastMessageRef
