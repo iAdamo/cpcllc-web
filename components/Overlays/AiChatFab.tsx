@@ -21,6 +21,7 @@ import { FormControl } from "@/components/ui/form-control";
 import { Input, InputField, InputSlot, InputIcon } from "@/components/ui/input";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Keyboard } from "react-native";
+import ReactMarkdown from "react-markdown";
 
 interface Message {
   sender: "user" | "ai";
@@ -149,11 +150,17 @@ const AiChat = () => {
                           : "bg-gray-200 text-black"
                       }`}
                     >
-                      <Text>{msg.text}</Text>
+                      {msg.sender === "ai" ? (
+                        <ReactMarkdown>{msg.text}</ReactMarkdown>
+                      ) : (
+                        <Text className="text-white font-semibold">
+                          {msg.text}
+                        </Text>
+                      )}
                     </Box>
                   ))}
                   {isLoading && (
-                    <Box className="p-4 rounded-lg max-w-[80%] bg-brand-secondary text-white mr-auto">
+                    <Box className="p-4 rounded-lg bg-brand-secondary text-white mr-auto">
                       <LoaderIcon className="animate-spin" />
                       <Text>Sanux is typing...</Text>
                     </Box>

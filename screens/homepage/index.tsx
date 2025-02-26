@@ -27,7 +27,7 @@ const HomePage = () => {
   }, [session, router]);
 
   if (loading && !session) {
-    return <div>Loading...</div>; // You can replace this with a proper loading indicator
+    return <div>Loading...</div>;
   }
 
   return (

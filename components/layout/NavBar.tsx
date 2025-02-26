@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MobileSideBar from "../../components/Overlays/MobileSideBar";
@@ -8,6 +8,7 @@ import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
+import { logowhite } from "@/public/assets/icons";
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
@@ -21,9 +22,31 @@ const NavBar = () => {
     { name: "Hire", href: "/hire" },
   ];
 
+  const options2 = [
+    { name: "My Requests", href: "/requests" },
+    { name: "Inbox", href: "/inbox" },
+    { name: "Favorites", href: "/favorites" },
+    { name: "Profile", href: "/profile" },
+  ];
+
+  const styles = useMemo(() => {
+    const isServicePage = currentPath === "/service";
+
+    return {
+      navBarClass: isServicePage && "bg-white",
+      navBarLogo: isServicePage ? logowhite : "/assets/homepage/logo.png",
+      linkClass: isServicePage
+        ? "no-underline text-white text-lg font-bold hover:text-brand-1"
+        : "no-underline text-text-primary text-lg font-bold hover:text-brand-0",
+      buttonClass: isServicePage ? "bg-white" : "bg-brand-0",
+    };
+  }, [currentPath]);
+
   return (
     <>
-      <VStack className="bg-brand-primary justify-center items-center z-10 sticky top-0 w-full">
+      <VStack
+        className={`bg-brand-primary justify-center items-center z-10 sticky top-0 w-full ${styles.navBarClass}`}
+      >
         <HStack className="py-10 w-full items-center justify-between pr-5">
           <HStack className="gap-2">
             <Button onPress={() => router.replace("/")} className="p-0">
@@ -53,39 +76,62 @@ const NavBar = () => {
               <ButtonText>Search</ButtonText>
             </Button>
           </Input>
+          {currentPath === "/" ? (
+            <>
+              <HStack className="items-center gap-6 hidden md:flex ml-8">
+                {options.map((option) => (
+                  <Link
+                    key={option.name}
+                    href={option.href}
+                    className={`no-underline text-text-primary text-lg font-bold ${
+                      currentPath === option.href ? "font-extrabold" : ""
+                    }`}
+                  >
+                    {option.name}
+                  </Link>
+                ))}
+                <Button variant="link" onPress={() => setIsAuthodalOpen(true)}>
+                  <ButtonText className="text-text-primary font-bold data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
+                    Log in
+                  </ButtonText>
+                </Button>
+              </HStack>
 
-          {/* Desktop Navigation */}
-          <HStack className="items-center gap-6 hidden md:flex ml-8">
-            {options.map((option) => (
               <Link
-                key={option.name}
-                href={option.href}
-                className={`no-underline text-text-primary text-lg font-bold ${
-                  currentPath === option.href ? "font-extrabold" : ""
-                }`}
+                href="/onboarding"
+                className="px-4 py-2 font-bold bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary text-text-primary"
               >
-                {option.name}
+                Get Started
               </Link>
-            ))}
-            <Button variant="link" onPress={() => setIsAuthodalOpen(true)}>
-              <ButtonText className="text-text-primary font-bold data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
-                Log in
-              </ButtonText>
-            </Button>
-          </HStack>
 
-          <Link href="/onboarding" className="px-4 py-2 font-bold bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary text-text-primary">
-            Get Started
-          </Link>
-
-          <MobileSideBar />
+              <MobileSideBar />
+            </>
+          ) : (
+            <HStack className="items-center gap-6 hidden md:flex ml-8">
+              {options2.map((option) => (
+                <Link
+                  key={option.name}
+                  href={option.href}
+                  className={`no-underline text-text-primary text-lg font-bold ${
+                    currentPath === option.href ? "font-extrabold" : ""
+                  }`}
+                >
+                  {option.name}
+                </Link>
+              ))}
+              <Button variant="link" onPress={() => setIsAuthodalOpen(true)}>
+                <ButtonText className="text-text-primary font-bold data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
+                  Log in
+                </ButtonText>
+              </Button>
+            </HStack>
+          )}
         </HStack>
+        <AuthModalManager
+          isModalOpen={isAuthodalOpen}
+          onClose={() => setIsAuthodalOpen(false)}
+        />
       </VStack>
-
-      <AuthModalManager
-        isModalOpen={isAuthodalOpen}
-        onClose={() => setIsAuthodalOpen(false)}
-      />
     </>
   );
 };
