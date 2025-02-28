@@ -11,6 +11,8 @@ export const colors = {
     primary: "#D9D9D9",
     secondary: "#808080",
     tertiary: "#1A365D",
+    cpc1: "#62646A",
+    cpc2: "#74767E",
   },
   btn: {
     primary: "#F5A623",

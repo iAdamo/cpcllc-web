@@ -6,9 +6,10 @@ import { useRouter, usePathname } from "next/navigation";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Input, InputField } from "@/components/ui/input";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
-import { logowhite } from "@/public/assets/icons";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input"
+import { SearchIcon } from "@/components/ui/icon"
+
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
@@ -26,7 +27,7 @@ const NavBar = () => {
     { name: "My Requests", href: "/requests" },
     { name: "Inbox", href: "/inbox" },
     { name: "Favorites", href: "/favorites" },
-    { name: "Profile", href: "/profile" },
+    { name: "Be a Company", href: "/company" },
   ];
 
   const styles = useMemo(() => {
@@ -34,7 +35,7 @@ const NavBar = () => {
 
     return {
       navBarClass: isServicePage && "bg-white",
-      navBarLogo: isServicePage ? logowhite : "/assets/homepage/logo.png",
+      navBarLogo: isServicePage ? "/assets/logo-white.jpeg" : "/assets/logo-color.png",
       linkClass: isServicePage
         ? "no-underline text-white text-lg font-bold hover:text-brand-1"
         : "no-underline text-text-primary text-lg font-bold hover:text-brand-0",
@@ -51,7 +52,7 @@ const NavBar = () => {
           <HStack className="gap-2">
             <Button onPress={() => router.replace("/")} className="p-0">
               <Image
-                src="/assets/logo-color.png"
+                src={styles.navBarLogo}
                 alt="Logo"
                 width={200}
                 height={80}
@@ -60,21 +61,23 @@ const NavBar = () => {
 
             {/** Language */}
             <Button variant="link" className="">
-              <ButtonText className="text-text-primary data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
+              <ButtonText className="text-text-cpc1 data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
                 English
               </ButtonText>
             </Button>
           </HStack>
 
           {/** Search */}
-          <Input className="hidden md:flex w-1/4 bg-white border-none rounded-xl">
+          <Input className="hidden md:flex w-2/5 bg-white">
             <InputField
               type="text"
-              className="bg-transparent text-text-primary border-b border-text-primary"
+              placeholder="Search..."
+              className="bg-transparent text-text-primary"
             />
-            <Button className="bg-btn-primary border-none rounded-xl">
-              <ButtonText>Search</ButtonText>
-            </Button>
+
+            <InputSlot className="pr-3">
+              <InputIcon as={SearchIcon} />
+            </InputSlot>
           </Input>
           {currentPath === "/" ? (
             <>
@@ -112,7 +115,7 @@ const NavBar = () => {
                 <Link
                   key={option.name}
                   href={option.href}
-                  className={`no-underline text-text-primary text-lg font-bold ${
+                  className={`no-underline text-text-cpc1 text-md font-bold ${
                     currentPath === option.href ? "font-extrabold" : ""
                   }`}
                 >
@@ -120,8 +123,8 @@ const NavBar = () => {
                 </Link>
               ))}
               <Button variant="link" onPress={() => setIsAuthodalOpen(true)}>
-                <ButtonText className="text-text-primary font-bold data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
-                  Log in
+                <ButtonText className="text-text-cpc1 font-bold data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
+                  Profile
                 </ButtonText>
               </Button>
             </HStack>
