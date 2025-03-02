@@ -2,15 +2,7 @@ import { useContext, createContext, type PropsWithChildren } from "react";
 import { useStorageState } from "@/utils/StorageState";
 import { login, logout } from "@/axios/auth";
 import { useRouter } from "next/navigation";
-
-interface AuthContextProps {
-  userData?: any;
-  login: (credentials: { email: string; password: string }) => Promise<void>;
-  session?: string | null;
-  isLoading: boolean;
-  loading: boolean;
-  logout: () => void;
-}
+import type { AuthContextProps } from "@/types";
 
 // Create the AuthContext
 export const AuthContext = createContext<AuthContextProps | undefined>(

@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
     // Send the request to the Gemini API
     const response = await axios.post(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyA-Y8mh3kuFhpW3I8Ml7-s1sparJhMb7Jw",
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GOOGLE_APIKEY}`,
       data,
       {
         headers: {

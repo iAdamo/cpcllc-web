@@ -19,6 +19,7 @@
     "@gluestack-ui/fab": "^0.1.22",
     "@gluestack-ui/form-control": "^0.1.19",
     "@gluestack-ui/icon": "^0.1.25",
+    "@gluestack-ui/image": "^0.1.15",
     "@gluestack-ui/input": "^0.1.32",
     "@gluestack-ui/link": "^0.1.23",
     "@gluestack-ui/menu": "^0.2.37",
