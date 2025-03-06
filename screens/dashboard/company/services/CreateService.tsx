@@ -10,7 +10,7 @@ import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
 import { TrashIcon } from "@/components/ui/icon";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
-import NavBar from "./NavBar";
+import NavBar from "../NavBar";
 import { useState } from "react";
 import { Keyboard } from "react-native";
 import { useForm, Controller } from "react-hook-form";
@@ -45,6 +45,7 @@ import PreFooter from "@/components/layout/PreFooter";
 import Footer from "@/components/layout/Footer";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
+import { createService } from "@/axios/services";
 
 type ControllerRenderType<T> = {
   field: {
@@ -114,7 +115,16 @@ const CreateService = () => {
     Keyboard.dismiss();
     setIsLoading(true);
     try {
-      const response = await registerService(data);
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("category", data.category);
+      formData.append("description", data.description);
+      formData.append("price", data.price.toString());
+      selectedImages.forEach((image, index) => {
+        formData.append(`images[${index}]`, image);
+      });
+
+      const response = await createService(formData);
       if (response) {
         router.replace("/dashboard");
       }
@@ -138,7 +148,7 @@ const CreateService = () => {
           </Text>
         </Card>
         <HStack className="justify-between">
-          <VStack className="gap-8 w-3/5 bg-white p-8 border rounded-lg">
+          <VStack className="gap-6 w-3/5 bg-white p-8 border rounded-lg">
             <FormControl isInvalid={!!errors?.title}>
               <FormControlLabel className="flex-col flex items-start gap-2">
                 <Heading size="xl">Title</Heading>
@@ -256,7 +266,8 @@ const CreateService = () => {
                 </FormControlError>
               )}
             </FormControl>
-            <FormControl>
+            {/** Location */}
+            <FormControl className="w-60">
               <FormControlLabel className="flex-col flex items-start gap-2">
                 <Heading size="xl">Service Location</Heading>
                 <FormControlLabelText>
