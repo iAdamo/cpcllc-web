@@ -5,14 +5,7 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import LogoWhite from "@/public/assets/logo-white.jpeg";
-import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallbackText,
-  AvatarImage,
-} from "@/components/ui/avatar";
-import { Heading } from "@/components/ui/heading";
-import { Text } from "@/components/ui/text";
+import ProfileMenu from "@/components/Overlays/ProfileMenu";
 
 const NavBar = () => {
   const router = useRouter();
@@ -33,26 +26,14 @@ const NavBar = () => {
           </Button>
         </HStack>
         <HStack>
-          <Avatar>
-            <AvatarFallbackText>{userData?.email.charAt(0)}</AvatarFallbackText>
-            <AvatarImage
-              source={
-                userData?.photo
-                  ? { uri: userData.photo }
-                  : {
-                      uri: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-                    }
-              }
-            />
-            <AvatarBadge />
-          </Avatar>
-          <VStack>
-            <Heading size="sm">
-              {userData?.firstName}
-              {userData?.lastName}
-            </Heading>
-            <Text size="sm">Nursing Assistant</Text>
-          </VStack>
+          <ProfileMenu
+            userData={userData}
+            options={[
+              { name: "Membership", onPress: () => router.replace("/profile") },
+              { name: "Settings", onPress: () => router.replace("/settings") },
+            ]}
+            offset={15}
+          />
         </HStack>
       </HStack>
     </VStack>

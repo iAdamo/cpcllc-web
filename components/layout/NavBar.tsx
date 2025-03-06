@@ -9,11 +9,13 @@ import { Button, ButtonText } from "@/components/ui/button";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input"
 import { SearchIcon } from "@/components/ui/icon"
-
+import ProfileMenu from "@/components/Overlays/ProfileMenu";
+import { useSession } from "@/context/AuthContext";
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
 
+  const { userData } = useSession();
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -122,11 +124,14 @@ const NavBar = () => {
                   {option.name}
                 </Link>
               ))}
-              <Button variant="link" onPress={() => setIsAuthodalOpen(true)}>
-                <ButtonText className="text-text-cpc1 font-bold data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
-                  Profile
-                </ButtonText>
-              </Button>
+              <ProfileMenu
+                userData={userData}
+                options={[
+                  { name: "Membership", onPress: () => router.replace("/profile") },
+                  { name: "Settings", onPress: () => router.replace("/settings") },
+                ]}
+                offset={15}
+              />
             </HStack>
           )}
         </HStack>
