@@ -8,17 +8,18 @@ import RightView from "./RightView";
 import PreFooter from "@/components/layout/PreFooter";
 import Footer from "@/components/layout/Footer";
 import { HStack } from "@/components/ui/hstack";
-import { VStack } from "@/components/ui/vstack";
 
 const CompanyDashboard = () => {
   return (
-    <SafeAreaView className="overflow-hidden h-screen">
+    <SafeAreaView className="">
       <NavBar />
       <HStack className="justify-between mt-4">
         <SideBar />
         <MiddleView />
         <RightView />
       </HStack>
+      <PreFooter />
+      <Footer />
     </SafeAreaView>
   );
 };

@@ -1,6 +1,4 @@
-import { useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "@/context/AuthContext";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
@@ -8,12 +6,10 @@ import { Image } from "@/components/ui/image";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
-import { Icon, AddIcon } from "@/components/ui/icon";
-import { ScrollView } from "@/components/ui/scroll-view";
+import { AddIcon } from "@/components/ui/icon";
 
 const MiddleView = () => {
-  const { userData } = useSession();
-  const scrollRef = useRef<ScrollView>(null);
+  const router = useRouter();
 
   const services = [
     {
@@ -54,30 +50,34 @@ const MiddleView = () => {
     },
   ];
   return (
-    <VStack className="p-4 h-screen w-1/2">
+    <VStack className="p-4 h-screen w-1/2 bg-white">
       <VStack className="items-center gap-20">
         <Card variant="outline" className="w-full ">
           <HStack className="justify-between p-4">
             <Heading size="sm">Total Services 20</Heading>
-            <Button variant="outline" className="border-gray-300 rounded-lg">
+            <Button variant="outline" className="border-gray-300 rounded-lg" onPress={() => router.push("/dashboard/company/create-service")}>
               <ButtonIcon as={AddIcon} />
               <ButtonText>Add New Service</ButtonText>
             </Button>
           </HStack>
           <VStack className="grid grid-cols-2 gap-4 p-4 overflow-auto [&::-webkit-scrollbar]:hidden h-96 ">
-            {services.map((service, index) => (
-              <Card key={index} variant="outline" className="">
-                <Image
-                  source={{ uri: service.thumbnail }}
-                  alt="Service"
-                  className="w-full h-40"
-                />
-                <VStack>
-                  <Heading size="sm">{service.name}</Heading>
-                  <Text size="sm">{service.category}</Text>
-                </VStack>
-              </Card>
-            ))}
+            {services && services.length > 0 ? (
+              services.map((service, index) => (
+                <Card key={index} variant="outline" className="">
+                  <Image
+                    source={{ uri: service.thumbnail }}
+                    alt="Service"
+                    className="w-full h-40"
+                  />
+                  <VStack>
+                    <Heading size="sm">{service.name}</Heading>
+                    <Text size="sm">{service.category}</Text>
+                  </VStack>
+                </Card>
+              ))
+            ) : (
+              <Text size="sm">No services available at the moment.</Text>
+            )}
           </VStack>
         </Card>
       </VStack>

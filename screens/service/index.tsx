@@ -7,13 +7,8 @@ import Footer from "@/components/layout/Footer";
 import SectionOne from "./SectionOne";
 import AiChat from "@/components/Overlays/AiChatFab";
 import ServicesSection from "./ServivesSection";
-import { useSession } from "@/context/AuthContext";
 
 const Service = () => {
-    const { userData } = useSession();
-
-    console.log(userData);
-
   return (
     <SafeAreaView>
       <NavBar />

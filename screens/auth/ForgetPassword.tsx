@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FormSchema, FormSchemaType } from "@/components/forms/FormSchema";
+import { FormSchema, FormSchemaType } from "@/components/forms/AuthFormSchema";
 import FormModal from "./AuthFormModal";
 import { sendCode, resetPassword, verifyEmail } from "@/axios/auth";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";

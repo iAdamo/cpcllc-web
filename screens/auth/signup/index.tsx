@@ -3,7 +3,7 @@ import { Keyboard } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertTriangle } from "lucide-react-native";
-import { FormSchema, FormSchemaType } from "@/components/forms/FormSchema";
+import { FormSchema, FormSchemaType } from "@/components/forms/AuthFormSchema";
 import { Toast, useToast, ToastTitle } from "@/components/ui/toast";
 import {
   Modal,

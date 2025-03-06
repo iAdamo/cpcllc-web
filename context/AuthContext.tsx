@@ -1,7 +1,7 @@
 import { useContext, createContext, type PropsWithChildren } from "react";
 import { useStorageState } from "@/utils/StorageState";
 import { login, logout } from "@/axios/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import type { AuthContextProps } from "@/types";
 
 // Create the AuthContext
@@ -21,6 +21,20 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   const [[isLoading, session], setSession] = useStorageState<string>("session");
   const [[loading, userData], setUserData] = useStorageState<any>("user");
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Block rendering if session is being loaded
+  if (isLoading || loading) return <div>Loading...</div>;
+
+  // Redirect before rendering the restricted page
+  if (!session && pathname !== "/") {
+    router.replace("/");
+    return null;
+  }
+  if (session && pathname === "/") {
+    router.replace("/service");
+    return <div>Loading...</div>;
+  }
 
   return (
     <AuthContext.Provider
@@ -39,9 +53,9 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
           }
         },
         logout: () => {
-            logout();
-            setSession(null);
-            setUserData(null);
+          logout();
+          setSession(null);
+          setUserData(null);
         },
         userData,
         session,

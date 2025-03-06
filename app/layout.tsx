@@ -9,14 +9,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionProvider>
-      <html lang="en">
-        <body className="h-screen m-0 p-0">
-          <StyledJsxRegistry>
-            <GluestackUIProvider mode="light">{children}</GluestackUIProvider>
-          </StyledJsxRegistry>
-        </body>
-      </html>
-    </SessionProvider>
+    <html lang="en">
+      <body className="h-screen m-0 p-0">
+        <StyledJsxRegistry>
+          <GluestackUIProvider mode="light">
+            <SessionProvider>{children} </SessionProvider>
+          </GluestackUIProvider>
+        </StyledJsxRegistry>
+      </body>
+    </html>
   );
 }

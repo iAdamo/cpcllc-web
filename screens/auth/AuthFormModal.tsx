@@ -4,7 +4,7 @@ import { Keyboard } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertTriangle } from "lucide-react-native";
-import { FormSchemaType } from "@/components/forms/FormSchema";
+import { FormSchemaType } from "@/components/forms/AuthFormSchema";
 import {
   Modal,
   ModalBackdrop,
