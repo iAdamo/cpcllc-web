@@ -117,7 +117,6 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
 
   // handle form submission on enter key press
   const handleKeyPress = () => {
-    Keyboard.dismiss();
     handleSubmit(onSubmit)();
   };
   const { isOpen, onClose, switchToSignUp } = props;

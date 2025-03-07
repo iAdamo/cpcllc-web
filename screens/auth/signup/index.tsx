@@ -85,44 +85,60 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   const onSubmit = async (data: FormSchemaType) => {
     Keyboard.dismiss();
     setIsLoading(true);
-    try {
-      const response = await register({
-        email: data.email,
-        password: data.password,
-      });
-      if (response) {
-        await sendCode({ email: data.email });
-        toast.show({
-          placement: "top",
-          duration: 3000,
-          render: ({ id }: { id: string }) => {
-            return (
-              <Toast nativeID={id} variant="outline" action="success">
-                <ToastTitle>Account created successfully</ToastTitle>
-              </Toast>
-            );
-          },
-        });
-        setShowVerifyEmailModal(true);
-      }
-    } catch (error) {
-      setValidated({ emailValid: false, passwordValid: false });
+    if (data.password !== data.confirmPassword) {
       toast.show({
         placement: "top",
-        duration: 5000,
-        render: ({ id }: RenderProps) => {
+        duration: 1000,
+        render: ({ id }: { id: string }) => {
           return (
             <Toast nativeID={id} variant="outline" action="error">
-              <ToastTitle>
-                {(error as any).response?.data?.message ||
-                  "An unexpected error occurred"}
-              </ToastTitle>
+              <ToastTitle>Passwords do not match</ToastTitle>
             </Toast>
           );
         },
       });
-    } finally {
       setIsLoading(false);
+      return;
+    } else {
+      try {
+        const response = await register({
+          email: data.email,
+          password: data.password,
+        });
+        if (response) {
+          await sendCode({ email: data.email });
+          toast.show({
+            placement: "top",
+            duration: 3000,
+            render: ({ id }: { id: string }) => {
+              return (
+                <Toast nativeID={id} variant="outline" action="success">
+                  <ToastTitle>Account created successfully</ToastTitle>
+                </Toast>
+              );
+            },
+          });
+          setShowVerifyEmailModal(true);
+        }
+      } catch (error) {
+        setValidated({ emailValid: false, passwordValid: false });
+        toast.show({
+          placement: "top",
+          duration: 5000,
+          render: ({ id }: RenderProps) => {
+            return (
+              <Toast nativeID={id} variant="outline" action="error">
+                <ToastTitle>
+                  {(error as any).response?.data?.message ||
+                    "An unexpected error occurred"}
+                </ToastTitle>
+              </Toast>
+            );
+          },
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -141,7 +157,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
 
   // handle form submission on enter key press
   const handleKeyPress = () => {
-    Keyboard.dismiss();
     handleSubmit(onSubmit)();
   };
 

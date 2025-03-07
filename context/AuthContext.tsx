@@ -21,20 +21,33 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   const [[isLoading, session], setSession] = useStorageState<string>("session");
   const [[loading, userData], setUserData] = useStorageState<any>("user");
   const router = useRouter();
-  //const pathname = usePathname();
+  const pathname = usePathname();
 
   // Block rendering if session is being loaded
-  //if (isLoading || loading) return <div>Loading...</div>;
+  if (isLoading || loading) return <div>Loading...</div>;
 
   // Redirect before rendering the restricted page
-  //if (!session && pathname !== "/") {
-    //router.replace("/");
-    //return null;
- // }
-  //if (session && pathname === "/") {
-    //router.replace("/service");
-    //return <div>Loading...</div>;
- // }
+  if (!session && pathname !== "/") {
+    router.replace("/");
+    return null;
+  }
+  if (session && userData?.role === "Client" && pathname === "/") {
+    router.replace("/service");
+    return <div>Loading...</div>;
+  } else if (session && userData?.role === "Company" && pathname === "/") {
+    router.replace("/dashboard");
+    return <div>Loading...</div>;
+  } else if (session && userData?.role === "admin" && pathname === "/") {
+    router.replace("/admin");
+    return <div>Loading...</div>;
+  } else if (
+    session &&
+    userData?.role !== "Company" &&
+    pathname === "/dashboard"
+  ) {
+    router.replace("/service");
+    return <div>Loading...</div>;
+  }
 
   return (
     <AuthContext.Provider
@@ -43,7 +56,8 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
           try {
             const response = await login(credentials);
             if (response) {
-              setSession(response.id);
+              console.log("Logged in:", response);
+              setSession(response._id);
               setUserData(response);
               router.replace("/service");
             }

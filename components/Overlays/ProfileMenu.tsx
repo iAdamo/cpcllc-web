@@ -13,6 +13,8 @@ import {
 import { Pressable } from "@/components/ui/pressable";
 import { useSession } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { VStack } from "@/components/ui/vstack";
+import { Button, ButtonText } from "@/components/ui/button";
 
 interface ProfileMenuProps {
   userData: any;
@@ -23,6 +25,11 @@ interface ProfileMenuProps {
 const ProfileMenu = ({ userData, options, offset }: ProfileMenuProps) => {
   const { logout } = useSession();
   const router = useRouter();
+
+  const getInitial = (name: string) => {
+    if (!name) return "";
+    return name.charAt(0).toUpperCase();
+  };
 
   return (
     userData && (
@@ -35,21 +42,33 @@ const ProfileMenu = ({ userData, options, offset }: ProfileMenuProps) => {
                 <AvatarFallbackText>
                   {userData?.email.charAt(0)}
                 </AvatarFallbackText>
-                <AvatarImage
-                  source={
-                    userData?.photo
-                      ? { uri: userData.photo }
-                      : {
-                          uri: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-                        }
-                  }
-                />
+                <AvatarImage source={{ uri: userData?.photo }} />
                 <AvatarBadge />
               </Avatar>
             </Pressable>
           );
         }}
       >
+        <MenuItem className="">
+          <VStack className="items-center gap-2">
+            <Avatar>
+              <AvatarFallbackText>
+                {getInitial(
+                  userData?.name || userData?.email || userData?.firstName
+                )}
+              </AvatarFallbackText>
+              <AvatarImage source={{ uri: userData?.photo }} />
+              <AvatarBadge />
+            </Avatar>
+            <Button variant="outline">
+              <ButtonText>
+                {userData?.role === "Client"
+                  ? "Switch to Company"
+                  : "Switch to Client"}
+              </ButtonText>
+            </Button>
+          </VStack>
+        </MenuItem>
         <MenuSeparator />
         {options.map((option) => (
           <MenuItem

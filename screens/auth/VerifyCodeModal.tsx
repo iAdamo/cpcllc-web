@@ -60,7 +60,7 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
         code: data.code,
       });
       if (response) {
-        router.push("/dashboard/feeds");
+        router.push("/");
         toast.show({
           placement: "top",
           duration: 3000,

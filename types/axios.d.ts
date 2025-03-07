@@ -9,8 +9,8 @@ export interface LoginUser {
 }
 
 export interface AuthResponse {
-  id: string;
+  _id: string;
   email: string;
   name: string;
-  access_token?;
+  role: string;
 }

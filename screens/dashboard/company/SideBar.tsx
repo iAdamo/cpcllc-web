@@ -1,6 +1,4 @@
-import { useRouter } from "next/navigation";
 import { useSession } from "@/context/AuthContext";
-import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";

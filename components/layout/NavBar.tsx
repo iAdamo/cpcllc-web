@@ -130,7 +130,7 @@ const NavBar = () => {
                   { name: "Membership", onPress: () => router.replace("/profile") },
                   { name: "Settings", onPress: () => router.replace("/settings") },
                 ]}
-                offset={15}
+                offset={20}
               />
             </HStack>
           )}
