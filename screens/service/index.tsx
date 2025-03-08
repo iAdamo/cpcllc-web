@@ -6,7 +6,7 @@ import PreFooter from "@/components/layout/PreFooter";
 import Footer from "@/components/layout/Footer";
 import SectionOne from "./SectionOne";
 import AiChat from "@/components/AiChatFab";
-import ServicesSection from "./ServivesSection";
+import ServicesSection from "./ServicesSection";
 
 const Service = () => {
   return (

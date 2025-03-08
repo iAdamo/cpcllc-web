@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
@@ -6,59 +7,16 @@ import { Text } from "@/components/ui/text";
 import Link from "next/link";
 import { star } from "@/public/assets/icons";
 import Image from "next/image";
+import { getRandomServices } from "@/axios/services";
+import { ServiceData } from "@/types";
+
 
 const BrowseCompanies = () => {
+  const [services, setServices] = useState<ServiceData[]>([]);
 
-  const services = [
-    {
-      name: "Gardening & Horticulture",
-      rating: "4.5",
-      companies: "117",
-      link: "#",
-    },
-    {
-      name: "Gardening & Horticulture",
-      rating: "4.5",
-      companies: "117",
-      link: "#",
-    },
-    {
-      name: "Gardening & Horticulture",
-      rating: "4.5",
-      companies: "117",
-      link: "#",
-    },
-    {
-      name: "Gardening & Horticulture",
-      rating: "4.5",
-      companies: "117",
-      link: "#",
-    },
-    {
-      name: "Gardening & Horticulture",
-      rating: "4.5",
-      companies: "117",
-      link: "#",
-    },
-    {
-      name: "Gardening & Horticulture",
-      rating: "4.5",
-      companies: "117",
-      link: "#",
-    },
-    {
-      name: "Gardening & Horticulture",
-      rating: "4.5",
-      companies: "117",
-      link: "#",
-    },
-    {
-      name: "Gardening & Horticulture",
-      rating: "4.5",
-      companies: "117",
-      link: "#",
-    },
-  ];
+  useEffect(() => {
+    getRandomServices().then((data) => setServices(data));
+  }, []);
 
   return (
     <VStack className="p-20 gap-4">
@@ -80,7 +38,7 @@ const BrowseCompanies = () => {
           <Link key={index} href={service.link || ""}>
             <Card className="bg-card-primary-1 hover:bg-card-primary-2 w-72 h-32 items-start">
               <VStack className="h-1/2">
-                <Heading className="">{service.name}</Heading>
+                <Heading className="">{service.title}</Heading>
               </VStack>
               <HStack className="h-1/2 w-full justify-between items-center pr-8">
                 <HStack className="gap-2 items-center">
@@ -92,10 +50,10 @@ const BrowseCompanies = () => {
                     height={20}
                   />
 
-                  <Text className="font-semibold">{`${service.rating}/5.0`}</Text>
+                  <Text className="font-semibold">{`${service.ratings}/5.0`}</Text>
                 </HStack>
                 <VStack>
-                  <Text className="font-semibold">{`${service.companies} companies`}</Text>
+                  <Text className="font-semibold">{`${service.title} companies`}</Text>
                 </VStack>
               </HStack>
             </Card>

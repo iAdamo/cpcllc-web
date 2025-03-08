@@ -9,67 +9,67 @@ const Categories = () => {
   const categories = [
     {
       title: "Search Marketing",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Social Media Marketing",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Channel-Specific Marketing",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Industry & Purpose-Specific Marketing",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "E-Commerce Marketing & Management",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Content Marketing & Copywriting",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Video & Multimedia Marketing",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Web Design & Development",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Marketing Design & Branding",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Analytics & Strategy",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Operations & Business Consulting",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Sales & Customer Care",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
     {
       title: "Tech & Marketing Consulting",
-      image: "#",
+      image: "/assest/homepage/categ1",
       url: "",
     },
   ];

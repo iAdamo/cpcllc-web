@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";

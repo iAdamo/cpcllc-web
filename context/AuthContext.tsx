@@ -27,7 +27,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   if (isLoading || loading) return <div>Loading...</div>;
 
   // Redirect before rendering the restricted page
-  if (!session && pathname !== "/") {
+  if (!session && pathname === "/dashboard") {
     router.replace("/");
     return null;
   }
