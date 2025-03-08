@@ -4,8 +4,6 @@ import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
 import { Card } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import Link from "next/link";
-import Image from "next/image";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import {

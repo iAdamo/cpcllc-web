@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Keyboard } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertTriangle } from "lucide-react-native";
 import { FormSchema, FormSchemaType } from "@/components/forms/AuthFormSchema";
 import {
   Modal,
@@ -17,7 +16,6 @@ import { Input, InputField, InputSlot, InputIcon } from "@/components/ui/input";
 import {
   FormControl,
   FormControlError,
-  FormControlErrorIcon,
   FormControlErrorText,
 } from "@/components/ui/form-control";
 import Link from "next/link";
@@ -185,7 +183,6 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorIcon as={AlertTriangle} />
                       <FormControlErrorText>
                         {errors?.email?.message || !validated.emailValid}
                       </FormControlErrorText>
@@ -233,7 +230,6 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorIcon as={AlertTriangle} />
                       <FormControlErrorText>
                         {errors?.password?.message || !validated.passwordValid}
                       </FormControlErrorText>

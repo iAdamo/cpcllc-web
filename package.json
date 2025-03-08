@@ -39,7 +39,6 @@
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "js-cookie": "^3.0.5",
-    "lucide-react-native": "^0.471.0",
     "nativewind": "^4.1.23",
     "next": "14.2.22",
     "react": "^18",

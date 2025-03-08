@@ -3,7 +3,6 @@ import { z } from "zod";
 import { Keyboard } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertTriangle } from "lucide-react-native";
 import { FormSchemaType } from "@/components/forms/AuthFormSchema";
 import {
   Modal,
@@ -17,7 +16,6 @@ import { Input, InputField } from "@/components/ui/input";
 import {
   FormControl,
   FormControlError,
-  FormControlErrorIcon,
   FormControlErrorText,
 } from "@/components/ui/form-control";
 import { HStack } from "@/components/ui/hstack";
@@ -110,7 +108,6 @@ const FormModal: React.FC<FormModalProps> = ({
               />
               {errors[name] && (
                 <FormControlError>
-                  <FormControlErrorIcon as={AlertTriangle} />
                   <FormControlErrorText>
                     {errors[name]?.message?.toString()}
                   </FormControlErrorText>
