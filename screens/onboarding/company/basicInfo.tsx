@@ -4,13 +4,9 @@ import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
 import { Heading } from "@/components/ui/heading";
-import { TrashIcon } from "@/components/ui/icon";
-import { SafeAreaView } from "@/components/ui/safe-area-view";
-import NavBar from "../NavBar";
 import { useState } from "react";
-import { Keyboard } from "react-native";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input, InputField } from "@/components/ui/input";
+import { useOnboarding } from "@/context/OnboardingContext";
 import {
   FormControl,
   FormControlError,
@@ -19,10 +15,18 @@ import {
   FormControlLabelText,
 } from "@/components/ui/form-control";
 
-
 const BasicInfo = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [errors, setErrors] = useState<{ image?: string }>({});
+  const { prevStep, nextStep, setData, data } = useOnboarding();
+  const [firstName, setFirstName] = useState(data.firstName);
+  const [lastName, setLastName] = useState(data.lastName);
+
+  useEffect(() => {
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
+    setSelectedImage(data.profilePicture);
+  }, [data]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -31,13 +35,11 @@ const BasicInfo = () => {
     }
   };
 
-   const handleSubmit = () => {
-     if (!selectedImage) {
-       setErrors({ image: "Image is required" });
-       return;
-     }
-     // Handle form submission
-   };
+  const handleSubmit = () => {
+    if (!firstName || !lastName) return;
+    setData({ firstName, lastName, profilePicture: selectedImage });
+    nextStep();
+  };
 
   return (
     <VStack className="w-full h-full">
@@ -51,16 +53,22 @@ const BasicInfo = () => {
               <FormControlLabel>
                 <FormControlLabelText>First Name </FormControlLabelText>
               </FormControlLabel>
-              <Input className="h-14">
-                <InputField placeholder="John" />
+              <Input className="h-12">
+                <InputField
+                  placeholder="John"
+                  onChangeText={(value: string) => setFirstName(value)}
+                />
               </Input>
             </FormControl>
             <FormControl>
               <FormControlLabel>
                 <FormControlLabelText>Last Name </FormControlLabelText>
               </FormControlLabel>
-              <Input className="h-14">
-                <InputField placeholder="Doe" />
+              <Input className="h-12">
+                <InputField
+                  placeholder="Doe"
+                  onChangeText={(value: string) => setLastName(value)}
+                />
               </Input>
             </FormControl>
           </HStack>
@@ -101,9 +109,14 @@ const BasicInfo = () => {
               </FormControlError>
             )}
           </FormControl>
-          <Button onPress={handleSubmit} className="mt-4">
-            <ButtonText>Next</ButtonText>
-          </Button>
+          <HStack className="justify-between mt-auto">
+            <Button variant="outline" onPress={prevStep} className="">
+              <ButtonText>Back</ButtonText>
+            </Button>
+            <Button onPress={handleSubmit} className="">
+              <ButtonText>Continue</ButtonText>
+            </Button>
+          </HStack>
         </VStack>
       </HStack>
     </VStack>

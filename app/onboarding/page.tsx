@@ -1,4 +1,11 @@
 "use client";
-import Onboarding from "@/screens/onboarding";
+import { OnboardingProvider } from "@/context/OnboardingContext";
+import Onboarding  from "@/screens/onboarding";
 
-export default Onboarding;
+export default function Page() {
+  return (
+    <OnboardingProvider>
+      <Onboarding />
+    </OnboardingProvider>
+  );
+}
