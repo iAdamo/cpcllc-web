@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { star } from "@/public/assets/icons";
 import { Card } from "@/components/ui/card";
+import { HomeClient } from "@/public/assets/homepage";
 
 const ServicesSection = () => {
   const services = [
@@ -43,11 +44,11 @@ const ServicesSection = () => {
       },
       media: {
         image: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
         video: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
       },
@@ -93,11 +94,11 @@ const ServicesSection = () => {
       },
       media: {
         image: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
         video: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
       },
@@ -143,11 +144,11 @@ const ServicesSection = () => {
       },
       media: {
         image: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
         video: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
       },
@@ -193,11 +194,11 @@ const ServicesSection = () => {
       },
       media: {
         image: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
         video: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
       },
@@ -243,11 +244,11 @@ const ServicesSection = () => {
       },
       media: {
         image: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
         video: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
       },
@@ -293,11 +294,11 @@ const ServicesSection = () => {
       },
       media: {
         image: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
         video: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
       },
@@ -343,11 +344,11 @@ const ServicesSection = () => {
       },
       media: {
         image: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
         video: {
-          primary: "/assets/homepage/home-client.jpg",
+          primary: HomeClient,
           secondary: "/assets/homepage/icon-deal.png",
         },
       },
