@@ -6,14 +6,15 @@ import { Text } from "@/components/ui/text";
 import { Icon, ArrowRightIcon } from "@/components/ui/icon";
 import Link from "next/link";
 import Image from "next/image";
+import { HomeClient } from "@/public/assets/homepage";
 
 const ForClient = () => {
   return (
     <VStack className="p-20 w-full relative rounded-lg">
       <Image
         className="object-cover w-full h-[36rem] top-0 left-0 rounded-lg"
-        src="/assets/homepages/home-client.jpg"
-        alt="home_header"
+        src={HomeClient}
+        alt="home_client"
         width={3264}
         height={2448}
       />

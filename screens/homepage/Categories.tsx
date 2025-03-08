@@ -3,74 +3,73 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
-
 import Image from "next/image";
 
 const Categories = () => {
   const categories = [
     {
       title: "Search Marketing",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Social Media Marketing",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Channel-Specific Marketing",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Industry & Purpose-Specific Marketing",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "E-Commerce Marketing & Management",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Content Marketing & Copywriting",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Video & Multimedia Marketing",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Web Design & Development",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Marketing Design & Branding",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Analytics & Strategy",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Operations & Business Consulting",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Sales & Customer Care",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
     {
       title: "Tech & Marketing Consulting",
-      image: "/assets/homepage/icon-deal.png",
+      image: "#",
       url: "",
     },
   ];

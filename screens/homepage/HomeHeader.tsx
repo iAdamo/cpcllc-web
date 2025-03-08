@@ -4,6 +4,7 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import Link from "next/link"
+import { HomeHeada } from "@/public/assets/homepage";
 
 const HomeHeader = () => {
   return (
@@ -28,7 +29,7 @@ const HomeHeader = () => {
         <VStack className="items-center h-full w-full">
           <Image
             className="object-cover rounded-lg"
-            src="/assets/homepages/home-header.jpg"
+            src={HomeHeada}
             alt="home_header"
             width={1920}
             height={1080}

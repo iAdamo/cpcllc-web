@@ -3,6 +3,7 @@ import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import Link from "next/link";
+import { HomeCompany } from "@/public/assets/homepage";
 import Image from "next/image";
 
 const ForCompany = () => {
@@ -12,8 +13,8 @@ const ForCompany = () => {
         <VStack className="w-1/2">
           <Image
             className="object-cover h-[37rem] rounded-l-xl"
-            src="/assets/homepages/home-company.jpg"
-            alt="home_header"
+            src={HomeCompany}
+            alt="home_company"
             width={3644}
             height={5466}
           />

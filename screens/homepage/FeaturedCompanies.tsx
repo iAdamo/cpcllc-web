@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/ui/icon";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Button, ButtonIcon } from "@/components/ui/button";
+import { HomeClient } from "@/public/assets/homepage";
 
 const FeaturedCompanies = () => {
   const scrollRef = useRef<ScrollView>(null);
@@ -61,8 +62,8 @@ const FeaturedCompanies = () => {
               <Card className={`rounded-lg w-52 shadow-hard-5 ${company.color}`}>
                 <Image
                   className="object-cover w-full rounded-lg"
-                  src="/assets/homepages/home-client.jpg"
-                  alt="home_header"
+                  src={HomeClient}
+                  alt="home_client"
                   width={500}
                   height={500}
                 />
