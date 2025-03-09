@@ -1,4 +1,5 @@
 "use client";
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { OnboardingData, OnboardingContextType } from "@/types";
 
@@ -11,23 +12,18 @@ export const OnboardingProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [step, setStep] = useState(1);
-  const [data, setDataState] = useState<OnboardingData>({
-    userType: "",
-    firstName: "",
-    lastName: "",
-    profilePicture: null,
+  const [data, setDataState] = useState<OnboardingData>(() => {
+    return JSON.parse(localStorage.getItem("onboardingData") || "{}");
   });
 
-  // Load saved data from localStorage when the app starts
-  useEffect(() => {
-    const savedData = localStorage.getItem("onboardingData");
-    if (savedData) {
-      setDataState(JSON.parse(savedData));
-    }
-  }, []);
+  const [step, setStep] = useState(() => {
+    return Number(localStorage.getItem("onboardingStep")) || 1;
+  });
 
-  // Save updated data to localStorage
+  useEffect(() => {
+    localStorage.setItem("onboardingStep", step.toString());
+  }, [step]);
+
   useEffect(() => {
     localStorage.setItem("onboardingData", JSON.stringify(data));
   }, [data]);
@@ -37,11 +33,15 @@ export const OnboardingProvider = ({
   };
 
   const nextStep = () => setStep((prev) => prev + 1);
-  const prevStep = () => setStep((prev) => (prev > 1 ? prev - 1 : prev));
+
+  const prevStep = () => {
+    setStep((prev) => (prev > 1 ? prev - 1 : prev)); // ✅ Fix: Don’t reset to 1 from step 2
+  };
 
   const submitData = () => {
     console.log("Submitting data:", data);
-    localStorage.removeItem("onboardingData"); // Clear storage after submission
+    localStorage.removeItem("onboardingData");
+    localStorage.removeItem("onboardingStep");
   };
 
   return (

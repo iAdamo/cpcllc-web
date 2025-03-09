@@ -14,16 +14,20 @@ export interface AuthContextProps {
   loading: boolean;
   logout: () => void;
 }
-import { Dispatch, SetStateAction } from "react";
 
-interface OnboardingData {
+export interface OnboardingData {
   userType: string;
   firstName: string;
   lastName: string;
   profilePicture: File | null;
+  companyName: string;
+  companyEmail: string;
+  companyPhoneNumber: string;
+  companyAddress: string;
+  companyLogo: File | null;
 }
 
-interface OnboardingContextType {
+export interface OnboardingContextType {
   step: number;
   data: OnboardingData;
   setData: (updates: Partial<OnboardingData>) => void;

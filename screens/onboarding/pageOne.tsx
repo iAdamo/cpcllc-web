@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
-import { Card } from "@/components/ui/card";
+import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
@@ -19,21 +19,19 @@ const PageOne = () => {
   const { nextStep, setData, data } = useOnboarding();
   const [values, setValues] = useState(data.userType); // Get from context
 
-   useEffect(() => {
-     setValues(data.userType);
-   }, [data.userType]);
+  useEffect(() => {
+    setValues(data.userType);
+  }, [data.userType]);
 
   const handleSubmit = () => {
     if (!values) return;
     setData({ userType: values }); // Save user type in context
     nextStep(); // Move to next step
-        console.log(values);
-
   };
 
   return (
     <VStack className="w-full h-full">
-      <Heading className="mt-5 ml-5">CompanyCenterLLC</Heading>
+      <Heading className="p-4">CompanyCenterLLC</Heading>
       <VStack className="h-full rounded-3xl mx-96 px-6 mt-14 py-10 gap-10">
         <Heading size="2xl" className="text-center font-medium">
           Join as a client or service provider
@@ -41,32 +39,38 @@ const PageOne = () => {
         <FormControl>
           <RadioGroup value={values} onChange={setValues}>
             <HStack className="justify-between h-40 w-full">
-              <Card
-                variant="outline"
-                className="w-64 h-full hover:border-black hover:border-2 rounded-xl"
+              <Pressable
+                className="w-64 p-2 h-full border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
+                onPress={() => setValues("client")}
               >
                 <Radio value="client" className="ml-auto">
                   <RadioIndicator>
-                    <RadioIcon as={CircleIcon} />
+                    <RadioIcon
+                      as={CircleIcon}
+                      className="fill-brand-secondary text-brand-secondary"
+                    />
                   </RadioIndicator>
                 </Radio>
                 <Text className="text-xl font-semibold text-center my-auto">
                   Client
                 </Text>
-              </Card>
-              <Card
-                variant="outline"
-                className="w-64 h-full hover:border-2 hover:border-black rounded-xl group"
+              </Pressable>
+              <Pressable
+                className="w-64 p-2 h-full border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
+                onPress={() => setValues("company")}
               >
                 <Radio value="company" className="ml-auto">
                   <RadioIndicator>
-                    <RadioIcon as={CircleIcon} />
+                    <RadioIcon
+                      as={CircleIcon}
+                      className="fill-brand-secondary text-brand-secondary"
+                    />
                   </RadioIndicator>
                 </Radio>
                 <Text className="text-xl font-semibold text-center my-auto">
                   Service Provider
                 </Text>
-              </Card>
+              </Pressable>
             </HStack>
           </RadioGroup>
         </FormControl>
