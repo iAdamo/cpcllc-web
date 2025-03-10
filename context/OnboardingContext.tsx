@@ -21,6 +21,13 @@ export const OnboardingProvider = ({
   });
 
   useEffect(() => {
+    return () => {
+      localStorage.removeItem("onboardingData");
+      localStorage.removeItem("onboardingStep");
+    };
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("onboardingStep", step.toString());
   }, [step]);
 

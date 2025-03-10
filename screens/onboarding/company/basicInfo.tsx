@@ -134,7 +134,7 @@ const BasicInfo = () => {
                 onChange={handleImageChange}
                 className="hidden"
               />
-              {selectedImage ? (
+              {selectedImage instanceof File ? (
                 <Image
                   src={URL.createObjectURL(selectedImage)}
                   alt="Selected image"

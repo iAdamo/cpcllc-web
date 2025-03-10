@@ -1,5 +1,3 @@
-"use client";
-
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import NavBar from "./NavBar";
 import SideBar from "./SideBar";
