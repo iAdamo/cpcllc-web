@@ -127,8 +127,14 @@ const NavBar = () => {
               <ProfileMenu
                 userData={userData}
                 options={[
-                  { name: "Membership", onPress: () => router.replace("/profile") },
-                  { name: "Settings", onPress: () => router.replace("/settings") },
+                  {
+                    name: "Membership",
+                    onPress: () => router.replace("/profile"),
+                  },
+                  {
+                    name: "Settings",
+                    onPress: () => router.replace("/settings"),
+                  },
                 ]}
                 offset={20}
               />

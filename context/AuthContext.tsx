@@ -56,7 +56,6 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
           try {
             const response = await login(credentials);
             if (response) {
-              console.log("Logged in:", response);
               setSession(response._id);
               setUserData(response);
               router.replace("/service");
@@ -67,9 +66,10 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
           }
         },
         logout: () => {
-          logout();
           setSession(null);
           setUserData(null);
+          logout();
+          router.replace("/");
         },
         userData,
         session,

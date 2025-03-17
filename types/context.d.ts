@@ -26,6 +26,12 @@ export interface OnboardingData {
   companyPhoneNumber: string;
   companyAddress: string;
   companyLogo: File | null;
+  zip: string;
+  city: string;
+  latitude: number;
+  longitude: number;
+  state: string;
+  country: string;
 }
 
 export interface OnboardingContextType {

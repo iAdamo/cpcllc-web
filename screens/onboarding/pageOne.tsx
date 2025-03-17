@@ -7,6 +7,8 @@ import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { useOnboarding } from "@/context/OnboardingContext";
+import AuthModalManager from "@/screens/auth/AuthModalManager";
+
 import {
   Radio,
   RadioGroup,
@@ -14,10 +16,14 @@ import {
   RadioIcon,
 } from "@/components/ui/radio";
 import { CircleIcon } from "@/components/ui/icon";
+import { useRouter } from "next/navigation";
 
 const PageOne = () => {
   const { nextStep, setData, data } = useOnboarding();
   const [values, setValues] = useState(data.userType); // Get from context
+  const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     setValues(data.userType);
@@ -31,7 +37,13 @@ const PageOne = () => {
 
   return (
     <VStack className="w-full h-full">
-      <Heading className="p-4">CompanyCenterLLC</Heading>
+      <Button
+        variant="link"
+        className="m-4 w-52 bg-transparent data-[hover=true]:bg-btn-primary"
+        onPress={() => router.push("/")}
+      >
+        <ButtonText size="xl">CompanyCenterLLC</ButtonText>
+      </Button>
       <VStack className="h-full rounded-3xl mx-96 px-6 mt-14 py-10 gap-10">
         <Heading size="2xl" className="text-center font-medium">
           Join as a client or service provider
@@ -41,7 +53,10 @@ const PageOne = () => {
             <HStack className="justify-between h-40 w-full">
               <Pressable
                 className="w-64 p-2 h-full border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
-                onPress={() => setValues("client")}
+                onPress={() => {
+                  setValues("client");
+                  setIsAuthodalOpen(true);
+                }}
               >
                 <Radio value="client" className="ml-auto">
                   <RadioIndicator>
@@ -57,7 +72,10 @@ const PageOne = () => {
               </Pressable>
               <Pressable
                 className="w-64 p-2 h-full border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
-                onPress={() => setValues("company")}
+                onPress={() => {
+                  setValues("company");
+                  setIsAuthodalOpen(true);
+                }}
               >
                 <Radio value="company" className="ml-auto">
                   <RadioIndicator>
@@ -94,6 +112,10 @@ const PageOne = () => {
           }`}</ButtonText>
         </Button>
       </VStack>
+      <AuthModalManager
+        isModalOpen={isAuthodalOpen}
+        onClose={() => setIsAuthodalOpen(false)}
+      />
     </VStack>
   );
 };

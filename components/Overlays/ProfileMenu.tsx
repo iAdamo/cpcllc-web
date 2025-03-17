@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/avatar";
 import { Pressable } from "@/components/ui/pressable";
 import { useSession } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 
@@ -24,7 +23,6 @@ interface ProfileMenuProps {
 
 const ProfileMenu = ({ userData, options, offset }: ProfileMenuProps) => {
   const { logout } = useSession();
-  const router = useRouter();
 
   const getInitial = (name: string) => {
     if (!name) return "";
@@ -84,10 +82,7 @@ const ProfileMenu = ({ userData, options, offset }: ProfileMenuProps) => {
           key="Logout"
           textValue="Logout"
           className=""
-          onPress={() => {
-            logout();
-            router.replace("/");
-          }}
+          onPress={() => logout()}
         >
           <MenuItemLabel size="md">Logout</MenuItemLabel>
         </MenuItem>

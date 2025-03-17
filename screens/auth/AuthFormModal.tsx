@@ -119,7 +119,7 @@ const FormModal: React.FC<FormModalProps> = ({
         <ModalFooter className="flex-col items-start">
           <Button
             variant="solid"
-            className="w-full bg-SteelBlue data-[hover=true]:bg-SteelBlue-600 data-[active=true]:bg-SteelBlue-700"
+            className="w-full"
             onPress={handleSubmit(onSubmit)}
           >
             <ButtonText>Submit</ButtonText>

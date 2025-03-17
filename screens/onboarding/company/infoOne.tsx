@@ -1,3 +1,5 @@
+"use client";
+
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
@@ -8,13 +10,15 @@ import {
   FormControlLabel,
   FormControlLabelText,
 } from "@/components/ui/form-control";
-import { Textarea, TextareaInput } from "@/components/ui/textarea";
 import { Input, InputField } from "@/components/ui/input";
 import { useState } from "react";
 import { useOnboarding } from "@/context/OnboardingContext";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { useForm, Controller } from "react-hook-form";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { Textarea, TextareaInput } from "@/components/ui/textarea";
 import { Text } from "@/components/ui/text";
 
 type FormData = {
@@ -60,13 +64,8 @@ const InfoOne = () => {
     nextStep();
   };
 
-  // handle form submission on enter key press
-  const handleKeyPress = () => {
-    handleSubmit(onSubmit)();
-  };
-
   return (
-    <VStack className="bg-white mx-auto w-3/5 my-10 p-8 gap-10 rounded-lg">
+    <VStack className="bg-white mx-auto w-3/5 my-10 p-8 gap-10 rounded-lg overflow-hidden">
       <HStack className="w-full justify-between">
         <VStack className="w-1/2 gap-2">
           <FormControl isInvalid={!!formErrors.companyName}>
@@ -82,13 +81,19 @@ const InfoOne = () => {
                   <InputField
                     placeholder="CompanyCenterLLC"
                     value={value}
-                    onSubmitEditing={handleKeyPress}
                     onChangeText={onChange}
                     onBlur={onBlur}
                   />
                 </Input>
               )}
             />
+            {formErrors.companyName && (
+              <FormControlError>
+                <FormControlErrorText>
+                  {formErrors.companyName.message}
+                </FormControlErrorText>
+              </FormControlError>
+            )}
           </FormControl>
           {/** Description */}
           <FormControl isInvalid={!!formErrors.companyDescription}>
@@ -104,7 +109,6 @@ const InfoOne = () => {
                   <TextareaInput
                     placeholder="Company Description"
                     value={value}
-                    onSubmitEditing={handleKeyPress}
                     onChangeText={onChange}
                     onBlur={onBlur}
                   />
@@ -131,7 +135,6 @@ const InfoOne = () => {
                   <InputField
                     placeholder="companyemail@example.com"
                     value={value}
-                    onSubmitEditing={handleKeyPress}
                     onChangeText={onChange}
                     onBlur={onBlur}
                   />
@@ -155,42 +158,39 @@ const InfoOne = () => {
               control={control}
               rules={{ required: "Company phone number is required" }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input className="h-12">
-                  <InputField
-                    placeholder="+1 123 456 7890"
-                    value={value}
-                    onSubmitEditing={handleKeyPress}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                  />
-                </Input>
+                <PhoneInput
+                  country={"us"}
+                  value={value}
+                  onChange={(phone) => onChange(phone)}
+                  onBlur={onBlur}
+                  inputStyle={{
+                    width: "100%",
+                    height: "3rem",
+                    zIndex: 1,
+                  }}
+                  containerStyle={{
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                  buttonStyle={{
+                    zIndex: 1,
+                  }}
+                  dropdownStyle={{
+                    zIndex: 1,
+                  }}
+                />
               )}
             />
-          </FormControl>
-          {/* Address */}
-          <FormControl isInvalid={!!formErrors.companyAddress}>
-            <FormControlLabel>
-              <FormControlLabelText>Company Address</FormControlLabelText>
-            </FormControlLabel>
-            <Controller
-              name="companyAddress"
-              control={control}
-              rules={{ required: "Company address is required" }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input className="h-12">
-                  <InputField
-                    placeholder="1234 Street Name"
-                    value={value}
-                    onSubmitEditing={handleKeyPress}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                  />
-                </Input>
-              )}
-            />
+            {formErrors.companyPhoneNumber && (
+              <FormControlError>
+                <FormControlErrorText>
+                  {formErrors.companyPhoneNumber.message}
+                </FormControlErrorText>
+              </FormControlError>
+            )}
           </FormControl>
         </VStack>
-        <VStack className="w-2/5">
+        <VStack className="w-2/5 justify-between">
           <Card variant="filled" className="w-full">
             <FormControl
               isInvalid={!!errors.image}
@@ -208,7 +208,7 @@ const InfoOne = () => {
                       onChange={handleImageChange}
                       className="hidden"
                     />
-                    {selectedImage ? (
+                    {selectedImage instanceof File ? (
                       <Image
                         src={URL.createObjectURL(selectedImage)}
                         alt="Selected image"
@@ -234,17 +234,15 @@ const InfoOne = () => {
               Informations like this helps you get the most out of our algorithm
             </Text>
           </Card>
-          <VStack className="gap-2 h-full">
-            <HStack className="justify-between mt-auto">
-              <Button variant="outline" onPress={prevStep} className="">
-                <ButtonText>Back</ButtonText>
-              </Button>
-              <Button onPress={handleSubmit(onSubmit)} className="">
-                <ButtonText>Continue</ButtonText>
-              </Button>
-            </HStack>
-          </VStack>
         </VStack>
+      </HStack>
+      <HStack className="justify-end mt-auto">
+        <Button variant="outline" onPress={prevStep} className="mr-28">
+          <ButtonText>Back</ButtonText>
+        </Button>
+        <Button onPress={handleSubmit(onSubmit)} className="">
+          <ButtonText>Continue</ButtonText>
+        </Button>
       </HStack>
     </VStack>
   );
