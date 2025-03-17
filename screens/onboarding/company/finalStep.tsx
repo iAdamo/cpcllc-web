@@ -7,6 +7,7 @@ import { updateProfile } from "@/axios/users";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/context/AuthContext";
 
 const FinalStep = () => {
   const [loading, setLoading] = useState(true); // Spinner initially visible
@@ -14,6 +15,7 @@ const FinalStep = () => {
   const [error, setError] = useState(false);
   const { data, submitData } = useOnboarding();
   const router = useRouter();
+  const { userData } = useSession();
 
   const handleSubmit = async () => {
     try {
@@ -27,22 +29,27 @@ const FinalStep = () => {
         }
       });
 
-      await updateProfile(formData); // Send the request to update the profile
-      setSuccess(true);
-      submitData(); // Clear onboarding data
-      router.replace("/dashboard");
+      if (!userData) {
+        throw new Error("User data is not available.");
+      }
+      const response = await updateProfile(userData.id, formData);
+      if (response) {
+        setSuccess(true);
+        submitData(); // Clear onboarding data
+        router.replace("/dashboard");
+      }
     } catch (err) {
       console.error("Error updating profile:", err);
       setError(true);
     } finally {
-      router.replace("/service");
       setLoading(false);
     }
   };
 
   useEffect(() => {
     handleSubmit(); // Automatically send the request when the component loads
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <VStack className="w-full h-screen bg-white p-8 gap-8 justify-center items-center">

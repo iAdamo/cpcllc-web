@@ -30,6 +30,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
 import { register, sendCode } from "@/axios/auth";
 import VerifyCodeModal from "../VerifyCodeModal";
+import { useSession } from "@/context/AuthContext";
 
 type ControllerRenderType = {
   field: {
@@ -59,6 +60,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showVerifyEmailModal, setShowVerifyEmailModal] = useState(false);
+  const { login } = useSession();
 
   const toast = useToast();
 
@@ -104,6 +106,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
           password: data.password,
         });
         if (response) {
+          login({ email: data.email, password: data.password });
           await sendCode({ email: data.email });
           toast.show({
             placement: "top",

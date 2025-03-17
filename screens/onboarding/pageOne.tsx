@@ -8,6 +8,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { useOnboarding } from "@/context/OnboardingContext";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
+import { useSession } from "@/context/AuthContext";
 
 import {
   Radio,
@@ -21,8 +22,9 @@ import { useRouter } from "next/navigation";
 const PageOne = () => {
   const { nextStep, setData, data } = useOnboarding();
   const [values, setValues] = useState(data.userType); // Get from context
-  const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
+  const { session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -30,23 +32,30 @@ const PageOne = () => {
   }, [data.userType]);
 
   const handleSubmit = () => {
-    if (!values) return;
-    setData({ userType: values }); // Save user type in context
-    nextStep(); // Move to next step
+    if (values === "Client") {
+      router.push("/service");
+    } else if (values === "Company") {
+      setData({ userType: values });
+      nextStep();
+    }
   };
-
   return (
     <VStack className="w-full h-full">
       <Button
         variant="link"
-        className="m-4 w-52 bg-transparent data-[hover=true]:bg-btn-primary"
+        className="m-4 w-52 bg-transparent"
         onPress={() => router.push("/")}
       >
-        <ButtonText size="xl">CompanyCenterLLC</ButtonText>
+        <ButtonText
+          size="xl"
+          className="data-[hover=true]:no-underline data-[hover=true]:text-btn-primary"
+        >
+          CompanyCenterLLC
+        </ButtonText>
       </Button>
       <VStack className="h-full rounded-3xl mx-96 px-6 mt-14 py-10 gap-10">
         <Heading size="2xl" className="text-center font-medium">
-          Join as a client or service provider
+          Join as a Client or service provider
         </Heading>
         <FormControl>
           <RadioGroup value={values} onChange={setValues}>
@@ -54,11 +63,11 @@ const PageOne = () => {
               <Pressable
                 className="w-64 p-2 h-full border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
                 onPress={() => {
-                  setValues("client");
-                  setIsAuthodalOpen(true);
+                  setValues("Client");
+                  if (!session) setIsAuthModalOpen(true);
                 }}
               >
-                <Radio value="client" className="ml-auto">
+                <Radio value="Client" className="ml-auto">
                   <RadioIndicator>
                     <RadioIcon
                       as={CircleIcon}
@@ -73,11 +82,11 @@ const PageOne = () => {
               <Pressable
                 className="w-64 p-2 h-full border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
                 onPress={() => {
-                  setValues("company");
-                  setIsAuthodalOpen(true);
+                  setValues("Company");
+                  if (!session) setIsAuthModalOpen(true);
                 }}
               >
-                <Radio value="company" className="ml-auto">
+                <Radio value="Company" className="ml-auto">
                   <RadioIndicator>
                     <RadioIcon
                       as={CircleIcon}
@@ -104,17 +113,17 @@ const PageOne = () => {
               values && "text-white"
             }`}
           >{`Apply ${
-            values === "client"
+            values === "Client"
               ? "as Client"
-              : values === "company"
+              : values === "Company"
               ? "as Service Provider"
               : ""
           }`}</ButtonText>
         </Button>
       </VStack>
       <AuthModalManager
-        isModalOpen={isAuthodalOpen}
-        onClose={() => setIsAuthodalOpen(false)}
+        isModalOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
       />
     </VStack>
   );

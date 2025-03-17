@@ -2,7 +2,7 @@ import { useContext, createContext, type PropsWithChildren } from "react";
 import { useStorageState } from "@/utils/StorageState";
 import { login, logout } from "@/axios/auth";
 import { useRouter, usePathname } from "next/navigation";
-import type { AuthContextProps } from "@/types";
+import type { AuthContextProps, UserProps } from "@/types";
 
 // Create the AuthContext
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -57,8 +57,17 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
             const response = await login(credentials);
             if (response) {
               setSession(response._id);
-              setUserData(response);
-              router.replace("/service");
+              const userData: UserProps = {
+                id: response._id,
+                firstName: response.firstName ?? "",
+                lastName: response.lastName ?? "",
+                email: response.email,
+                photo: response.photo ?? "",
+              }
+              setUserData(userData);
+              if (pathname === "/") {
+                router.replace("/service");
+              }
             }
           } catch (e) {
             console.error("Error logging in:", e);

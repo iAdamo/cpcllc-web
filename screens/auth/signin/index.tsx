@@ -53,6 +53,8 @@ interface RenderProps {
 }
 
 const SignInModal: React.FC<SignInModalProps> = (props) => {
+    const { isOpen, onClose, switchToSignUp } = props;
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
@@ -84,6 +86,8 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
     setIsLoading(true);
     try {
       await login(data);
+      reset();
+      onClose();
       setIsLoading(false);
     } catch (error) {
       setValidated({ emailValid: false, passwordValid: false });
@@ -117,8 +121,6 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
   const handleKeyPress = () => {
     handleSubmit(onSubmit)();
   };
-  const { isOpen, onClose, switchToSignUp } = props;
-
   return (
     <>
       <Modal

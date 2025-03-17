@@ -52,7 +52,7 @@ const NavBar = () => {
       >
         <HStack className="py-10 w-full items-center justify-between pr-5">
           <HStack className="gap-2">
-            <Button onPress={() => router.replace("/")} className="p-0">
+            <Button variant="link" onPress={() => router.replace("/")} className="p-0">
               <Image
                 src={styles.navBarLogo}
                 alt="Logo"
@@ -70,7 +70,7 @@ const NavBar = () => {
           </HStack>
 
           {/** Search */}
-          <Input className="hidden md:flex w-2/5 bg-white">
+          <Input className="hidden md:flex w-1/3 bg-white">
             <InputField
               type="text"
               placeholder="Search..."
@@ -124,6 +124,7 @@ const NavBar = () => {
                   {option.name}
                 </Link>
               ))}
+              {}
               <ProfileMenu
                 userData={userData}
                 options={[

@@ -14,20 +14,28 @@ const AuthModalManager: React.FC<AuthModalManagerProps> = (props) => {
     onClose();
   };
 
-  const switchToSignUp = () => {
+  const switchToSignIn = () => {
     setIsSignInOpen(false);
   };
 
-  const switchToSignIn = () => {
+  const switchToSignUp = () => {
     setIsSignInOpen(true);
   };
 
   return (
     <>
       {isSignInOpen ? (
-        <SignInModal isOpen={isModalOpen} onClose={handleClose} switchToSignUp={switchToSignUp} />
+        <SignUpModal
+          isOpen={isModalOpen}
+          onClose={handleClose}
+          switchToSignIn={switchToSignIn}
+        />
       ) : (
-        <SignUpModal isOpen={isModalOpen} onClose={handleClose} switchToSignIn={switchToSignIn} />
+        <SignInModal
+          isOpen={isModalOpen}
+          onClose={handleClose}
+          switchToSignUp={switchToSignUp}
+        />
       )}
     </>
   );
