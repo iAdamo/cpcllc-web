@@ -101,10 +101,11 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
       return;
     } else {
       try {
-        const response = await register({
-          email: data.email,
-          password: data.password,
-        });
+        const formData = new FormData();
+        formData.append("email", data.email);
+        formData.append("password", data.password);
+
+        const response = await register(formData);
         if (response) {
           login({ email: data.email, password: data.password });
           await sendCode({ email: data.email });

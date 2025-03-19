@@ -3,7 +3,7 @@
 import { VStack } from "@/components/ui/vstack";
 import { Spinner } from "@/components/ui/spinner";
 import { Icon, CheckIcon, CloseIcon } from "@/components/ui/icon";
-import { updateProfile } from "@/axios/users";
+import { register } from "@/axios/auth";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -32,7 +32,7 @@ const FinalStep = () => {
       if (!userData) {
         throw new Error("User data is not available.");
       }
-      const response = await updateProfile(userData.id, formData);
+      const response = await register(formData, userData.id);
       if (response) {
         setSuccess(true);
         submitData(); // Clear onboarding data
@@ -48,7 +48,7 @@ const FinalStep = () => {
 
   useEffect(() => {
     handleSubmit(); // Automatically send the request when the component loads
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

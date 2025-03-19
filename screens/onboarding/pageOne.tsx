@@ -21,21 +21,21 @@ import { useRouter } from "next/navigation";
 
 const PageOne = () => {
   const { nextStep, setData, data } = useOnboarding();
-  const [values, setValues] = useState(data.userType); // Get from context
+  const [values, setValues] = useState(data.role); // Get from context
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const { session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    setValues(data.userType);
-  }, [data.userType]);
+    setValues(data.role);
+  }, [data.role]);
 
   const handleSubmit = () => {
     if (values === "Client") {
       router.push("/service");
     } else if (values === "Company") {
-      setData({ userType: values });
+      setData({ role: values });
       nextStep();
     }
   };

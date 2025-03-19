@@ -26,6 +26,10 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   // Block rendering if session is being loaded
   if (isLoading || loading) return <div>Loading...</div>;
 
+  if (session && pathname === "/") {
+    router.replace("/service");
+    return <div>Loading...</div>;
+  }
   // Redirect before rendering the restricted page
   if (!session && pathname === "/dashboard") {
     router.replace("/");
@@ -63,7 +67,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
                 lastName: response.lastName ?? "",
                 email: response.email,
                 photo: response.photo ?? "",
-              }
+              };
               setUserData(userData);
               if (pathname === "/") {
                 router.replace("/service");

@@ -1,10 +1,19 @@
 import { ApiClientSingleton } from "./conf";
-import { RegisterUser, LoginUser, AuthResponse } from "@/types";
+import { LoginUser, AuthResponse } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
-export const register = async (data: RegisterUser): Promise<AuthResponse> => {
-  const response = await axiosInstance.post("users/", data);
+export const register = async (
+  data: FormData,
+  id?: string
+): Promise<AuthResponse> => {
+  const url = id ? `users/${id}` : `users`;
+  console.log("data", data);
+  const response = await axiosInstance.post(url, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 
@@ -36,8 +45,6 @@ export const resetPassword = async (data: { email: string; code: string }) => {
   const response = await axiosInstance.post("/auth/reset-password", data);
   return response.data;
 };
-
-
 
 import { useSession } from "@/context/AuthContext";
 

@@ -16,7 +16,7 @@ export interface AuthContextProps {
 }
 
 export interface OnboardingData {
-  userType: string;
+  role: string;
   firstName: string;
   lastName: string;
   profilePicture: File | null;
