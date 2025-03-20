@@ -14,7 +14,7 @@ export interface AuthResponse {
   lastName?: string;
   email: string;
   photo?: string;
-  role: string;
+  activeRole: string;
 }
 
 export interface ServiceData {

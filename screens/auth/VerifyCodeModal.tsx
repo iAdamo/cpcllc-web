@@ -4,7 +4,7 @@ import FormModal from "./AuthFormModal";
 import { sendCode, verifyEmail } from "@/axios/auth";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
 import { Keyboard } from "react-native";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface VerifyCodeModalProps {
   isOpen: boolean;
@@ -20,6 +20,7 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
   const [showModal, setShowModal] = useState(isOpen);
   const toast = useToast();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     setShowModal(isOpen);
@@ -60,7 +61,9 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
         code: data.code,
       });
       if (response) {
-        router.push("/");
+        if (pathname === "/") {
+          router.replace("/service");
+        }
         toast.show({
           placement: "top",
           duration: 3000,

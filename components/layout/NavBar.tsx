@@ -29,7 +29,7 @@ const NavBar = () => {
     { name: "My Requests", href: "/requests" },
     { name: "Inbox", href: "/inbox" },
     { name: "Favorites", href: "/favorites" },
-    { name: "Be a Company", href: "/company" },
+    { name: "Be a Company", href: "/onboarding" },
   ];
 
   const styles = useMemo(() => {

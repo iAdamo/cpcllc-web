@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
@@ -32,10 +33,13 @@ type FormData = {
 
 const InfoOne = () => {
   const { prevStep, nextStep, setData, data } = useOnboarding();
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(
+    data.companyLogo
+  );
   const [errors, setErrors] = useState<{ image?: string }>({});
   const {
     control,
+    setValue,
     handleSubmit,
     formState: { errors: formErrors },
   } = useForm<FormData>({
@@ -45,8 +49,15 @@ const InfoOne = () => {
       companyEmail: data.companyEmail,
       companyPhoneNumber: data.companyPhoneNumber,
       companyAddress: data.companyAddress,
+      companyLogo: data.companyLogo,
     },
   });
+
+
+  useEffect(() => {
+   
+    setSelectedImage(data.companyLogo);
+  }, [data, setValue]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {

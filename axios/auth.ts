@@ -8,7 +8,6 @@ export const register = async (
   id?: string
 ): Promise<AuthResponse> => {
   const url = id ? `users/${id}` : `users`;
-  console.log("data", data);
   const response = await axiosInstance.post(url, data, {
     headers: {
       "Content-Type": "multipart/form-data",

@@ -26,27 +26,27 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   // Block rendering if session is being loaded
   if (isLoading || loading) return <div>Loading...</div>;
 
-  if (session && pathname === "/") {
-    router.replace("/service");
-    return <div>Loading...</div>;
-  }
   // Redirect before rendering the restricted page
   if (!session && pathname === "/dashboard") {
     router.replace("/");
     return null;
   }
-  if (session && userData?.role === "Client" && pathname === "/") {
+  if (session && pathname === "/" && userData?.activeRole === "Client") {
     router.replace("/service");
     return <div>Loading...</div>;
-  } else if (session && userData?.role === "Company" && pathname === "/") {
+  } else if (
+    session &&
+    userData?.activeRole === "Company" &&
+    pathname === "/"
+  ) {
     router.replace("/dashboard");
     return <div>Loading...</div>;
-  } else if (session && userData?.role === "admin" && pathname === "/") {
+  } else if (session && userData?.activeRole === "admin" && pathname === "/") {
     router.replace("/admin");
     return <div>Loading...</div>;
   } else if (
     session &&
-    userData?.role !== "Company" &&
+    userData?.activeRole !== "Company" &&
     pathname === "/dashboard"
   ) {
     router.replace("/service");
@@ -65,6 +65,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
                 id: response._id,
                 firstName: response.firstName ?? "",
                 lastName: response.lastName ?? "",
+                activeRole: response.activeRole,
                 email: response.email,
                 photo: response.photo ?? "",
               };

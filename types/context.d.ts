@@ -1,9 +1,10 @@
 export interface UserProps {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
+  activeRole: string;
   email: string;
-  photo: string;
+  photo?: string;
 }
 
 export interface AuthContextProps {
