@@ -1,4 +1,5 @@
 import { ApiClientSingleton } from "./conf";
+import { CompanyData } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -9,5 +10,17 @@ export const updateProfile = async (id: string, data: FormData) => {
     },
   });
 
+  return response.data;
+};
+
+export const registerCompany = async (
+  data: FormData,
+  id: string
+): Promise<CompanyData> => {
+  const response = await axiosInstance.post(`users/${id}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };

@@ -3,7 +3,6 @@
 import { VStack } from "@/components/ui/vstack";
 import { Spinner } from "@/components/ui/spinner";
 import { Icon, CheckIcon, CloseIcon } from "@/components/ui/icon";
-import { register } from "@/axios/auth";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -13,9 +12,10 @@ const FinalStep = () => {
   const [loading, setLoading] = useState(true); // Spinner initially visible
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+
   const { data, submitData } = useOnboarding();
   const router = useRouter();
-  const { userData } = useSession();
+  const { registerCompany } = useSession();
 
   const handleSubmit = async () => {
     try {
@@ -28,16 +28,10 @@ const FinalStep = () => {
           formData.append(key, value as string);
         }
       });
-
-      if (!userData) {
-        throw new Error("User data is not available.");
-      }
-      const response = await register(formData, userData.id);
-      if (response) {
-        setSuccess(true);
-        submitData(); // Clear onboarding data
-        router.replace("/dashboard");
-      }
+      await registerCompany(formData);
+      setSuccess(true);
+      submitData(); // Clear onboarding data
+      router.replace("/dashboard");
     } catch (err) {
       console.error("Error updating profile:", err);
       setError(true);

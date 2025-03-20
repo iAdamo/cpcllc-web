@@ -15,7 +15,6 @@ import { useForm, Controller } from "react-hook-form";
 import { useOnboarding } from "@/context/OnboardingContext";
 
 type FormData = {
-  businessName: string;
   companyAddress: string;
   city: string;
   state: string;
@@ -40,7 +39,16 @@ const InfoTwo = () => {
   });
 
   const onSubmit = (formData: FormData) => {
-    setData(formData);
+    const payload = {
+      addresses: [
+        formData.companyAddress,
+        formData.city,
+        formData.state,
+        formData.zip,
+        formData.country,
+      ],
+    };
+    setData(payload);
     nextStep();
   };
 

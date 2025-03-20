@@ -3,12 +3,8 @@ import { LoginUser, AuthResponse } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
-export const register = async (
-  data: FormData,
-  id?: string
-): Promise<AuthResponse> => {
-  const url = id ? `users/${id}` : `users`;
-  const response = await axiosInstance.post(url, data, {
+export const register = async (data: FormData): Promise<AuthResponse> => {
+  const response = await axiosInstance.post("users", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

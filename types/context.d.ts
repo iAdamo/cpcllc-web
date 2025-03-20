@@ -1,4 +1,4 @@
-export interface UserProps {
+export interface UserData {
   id: string;
   firstName?: string;
   lastName?: string;
@@ -7,13 +7,33 @@ export interface UserProps {
   photo?: string;
 }
 
+export interface Address {
+  companyAddress: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+export interface CompanyData {
+  name: string;
+  description: string;
+  email: string;
+  phoneNumber: string;
+  logo: string;
+  latitude: number;
+  longitude: number;
+  addresses?: Address[];
+}
+
 export interface AuthContextProps {
-  userData: UserProps | null;
+  userData: UserData | null;
   login: (credentials: { email: string; password: string }) => Promise<void>;
   session?: string | null;
   isLoading: boolean;
   loading: boolean;
   logout: () => void;
+  registerCompany: (data: FormData) => Promise<void>;
+  companyData: CompanyData | null;
 }
 
 export interface OnboardingData {
@@ -33,6 +53,7 @@ export interface OnboardingData {
   longitude: number;
   state: string;
   country: string;
+  addresses?: string[];
 }
 
 export interface OnboardingContextType {

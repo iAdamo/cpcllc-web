@@ -2,7 +2,8 @@ import { useContext, createContext, type PropsWithChildren } from "react";
 import { useStorageState } from "@/utils/StorageState";
 import { login, logout } from "@/axios/auth";
 import { useRouter, usePathname } from "next/navigation";
-import type { AuthContextProps, UserProps } from "@/types";
+import type { AuthContextProps, UserData, CompanyData } from "@/types";
+import { registerCompany } from "@/axios/users";
 
 // Create the AuthContext
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -20,11 +21,14 @@ export function useSession() {
 export function SessionProvider({ children }: PropsWithChildren<object>) {
   const [[isLoading, session], setSession] = useStorageState<string>("session");
   const [[loading, userData], setUserData] = useStorageState<any>("user");
+  const [[loadingCompany, companyData], setCompanyData] =
+    useStorageState<CompanyData>("company");
+
   const router = useRouter();
   const pathname = usePathname();
 
   // Block rendering if session is being loaded
-  if (isLoading || loading) return <div>Loading...</div>;
+  if (isLoading || loading || loadingCompany) return <div>Loading...</div>;
 
   // Redirect before rendering the restricted page
   if (!session && pathname === "/dashboard") {
@@ -61,7 +65,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
             const response = await login(credentials);
             if (response) {
               setSession(response._id);
-              const userData: UserProps = {
+              const userData: UserData = {
                 id: response._id,
                 firstName: response.firstName ?? "",
                 lastName: response.lastName ?? "",
@@ -85,7 +89,21 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
           logout();
           router.replace("/");
         },
+        registerCompany: async (data: FormData) => {
+          try {
+            if (!userData) {
+              throw new Error("User data is not available.");
+            }
+            const response = await registerCompany(data, userData.id);
+            if (response) {
+              setCompanyData(response);
+            }
+          } catch (err) {
+            console.error("Error updating profile:", err);
+            throw err;}
+        },
         userData,
+        companyData,
         session,
         isLoading,
         loading,

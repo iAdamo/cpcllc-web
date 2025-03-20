@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
@@ -44,6 +43,7 @@ import Footer from "@/components/layout/Footer";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 import { createService } from "@/axios/services";
+import { useSession } from "@/context/AuthContext";
 
 type ControllerRenderType<T> = {
   field: {
@@ -56,27 +56,11 @@ type ControllerRenderType<T> = {
 const CreateService = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [locations, setLocations] = useState<
-    { label: string; value: string }[]
-  >([]);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
 
   const router = useRouter();
+  const { companyData } = useSession();
 
-  useEffect(() => {
-    // Fetch locations from the backend
-    const fetchLocations = async () => {
-      try {
-        const response = await fetch("/api/locations");
-        const data = await response.json();
-        setLocations(data.locations);
-      } catch (error) {
-        console.error("Failed to fetch locations", error);
-      }
-    };
-
-    fetchLocations();
-  }, []);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -279,17 +263,18 @@ const CreateService = () => {
                 isRequired
               >
                 <SelectTrigger>
-                  <SelectInput placeholder="Choose from your registered location" />
+                  <SelectInput placeholder="Choose from your registered address" />
                   <SelectIcon className="mr-3" as={ChevronDownIcon} />
                 </SelectTrigger>
                 <SelectPortal>
                   <SelectBackdrop />
                   <SelectContent>
-                    {locations.map((location) => (
+
+                    {companyData?.addresses?.map((address) => (
                       <SelectItem
-                        key={location.value}
-                        label={location.label}
-                        value={location.value}
+                        key={address.state}
+                        label={address.state}
+                        value={address.state}
                       />
                     ))}
                   </SelectContent>
@@ -301,7 +286,7 @@ const CreateService = () => {
 
               <FormControlError>
                 <FormControlErrorText>
-                  location is required
+                  address is required
                 </FormControlErrorText>
               </FormControlError>
             </FormControl>
