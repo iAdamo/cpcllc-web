@@ -30,7 +30,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
 import { register, sendCode } from "@/axios/auth";
 import VerifyCodeModal from "../VerifyCodeModal";
-import { useSession } from "@/context/AuthContext";
+import { useAuthStore } from "@/stores";
 
 type ControllerRenderType = {
   field: {
@@ -60,7 +60,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showVerifyEmailModal, setShowVerifyEmailModal] = useState(false);
-  const { login } = useSession();
+  const { login } = useAuthStore();
 
   const toast = useToast();
 

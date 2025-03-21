@@ -43,7 +43,7 @@ import Footer from "@/components/layout/Footer";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 import { createService } from "@/axios/services";
-import { useSession } from "@/context/AuthContext";
+import { useAuthStore } from "@/stores";
 
 type ControllerRenderType<T> = {
   field: {
@@ -59,8 +59,7 @@ const CreateService = () => {
   const [selectedLocation, setSelectedLocation] = useState<string>("");
 
   const router = useRouter();
-  const { companyData } = useSession();
-
+  const { companyData } = useAuthStore();
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -269,7 +268,6 @@ const CreateService = () => {
                 <SelectPortal>
                   <SelectBackdrop />
                   <SelectContent>
-
                     {companyData?.addresses?.map((address) => (
                       <SelectItem
                         key={address.state}
@@ -285,9 +283,7 @@ const CreateService = () => {
               </Select>
 
               <FormControlError>
-                <FormControlErrorText>
-                  address is required
-                </FormControlErrorText>
+                <FormControlErrorText>address is required</FormControlErrorText>
               </FormControlError>
             </FormControl>
             <FormControl isInvalid={!!errors.description}>

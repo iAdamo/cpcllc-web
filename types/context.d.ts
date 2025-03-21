@@ -4,7 +4,7 @@ export interface UserData {
   lastName?: string;
   activeRole: string;
   email: string;
-  photo?: string;
+  profilePicture?: string;
 }
 
 export interface Address {
@@ -27,6 +27,7 @@ export interface CompanyData {
 
 export interface AuthContextProps {
   userData: UserData | null;
+  setUserData: (data: UserData) => void;
   login: (credentials: { email: string; password: string }) => Promise<void>;
   session?: string | null;
   isLoading: boolean;

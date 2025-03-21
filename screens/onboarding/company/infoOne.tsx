@@ -55,7 +55,6 @@ const InfoOne = () => {
 
 
   useEffect(() => {
-   
     setSelectedImage(data.companyLogo);
   }, [data, setValue]);
 

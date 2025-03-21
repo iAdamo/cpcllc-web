@@ -1,7 +1,7 @@
 "use client"
 import StyledJsxRegistry from "./registry";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import { SessionProvider } from "@/context/AuthContext";
+import { AuthHandler } from "@/components/AuthHandler";
 
 export default function RootLayout({
   children,
@@ -13,7 +13,8 @@ export default function RootLayout({
       <body className="h-screen m-0 p-0">
         <StyledJsxRegistry>
           <GluestackUIProvider mode="light">
-            <SessionProvider>{children} </SessionProvider>
+            <AuthHandler />
+            {children}
           </GluestackUIProvider>
         </StyledJsxRegistry>
       </body>

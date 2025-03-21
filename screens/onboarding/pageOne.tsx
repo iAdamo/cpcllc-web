@@ -8,7 +8,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { FormControl } from "@/components/ui/form-control";
 import { useOnboarding } from "@/context/OnboardingContext";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
-import { useSession } from "@/context/AuthContext";
+import { useAuthStore } from "@/stores";
 
 import {
   Radio,
@@ -24,7 +24,7 @@ const PageOne = () => {
   const [values, setValues] = useState(data.role); // Get from context
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  const { session } = useSession();
+  const { session } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {

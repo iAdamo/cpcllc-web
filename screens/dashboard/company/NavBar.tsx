@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useSession } from "@/context/AuthContext";
+import { useAuthStore } from "@/stores";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import ProfileMenu from "@/components/Overlays/ProfileMenu";
 
 const NavBar = () => {
   const router = useRouter();
-  const { userData } = useSession();
+  const { userData } = useAuthStore();
   return (
     <VStack className="p-4 border-b">
       <HStack className="justify-between">
@@ -26,14 +26,21 @@ const NavBar = () => {
           </Button>
         </HStack>
         <HStack>
-          <ProfileMenu
-            userData={userData}
-            options={[
-              { name: "Membership", onPress: () => router.replace("/profile") },
-              { name: "Settings", onPress: () => router.replace("/settings") },
-            ]}
-            offset={15}
-          />
+          {userData && (
+            <ProfileMenu
+              options={[
+                {
+                  name: "Membership",
+                  onPress: () => router.replace("/profile"),
+                },
+                {
+                  name: "Settings",
+                  onPress: () => router.replace("/settings"),
+                },
+              ]}
+              offset={15}
+            />
+          )}
         </HStack>
       </HStack>
     </VStack>

@@ -24,3 +24,8 @@ export const registerCompany = async (
   });
   return response.data;
 };
+
+export const userProfile = async (id: string) => {
+  const response = await axiosInstance.get(`users/${id}`);
+  return response.data;
+};

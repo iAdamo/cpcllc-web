@@ -1,5 +1,6 @@
 import { ApiClientSingleton } from "./conf";
 import { LoginUser, AuthResponse } from "@/types";
+import { useAuthStore } from "@/stores";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -41,10 +42,8 @@ export const resetPassword = async (data: { email: string; code: string }) => {
   return response.data;
 };
 
-import { useSession } from "@/context/AuthContext";
-
 export const useSignOut = () => {
-  const { logout } = useSession();
+  const { logout } = useAuthStore();
   const signOut = async () => {
     try {
       logout();

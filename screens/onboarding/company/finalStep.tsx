@@ -6,7 +6,7 @@ import { Icon, CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "@/context/AuthContext";
+import { useAuthStore } from "@/stores";
 
 const FinalStep = () => {
   const [loading, setLoading] = useState(true); // Spinner initially visible
@@ -15,7 +15,7 @@ const FinalStep = () => {
 
   const { data, submitData } = useOnboarding();
   const router = useRouter();
-  const { registerCompany } = useSession();
+  const { registerCompany } = useAuthStore();
 
   const handleSubmit = async () => {
     try {

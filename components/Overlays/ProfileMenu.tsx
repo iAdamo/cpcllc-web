@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Menu,
   MenuItem,
@@ -11,19 +12,25 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { Pressable } from "@/components/ui/pressable";
-import { useSession } from "@/context/AuthContext";
+import { useAuthStore } from "@/stores";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import Link from "next/link";
 
 interface ProfileMenuProps {
-  userData: any;
   options: any[];
   offset?: number;
 }
 
-const ProfileMenu = ({ userData, options, offset }: ProfileMenuProps) => {
-  const { logout } = useSession();
+const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
+  const { userData, fetchUserProfile, logout } = useAuthStore();
+
+  // get user profile data and update userData
+  useEffect(() => {
+    if (userData?.id) {
+      fetchUserProfile(userData.id);
+    }
+  }, [userData?.id, fetchUserProfile]);
 
   const getInitial = (name: string) => {
     if (!name) return "";
@@ -40,7 +47,7 @@ const ProfileMenu = ({ userData, options, offset }: ProfileMenuProps) => {
               <AvatarFallbackText>
                 {userData?.email.charAt(0)}
               </AvatarFallbackText>
-              <AvatarImage source={{ uri: userData?.photo }} />
+              <AvatarImage source={{ uri: userData?.profilePicture }} />
               <AvatarBadge />
             </Avatar>
           </Pressable>
@@ -51,16 +58,14 @@ const ProfileMenu = ({ userData, options, offset }: ProfileMenuProps) => {
         <VStack className="items-center gap-2">
           <Avatar>
             <AvatarFallbackText>
-              {getInitial(
-                userData?.name || userData?.email || userData?.firstName
-              )}
+              {getInitial(userData?.email || userData?.firstName || "")}
             </AvatarFallbackText>
-            <AvatarImage source={{ uri: userData?.photo }} />
+            <AvatarImage source={{ uri: userData?.profilePicture }} />
             <AvatarBadge />
           </Avatar>
           <Button variant="outline">
             <ButtonText>
-              {userData?.role === "Client"
+              {userData?.activeRole === "Client"
                 ? "Switch to Company"
                 : "Switch to Client"}
             </ButtonText>

@@ -27,7 +27,7 @@ import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
 import ForgotPasswordModal from "@/screens/auth/ForgetPassword";
-import { useSession } from "@/context/AuthContext";
+import { useAuthStore } from "@/stores";
 
 type ControllerRenderType = {
   field: {
@@ -53,13 +53,13 @@ interface RenderProps {
 }
 
 const SignInModal: React.FC<SignInModalProps> = (props) => {
-    const { isOpen, onClose, switchToSignUp } = props;
+  const { isOpen, onClose, switchToSignUp } = props;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
-  const { login } = useSession();
+  const { login } = useAuthStore();
   const toast = useToast();
 
   // handle form submission

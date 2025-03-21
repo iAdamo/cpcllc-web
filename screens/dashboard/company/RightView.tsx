@@ -1,16 +1,12 @@
-import { useRouter } from "next/navigation";
-import { useSession } from "@/context/AuthContext";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
-import { Image } from "@/components/ui/image";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
-import { Icon, AddIcon } from "@/components/ui/icon";
+import { AddIcon } from "@/components/ui/icon";
 
 const RightView = () => {
-  const { userData } = useSession();
   return (
     <VStack className="p-4 h-screen w-1/4">
       <VStack className="items-center gap-2">
