@@ -4,6 +4,7 @@ import { login, logout } from "@/axios/auth";
 import { useRouter, usePathname } from "next/navigation";
 import type { AuthContextProps, UserData, CompanyData } from "@/types";
 import { registerCompany } from "@/axios/users";
+import { userProfile } from "@/axios/users";
 
 // Create the AuthContext
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -41,7 +42,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   } else if (
     session &&
     userData?.activeRole === "Company" &&
-    pathname === "/"
+    pathname !== "/dashboard"
   ) {
     router.replace("/dashboard");
     return <div>Loading...</div>;
@@ -71,7 +72,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
                 lastName: response.lastName ?? "",
                 activeRole: response.activeRole,
                 email: response.email,
-                photo: response.photo ?? "",
+                profilePicture: response.profilePicture ?? "",
               };
               setUserData(userData);
               if (pathname === "/") {
@@ -100,9 +101,28 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
             }
           } catch (err) {
             console.error("Error updating profile:", err);
-            throw err;}
+            throw err;
+          }
+        },
+        fetchUserProfile: async () => {
+          if (!userData) {
+            return;
+          }
+          try {
+            const response = await userProfile(userData.id);
+            if (response) {
+              setUserData((response) => ({
+                ...response,
+                id: response._id,
+              }));
+            }
+          } catch (err) {
+            console.error("Error fetching user profile:", err);
+            throw err;
+          }
         },
         userData,
+        setUserData,
         companyData,
         session,
         isLoading,

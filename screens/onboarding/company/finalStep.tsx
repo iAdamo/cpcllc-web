@@ -15,7 +15,7 @@ const FinalStep = () => {
 
   const { data, submitData } = useOnboarding();
   const router = useRouter();
-  const { registerCompany } = useSession();
+  const { registerCompany, fetchUserProfile } = useSession();
 
   const handleSubmit = async () => {
     try {
@@ -29,6 +29,7 @@ const FinalStep = () => {
         }
       });
       await registerCompany(formData);
+      fetchUserProfile();
       setSuccess(true);
       submitData(); // Clear onboarding data
       router.replace("/dashboard");

@@ -17,13 +17,12 @@ import { Button, ButtonText } from "@/components/ui/button";
 import Link from "next/link";
 
 interface ProfileMenuProps {
-  userData: any;
   options: any[];
   offset?: number;
 }
 
-const ProfileMenu = ({ userData, options, offset }: ProfileMenuProps) => {
-  const { logout } = useSession();
+const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
+  const { userData, logout, setUserData } = useSession();
 
   const getInitial = (name: string) => {
     if (!name) return "";
@@ -40,27 +39,35 @@ const ProfileMenu = ({ userData, options, offset }: ProfileMenuProps) => {
               <AvatarFallbackText>
                 {userData?.email.charAt(0)}
               </AvatarFallbackText>
-              <AvatarImage source={{ uri: userData?.photo }} />
+              <AvatarImage source={{ uri: userData?.profilePicture }} />
               <AvatarBadge />
             </Avatar>
           </Pressable>
         );
       }}
     >
-      <MenuItem className="">
-        <VStack className="items-center gap-2">
+      <MenuItem className="data-[hover=true]:bg-transparent">
+        <VStack className="items-center gap-4">
           <Avatar>
             <AvatarFallbackText>
-              {getInitial(
-                userData?.name || userData?.email || userData?.firstName
-              )}
+              {getInitial(userData?.email || userData?.firstName || "")}
             </AvatarFallbackText>
-            <AvatarImage source={{ uri: userData?.photo }} />
+            <AvatarImage source={{ uri: userData?.profilePicture }} />
             <AvatarBadge />
           </Avatar>
-          <Button variant="outline">
+          <Button
+            variant="outline"
+            onPress={() => {
+              setUserData({
+                ...userData,
+                activeRole:
+                  userData?.activeRole === "Client" ? "Company" : "Client",
+              });
+            }}
+            className="w-52"
+          >
             <ButtonText>
-              {userData?.role === "Client"
+              {userData?.activeRole === "Client"
                 ? "Switch to Company"
                 : "Switch to Client"}
             </ButtonText>

@@ -27,7 +27,6 @@ type FormData = {
   companyDescription: string;
   companyEmail: string;
   companyPhoneNumber: string;
-  companyAddress: string;
   companyLogo: File | null;
 };
 
@@ -48,14 +47,11 @@ const InfoOne = () => {
       companyDescription: data.companyDescription,
       companyEmail: data.companyEmail,
       companyPhoneNumber: data.companyPhoneNumber,
-      companyAddress: data.companyAddress,
       companyLogo: data.companyLogo,
     },
   });
 
-
   useEffect(() => {
-   
     setSelectedImage(data.companyLogo);
   }, [data, setValue]);
 

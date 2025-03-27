@@ -4,17 +4,12 @@ export interface UserData {
   lastName?: string;
   activeRole: string;
   email: string;
-  photo?: string;
+  profilePicture?: string;
 }
 
-export interface Address {
-  companyAddress: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-}
 export interface CompanyData {
+  _id: string;
+  id: string;
   name: string;
   description: string;
   email: string;
@@ -22,17 +17,53 @@ export interface CompanyData {
   logo: string;
   latitude: number;
   longitude: number;
-  addresses?: Address[];
+  location: {
+    primary: {
+      coordinates: {
+        lat: number;
+        long: number;
+      };
+      zip: string;
+      city: string;
+      state: string;
+      country: string;
+      address: string;
+    };
+    secondary: {
+      coordinates: {
+        lat: number;
+        long: number;
+      };
+      zip: string;
+      city: string;
+      state: string;
+      country: string;
+      address: string;
+    };
+    tertiary: {
+      coordinates: {
+        lat: number;
+        long: number;
+      };
+      zip: string;
+      city: string;
+      state: string;
+      country: string;
+      address: string;
+    };
+  };
 }
 
 export interface AuthContextProps {
   userData: UserData | null;
+  setUserData: (data: UserData) => void;
   login: (credentials: { email: string; password: string }) => Promise<void>;
   session?: string | null;
   isLoading: boolean;
   loading: boolean;
   logout: () => void;
   registerCompany: (data: FormData) => Promise<void>;
+  fetchUserProfile: () => void;
   companyData: CompanyData | null;
 }
 

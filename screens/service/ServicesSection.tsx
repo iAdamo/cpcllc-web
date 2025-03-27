@@ -10,12 +10,15 @@ import { getRandomServices } from "@/axios/services";
 import { useEffect, useState } from "react";
 import { ServiceData } from "@/types";
 
-
 const ServicesSection = () => {
   const [services, setServices] = useState<ServiceData[]>([]);
 
   useEffect(() => {
-    getRandomServices().then((data) => setServices(data));
+    const fetchServices = async () => {
+      const response = await getRandomServices(10);
+      setServices(response);
+    };
+    fetchServices();
   }, []);
 
   return (
@@ -24,12 +27,14 @@ const ServicesSection = () => {
       <HStack></HStack>
       <VStack className="grid md:grid-cols-4 grid-cols-2 gap-4 p-4 h-auto">
         {services.map((service, index) => (
-          <Link key={index} href={service.link}>
+          <Link key={index} href={service.link || "/service"}>
             <Card variant="filled" className="gap-4">
               <VStack>
                 <Image
                   className="h-40"
-                  src={service.media.image.primary}
+                  src={
+                    service?.media?.image?.primary || "/assets/placeholder.jpg"
+                  }
                   alt={service.title}
                   width={1400}
                   height={600}
@@ -37,7 +42,7 @@ const ServicesSection = () => {
               </VStack>
               <VStack className="gap-4">
                 <Text className="font-semibold">{service.title}</Text>
-                <HStack className="w-full justify-between items-center pr-8">
+                <HStack className="w-full gap-4 items-center">
                   <HStack className="gap-2 items-center">
                     <Image
                       className="font-semibold"
@@ -46,12 +51,16 @@ const ServicesSection = () => {
                       width={20}
                       height={20}
                     />
-
                     <Text className="font-semibold">{`${service.ratings}/5.0`}</Text>
                   </HStack>
                   <VStack>
                     <Text className="font-semibold">
-                      {service.location.first.country}
+                      {service.location?.primary?.address ||
+                        service.location?.primary?.city +
+                          ", " +
+                          service.location?.primary?.state +
+                          ", " +
+                          service.location?.primary?.country}
                     </Text>
                   </VStack>
                 </HStack>

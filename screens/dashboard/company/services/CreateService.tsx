@@ -7,7 +7,6 @@ import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
 import { TrashIcon } from "@/components/ui/icon";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
-import NavBar from "../NavBar";
 import { useState } from "react";
 import { Keyboard } from "react-native";
 import { useForm, Controller } from "react-hook-form";
@@ -56,11 +55,9 @@ type ControllerRenderType<T> = {
 const CreateService = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
 
   const router = useRouter();
   const { companyData } = useSession();
-
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -68,7 +65,9 @@ const CreateService = () => {
         0,
         3 - selectedImages.length
       );
-      setSelectedImages((prev) => [...prev, ...files]); // Append new images
+      const updatedImages = [...selectedImages, ...files];
+      setSelectedImages(updatedImages); // Update local state
+      setValue("images", updatedImages); // Update form state
     }
   };
 
@@ -78,19 +77,27 @@ const CreateService = () => {
       0,
       3 - selectedImages.length
     );
-    setSelectedImages((prev) => [...prev, ...files]);
+    const updatedImages = [...selectedImages, ...files];
+    setSelectedImages(updatedImages); // Update local state
+    setValue("images", updatedImages); // Update form state
   };
 
   const handleRemoveImage = (index: number) => {
-    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    const updatedImages = selectedImages.filter((_, i) => i !== index);
+    setSelectedImages(updatedImages); // Update local state
+    setValue("images", updatedImages); // Update form state
   };
 
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<ServiceFormSchemaType>({
     resolver: zodResolver(ServiceFormSchema),
+    defaultValues: {
+      images: [], // Initialize images as an empty array
+    },
   });
 
   const onSubmit = async (data: ServiceFormSchemaType) => {
@@ -98,20 +105,34 @@ const CreateService = () => {
     setIsLoading(true);
     try {
       const formData = new FormData();
+
+      // Append form fields
       formData.append("title", data.title);
       formData.append("category", data.category);
       formData.append("description", data.description);
       formData.append("price", data.price.toString());
-      selectedImages.forEach((image, index) => {
-        formData.append(`images[${index}]`, image);
-      });
 
+      // Append company ID
+      if (companyData?.id) {
+        formData.append("company", companyData.id);
+      } else {
+        console.error("Company ID is missing");
+        setIsLoading(false);
+        return;
+      }
+
+      // Append images with specific keys
+      if (selectedImages[0]) formData.append("primary", selectedImages[0]);
+      if (selectedImages[1]) formData.append("secondary", selectedImages[1]);
+      if (selectedImages[2]) formData.append("tertiary", selectedImages[2]);
+
+      // Send the request to the backend
       const response = await createService(formData);
       if (response) {
         router.replace("/dashboard");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error creating service:", error);
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +140,6 @@ const CreateService = () => {
 
   return (
     <SafeAreaView>
-      <NavBar />
       <VStack className="p-20 bg-[#F7F7F7] gap-8 border-b">
         <Card className="bg-green-200 w-3/5">
           <Heading className="text-green-800">
@@ -256,38 +276,56 @@ const CreateService = () => {
                   Where will you be providing this service?
                 </FormControlLabelText>
               </FormControlLabel>
-
-              <Select
-                selectedValue={selectedLocation}
-                onValueChange={setSelectedLocation}
-                isRequired
-              >
-                <SelectTrigger>
-                  <SelectInput placeholder="Choose from your registered address" />
-                  <SelectIcon className="mr-3" as={ChevronDownIcon} />
-                </SelectTrigger>
-                <SelectPortal>
-                  <SelectBackdrop />
-                  <SelectContent>
-
-                    {companyData?.addresses?.map((address) => (
-                      <SelectItem
-                        key={address.state}
-                        label={address.state}
-                        value={address.state}
-                      />
-                    ))}
-                  </SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                </SelectPortal>
-              </Select>
-
+              <Controller
+                name="location"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Select
+                    selectedValue={value}
+                    onValueChange={onChange}
+                    isInvalid={!!errors.category}
+                    isRequired
+                  >
+                    <SelectTrigger>
+                      <SelectInput placeholder="Choose from your registered address" />
+                      <SelectIcon className="mr-3" as={ChevronDownIcon} />
+                    </SelectTrigger>
+                    <SelectPortal>
+                      <SelectBackdrop />
+                      <SelectContent>
+                        {Object.values(companyData?.location || {}).map(
+                          (address) => (
+                            <SelectItem
+                              key={address.country}
+                              label={
+                                address.address ||
+                                address.city +
+                                  ", " +
+                                  address.state +
+                                  ", " +
+                                  address.country
+                              }
+                              value={
+                                address.address ||
+                                address.city +
+                                  ", " +
+                                  address.state +
+                                  ", " +
+                                  address.country
+                              }
+                            />
+                          )
+                        )}
+                      </SelectContent>
+                      <SelectDragIndicatorWrapper>
+                        <SelectDragIndicator />
+                      </SelectDragIndicatorWrapper>
+                    </SelectPortal>
+                  </Select>
+                )}
+              />
               <FormControlError>
-                <FormControlErrorText>
-                  address is required
-                </FormControlErrorText>
+                <FormControlErrorText>address is required</FormControlErrorText>
               </FormControlError>
             </FormControl>
             <FormControl isInvalid={!!errors.description}>
@@ -339,8 +377,8 @@ const CreateService = () => {
                     <Image
                       src={URL.createObjectURL(image)}
                       alt={`Selected image ${index + 1}`}
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      style={{ objectFit: "cover" }}
                     />
                     <Button
                       className="absolute top-2 right-2 bg-red-600 data-[hover=true]:bg-red-500"

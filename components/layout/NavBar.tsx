@@ -7,15 +7,13 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input"
-import { SearchIcon } from "@/components/ui/icon"
-import ProfileMenu from "@/components/Overlays/ProfileMenu";
-import { useSession } from "@/context/AuthContext";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { SearchIcon } from "@/components/ui/icon";
+import ProfileMenu from "@/components/ProfileMenu";
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
 
-  const { userData } = useSession();
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -37,7 +35,9 @@ const NavBar = () => {
 
     return {
       navBarClass: isServicePage && "bg-white",
-      navBarLogo: isServicePage ? "/assets/logo-white.jpeg" : "/assets/logo-color.png",
+      navBarLogo: isServicePage
+        ? "/assets/logo-white.jpeg"
+        : "/assets/logo-color.png",
       linkClass: isServicePage
         ? "no-underline text-white text-lg font-bold hover:text-brand-1"
         : "no-underline text-text-primary text-lg font-bold hover:text-brand-0",
@@ -52,12 +52,17 @@ const NavBar = () => {
       >
         <HStack className="py-10 w-full items-center justify-between pr-5">
           <HStack className="gap-2">
-            <Button variant="link" onPress={() => router.replace("/")} className="p-0">
+            <Button
+              variant="link"
+              onPress={() => router.replace("/")}
+              className="p-0"
+            >
               <Image
                 src={styles.navBarLogo}
                 alt="Logo"
                 width={200}
                 height={80}
+                priority
               />
             </Button>
 
@@ -126,7 +131,6 @@ const NavBar = () => {
               ))}
               {}
               <ProfileMenu
-                userData={userData}
                 options={[
                   {
                     name: "Membership",

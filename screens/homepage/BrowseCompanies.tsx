@@ -10,12 +10,11 @@ import Image from "next/image";
 import { getRandomServices } from "@/axios/services";
 import { ServiceData } from "@/types";
 
-
 const BrowseCompanies = () => {
   const [services, setServices] = useState<ServiceData[]>([]);
 
   useEffect(() => {
-    getRandomServices().then((data) => setServices(data));
+    getRandomServices(10).then((data) => setServices(data));
   }, []);
 
   return (
