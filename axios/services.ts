@@ -19,11 +19,13 @@ export const getCategories = async () => {
   return response.data;
 };
 
-export const getRandomServices = async (
-  count: number
-): Promise<ServiceData[]> => {
-  const response = await axiosInstance.get(`services/random/${count}`);
-
+export const getServices = async (
+  page: number,
+  limit: number
+): Promise<{services: ServiceData[]; totalPages: number}> => {
+  const response = await axiosInstance.get(
+    `services/random?page=${page}&limit=${limit}`
+  );
   return response.data;
 };
 

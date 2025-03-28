@@ -52,7 +52,7 @@ const NavBar = () => {
   return (
     <>
       <VStack
-        className={`bg-brand-primary h-20 justify-center items-center z-10 sticky top-0 w-full ${styles.navBarClass}`}
+        className={`bg-brand-primary h-20 justify-center items-center z-10 fixed top-0 w-full ${styles.navBarClass}`}
       >
         <HStack className="py-10 w-full items-center justify-between pr-5">
           <HStack className="gap-2">

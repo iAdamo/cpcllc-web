@@ -85,7 +85,7 @@ const SectionOne = () => {
     },
   ];
   return (
-    <VStack className="fixed top-28 z-10 bg-white">
+    <VStack className="fixed top-20 z-10 bg-white">
       <ScrollView
         ref={scrollRef}
         horizontal

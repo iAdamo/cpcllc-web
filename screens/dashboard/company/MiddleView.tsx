@@ -8,6 +8,7 @@ import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
 import { AddIcon } from "@/components/ui/icon";
 import { Divider } from "@/components/ui/divider";
+// import ServiceCard from "@/components/ServiceCard";
 
 const MiddleView = () => {
   const router = useRouter();
@@ -50,6 +51,7 @@ const MiddleView = () => {
         "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
     },
   ];
+
   return (
     <VStack className="p-4 gap-4 w-3/4">
       <Card
