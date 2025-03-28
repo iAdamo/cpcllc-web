@@ -1,20 +1,27 @@
 export interface UserData {
   id: string;
+  username: string;
   firstName?: string;
   lastName?: string;
   activeRole: string;
   email: string;
   profilePicture?: string;
+  purchasedServices: any[];
+  hiredCompanies: any[];
+  admins: any[];
+  createdAt: string;
 }
 
 export interface CompanyData {
   _id: string;
   id: string;
-  name: string;
-  description: string;
-  email: string;
+  companyName: string;
+  companyDescription: string;
+  companyEmail: string;
   phoneNumber: string;
-  logo: string;
+  companyLogo: string;
+  createdServices: any[];
+  clients: any[];
   latitude: number;
   longitude: number;
   location: {

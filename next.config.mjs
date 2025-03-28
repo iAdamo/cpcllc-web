@@ -5,6 +5,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    domains: ["localhost"], // Add the domain of your external image
+  },
 };
 
 export default withGluestackUI(nextConfig);

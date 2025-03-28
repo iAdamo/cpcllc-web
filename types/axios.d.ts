@@ -9,13 +9,19 @@ export interface LoginUser {
 }
 
 export interface AuthResponse {
-  _id: string;
-  firstName?: string;
-  lastName?: string;
-  email: string;
-  profilePicture?: string;
-  activeRole: string;
-}
+    _id: string;
+    username: string;
+    firstName?: string;
+    lastName?: string;
+    email: string;
+    profilePicture?: string;
+    activeRole: string;
+    createdServices: any[];
+    purchasedServices: any[];
+    hiredCompanies: any[];
+    admins: any[];
+    createdAt: string;
+  }
 
 export interface ServiceData {
   title: string;

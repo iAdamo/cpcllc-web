@@ -22,7 +22,7 @@ interface ProfileMenuProps {
 }
 
 const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
-  const { userData, logout, setUserData } = useSession();
+  const { userData, companyData, logout, setUserData } = useSession();
 
   const getInitial = (name: string) => {
     if (!name) return "";
@@ -58,11 +58,13 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
           <Button
             variant="outline"
             onPress={() => {
-              setUserData({
-                ...userData,
-                activeRole:
-                  userData?.activeRole === "Client" ? "Company" : "Client",
-              });
+              if (companyData) {
+                setUserData({
+                  ...userData,
+                  activeRole:
+                    userData?.activeRole === "Client" ? "Company" : "Client",
+                });
+              }
             }}
             className="w-52"
           >

@@ -26,3 +26,9 @@ export const getRandomServices = async (
 
   return response.data;
 };
+
+export const getUserServices = async (id: string) => {
+  const response = await axiosInstance.get(`services/user/${id}`);
+
+  return response.data;
+};

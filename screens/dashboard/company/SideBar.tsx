@@ -5,9 +5,11 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
 import { useSession } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const SideBar = () => {
-  const { userData } = useSession();
+  const { userData, companyData } = useSession();
+  const router = useRouter();
   return (
     <VStack className="p-4 h-screen w-1/4">
       <Card variant="outline" className="bg-white items-center gap-2">
@@ -24,8 +26,14 @@ const SideBar = () => {
           className="rounded-full"
         />
         <Heading>{userData?.firstName}</Heading>
-        <Text>Nursing Assistant</Text>
-        <Button variant="outline" className="w-full">
+        <Text>{companyData?.companyName}</Text>
+        <Button
+          variant="outline"
+          className="w-full"
+          onPress={() => {
+            router.push("/cpc");
+          }}
+        >
           <ButtonText className="text-text-cpc1 data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
             View Profile
           </ButtonText>

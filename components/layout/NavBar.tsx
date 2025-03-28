@@ -10,10 +10,12 @@ import AuthModalManager from "@/screens/auth/AuthModalManager";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { SearchIcon } from "@/components/ui/icon";
 import ProfileMenu from "@/components/ProfileMenu";
+import { useSession } from "@/context/AuthContext";
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
 
+  const { userData } = useSession();
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -27,28 +29,30 @@ const NavBar = () => {
     { name: "My Requests", href: "/requests" },
     { name: "Inbox", href: "/inbox" },
     { name: "Favorites", href: "/favorites" },
-    { name: "Be a Company", href: "/onboarding" },
+    ...(userData?.activeRole !== "Company"
+      ? [{ name: "Be a Company", href: "/onboarding" }]
+      : []),
   ];
 
   const styles = useMemo(() => {
-    const isServicePage = currentPath === "/service";
+    const isHome = currentPath === "/";
 
     return {
-      navBarClass: isServicePage && "bg-white",
-      navBarLogo: isServicePage
+      navBarClass: !isHome && "bg-white",
+      navBarLogo: !isHome
         ? "/assets/logo-white.jpeg"
         : "/assets/logo-color.png",
-      linkClass: isServicePage
+      linkClass: !isHome
         ? "no-underline text-white text-lg font-bold hover:text-brand-1"
         : "no-underline text-text-primary text-lg font-bold hover:text-brand-0",
-      buttonClass: isServicePage ? "bg-white" : "bg-brand-0",
+      buttonClass: !isHome ? "bg-white" : "bg-brand-0",
     };
   }, [currentPath]);
 
   return (
     <>
       <VStack
-        className={`bg-brand-primary justify-center items-center z-10 sticky top-0 w-full ${styles.navBarClass}`}
+        className={`bg-brand-primary h-20 justify-center items-center z-10 sticky top-0 w-full ${styles.navBarClass}`}
       >
         <HStack className="py-10 w-full items-center justify-between pr-5">
           <HStack className="gap-2">
@@ -132,6 +136,10 @@ const NavBar = () => {
               {}
               <ProfileMenu
                 options={[
+                  {
+                    name: "Profile",
+                    onPress: () => router.replace("/cpc"),
+                  },
                   {
                     name: "Membership",
                     onPress: () => router.replace("/profile"),

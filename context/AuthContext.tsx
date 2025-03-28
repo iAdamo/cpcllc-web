@@ -3,8 +3,8 @@ import { useStorageState } from "@/utils/StorageState";
 import { login, logout } from "@/axios/auth";
 import { useRouter, usePathname } from "next/navigation";
 import type { AuthContextProps, UserData, CompanyData } from "@/types";
-import { registerCompany } from "@/axios/users";
-import { userProfile } from "@/axios/users";
+import { registerCompany, userProfile  } from "@/axios/users";
+// import { getUserServices } from "@/axios/services";
 
 // Create the AuthContext
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -34,7 +34,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   // Redirect before rendering the restricted page
   if (!session && pathname === "/dashboard") {
     router.replace("/");
-    return null;
+        return <div>Loading...</div>;
   }
   if (session && pathname === "/" && userData?.activeRole === "Client") {
     router.replace("/service");
@@ -65,14 +65,11 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
           try {
             const response = await login(credentials);
             if (response) {
+              console.log("User data:", response);
               setSession(response._id);
               const userData: UserData = {
+                ...response,
                 id: response._id,
-                firstName: response.firstName ?? "",
-                lastName: response.lastName ?? "",
-                activeRole: response.activeRole,
-                email: response.email,
-                profilePicture: response.profilePicture ?? "",
               };
               setUserData(userData);
               if (pathname === "/") {
