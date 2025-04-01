@@ -37,7 +37,7 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
           <Pressable {...triggerProps}>
             <Avatar>
               <AvatarFallbackText>
-                {userData?.email.charAt(0)}
+                {userData?.email?.charAt(0)}
               </AvatarFallbackText>
               <AvatarImage source={{ uri: userData?.profilePicture }} />
               <AvatarBadge />

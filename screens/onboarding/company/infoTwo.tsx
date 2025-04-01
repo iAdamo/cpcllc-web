@@ -40,13 +40,11 @@ const InfoTwo = () => {
 
   const onSubmit = (formData: FormData) => {
     const payload = {
-      addresses: [
-        formData.companyAddress,
-        formData.city,
-        formData.state,
-        formData.zip,
-        formData.country,
-      ],
+        companyAddress: formData.companyAddress,
+        city: formData.city,
+        state: formData.state,
+        zip: formData.zip,
+        country: formData.country,
     };
     setData(payload);
     nextStep();

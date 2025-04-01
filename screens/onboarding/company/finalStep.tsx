@@ -29,9 +29,9 @@ const FinalStep = () => {
         }
       });
       await registerCompany(formData);
-      fetchUserProfile();
+      await fetchUserProfile();
       setSuccess(true);
-      submitData(); // Clear onboarding data
+      submitData();
       router.replace("/dashboard");
     } catch (err) {
       console.error("Error updating profile:", err);

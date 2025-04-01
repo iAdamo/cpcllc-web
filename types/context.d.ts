@@ -1,5 +1,6 @@
 export interface UserData {
   id: string;
+  _id: string;
   username: string;
   firstName?: string;
   lastName?: string;
@@ -70,7 +71,7 @@ export interface AuthContextProps {
   loading: boolean;
   logout: () => void;
   registerCompany: (data: FormData) => Promise<void>;
-  fetchUserProfile: () => void;
+  fetchUserProfile: () => Promise<void>;
   companyData: CompanyData | null;
 }
 

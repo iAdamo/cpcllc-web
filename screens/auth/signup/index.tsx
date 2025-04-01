@@ -102,12 +102,13 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
     } else {
       try {
         const formData = new FormData();
+        formData.append("username", data.username);
         formData.append("email", data.email);
         formData.append("password", data.password);
 
         const response = await register(formData);
         if (response) {
-          login({ email: data.email, password: data.password });
+          await login({ email: data.email, password: data.password });
           await sendCode({ email: data.email });
           toast.show({
             placement: "top",
@@ -191,6 +192,50 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
               </ModalHeader>
               <ModalBody>
                 <VStack className="gap-4 pt-8 items-center justify-center w-full h-full">
+                  {/** Username */}
+                  <FormControl
+                    isInvalid={!!errors?.username}
+                    className="w-96"
+                  >
+                    <FormControlLabel>
+                      <FormControlLabelText>Username</FormControlLabelText>
+                    </FormControlLabel>
+                    <Controller
+                      defaultValue=""
+                      name="username"
+                      control={control}
+                      rules={{
+                        validate: async (value: string) => {
+                          try {
+                            await FormSchema.parseAsync({ username: value });
+                            return true;
+                          } catch (error: any) {
+                            return error.message;
+                          }
+                        },
+                      }}
+                      render={({
+                        field: { onChange, onBlur, value },
+                      }: ControllerRenderType) => (
+                        <Input className="h-12">
+                          <InputField
+                            placeholder="Username"
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            onSubmitEditing={handleKeyPress}
+                            returnKeyType="done"
+                            className=""
+                          />
+                        </Input>
+                      )}
+                    />
+                    <FormControlError>
+                      <FormControlErrorText>
+                        {errors?.username?.message}
+                      </FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
                   {/** Email */}
                   <FormControl
                     className="w-96"

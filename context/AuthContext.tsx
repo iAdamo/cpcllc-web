@@ -3,7 +3,7 @@ import { useStorageState } from "@/utils/StorageState";
 import { login, logout } from "@/axios/auth";
 import { useRouter, usePathname } from "next/navigation";
 import type { AuthContextProps, UserData, CompanyData } from "@/types";
-import { registerCompany, userProfile  } from "@/axios/users";
+import { registerCompany, userProfile } from "@/axios/users";
 // import { getUserServices } from "@/axios/services";
 
 // Create the AuthContext
@@ -34,7 +34,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   // Redirect before rendering the restricted page
   if (!session && pathname === "/dashboard") {
     router.replace("/");
-        return <div>Loading...</div>;
+    return <div>Loading...</div>;
   }
   if (session && pathname === "/" && userData?.activeRole === "Client") {
     router.replace("/service");
@@ -65,7 +65,6 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
           try {
             const response = await login(credentials);
             if (response) {
-              console.log("User data:", response);
               setSession(response._id);
               const userData: UserData = {
                 ...response,
@@ -84,6 +83,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
         logout: () => {
           setSession(null);
           setUserData(null);
+          setCompanyData(null);
           logout();
           router.replace("/");
         },
@@ -108,10 +108,10 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
           try {
             const response = await userProfile(userData.id);
             if (response) {
-              setUserData((response) => ({
+              setUserData({
                 ...response,
                 id: response._id,
-              }));
+              });
             }
           } catch (err) {
             console.error("Error fetching user profile:", err);

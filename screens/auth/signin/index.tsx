@@ -53,7 +53,7 @@ interface RenderProps {
 }
 
 const SignInModal: React.FC<SignInModalProps> = (props) => {
-    const { isOpen, onClose, switchToSignUp } = props;
+  const { isOpen, onClose, switchToSignUp } = props;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -70,7 +70,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
     formState: { errors },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(
-      FormSchema.omit({ confirmPassword: true, code: true })
+      FormSchema.omit({ confirmPassword: true, code: true, username: true })
     ),
   });
 

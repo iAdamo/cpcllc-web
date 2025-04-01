@@ -7,14 +7,14 @@ import { Text } from "@/components/ui/text";
 import Link from "next/link";
 import { star } from "@/public/assets/icons";
 import Image from "next/image";
-import { getRandomServices } from "@/axios/services";
+import { getServices } from "@/axios/services";
 import { ServiceData } from "@/types";
 
 const BrowseCompanies = () => {
   const [services, setServices] = useState<ServiceData[]>([]);
 
   useEffect(() => {
-    getRandomServices(10).then((data) => setServices(data));
+    getServices(1, 10).then((data) => setServices(data.services));
   }, []);
 
   return (

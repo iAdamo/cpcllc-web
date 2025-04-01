@@ -1,5 +1,5 @@
 import { ApiClientSingleton } from "./conf";
-import { CompanyData } from "@/types";
+import { CompanyData, UserData } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -25,7 +25,7 @@ export const registerCompany = async (
   return response.data;
 };
 
-export const userProfile = async (id: string) => {
+export const userProfile = async (id: string): Promise<any> => {
   const response = await axiosInstance.get(`users/${id}`);
   return response.data;
 };

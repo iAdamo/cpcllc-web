@@ -46,7 +46,6 @@ export const OnboardingProvider = ({
   };
 
   const submitData = () => {
-    console.log("Submitting data:", data);
     localStorage.removeItem("onboardingData");
     localStorage.removeItem("onboardingStep");
   };
