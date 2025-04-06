@@ -25,7 +25,7 @@ export const registerCompany = async (
   return response.data;
 };
 
-export const userProfile = async (id: string): Promise<any> => {
+export const userProfile = async (id: string): Promise<UserData> => {
   const response = await axiosInstance.get(`users/${id}`);
   return response.data;
 };

@@ -1,16 +1,30 @@
+import { ServiceData } from "@/types";
+import { ServiceData } from "@/types";
 export interface UserData {
   id: string;
   _id: string;
   username: string;
   firstName?: string;
   lastName?: string;
-  activeRole: string;
+  activeRole: "Client" | "Company";
   email: string;
   profilePicture?: string;
   purchasedServices: any[];
   hiredCompanies: any[];
   admins: any[];
   createdAt: string;
+  activeRoleId?: CompanyData;
+  clients: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    profilePicture: string;
+  }[];
+  services: ServiceData[];
+  purchasedServices: ServiceData[];
+  hiredCompanies: CompanyData[];
+  owner: string;
 }
 
 export interface CompanyData {

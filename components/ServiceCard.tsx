@@ -10,7 +10,7 @@ import { ServiceData } from "@/types";
 
 const ServiceCard = (service: ServiceData, index: number) => {
   return (
-    <Link key={index} href={service.link || "/service"}>
+    <Link key={index} href={`/service/${service._id}`}>
       <Card variant="filled" className="gap-2 h-80">
         <VStack className="">
           <Image

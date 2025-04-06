@@ -20,7 +20,6 @@ export function useStorageState<T>(key: string): UseStateHook<T> {
   const fetchStorageItem = useCallback(async () => {
     try {
       const value = localStorage.getItem(key);
-      console.log(value);
       setState(value ? JSON.parse(value) : null);
     } catch (error) {
       console.error(`Error fetching storage item (${key}):`, error);

@@ -17,12 +17,16 @@ import { Button, ButtonText } from "@/components/ui/button";
 import Link from "next/link";
 
 interface ProfileMenuProps {
-  options: any[];
+  options: {
+    name: string;
+    onPress: () => void;
+  }[];
+
   offset?: number;
 }
 
 const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
-  const { userData, companyData, logout, setUserData } = useSession();
+  const { userData, logout, setUserData } = useSession();
 
   const getInitial = (name: string) => {
     if (!name) return "";
@@ -58,13 +62,12 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
           <Button
             variant="outline"
             onPress={() => {
-              if (companyData) {
                 setUserData({
                   ...userData,
                   activeRole:
                     userData?.activeRole === "Client" ? "Company" : "Client",
                 });
-              }
+              
             }}
             className="w-52"
           >

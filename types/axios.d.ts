@@ -24,6 +24,8 @@ export interface AuthResponse {
   }
 
 export interface ServiceData {
+  _id: string;
+  id: string;
   title: string;
   description: string;
   price: number;

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
@@ -10,11 +12,9 @@ import { useSession } from "@/context/AuthContext";
 import Image from "next/image";
 
 const ProfilePage = () => {
-  const { userData, companyData } = useSession();
+  const { userData } = useSession();
   const [isFavourite, setIsFavourite] = useState(false);
   const [showCompanyProfile, setShowCompanyProfile] = useState(false);
-
-  if (!companyData) return null;
 
   if (!userData) return null;
   const date = new Date(userData.createdAt);
@@ -37,20 +37,21 @@ const ProfilePage = () => {
       <VStack className="h-full px-20 gap-8 -mt-4">
         <Card variant="outline" className="flex flex-row p-0 bg-white">
           <VStack className="w-3/4 border-r">
-            {showCompanyProfile ? (
+            {userData?.activeRoleId?._id && showCompanyProfile ? (
               <>
                 <VStack>
                   <HStack className="h-full justify-between p-4">
                     <HStack className="gap-10">
                       <Card variant="outline" className="-mt-8 bg-white">
                         <Image
+                          className="object-cover h-56 w-56"
                           src={
-                            userData.profilePicture ||
+                            userData?.activeRoleId?.companyLogo ||
                             "/assets/default-profile.jpg"
                           }
                           alt="cover-image"
-                          width={200}
-                          height={200}
+                          width={1200}
+                          height={1200}
                         />
                       </Card>
                       <VStack>
@@ -76,10 +77,10 @@ const ProfilePage = () => {
                 <HStack className="justify-between px-4 items-end">
                   <VStack className="gap-1">
                     <Heading className="mb-2" size="sm">
-                      {companyData.companyName}
+                      {userData?.activeRoleId?.companyName}
                     </Heading>
                     <Text size="sm">
-                      {companyData?.location?.primary?.country}
+                      {userData?.activeRoleId?.location?.primary?.country}
                     </Text>
                     <Text size="sm">Joined {formattedDate}</Text>
                     <Text size="sm">Online</Text>
@@ -102,13 +103,14 @@ const ProfilePage = () => {
                     <HStack className="gap-10">
                       <Card variant="outline" className="-mt-8 bg-white">
                         <Image
+                          className="object-cover h-56 w-56"
                           src={
                             userData.profilePicture ||
                             "/assets/default-profile.jpg"
                           }
                           alt="cover-image"
-                          width={200}
-                          height={200}
+                          width={4000}
+                          height={4000}
                         />
                       </Card>
                       <VStack>
@@ -133,24 +135,24 @@ const ProfilePage = () => {
                 <HStack className="justify-between px-4 items-end">
                   <VStack className="gap-1">
                     <Heading className="mb-2" size="sm">
-                      iadamoinc{userData?.username}
+                      {userData?.username}
                     </Heading>
                     <Text size="sm">
-                      {companyData?.location?.primary?.country}
+                      {userData?.activeRoleId?.location?.primary?.country}
                     </Text>
                     <Text size="sm">Joined {formattedDate}</Text>
                     <Text size="sm">Online</Text>
                   </VStack>
-                  {companyData && (
-                  <Button
-                    size="xs"
-                    variant="link"
-                    onPress={() => setShowCompanyProfile(true)}
-                  >
-                    <ButtonText className="text-btn-primary data-[hover=true]:no-underline data-[active=true]:no-underline">
-                      VIEW COMPANY PROFILE
-                    </ButtonText>
-                  </Button>
+                  {userData && (
+                    <Button
+                      size="xs"
+                      variant="link"
+                      onPress={() => setShowCompanyProfile(true)}
+                    >
+                      <ButtonText className="text-btn-primary data-[hover=true]:no-underline data-[active=true]:no-underline">
+                        VIEW COMPANY PROFILE
+                      </ButtonText>
+                    </Button>
                   )}
                 </HStack>
               </>
@@ -167,7 +169,7 @@ const ProfilePage = () => {
         <Card variant="filled">
           <Heading>Your Reviews</Heading>
           <HStack>
-            {companyData?.createdServices?.map((service) => (
+            {userData?.createdServices?.map((service) => (
               <Card key={service._id} className="w-1/4">
                 <VStack>
                   <Text>{service.title}</Text>

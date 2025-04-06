@@ -3,7 +3,7 @@ import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Text } from "@/components/ui/text";
+// import { Text } from "@/components/ui/text";
 import { getServices } from "@/axios/services";
 import { ServiceData } from "@/types";
 import ServiceCard from "@/components/ServiceCard";
@@ -38,6 +38,7 @@ const ServicesSection = () => {
             <ServiceCard key={index} {...service} />
           ))}
         </HStack>
+
       </VStack>
 
       {/* Pagination UI */}
