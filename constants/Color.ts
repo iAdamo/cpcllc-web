@@ -15,7 +15,7 @@ export const colors = {
     cpc2: "#74767E",
   },
   btn: {
-    primary: "#F5A623",
+    primary: "#2563EB",
     secondary: "#1A365D",
     outline: "#FFFFFF",
   },

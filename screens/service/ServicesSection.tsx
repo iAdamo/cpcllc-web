@@ -4,7 +4,7 @@ import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText } from "@/components/ui/button";
 // import { Text } from "@/components/ui/text";
-import { getServices } from "@/axios/services";
+import { getRandomServices } from "@/axios/services";
 import { ServiceData } from "@/types";
 import ServiceCard from "@/components/ServiceCard";
 
@@ -16,7 +16,7 @@ const ServicesSection = () => {
 
   useEffect(() => {
     const fetchServices = async () => {
-      const { services, totalPages } = await getServices(currentPage, limit);
+      const { services, totalPages } = await getRandomServices(currentPage, limit);
       setServices(services);
       setTotalPages(totalPages); // Update total pages dynamically
     };
@@ -35,10 +35,9 @@ const ServicesSection = () => {
         <Heading>Services</Heading>
         <HStack className="grid md:grid-cols-4 grid-cols-2 gap-4 p-4">
           {services?.map((service, index) => (
-            <ServiceCard key={index} {...service} />
+            <ServiceCard key={index} service={service} index={index} />
           ))}
         </HStack>
-
       </VStack>
 
       {/* Pagination UI */}

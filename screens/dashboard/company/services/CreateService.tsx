@@ -57,7 +57,7 @@ const CreateService = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
-  const { companyData } = useSession();
+  const { userData } = useSession();
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -113,12 +113,17 @@ const CreateService = () => {
       formData.append("price", data.price.toString());
 
       // Append company ID
-      if (companyData?.id) {
-        formData.append("company", companyData.id);
+      if (userData?.id) {
+        formData.append("company", userData.id);
       } else {
         console.error("Company ID is missing");
         setIsLoading(false);
         return;
+      }
+
+      if (data.location) {
+        console.log(location);
+        formData.append("location", data.location);
       }
 
       // Append images with specific keys
@@ -269,7 +274,7 @@ const CreateService = () => {
               )}
             </FormControl>
             {/** Location */}
-            <FormControl className="w-60">
+            <FormControl isInvalid={!!errors.location} className="w-60">
               <FormControlLabel className="flex-col flex items-start gap-2">
                 <Heading size="xl">Service Location</Heading>
                 <FormControlLabelText>
@@ -283,7 +288,7 @@ const CreateService = () => {
                   <Select
                     selectedValue={value}
                     onValueChange={onChange}
-                    isInvalid={!!errors.category}
+                    isInvalid={!!errors.location}
                     isRequired
                   >
                     <SelectTrigger>
@@ -293,30 +298,25 @@ const CreateService = () => {
                     <SelectPortal>
                       <SelectBackdrop />
                       <SelectContent>
-                        {Object.values(companyData?.location || {}).map(
-                          (address) => (
-                            <SelectItem
-                              key={address.country}
-                              label={
-                                address.address ||
-                                address.city +
-                                  ", " +
-                                  address.state +
-                                  ", " +
-                                  address.country
-                              }
-                              value={
-                                address.address ||
-                                address.city +
-                                  ", " +
-                                  address.state +
-                                  ", " +
-                                  address.country
-                              }
-                            />
+                        {Object.values(userData?.activeRoleId?.location || {})
+                          .filter(
+                            (location) =>
+                              typeof location === "object" &&
+                              location !== null &&
+                              "address" in location &&
+                              typeof location.address === "object" &&
+                              location.address !== null &&
+                              "address" in location.address
                           )
-                        )}
+                          .map((location, index) => (
+                            <SelectItem
+                              key={index}
+                              label={location.address.address}
+                              value={location.address.address}
+                            />
+                          ))}
                       </SelectContent>
+
                       <SelectDragIndicatorWrapper>
                         <SelectDragIndicator />
                       </SelectDragIndicatorWrapper>

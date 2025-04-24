@@ -110,7 +110,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     }
   } else if (session && userData?.activeRole === "Client") {
     if (pathname === "/dashboard") {
-      router.push("/service");
+      router.replace("/service");
     }
   }
   return (

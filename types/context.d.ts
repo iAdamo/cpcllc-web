@@ -45,33 +45,39 @@ export interface CompanyData {
         lat: number;
         long: number;
       };
-      zip: string;
-      city: string;
-      state: string;
-      country: string;
-      address: string;
+      address: {
+        zip: string;
+        city: string;
+        state: string;
+        country: string;
+        address: string;
+      };
     };
     secondary: {
       coordinates: {
         lat: number;
         long: number;
       };
-      zip: string;
-      city: string;
-      state: string;
-      country: string;
-      address: string;
+      address: {
+        zip: string;
+        city: string;
+        state: string;
+        country: string;
+        address: string;
+      };
     };
     tertiary: {
       coordinates: {
         lat: number;
         long: number;
       };
-      zip: string;
-      city: string;
-      state: string;
-      country: string;
-      address: string;
+      address: {
+        zip: string;
+        city: string;
+        state: string;
+        country: string;
+        address: string;
+      };
     };
   };
 }

@@ -13,23 +13,29 @@ export const createService = async (data: FormData) => {
   return response.data;
 };
 
-export const getCategories = async () => {
+export const getCategories = async (): Promise<any> => {
   const response = await axiosInstance.get("services/categories");
 
   return response.data;
 };
 
-export const getServices = async (
+export const getServiceById = async (id: string): Promise<ServiceData> => {
+  const response = await axiosInstance.get(`services/${id}`);
+
+  return response.data;
+};
+
+export const getRandomServices = async (
   page: number,
   limit: number
-): Promise<{services: ServiceData[]; totalPages: number}> => {
+): Promise<{ services: ServiceData[]; totalPages: number }> => {
   const response = await axiosInstance.get(
     `services/random?page=${page}&limit=${limit}`
   );
   return response.data;
 };
 
-export const getUserServices = async (id: string) => {
+export const getUserServices = async (id: string): Promise<ServiceData[]> => {
   const response = await axiosInstance.get(`services/user/${id}`);
 
   return response.data;

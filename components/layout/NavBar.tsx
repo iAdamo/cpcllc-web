@@ -39,9 +39,7 @@ const NavBar = () => {
 
     return {
       navBarClass: !isHome && "bg-white",
-      navBarLogo: !isHome
-        ? "/assets/logo-white.jpeg"
-        : "/assets/logo-color.png",
+      navBarLogo: !isHome ? "/assets/logo-white.svg" : "/assets/logo-color.svg",
       linkClass: !isHome
         ? "no-underline text-white text-lg font-bold hover:text-brand-1"
         : "no-underline text-text-primary text-lg font-bold hover:text-brand-0",
@@ -52,10 +50,12 @@ const NavBar = () => {
   return (
     <>
       <VStack
-        className={`bg-brand-primary h-20 justify-center items-center z-10 fixed top-0 w-full ${styles.navBarClass}`}
+        className={`bg-transparent h-20 justify-center items-center ${
+          currentPath !== "/" && "fixed top-0"
+        } z-10 w-full ${styles.navBarClass}`}
       >
         <HStack className="py-10 w-full items-center justify-between pr-5">
-          <HStack className="gap-2">
+          <HStack className="gap-10">
             <Button
               variant="link"
               onPress={() => router.replace("/")}
@@ -79,17 +79,19 @@ const NavBar = () => {
           </HStack>
 
           {/** Search */}
-          <Input className="hidden md:flex w-1/3 bg-white">
-            <InputField
-              type="text"
-              placeholder="Search..."
-              className="bg-transparent text-text-primary"
-            />
+          {currentPath !== "/" && (
+            <Input className="hidden md:flex w-1/3 bg-white">
+              <InputField
+                type="text"
+                placeholder="Search..."
+                className="bg-transparent text-text-primary"
+              />
 
-            <InputSlot className="pr-3">
-              <InputIcon as={SearchIcon} />
-            </InputSlot>
-          </Input>
+              <InputSlot className="pr-3">
+                <InputIcon as={SearchIcon} />
+              </InputSlot>
+            </Input>
+          )}
           {currentPath === "/" ? (
             <>
               <HStack className="items-center gap-6 hidden md:flex ml-8">
@@ -97,7 +99,7 @@ const NavBar = () => {
                   <Link
                     key={option.name}
                     href={option.href}
-                    className={`no-underline text-text-primary text-lg font-bold ${
+                    className={`no-underline text-white text-xl font-bold ${
                       currentPath === option.href ? "font-extrabold" : ""
                     }`}
                   >
@@ -105,7 +107,7 @@ const NavBar = () => {
                   </Link>
                 ))}
                 <Button variant="link" onPress={() => setIsAuthodalOpen(true)}>
-                  <ButtonText className="text-text-primary font-bold data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
+                  <ButtonText className="text-white text-xl font-bold data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
                     Log in
                   </ButtonText>
                 </Button>
@@ -113,7 +115,7 @@ const NavBar = () => {
 
               <Link
                 href="/onboarding"
-                className="px-4 py-2 font-bold bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary text-text-primary"
+                className="px-5 py-3 text-xl font-bold bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary text-text-primary"
               >
                 Get Started
               </Link>

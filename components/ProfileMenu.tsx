@@ -15,6 +15,7 @@ import { useSession } from "@/context/AuthContext";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import Link from "next/link";
+import { getInitial } from "@/utils/GetInitials";
 
 interface ProfileMenuProps {
   options: {
@@ -28,10 +29,7 @@ interface ProfileMenuProps {
 const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
   const { userData, logout, setUserData } = useSession();
 
-  const getInitial = (name: string) => {
-    if (!name) return "";
-    return name.charAt(0).toUpperCase();
-  };
+
 
   return userData ? (
     <Menu
@@ -67,7 +65,7 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
                   activeRole:
                     userData?.activeRole === "Client" ? "Company" : "Client",
                 });
-              
+
             }}
             className="w-52"
           >
