@@ -1,4 +1,3 @@
-export { default as HomeHeada } from './home-header.jpg';
 export { default as HomeCompany } from './home-company.jpg';
 export { default as HomeClient } from './home-client.jpg';
 export { default as Categ0 } from './categ0.jpeg';
