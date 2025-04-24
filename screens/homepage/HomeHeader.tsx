@@ -8,9 +8,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { carousel0, carousel1, HomeHeada } from "@/public/assets/homepage";
+import {
+  carousel0,
+  carousel1,
+  carousel2,
+  carousel3,
+  carousel4,
+} from "@/public/assets/homepage";
 
-const carouselImages = [HomeHeada, carousel0, carousel1];
+const carouselImages = [carousel0, carousel1, carousel2, carousel3, carousel4];
 
 const HomeHeader = () => {
   return (
@@ -41,7 +47,7 @@ const HomeHeader = () => {
           <Heading className="md:text-5xl text-4xl font-extrabold text-brand-secondary">
             Welcome to companiescenterllc.com
           </Heading>
-          <Text size="lg" className="font-semibold leading-6 text-black">
+          <Text size="lg" className="font-semibold leading-6 text-white">
             Your Trusted Platform for Connecting with Leading Companies. Whether
             you&apos;re looking to hire or get hired, we provide a comprehensive
             marketplace for businesses and job seekers.

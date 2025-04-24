@@ -80,7 +80,10 @@ const ProfilePage = () => {
                       {userData?.activeRoleId?.companyName}
                     </Heading>
                     <Text size="sm">
-                      {userData?.activeRoleId?.location?.primary?.country}
+                      {
+                        userData?.activeRoleId?.location?.primary?.address
+                          ?.country
+                      }
                     </Text>
                     <Text size="sm">Joined {formattedDate}</Text>
                     <Text size="sm">Online</Text>
@@ -138,7 +141,10 @@ const ProfilePage = () => {
                       {userData?.username}
                     </Heading>
                     <Text size="sm">
-                      {userData?.activeRoleId?.location?.primary?.country}
+                      {
+                        userData?.activeRoleId?.location?.primary?.address
+                          ?.country
+                      }
                     </Text>
                     <Text size="sm">Joined {formattedDate}</Text>
                     <Text size="sm">Online</Text>
@@ -169,7 +175,7 @@ const ProfilePage = () => {
         <Card variant="filled">
           <Heading>Your Reviews</Heading>
           <HStack>
-            {userData?.createdServices?.map((service) => (
+            {userData?.services?.map((service) => (
               <Card key={service._id} className="w-1/4">
                 <VStack>
                   <Text>{service.title}</Text>
