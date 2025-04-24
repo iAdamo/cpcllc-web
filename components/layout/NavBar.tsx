@@ -54,7 +54,7 @@ const NavBar = () => {
           currentPath !== "/" && "fixed top-0"
         } z-10 w-full ${styles.navBarClass}`}
       >
-        <HStack className="py-10 w-full items-center justify-between pr-5">
+        <HStack className="py-10 w-full items-center pr-5">
           <HStack className="gap-10">
             <Button
               variant="link"
@@ -72,7 +72,7 @@ const NavBar = () => {
 
             {/** Language */}
             <Button variant="link" className="">
-              <ButtonText className="text-text-cpc1 data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
+              <ButtonText className="text-white text-lg data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
                 English
               </ButtonText>
             </Button>
@@ -92,69 +92,74 @@ const NavBar = () => {
               </InputSlot>
             </Input>
           )}
-          {currentPath === "/" ? (
-            <>
+          <HStack className="gap-32 ml-auto">
+            {currentPath === "/" ? (
+              <>
+                <HStack className="items-center gap-8 hidden md:flex">
+                  {options.map((option) => (
+                    <Link
+                      key={option.name}
+                      href={option.href}
+                      className={` text-white text-lg font-bold ${
+                        currentPath === option.href ? "font-extrabold" : ""
+                      }`}
+                    >
+                      {option.name}
+                    </Link>
+                  ))}
+                </HStack>
+                <HStack space="lg" className="ml-auto">
+                  <Button
+                    onPress={() => setIsAuthodalOpen(true)}
+                    className="bg-[#FFFFFF20] data-[hover=true]:bg-[#FFFFFF40]"
+                  >
+                    <ButtonText className="">Log in</ButtonText>
+                  </Button>
+
+                  <Button
+                    onPress={() => router.push("/onboarding")}
+                    className="bg-btn-primary data-[hover=true]:bg-blue-500"
+                  >
+                    <ButtonText className="text-white ">Get Started</ButtonText>
+                  </Button>
+                </HStack>
+
+                <MobileSideBar />
+              </>
+            ) : (
               <HStack className="items-center gap-6 hidden md:flex ml-8">
-                {options.map((option) => (
+                {options2.map((option) => (
                   <Link
                     key={option.name}
                     href={option.href}
-                    className={`no-underline text-white text-xl font-bold ${
+                    className={`no-underline text-text-cpc1 text-md font-bold ${
                       currentPath === option.href ? "font-extrabold" : ""
                     }`}
                   >
                     {option.name}
                   </Link>
                 ))}
-                <Button variant="link" onPress={() => setIsAuthodalOpen(true)}>
-                  <ButtonText className="text-white text-xl font-bold data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
-                    Log in
-                  </ButtonText>
-                </Button>
+                {}
+                <ProfileMenu
+                  options={[
+                    {
+                      name: "Profile",
+                      onPress: () => router.replace("/cpc"),
+                    },
+                    {
+                      name: "Membership",
+                      onPress: () => router.replace("/profile"),
+                    },
+                    {
+                      name: "Settings",
+                      onPress: () => router.replace("/settings"),
+                    },
+                  ]}
+                  offset={20}
+                />
               </HStack>
-
-              <Link
-                href="/onboarding"
-                className="px-5 py-3 text-xl font-bold bg-btn-primary border border-btn-outline rounded-3xl hover:bg-btn-secondary text-text-primary"
-              >
-                Get Started
-              </Link>
-
-              <MobileSideBar />
-            </>
-          ) : (
-            <HStack className="items-center gap-6 hidden md:flex ml-8">
-              {options2.map((option) => (
-                <Link
-                  key={option.name}
-                  href={option.href}
-                  className={`no-underline text-text-cpc1 text-md font-bold ${
-                    currentPath === option.href ? "font-extrabold" : ""
-                  }`}
-                >
-                  {option.name}
-                </Link>
-              ))}
-              {}
-              <ProfileMenu
-                options={[
-                  {
-                    name: "Profile",
-                    onPress: () => router.replace("/cpc"),
-                  },
-                  {
-                    name: "Membership",
-                    onPress: () => router.replace("/profile"),
-                  },
-                  {
-                    name: "Settings",
-                    onPress: () => router.replace("/settings"),
-                  },
-                ]}
-                offset={20}
-              />
-            </HStack>
-          )}
+            )}
+          </HStack>
         </HStack>
         <AuthModalManager
           isModalOpen={isAuthodalOpen}

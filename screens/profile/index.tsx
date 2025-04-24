@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
@@ -10,14 +11,27 @@ import { Heading } from "@/components/ui/heading";
 import { SettingsIcon, FavouriteIcon } from "@/components/ui/icon";
 import { useSession } from "@/context/AuthContext";
 import Image from "next/image";
+import { userProfile } from "@/axios/users";
+import { UserData } from "@/types";
 
 const ProfilePage = () => {
   const { userData } = useSession();
+  const { id } = useParams();
   const [isFavourite, setIsFavourite] = useState(false);
   const [showCompanyProfile, setShowCompanyProfile] = useState(false);
+  let data: UserData | null = userData;
 
   if (!userData) return null;
-  const date = new Date(userData.createdAt);
+  if (userData._id !== id) {
+    const fetchUserData = async () => {
+      if (typeof id === "string") {
+        data = await userProfile(id);
+      }
+    };
+    fetchUserData();
+  }
+  if (!data) return null;
+  const date = new Date(data.createdAt);
   const options: Intl.DateTimeFormatOptions = {
     month: "long",
     day: "numeric",
@@ -37,7 +51,7 @@ const ProfilePage = () => {
       <VStack className="h-full px-20 gap-8 -mt-4">
         <Card variant="outline" className="flex flex-row p-0 bg-white">
           <VStack className="w-3/4 border-r">
-            {userData?.activeRoleId?._id && showCompanyProfile ? (
+            {data?.activeRoleId?._id && showCompanyProfile ? (
               <>
                 <VStack>
                   <HStack className="h-full justify-between p-4">
@@ -46,7 +60,7 @@ const ProfilePage = () => {
                         <Image
                           className="object-cover h-56 w-56"
                           src={
-                            userData?.activeRoleId?.companyLogo ||
+                            data?.activeRoleId?.companyLogo ||
                             "/assets/default-profile.jpg"
                           }
                           alt="cover-image"
@@ -77,11 +91,11 @@ const ProfilePage = () => {
                 <HStack className="justify-between px-4 items-end">
                   <VStack className="gap-1">
                     <Heading className="mb-2" size="sm">
-                      {userData?.activeRoleId?.companyName}
+                      {data?.activeRoleId?.companyName}
                     </Heading>
                     <Text size="sm">
                       {
-                        userData?.activeRoleId?.location?.primary?.address
+                        data?.activeRoleId?.location?.primary?.address
                           ?.country
                       }
                     </Text>
@@ -108,7 +122,7 @@ const ProfilePage = () => {
                         <Image
                           className="object-cover h-56 w-56"
                           src={
-                            userData.profilePicture ||
+                            data.profilePicture ||
                             "/assets/default-profile.jpg"
                           }
                           alt="cover-image"
@@ -138,18 +152,18 @@ const ProfilePage = () => {
                 <HStack className="justify-between px-4 items-end">
                   <VStack className="gap-1">
                     <Heading className="mb-2" size="sm">
-                      {userData?.username}
+                      {data?.username}
                     </Heading>
                     <Text size="sm">
                       {
-                        userData?.activeRoleId?.location?.primary?.address
+                        data?.activeRoleId?.location?.primary?.address
                           ?.country
                       }
                     </Text>
                     <Text size="sm">Joined {formattedDate}</Text>
                     <Text size="sm">Online</Text>
                   </VStack>
-                  {userData && (
+                  {data && (
                     <Button
                       size="xs"
                       variant="link"
@@ -175,7 +189,7 @@ const ProfilePage = () => {
         <Card variant="filled">
           <Heading>Your Reviews</Heading>
           <HStack>
-            {userData?.services?.map((service) => (
+            {data?.services?.map((service) => (
               <Card key={service._id} className="w-1/4">
                 <VStack>
                   <Text>{service.title}</Text>

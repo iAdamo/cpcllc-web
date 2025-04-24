@@ -111,12 +111,17 @@ const ServiceView = () => {
               />
             </Avatar>
             <VStack space="xs">
-              <Heading
-                size="4xl"
-                className="font-extrablack break-words whitespace-normal"
+              <Link
+                href={`/cpc/${usersData?._id}`}
+                className=""
               >
-                {usersData?.activeRoleId?.companyName}
-              </Heading>
+                <Heading
+                  size="4xl"
+                  className="font-extrablack break-words whitespace-normal"
+                >
+                  {usersData?.activeRoleId?.companyName}
+                </Heading>
+              </Link>
               <HStack>
                 <Heading className="text-text-tertiary">
                   5.0 (226 reviews)
@@ -163,20 +168,21 @@ const ServiceView = () => {
             >
               {services?.title}
             </Heading>
-            <HStack className="justify-between">
-              <HStack className="gap-4 items-center">
-                <Avatar size="sm">
-                  <AvatarFallbackText>
-                    {getInitial(usersData?.email || usersData?.firstName || "")}
-                  </AvatarFallbackText>
-                  <AvatarImage source={{ uri: usersData?.profilePicture }} />
-                  <AvatarBadge />
-                </Avatar>
-                <Text className="text-sm font-semibold">
-                  {usersData?.firstName} {usersData?.lastName}
-                </Text>
-              </HStack>
-            </HStack>
+            <Link
+              href={`/cpc/${usersData?._id}`}
+              className="flex flex-row gap-4 items-center"
+            >
+              <Avatar size="sm">
+                <AvatarFallbackText>
+                  {getInitial(usersData?.email || usersData?.firstName || "")}
+                </AvatarFallbackText>
+                <AvatarImage source={{ uri: usersData?.profilePicture }} />
+                <AvatarBadge />
+              </Avatar>
+              <Text className="text-sm font-semibold">
+                {usersData?.firstName} {usersData?.lastName}
+              </Text>
+            </Link>
           </VStack>
           <VStack>
             <Image
