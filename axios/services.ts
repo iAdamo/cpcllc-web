@@ -35,8 +35,24 @@ export const getRandomServices = async (
   return response.data;
 };
 
+export const getServices = async (
+  page: number,
+  limit: number
+): Promise<{ services: ServiceData[]; totalPages: number }> => {
+  const response = await axiosInstance.get(
+    `services?page=${page}&limit=${limit}`
+  );
+  return response.data;
+};
+
+
 export const getUserServices = async (id: string): Promise<ServiceData[]> => {
   const response = await axiosInstance.get(`services/user/${id}`);
 
+  return response.data;
+};
+
+export const setUserFavourites = async (serviceId: string): Promise<ServiceData> => {
+  const response = await axiosInstance.patch(`services/${serviceId}/favorite`);
   return response.data;
 };

@@ -28,6 +28,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
 import ForgotPasswordModal from "@/screens/auth/ForgetPassword";
 import { useSession } from "@/context/AuthContext";
+import { Spinner } from "@/components/ui/spinner";
 
 type ControllerRenderType = {
   field: {
@@ -253,7 +254,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                       onPress={handleSubmit(onSubmit)}
                     >
                       <ButtonText>
-                        {isLoading ? "Loading..." : "Sign in"}
+                        {isLoading ? <Spinner /> : "Sign in"}
                       </ButtonText>
                     </Button>
                   </VStack>

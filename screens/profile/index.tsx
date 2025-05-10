@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
@@ -15,29 +15,39 @@ import { userProfile } from "@/axios/users";
 import { UserData } from "@/types";
 
 const ProfilePage = () => {
-  const { userData } = useSession();
+  const { userData: sessionUserData } = useSession();
   const { id } = useParams();
+  const [data, setData] = useState<UserData | null>(null);
   const [isFavourite, setIsFavourite] = useState(false);
   const [showCompanyProfile, setShowCompanyProfile] = useState(false);
-  let data: UserData | null = userData;
 
-  if (!userData) return null;
-  if (userData._id !== id) {
+  useEffect(() => {
     const fetchUserData = async () => {
-      if (typeof id === "string") {
-        data = await userProfile(id);
+      if (typeof id !== "string") return;
+
+      if (sessionUserData?.id === id) {
+        setData(sessionUserData);
+      } else {
+        try {
+          const res = await userProfile(id);
+          setData(res);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
       }
     };
+
     fetchUserData();
-  }
+  }, [id, sessionUserData]);
+
   if (!data) return null;
+
   const date = new Date(data.createdAt);
-  const options: Intl.DateTimeFormatOptions = {
+  const formattedDate = date.toLocaleDateString(undefined, {
     month: "long",
     day: "numeric",
     year: "numeric",
-  };
-  const formattedDate = date.toLocaleDateString(undefined, options);
+  });
 
   return (
     <VStack className="">
@@ -63,7 +73,7 @@ const ProfilePage = () => {
                             data?.activeRoleId?.companyLogo ||
                             "/assets/default-profile.jpg"
                           }
-                          alt="cover-image"
+                          alt={data?.activeRoleId?.companyName}
                           width={1200}
                           height={1200}
                         />
@@ -94,10 +104,7 @@ const ProfilePage = () => {
                       {data?.activeRoleId?.companyName}
                     </Heading>
                     <Text size="sm">
-                      {
-                        data?.activeRoleId?.location?.primary?.address
-                          ?.country
-                      }
+                      {data?.activeRoleId?.location?.primary?.address?.country}
                     </Text>
                     <Text size="sm">Joined {formattedDate}</Text>
                     <Text size="sm">Online</Text>
@@ -122,8 +129,7 @@ const ProfilePage = () => {
                         <Image
                           className="object-cover h-56 w-56"
                           src={
-                            data.profilePicture ||
-                            "/assets/default-profile.jpg"
+                            data.profilePicture || "/assets/default-profile.jpg"
                           }
                           alt="cover-image"
                           width={4000}
@@ -155,15 +161,12 @@ const ProfilePage = () => {
                       {data?.username}
                     </Heading>
                     <Text size="sm">
-                      {
-                        data?.activeRoleId?.location?.primary?.address
-                          ?.country
-                      }
+                      {data?.activeRoleId?.location?.primary?.address?.country}
                     </Text>
                     <Text size="sm">Joined {formattedDate}</Text>
                     <Text size="sm">Online</Text>
                   </VStack>
-                  {data && (
+                  {data.activeRoleId && (
                     <Button
                       size="xs"
                       variant="link"

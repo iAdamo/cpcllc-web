@@ -9,6 +9,7 @@ import { login, logout as logoutRequest } from "@/axios/auth";
 import { useRouter, usePathname } from "next/navigation";
 import type { AuthContextProps, UserData, CompanyData } from "@/types";
 import { registerCompany, userProfile } from "@/axios/users";
+import { Spinner } from "@/components/ui/spinner";
 
 // Create the AuthContext
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -55,8 +56,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     setUserData(null);
     setCompanyData(null);
     await logoutRequest();
-    router.replace("/");
-  }, [setSession, setUserData, setCompanyData, router]);
+  }, [setSession, setUserData, setCompanyData]);
 
   const registerCompanyHandler = useCallback(
     async (data: FormData) => {
@@ -89,28 +89,47 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     }
   }, [userData, session, setUserData]);
 
-  if (isLoading || loading || loadingCompany) return <div>Loading...</div>;
+  if (isLoading || loading || loadingCompany)
+    return (
+      <Spinner size="large" className="h-full items-center justify-center" />
+    );
 
   // Route redirects
-  if (session && pathname === "/") {
+  if (!session && pathname !== "/") {
+    router.replace("/");
+    return (
+      <Spinner size="large" className="h-full items-center justify-center" />
+    );
+  } else if (session && pathname === "/") {
     if (userData?.activeRole === "Client") {
       router.replace("/service");
-      return <div>Loading...</div>;
+      return (
+        <Spinner size="large" className="h-full items-center justify-center" />
+      );
     } else if (userData?.activeRole === "Company") {
       router.replace("/dashboard");
-      return <div>Loading...</div>;
+      return (
+        <Spinner size="large" className="h-full items-center justify-center" />
+      );
     }
-  }
-
-  if (session && userData?.activeRole === "Company") {
+  } else if (session && userData?.activeRole === "Company") {
     if (pathname.startsWith("/service")) {
       router.replace("/dashboard");
+      return (
+        <Spinner size="large" className="h-full items-center justify-center" />
+      );
     } else if (pathname === "/cpc") {
       router.push("/cpc");
+      return (
+        <Spinner size="large" className="h-full items-center justify-center" />
+      );
     }
   } else if (session && userData?.activeRole === "Client") {
     if (pathname === "/dashboard") {
       router.replace("/service");
+      return (
+        <Spinner size="large" className="h-full items-center justify-center" />
+      );
     }
   }
   return (

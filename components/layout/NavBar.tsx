@@ -132,7 +132,7 @@ const NavBar = () => {
                   <Link
                     key={option.name}
                     href={option.href}
-                    className={`no-underline text-text-cpc1 text-md font-bold ${
+                    className={`no-underline text-md font-semibold ${
                       currentPath === option.href ? "font-extrabold" : ""
                     }`}
                   >
@@ -144,7 +144,7 @@ const NavBar = () => {
                   options={[
                     {
                       name: "Profile",
-                      onPress: () => router.replace("/cpc"),
+                      onPress: () => router.replace(`/cpc/${userData?.id}`),
                     },
                     {
                       name: "Membership",

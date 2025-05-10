@@ -21,25 +21,65 @@ import {
   ExternalLinkIcon,
   PhoneIcon,
   GlobeIcon,
+  FavouriteIcon,
 } from "@/components/ui/icon";
 import { getServiceById } from "@/axios/services";
-import { userProfile } from "@/axios/users";
-import { ServiceData, UserData } from "@/types";
+import { ServiceData } from "@/types";
 // import ServiceCard from "@/components/ServiceCard";
 import { useParams } from "next/navigation";
 import { getInitial } from "@/utils/GetInitials";
-import { FavouriteIcon } from "@/components/ui/icon";
 import { useRouter } from "next/navigation";
-import { useStorageState } from "@/utils/StorageState";
-
+import { setUserFavourites } from "@/axios/services";
+import { useSession } from "@/context/AuthContext";
 // qDMOY925z0RNAKzH
 const ServiceView = () => {
-  const [[, usersData], setUsersData] = useStorageState<UserData>("users");
-
   const [isFavourite, setIsFavourite] = useState(false);
   const [services, setServices] = useState<ServiceData | null>(null);
   const { id } = useParams();
   const router = useRouter();
+  const { userData } = useSession();
+
+  const portfolio = [
+    {
+      name: "Portfolio 1",
+      image: "/assets/header10.jpg",
+    },
+    {
+      name: "Portfolio 2",
+      image: "/assets/header10.jpg",
+    },
+    {
+      name: "Portfolio 3",
+      image: "/assets/header10.jpg",
+    },
+  ];
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      if (!userData || typeof id !== "string") return;
+
+      const service = await getServiceById(id);
+      setServices(service);
+
+      // Check if current user has already favorited
+      const alreadyFavourited = service?.favoritedBy?.includes(userData?.id ?? "");
+      setIsFavourite(alreadyFavourited);
+    };
+
+    fetchServices();
+  }, [id, userData]);
+
+  const handleFavourite = async () => {
+    try {
+      if (!services?._id) return console.error("Service ID is undefined");
+
+      const updatedService = await setUserFavourites(services._id);
+      const hasFavourited = updatedService.favoritedBy.includes(userData?.id ?? "");
+      setIsFavourite(hasFavourited);
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
 
   const buttons = [
     {
@@ -61,65 +101,32 @@ const ServiceView = () => {
       name: "Favorite",
 
       icon: FavouriteIcon,
-      action: () => setIsFavourite((prev) => !prev),
+      action: handleFavourite,
     },
   ];
-
-  const portfolio = [
-    {
-      name: "Portfolio 1",
-      image: "/assets/header10.jpg",
-    },
-    {
-      name: "Portfolio 2",
-      image: "/assets/header10.jpg",
-    },
-    {
-      name: "Portfolio 3",
-      image: "/assets/header10.jpg",
-    },
-  ];
-
-  useEffect(() => {
-    let service: ServiceData | null = null;
-    const fetchServices = async () => {
-      if (typeof id === "string") {
-        service = await getServiceById(id);
-        setServices(service);
-      }
-      if (usersData?.id) {
-        const user = await userProfile(service?.company || "");
-        console.log(user);
-        setUsersData(user);
-      }
-    };
-    fetchServices();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <VStack className=" bg-[#F6F6F6]">
-      <HStack space="xl" className="p-20 bg-[#F6F6F6] pt-40">
+      <HStack space="xl" className="p-20 gap-8 bg-[#F6F6F6] pt-40">
         <VStack className="w-2/3 gap-4 bg-white p-4">
           <HStack className="gap-6">
             <Avatar size="xl">
               <AvatarFallbackText>
-                {getInitial(usersData?.email || usersData?.firstName || "")}
+                {getInitial(
+                  services?.company?.companyEmail ||
+                    services?.company?.companyName ||
+                    ""
+                )}
               </AvatarFallbackText>
-              <AvatarImage
-                source={{ uri: usersData?.activeRoleId?.companyLogo }}
-              />
+              <AvatarImage source={{ uri: services?.company?.companyLogo }} />
             </Avatar>
             <VStack space="xs">
-              <Link
-                href={`/cpc/${usersData?._id}`}
-                className=""
-              >
+              <Link href={`/cpc/${services?.company?.owner?._id}`} className="">
                 <Heading
                   size="4xl"
                   className="font-extrablack break-words whitespace-normal"
                 >
-                  {usersData?.activeRoleId?.companyName}
+                  {services?.company?.companyName}
                 </Heading>
               </Link>
               <HStack>
@@ -128,7 +135,7 @@ const ServiceView = () => {
                 </Heading>
               </HStack>
               <Heading className="text-text-tertiary">
-                {usersData?.activeRoleId?.clients}
+                {services?.company?.clients}
               </Heading>
 
               <HStack className="justify-between gap-4 flex-wrap">
@@ -139,7 +146,8 @@ const ServiceView = () => {
                     size="md"
                     onPress={button.action}
                     className={`${
-                      isFavourite && "bg-red-500 data-[hover=true]:bg-red-500"
+                      isFavourite &&
+                      "bg-red-500 border-red-500 data-[hover=true]:bg-red-500"
                     }`}
                   >
                     <ButtonIcon
@@ -169,18 +177,25 @@ const ServiceView = () => {
               {services?.title}
             </Heading>
             <Link
-              href={`/cpc/${usersData?._id}`}
+              href={`/cpc/${services?.company?.owner?._id}`}
               className="flex flex-row gap-4 items-center"
             >
               <Avatar size="sm">
                 <AvatarFallbackText>
-                  {getInitial(usersData?.email || usersData?.firstName || "")}
+                  {getInitial(
+                    services?.company?.owner?.email ||
+                      services?.company?.owner?.firstName ||
+                      ""
+                  )}
                 </AvatarFallbackText>
-                <AvatarImage source={{ uri: usersData?.profilePicture }} />
+                <AvatarImage
+                  source={{ uri: services?.company?.owner?.profilePicture }}
+                />
                 <AvatarBadge />
               </Avatar>
               <Text className="text-sm font-semibold">
-                {usersData?.firstName} {usersData?.lastName}
+                {services?.company?.owner?.firstName}{" "}
+                {services?.company?.owner?.lastName}
               </Text>
             </Link>
           </VStack>
@@ -188,8 +203,7 @@ const ServiceView = () => {
             <Image
               className="object-cover h-96"
               src={
-                usersData?.activeRoleId?.companyLogo ||
-                "/assets/default-profile.jpg"
+                services?.media.image.primary || "/assets/default-profile.jpg"
               }
               alt="service-image"
               width={1200}
@@ -237,8 +251,8 @@ const ServiceView = () => {
             </VStack>
           </VStack>
         </VStack>
-        <VStack className="w-1/3 gap-4 bg-[#F6F6F6] fixed right-0 overflow-hidden">
-          <VStack className="bg-white w-10/12 p-4 gap-4">
+        <VStack className="w-1/3 sticky top-32 self-start h-fit gap-4 bg-[#F6F6F6]">
+          <VStack className="bg-white p-4 gap-4">
             <Heading className="text-3xl font-extrablack">
               Request quote & availability
             </Heading>
@@ -263,7 +277,7 @@ const ServiceView = () => {
               107 locals recently requested a quote
             </small>
           </VStack>
-          <Card className="bg-white w-10/12 p-4 gap-4">
+          <Card className="bg-white p-4 gap-4">
             <div className="flex flex-row justify-between">
               <Link href="#" className="font-extrablack text-lg text-cyan-700">
                 kajola.org
@@ -289,7 +303,7 @@ const ServiceView = () => {
                   Get Directions
                 </Link>
                 <p className="font-bold textt-lg text-text-secondary">
-                  {usersData?.activeRoleId?.location?.primary?.address?.address}
+                  {services?.company?.location?.primary?.address?.address}
                 </p>
               </div>
 

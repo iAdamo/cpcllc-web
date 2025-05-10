@@ -31,6 +31,8 @@ import Image from "next/image";
 import { register, sendCode } from "@/axios/auth";
 import VerifyCodeModal from "../VerifyCodeModal";
 import { useSession } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
 
 type ControllerRenderType = {
   field: {
@@ -63,6 +65,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   const { login } = useSession();
 
   const toast = useToast();
+  const router = useRouter();
 
   // handle form submission
   const {
@@ -108,8 +111,8 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
 
         const response = await register(formData);
         if (response) {
-          await login({ email: data.email, password: data.password });
           await sendCode({ email: data.email });
+          setShowVerifyEmailModal(true);
           toast.show({
             placement: "top",
             duration: 3000,
@@ -171,6 +174,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
         onClose={() => {
           onClose();
           reset();
+          setShowVerifyEmailModal(false);
         }}
         className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm overflow-hidden"
       >
@@ -188,15 +192,12 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
             </VStack>
             <ModalContent className="w-1/2 pt-2 pb-0 h-full border-none">
               <ModalHeader>
-                <Heading size="2xl">Sign Up</Heading>
+                <Heading size="xl">Sign Up</Heading>
               </ModalHeader>
               <ModalBody>
                 <VStack className="gap-4 pt-8 items-center justify-center w-full h-full">
                   {/** Username */}
-                  <FormControl
-                    isInvalid={!!errors?.username}
-                    className="w-96"
-                  >
+                  <FormControl isInvalid={!!errors?.username} className="w-96">
                     <FormControlLabel>
                       <FormControlLabelText>Username</FormControlLabelText>
                     </FormControlLabel>
@@ -204,16 +205,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       defaultValue=""
                       name="username"
                       control={control}
-                      rules={{
-                        validate: async (value: string) => {
-                          try {
-                            await FormSchema.parseAsync({ username: value });
-                            return true;
-                          } catch (error: any) {
-                            return error.message;
-                          }
-                        },
-                      }}
                       render={({
                         field: { onChange, onBlur, value },
                       }: ControllerRenderType) => (
@@ -248,16 +239,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       defaultValue=""
                       name="email"
                       control={control}
-                      rules={{
-                        validate: async (value: string) => {
-                          try {
-                            await FormSchema.parseAsync({ email: value });
-                            return true;
-                          } catch (error: any) {
-                            return error.message;
-                          }
-                        },
-                      }}
                       render={({
                         field: { onChange, onBlur, value },
                       }: ControllerRenderType) => (
@@ -292,16 +273,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       defaultValue=""
                       name="password"
                       control={control}
-                      rules={{
-                        validate: async (value) => {
-                          try {
-                            await FormSchema.parseAsync({ password: value });
-                            return true;
-                          } catch (error: any) {
-                            return error.message;
-                          }
-                        },
-                      }}
                       render={({
                         field: { onChange, onBlur, value },
                       }: ControllerRenderType) => (
@@ -344,18 +315,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       defaultValue=""
                       name="confirmPassword"
                       control={control}
-                      rules={{
-                        validate: async (value) => {
-                          try {
-                            await FormSchema.parseAsync({
-                              confirmPassword: value,
-                            });
-                            return true;
-                          } catch (error: any) {
-                            return error.message;
-                          }
-                        },
-                      }}
                       render={({ field: { onChange, onBlur, value } }) => (
                         <Input className="h-12">
                           <InputField
@@ -394,7 +353,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       onPress={handleSubmit(onSubmit)}
                     >
                       <ButtonText>
-                        {isLoading ? "Loading..." : "Sign Up"}
+                        {isLoading ? <Spinner /> : "Sign Up"}
                       </ButtonText>
                     </Button>
                   </VStack>
@@ -437,9 +396,16 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
       </Modal>
       {showVerifyEmailModal && (
         <VerifyCodeModal
-          email={getValues("email")}
           isOpen={showVerifyEmailModal}
           onClose={() => setShowVerifyEmailModal(false)}
+          email={getValues("email")}
+          onVerified={async () => {
+            await login({
+              email: getValues("email"),
+              password: getValues("password"),
+            });
+            router.push("/service");
+          }}
         />
       )}
     </>

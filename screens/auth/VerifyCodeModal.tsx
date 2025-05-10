@@ -10,23 +10,32 @@ interface VerifyCodeModalProps {
   isOpen: boolean;
   onClose: () => void;
   email: string;
+  onVerified: () => void;
 }
 
 const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
   isOpen,
   onClose,
   email,
+  onVerified,
 }) => {
-  const [showModal, setShowModal] = useState(isOpen);
   const toast = useToast();
   const router = useRouter();
   const pathname = usePathname();
 
+  const [cooldown, setCooldown] = useState(0);
+
   useEffect(() => {
-    setShowModal(isOpen);
-  }, [isOpen]);
+    let timer: NodeJS.Timeout;
+    if (cooldown > 0) {
+      timer = setTimeout(() => setCooldown((prev) => prev - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [cooldown]);
 
   const handleSendCode = async () => {
+    if (cooldown > 0) return;
+
     try {
       const response = await sendCode({ email });
       if (response) {
@@ -35,19 +44,22 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
           duration: 10000,
           render: ({ id }) => (
             <Toast nativeID={id} variant="outline" action="success">
-              <ToastTitle>Code sent, Check your inbox</ToastTitle>
+              <ToastTitle>Code sent, check your inbox</ToastTitle>
             </Toast>
           ),
         });
         Keyboard.dismiss();
+        setCooldown(30); // start 30-second cooldown
       }
-    } catch (error) {
+    } catch (error: any) {
       toast.show({
         placement: "top",
         duration: 3000,
         render: ({ id }) => (
           <Toast nativeID={id} variant="outline" action="error">
-            <ToastTitle>{(error as any).response?.data?.message}</ToastTitle>
+            <ToastTitle>
+              {error?.response?.data?.message || "Error sending code"}
+            </ToastTitle>
           </Toast>
         ),
       });
@@ -60,30 +72,35 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
         email,
         code: data.code,
       });
+
       if (response) {
-        if (pathname === "/") {
-          router.replace("/service");
-        }
         toast.show({
           placement: "top",
           duration: 3000,
           render: ({ id }) => (
             <Toast nativeID={id} variant="outline" action="success">
-              <ToastTitle>Email Verified</ToastTitle>
+              <ToastTitle>Email verified</ToastTitle>
             </Toast>
           ),
         });
+
         Keyboard.dismiss();
-        setShowModal(false);
+        onVerified();
         onClose();
+
+        if (pathname === "/") {
+          router.replace("/service");
+        }
       }
-    } catch (error) {
+    } catch (error: any) {
       toast.show({
         placement: "top",
         duration: 3000,
         render: ({ id }) => (
           <Toast nativeID={id} variant="outline" action="error">
-            <ToastTitle>{(error as any).response?.data?.message}</ToastTitle>
+            <ToastTitle>
+              {error?.response?.data?.message || "Verification failed"}
+            </ToastTitle>
           </Toast>
         ),
       });
@@ -92,19 +109,20 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
 
   return (
     <FormModal
-      isOpen={showModal}
-      onClose={() => {
-        setShowModal(false);
-        onClose();
-      }}
+      isOpen={isOpen}
+      onClose={onClose}
       title="Verify Email"
-      description="A verification code has been sent to you. Enter code below."
-      extraText="Didn't receive the code?"
+      description="A verification code has been sent to you. Enter it below."
+      extraText={
+        cooldown > 0
+          ? `You can resend code in ${cooldown}s`
+          : "Didn't receive the code?"
+      }
       onSubmit_2={handleSendCode}
       fields={[
         {
           name: "code",
-          label: "Verification code",
+          label: "Verification Code",
           placeholder: "Enter verification code",
           type: "text",
         },

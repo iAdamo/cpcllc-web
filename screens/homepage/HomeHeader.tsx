@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { VStack } from "@/components/ui/vstack";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { SearchIcon } from "@/components/ui/icon";
+import SearchEngine from "@/components/SearchEngine";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -49,24 +48,14 @@ const HomeHeader = () => {
                 "2px 2px 0 black, -2px 2px 0 black, 2px -2px 0 black, -2px -2px 0 black",
             }}
           >
-            Welcome To CompanyCenterLLC
+            CompanyCenterLLC
           </p>
-          <p className="text-white text-xl font-extrabold">
+          <p className="text-white text-xl font-extrabold pr-14">
             Your Trusted Platform for Connecting with Leading Companies. Whether
             you&apos;re looking to hire or get hired, we provide a comprehensive
             marketplace for businesses and job seekers.
           </p>
-
-          <Input className="hidden md:flex w-full h-14 bg-white">
-            <InputField
-              type="text"
-              placeholder="Search..."
-              className="bg-transparent text-black  font-bold text-lg"
-            />
-            <InputSlot className="pr-3">
-              <InputIcon as={SearchIcon} />
-            </InputSlot>
-          </Input>
+          <SearchEngine />
         </VStack>
       </VStack>
     </VStack>

@@ -18,7 +18,7 @@ export const login = async (data: LoginUser): Promise<UserData> => {
 };
 
 export const logout = async () => {
-  await axiosInstance.post("/auth/logout");
+  await axiosInstance.post("/auth/logout", {}, { withCredentials: true });
 };
 
 export const sendCode = async (data: { email: string }) => {

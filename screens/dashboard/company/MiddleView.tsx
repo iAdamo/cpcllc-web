@@ -2,55 +2,19 @@ import { useRouter } from "next/navigation";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
-import { Image } from "@/components/ui/image";
+// import { Image } from "@/components/ui/image";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
 import { AddIcon } from "@/components/ui/icon";
 import { Divider } from "@/components/ui/divider";
-// import ServiceCard from "@/components/ServiceCard";
+import ServiceCard from "@/components/ServiceCard";
+import { useSession } from "@/context/AuthContext";
 
 const MiddleView = () => {
   const router = useRouter();
-
-  const services = [
-    {
-      name: "Service 1",
-      category: "Plumbing",
-      thumbnail:
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    {
-      name: "Service 1",
-      category: "Plumbing",
-      thumbnail:
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    {
-      name: "Service 1",
-      category: "Plumbing",
-      thumbnail:
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    {
-      name: "Service 1",
-      category: "Plumbing",
-      thumbnail:
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    {
-      name: "Service 1",
-      category: "Plumbing",
-      thumbnail:
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-    },
-    {
-      name: "Service 1",
-      category: "Plumbing",
-      thumbnail:
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-    },
-  ];
+  const { userData } = useSession();
+  console.log(userData);
 
   return (
     <VStack className="p-4 gap-4 w-3/4">
@@ -72,23 +36,9 @@ const MiddleView = () => {
       </Card>
       <HStack className="w-full gap-4">
         <VStack className="grid grid-cols-2 gap-4 w-3/5">
-          {services && services.length > 0 ? (
-            services.map((service, index) => (
-              <Card key={index} variant="outline" className="">
-                <Image
-                  source={{ uri: service.thumbnail }}
-                  alt="Service"
-                  className="w-full h-40"
-                />
-                <VStack>
-                  <Heading size="sm">{service.name}</Heading>
-                  <Text size="sm">{service.category}</Text>
-                </VStack>
-              </Card>
-            ))
-          ) : (
-            <Text size="sm">No services available at the moment.</Text>
-          )}
+          {userData?.activeRoleId?.services.map((service, index) => (
+            <ServiceCard key={index} service={service} index={index} />
+          ))}
         </VStack>
         <VStack className="w-2/5">
           <VStack className="bg-white">

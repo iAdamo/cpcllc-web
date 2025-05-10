@@ -113,8 +113,8 @@ const CreateService = () => {
       formData.append("price", data.price.toString());
 
       // Append company ID
-      if (userData?.id) {
-        formData.append("company", userData.id);
+      if (userData?.activeRoleId) {
+        formData.append("company", userData.activeRoleId._id ?? "");
       } else {
         console.error("Company ID is missing");
         setIsLoading(false);

@@ -32,8 +32,10 @@ const PageOne = () => {
   }, [data.role]);
 
   const handleSubmit = () => {
-    if (values === "Client") {
+    if (values === "Client" && session) {
       router.push("/service");
+    } else if (values === "Client" && !session) {
+      setIsAuthModalOpen(true);
     } else if (values === "Company") {
       setData({ role: values });
       nextStep();
@@ -130,4 +132,3 @@ const PageOne = () => {
 };
 
 export default PageOne;
-
