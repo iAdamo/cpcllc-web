@@ -105,7 +105,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
     } else {
       try {
         const formData = new FormData();
-        formData.append("username", data.username);
         formData.append("email", data.email);
         formData.append("password", data.password);
 
@@ -190,43 +189,12 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                 height={2448}
               />
             </VStack>
-            <ModalContent className="w-1/2 pt-2 pb-0 h-full border-none">
+            <ModalContent className="w-1/2 pt-2 h-full border-none">
               <ModalHeader>
                 <Heading size="xl">Sign Up</Heading>
               </ModalHeader>
               <ModalBody>
                 <VStack className="gap-4 pt-8 items-center justify-center w-full h-full">
-                  {/** Username */}
-                  <FormControl isInvalid={!!errors?.username} className="w-96">
-                    <FormControlLabel>
-                      <FormControlLabelText>Username</FormControlLabelText>
-                    </FormControlLabel>
-                    <Controller
-                      defaultValue=""
-                      name="username"
-                      control={control}
-                      render={({
-                        field: { onChange, onBlur, value },
-                      }: ControllerRenderType) => (
-                        <Input className="h-12">
-                          <InputField
-                            placeholder="Username"
-                            value={value}
-                            onChangeText={onChange}
-                            onBlur={onBlur}
-                            onSubmitEditing={handleKeyPress}
-                            returnKeyType="done"
-                            className=""
-                          />
-                        </Input>
-                      )}
-                    />
-                    <FormControlError>
-                      <FormControlErrorText>
-                        {errors?.username?.message}
-                      </FormControlErrorText>
-                    </FormControlError>
-                  </FormControl>
                   {/** Email */}
                   <FormControl
                     className="w-96"
@@ -318,7 +286,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       render={({ field: { onChange, onBlur, value } }) => (
                         <Input className="h-12">
                           <InputField
-                            className="text-sm"
+                            className=""
                             placeholder="Confirm Password"
                             value={value}
                             onChangeText={onChange}
@@ -372,11 +340,11 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                 </VStack>
               </ModalBody>
               <ModalFooter>
-                <Text className="text-xs">
+                <Text className="text-md">
                   By joining, you agree to the
                   <Link
                     href="#"
-                    className="text-xs mx-1 inline underline hover:no-underline"
+                    className="text-md text-blue-600 mx-1 inline underline hover:no-underline"
                   >
                     CPCLLC
                   </Link>
@@ -384,7 +352,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                   Please read our
                   <Link
                     href="#"
-                    className="text-xs mx-1 inline underline hover:no-underline"
+                    className="text-md text-blue-600 mx-1 inline underline hover:no-underline"
                   >
                     Privacy
                   </Link>

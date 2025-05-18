@@ -51,8 +51,3 @@ export const getUserServices = async (id: string): Promise<ServiceData[]> => {
 
   return response.data;
 };
-
-export const setUserFavourites = async (serviceId: string): Promise<ServiceData> => {
-  const response = await axiosInstance.patch(`services/${serviceId}/favorite`);
-  return response.data;
-};

@@ -71,7 +71,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
     formState: { errors },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(
-      FormSchema.omit({ confirmPassword: true, code: true, username: true })
+      FormSchema.omit({ confirmPassword: true, code: true })
     ),
   });
 
@@ -273,11 +273,11 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                 </VStack>
               </ModalBody>
               <ModalFooter className="">
-                <Text className="text-xs">
+                <Text className="text-md">
                   By joining, you agree to the
                   <Link
                     href="#"
-                    className="text-xs mx-1 inline underline hover:no-underline"
+                    className="text-md text-blue-600 mx-1 inline underline hover:no-underline"
                   >
                     CPCLLC
                   </Link>
@@ -285,7 +285,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                   Please read our
                   <Link
                     href="#"
-                    className="text-xs mx-1 inline underline hover:no-underline"
+                    className="text-md text-blue-600 mx-1 inline underline hover:no-underline"
                   >
                     Privacy
                   </Link>

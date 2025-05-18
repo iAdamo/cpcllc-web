@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Heading } from "@/components/ui/heading";
+import { Text } from "@/components/ui/text";
+import { Textarea, TextareaInput } from "@/components/ui/textarea";
+import { TrashIcon } from "@/components/ui/icon";
 import Image from "next/image";
 import { Input, InputField } from "@/components/ui/input";
 import { useOnboarding } from "@/context/OnboardingContext";
@@ -13,154 +18,473 @@ import {
   FormControlLabelText,
 } from "@/components/ui/form-control";
 import { useForm, Controller } from "react-hook-form";
-
-type FormData = {
-  firstName: string;
-  lastName: string;
-  profilePicture: File | null;
-};
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import {
+  OnboardingFormSchema,
+  OnboardingFormSchemaType,
+} from "@/components/forms/OnboardingFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const BasicInfo = () => {
   const { prevStep, nextStep, setData, data } = useOnboarding();
-  const [errors, setErrors] = useState<{ image?: string }>({});
-  const [selectedImage, setSelectedImage] = useState<File | null>(
+
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
     data.profilePicture
   );
+
   const {
     control,
     handleSubmit,
     setValue,
-    formState: { errors: formErrors },
-  } = useForm<FormData>({
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<OnboardingFormSchemaType>({
+    resolver: zodResolver(OnboardingFormSchema),
     defaultValues: {
       firstName: data.firstName,
       lastName: data.lastName,
-      profilePicture: data.profilePicture,
+      profilePicture: data.profilePicture ?? undefined,
+      companyEmail: data.companyEmail,
+      companyName: data.companyName,
+      companyDescription: data.companyDescription,
+      companyPhoneNumber: data.companyPhoneNumber,
+      companyImages: data.companyImages || [],
     },
   });
 
   useEffect(() => {
     setValue("firstName", data.firstName);
     setValue("lastName", data.lastName);
-    setSelectedImage(data.profilePicture);
-  }, [data, setValue]);
+    setSelectedProfileImage(data.profilePicture);
+    setSelectedImages(data.companyImages || []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setSelectedImage(event.target.files[0]);
+ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return;
+
+    const MAX_IMAGE_SIZE_MB = 9;
+    const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
+
+    const newFiles = Array.from(event.target.files).slice(
+      0,
+      6 - selectedImages.length
+    );
+
+    // Check if any file exceeds the size limit
+    const oversizedFile = newFiles.find(
+      (file) => file.size > MAX_IMAGE_SIZE_BYTES
+    );
+
+    if (oversizedFile) {
+      setError("companyImages", {
+        type: "manual",
+        message: `Each image must be less than ${MAX_IMAGE_SIZE_MB}MB`,
+      });
+      return;
+    }
+
+    // If all files are valid, update the selected images
+    const updated = [...selectedImages, ...newFiles];
+    setSelectedImages(updated);
+    setValue("companyImages", updated);
+    clearErrors("companyImages"); // Clear any previous errors
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const droppedFiles = Array.from(event.dataTransfer.files).slice(
+      0,
+      6 - selectedImages.length
+    );
+    const updated = [...selectedImages, ...droppedFiles];
+    setSelectedImages(updated);
+    setValue("companyImages", updated);
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const updated = selectedImages.filter((_, i) => i !== index);
+    setSelectedImages(updated);
+    setValue("companyImages", updated);
+  };
+
+  const handleProfileImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedProfileImage(file);
     }
   };
 
-  const onSubmit = (formData: FormData) => {
-    if (!selectedImage) {
-      setErrors({ image: "Image is required" });
-      return;
-    }
-    setData({ ...formData, profilePicture: selectedImage });
+  const onSubmit = (formData: OnboardingFormSchemaType) => {
+    console.log("Form Data:", formData);
+    setData({ ...formData, profilePicture: selectedProfileImage });
     nextStep();
   };
 
   return (
-    <VStack className="bg-white mx-auto w-2/5 my-10 p-8 gap-10 rounded-lg">
-      <HStack className="w-full justify-between">
-        <FormControl isInvalid={!!formErrors.firstName}>
-          <FormControlLabel>
-            <FormControlLabelText>First Name</FormControlLabelText>
-          </FormControlLabel>
-          <Controller
-            name="firstName"
-            control={control}
-            rules={{ required: "First name is required" }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input className="h-12">
-                <InputField
-                  placeholder="John"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
-              </Input>
-            )}
-          />
-          {formErrors.firstName && (
-            <FormControlError>
-              <FormControlErrorText>
-                {formErrors.firstName.message}
-              </FormControlErrorText>
-            </FormControlError>
-          )}
-        </FormControl>
-        <FormControl isInvalid={!!formErrors.lastName}>
-          <FormControlLabel>
-            <FormControlLabelText>Last Name</FormControlLabelText>
-          </FormControlLabel>
-          <Controller
-            name="lastName"
-            control={control}
-            rules={{ required: "Last name is required" }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input className="h-12">
-                <InputField
-                  placeholder="Doe"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
-              </Input>
-            )}
-          />
-          {formErrors.lastName && (
-            <FormControlError>
-              <FormControlErrorText>
-                {formErrors.lastName.message}
-              </FormControlErrorText>
-            </FormControlError>
-          )}
-        </FormControl>
-      </HStack>
-      <FormControl
-        isInvalid={!!errors.image}
-        className="mx-auto justify-center items-center"
-      >
-        <FormControlLabel>
-          <FormControlLabelText>Profile Picture</FormControlLabelText>
-        </FormControlLabel>
-        <VStack className="w-48 h-48 rounded-full border-4">
-          <div className="text-center cursor-pointer h-48 border rounded-full w-full flex items-center justify-center">
-            <label className="cursor-pointer">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
+    <VStack className="w-full mx-10 mt-4 gap-10 rounded-lg">
+      <HStack className="gap-4">
+        <VStack className="w-1/2 gap-4">
+          <HStack className="justify-between">
+            <FormControl isInvalid={!!errors.firstName} className="w-[48%]">
+              <FormControlLabel>
+                <FormControlLabelText className="font-semibold">
+                  First Name
+                </FormControlLabelText>
+              </FormControlLabel>
+              <Controller
+                name="firstName"
+                control={control}
+                rules={{ required: "First name is required" }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input className="">
+                    <InputField
+                      placeholder="John"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      autoCapitalize="words"
+                    />
+                  </Input>
+                )}
               />
-              {selectedImage instanceof File ? (
-                <Image
-                  src={URL.createObjectURL(selectedImage)}
-                  alt="Selected image"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-full"
-                />
-              ) : (
-                <p className="text-gray-500">Click to Upload</p>
+              {errors.firstName && (
+                <FormControlError>
+                  <FormControlErrorText className="text-sm">
+                    {errors.firstName.message}
+                  </FormControlErrorText>
+                </FormControlError>
               )}
-            </label>
-          </div>
+            </FormControl>
+            <FormControl isInvalid={!!errors.lastName} className="w-[48%]">
+              <FormControlLabel>
+                <FormControlLabelText className="font-semibold">
+                  Last Name
+                </FormControlLabelText>
+              </FormControlLabel>
+              <Controller
+                name="lastName"
+                control={control}
+                rules={{ required: "Last name is required" }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input className="">
+                    <InputField
+                      placeholder="Doe"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      autoCapitalize="words"
+                    />
+                  </Input>
+                )}
+              />
+              {errors.lastName && (
+                <FormControlError>
+                  <FormControlErrorText className="text-sm">
+                    {errors.lastName.message}
+                  </FormControlErrorText>
+                </FormControlError>
+              )}
+            </FormControl>
+          </HStack>
+          {/** Company Name */}
+          <FormControl isInvalid={!!errors.companyName}>
+            <FormControlLabel>
+              <FormControlLabelText className="font-semibold">
+                Company Name
+              </FormControlLabelText>
+            </FormControlLabel>
+            <Controller
+              name="companyName"
+              control={control}
+              rules={{ required: "Company name is required" }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input className="">
+                  <InputField
+                    placeholder="CompanyCenterLLC"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    autoCapitalize="words"
+                  />
+                </Input>
+              )}
+            />
+            {errors.companyName && (
+              <FormControlError>
+                <FormControlErrorText className="text-sm">
+                  {errors.companyName.message}
+                </FormControlErrorText>
+              </FormControlError>
+            )}
+          </FormControl>
+          {/** Company Phone Number */}
+          <FormControl isInvalid={!!errors.companyPhoneNumber} className="z-50">
+            <FormControlLabel>
+              <FormControlLabelText>Company Phone Number</FormControlLabelText>
+            </FormControlLabel>
+            <Controller
+              name="companyPhoneNumber"
+              control={control}
+              rules={{ required: "Company phone number is required" }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <PhoneInput
+                  country={"us"}
+                  value={value}
+                  onChange={(phone) => onChange(phone)}
+                  onBlur={onBlur}
+                  inputStyle={{
+                    width: "100%",
+                    height: "2.5rem",
+                    zIndex: 1,
+                  }}
+                  containerStyle={{
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                  buttonStyle={{
+                    zIndex: 1,
+                  }}
+                  dropdownStyle={{
+                    zIndex: 1,
+                  }}
+                />
+              )}
+            />
+            {errors.companyPhoneNumber && (
+              <FormControlError>
+                <FormControlErrorText className="text-sm">
+                  {errors.companyPhoneNumber.message}
+                </FormControlErrorText>
+              </FormControlError>
+            )}
+          </FormControl>
+          {/** Company Email */}
+          <FormControl isInvalid={!!errors.companyEmail}>
+            <FormControlLabel>
+              <FormControlLabelText className="font-semibold">
+                Company Email
+              </FormControlLabelText>
+            </FormControlLabel>
+            <Controller
+              name="companyEmail"
+              control={control}
+              rules={{
+                required: "Company email is required",
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: "Invalid email address",
+                },
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input className="">
+                  <InputField
+                    placeholder="companyemail@example.com"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                  />
+                </Input>
+              )}
+            />
+            {errors.companyEmail && (
+              <FormControlError>
+                <FormControlErrorText className="text-sm">
+                  {errors.companyEmail.message}
+                </FormControlErrorText>
+              </FormControlError>
+            )}
+          </FormControl>
+          {/** Description */}
+          <FormControl isInvalid={!!errors.companyDescription}>
+            <FormControlLabel>
+              <FormControlLabelText className="font-semibold">
+                Company Description
+              </FormControlLabelText>
+            </FormControlLabel>
+            <Controller
+              name="companyDescription"
+              control={control}
+              rules={{ required: "Company description is required" }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Textarea className="h-20">
+                  <TextareaInput
+                    placeholder="Company Description"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                  />
+                </Textarea>
+              )}
+            />
+            {errors.companyDescription && (
+              <FormControlError>
+                <FormControlErrorText className="text-sm">
+                  {errors.companyDescription.message}
+                </FormControlErrorText>
+              </FormControlError>
+            )}
+          </FormControl>
+
+          <HStack className="justify-between mt-auto">
+            <Button variant="outline" onPress={prevStep} className="">
+              <ButtonText>Back</ButtonText>
+            </Button>
+            <Button onPress={handleSubmit(onSubmit)} className="">
+              <ButtonText>Continue</ButtonText>
+            </Button>
+          </HStack>
         </VStack>
-        {errors.image && (
-          <FormControlError>
-            <FormControlErrorText>{errors.image}</FormControlErrorText>
-          </FormControlError>
-        )}
-      </FormControl>
-      <HStack className="justify-between mt-auto">
-        <Button variant="outline" onPress={prevStep} className="">
-          <ButtonText>Back</ButtonText>
-        </Button>
-        <Button onPress={handleSubmit(onSubmit)} className="">
-          <ButtonText>Continue</ButtonText>
-        </Button>
+        <VStack className="w-1/2 gap-4">
+          <FormControl
+            isInvalid={!!errors.profilePicture}
+            className="flex-row justify-between items-start border border-gray-300 rounded-xl p-4"
+          >
+            <VStack className="w-44 h-40">
+              <Controller
+                name="profilePicture"
+                control={control}
+                render={({ field: { onChange } }) => (
+                  <div className="text-center cursor-pointer h-40 border w-full flex items-center justify-center">
+                    <label className="w-full h-full cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          onChange((e.target as HTMLInputElement).files?.[0]);
+                          handleProfileImageChange(e);
+                        }}
+                        className="hidden"
+                      />
+                      {selectedProfileImage instanceof File ? (
+                        <Image
+                          src={URL.createObjectURL(selectedProfileImage)}
+                          alt="Selected image"
+                          layout="fill"
+                          objectFit="cover"
+                          className=""
+                        />
+                      ) : (
+                        <p className="text-gray-500 mt-16">Click to Upload</p>
+                      )}
+                    </label>
+                  </div>
+                )}
+              />
+            </VStack>
+            <VStack className="w-1/2 ml-auto">
+              <FormControlLabel>
+                <FormControlLabelText className="font-semibold">
+                  Profile Picture
+                </FormControlLabelText>
+              </FormControlLabel>
+              <Card
+                variant="filled"
+                className={`${
+                  errors.profilePicture ? "bg-red-200" : "bg-green-200"
+                }`}
+              >
+                {errors.profilePicture ? (
+                  <Text className="text-red-950">
+                    {errors.profilePicture?.message}
+                  </Text>
+                ) : (
+                  <Text size="sm" className="text-green-950 ">
+                    A profile picture helps build trust and credibility by
+                    allowing clients to recognize and connect with you, creating
+                    a more personalized and professional experience
+                  </Text>
+                )}
+              </Card>
+            </VStack>
+          </FormControl>
+          {/**Company Images */}
+          <FormControl
+            isInvalid={selectedImages.length === 0}
+            className="border border-gray-300 rounded-xl p-4 pb-0 gap-2"
+          >
+            <Heading size="md">Professional Company Images</Heading>
+            <FormControlLabel className="flex-col flex items-start">
+              <FormControlLabelText className="text-md">
+                Upload up to 6 professional companyImages (.jpg or .png) that
+                showcase your company. Ensure each image is under 10MB and less
+                than 4,000 pixels in width or height.
+              </FormControlLabelText>
+            </FormControlLabel>
+            <HStack className="gap-4 grid grid-cols-3">
+              {selectedImages.map((image, index) => (
+                <Card
+                  key={index}
+                  variant="filled"
+                  className="h-36 justify-center items-center relative"
+                >
+                  <Image
+                    src={URL.createObjectURL(image)}
+                    alt={`Selected image ${index + 1}`}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    className="rounded-lg"
+                  />
+                  <Button
+                    size="xs"
+                    className="absolute top-2 right-2 bg-red-600 data-[hover=true]:bg-red-500"
+                    onPress={() => handleRemoveImage(index)}
+                  >
+                    <ButtonIcon as={TrashIcon} className="text-white" />
+                  </Button>
+                </Card>
+              ))}
+              {selectedImages.length < 6 && (
+                <Card variant="filled" className="border h-36">
+                  <Controller
+                    name="companyImages"
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <div
+                        className="text-center cursor-pointer h-36 w-full flex items-center justify-center"
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={handleDrop}
+                        onChange={(e) => {
+                          onChange((e.target as HTMLInputElement).files?.[0]);
+                        }}
+                      >
+                        <label className="cursor-pointer w-full h-full">
+                          <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={
+                              handleImageChange
+                            }
+                            className="hidden"
+                          />
+                          <p className="text-gray-500 text-md">
+                            Drag companyImages here or{" "}
+                            <span className="text-blue-500 mt-10">
+                              Click to Upload
+                            </span>
+                          </p>
+                        </label>
+                      </div>
+                    )}
+                  />
+                </Card>
+              )}
+            </HStack>
+            {errors.companyImages && (
+              <FormControlError>
+                <FormControlErrorText className="text-sm">
+                  {errors.companyImages.message}
+                </FormControlErrorText>
+              </FormControlError>
+            )}
+          </FormControl>
+        </VStack>
       </HStack>
     </VStack>
   );

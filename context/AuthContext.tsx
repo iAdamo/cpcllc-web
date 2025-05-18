@@ -89,20 +89,18 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     }
   }, [userData, session, setUserData]);
 
+  if (!session && pathname !== "/services" && pathname !== "/onboarding") {
+    router.replace("/");
+  }
   if (isLoading || loading || loadingCompany)
     return (
       <Spinner size="large" className="h-full items-center justify-center" />
     );
 
   // Route redirects
-  if (!session && pathname !== "/") {
-    router.replace("/");
-    return (
-      <Spinner size="large" className="h-full items-center justify-center" />
-    );
-  } else if (session && pathname === "/") {
+  if (session && pathname === "/") {
     if (userData?.activeRole === "Client") {
-      router.replace("/service");
+      router.replace("/services");
       return (
         <Spinner size="large" className="h-full items-center justify-center" />
       );

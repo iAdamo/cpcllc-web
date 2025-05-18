@@ -34,3 +34,28 @@ export const companyProfile = async (id: string): Promise<CompanyData> => {
   const response = await axiosInstance.get(`users/${id}`);
   return response.data;
 };
+
+export const getUsers = async (
+  page: number,
+  limit: number
+): Promise<{ users: UserData[]; totalPages: number }> => {
+  const response = await axiosInstance.get(
+    `users?page=${page}&limit=${limit}`
+  );
+  return response.data;
+}
+
+export const getCompanies = async (
+  page: number,
+  limit: number
+): Promise<{ companies: CompanyData[]; totalPages: number }> => {
+  const response = await axiosInstance.get(
+    `users/company?page=${page}&limit=${limit}`
+  );
+  return response.data;
+}
+
+export const setUserFavourites = async (companyId: string): Promise<CompanyData> => {
+  const response = await axiosInstance.patch(`users/${companyId}/favorite`);
+  return response.data;
+};

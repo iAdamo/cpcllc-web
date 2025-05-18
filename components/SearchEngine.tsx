@@ -23,7 +23,7 @@ const SearchEngine = () => {
   };
 
   return (
-    <VStack className="hidden md:flex md:flex-row w-full bg-white border-3 h-full border-blue-500">
+    <VStack className="hidden md:flex md:flex-row shadow-lg h-full">
       <FormControl>
         <Input className="h-14 w-full bg-white border-none rounded-none">
           <InputField
@@ -55,8 +55,8 @@ const SearchEngine = () => {
             onFocus={handleSecondFocus}
             onBlur={handleBlur}
           />
-          <InputSlot className="bg-blue-600 h-full w-16">
-            <InputIcon as={SearchIcon} className="w-8 h-8" />
+          <InputSlot className="h-full">
+            <InputIcon as={SearchIcon} className="" />
           </InputSlot>
         </Input>
         {isSecondDropdownVisible && (

@@ -40,6 +40,8 @@ export interface CompanyData {
   latitude: number;
   longitude: number;
   owner?: UserData;
+  favoritedBy: string[];
+  favoriteCount: number;
   location: {
     primary: {
       coordinates: {
@@ -133,7 +135,7 @@ export interface OnboardingData {
   companyEmail: string;
   companyPhoneNumber: string;
   companyAddress: string;
-  companyLogo: File | null;
+  companyImages: File[] | null;
   zip: string;
   city: string;
   latitude: number;

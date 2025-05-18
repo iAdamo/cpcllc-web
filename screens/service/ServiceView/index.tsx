@@ -7,7 +7,6 @@ import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import {
   Avatar,
-  AvatarBadge,
   AvatarFallbackText,
   AvatarImage,
 } from "@/components/ui/avatar";
@@ -20,66 +19,77 @@ import {
   Icon,
   ExternalLinkIcon,
   PhoneIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon,
   GlobeIcon,
   FavouriteIcon,
 } from "@/components/ui/icon";
-import { getServiceById } from "@/axios/services";
-import { ServiceData } from "@/types";
-// import ServiceCard from "@/components/ServiceCard";
-import { useParams } from "next/navigation";
+import { setUserFavourites } from "@/axios/users";
+import { UserData } from "@/types";
 import { getInitial } from "@/utils/GetInitials";
 import { useRouter } from "next/navigation";
-import { setUserFavourites } from "@/axios/services";
 import { useSession } from "@/context/AuthContext";
-// qDMOY925z0RNAKzH
-const ServiceView = () => {
-  const [isFavourite, setIsFavourite] = useState(false);
-  const [services, setServices] = useState<ServiceData | null>(null);
-  const { id } = useParams();
-  const router = useRouter();
-  const { userData } = useSession();
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
-  const portfolio = [
-    {
-      name: "Portfolio 1",
-      image: "/assets/header10.jpg",
-    },
-    {
-      name: "Portfolio 2",
-      image: "/assets/header10.jpg",
-    },
-    {
-      name: "Portfolio 3",
-      image: "/assets/header10.jpg",
-    },
-  ];
+const ServiceView = (data: UserData) => {
+  const [isFavourite, setIsFavourite] = useState(false);
+
+  const { userData } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchServices = async () => {
-      if (!userData || typeof id !== "string") return;
-
-      const service = await getServiceById(id);
-      setServices(service);
-
-      // Check if current user has already favorited
-      const alreadyFavourited = service?.favoritedBy?.includes(userData?.id ?? "");
-      setIsFavourite(alreadyFavourited);
-    };
-
-    fetchServices();
-  }, [id, userData]);
+    const hasFavourited = data?.activeRoleId?.favoritedBy.includes(
+      userData?.id ?? ""
+    );
+    setIsFavourite(hasFavourited ?? false);
+  }, [data?.activeRoleId?.favoritedBy, userData?.id]);
 
   const handleFavourite = async () => {
     try {
-      if (!services?._id) return console.error("Service ID is undefined");
+      if (!data?.activeRoleId?._id)
+        return console.error("Service ID is undefined");
 
-      const updatedService = await setUserFavourites(services._id);
-      const hasFavourited = updatedService.favoritedBy.includes(userData?.id ?? "");
-      setIsFavourite(hasFavourited);
+      const updatedCompany = await setUserFavourites(data?.activeRoleId?._id);
+      console.log(updatedCompany);
+      const hasFavourited = updatedCompany?.favoritedBy.includes(
+        userData?.id ?? ""
+      );
+      console.log(hasFavourited);
+      setIsFavourite(hasFavourited ?? false);
     } catch (error) {
       console.error("Error toggling favorite:", error);
     }
   };
+
+  const portfolio = [
+    { name: "Portfolio 1", image: "/assets/header10.jpg" },
+    { name: "Portfolio 2", image: "/assets/header10.jpg" },
+    { name: "Portfolio 3", image: "/assets/header10.jpg" },
+  ];
+
+  const serviceUpdates = [
+    {
+      name: "Modern white kitchen with a clean touch",
+      description:
+        "This kitchen is designed with a modern touch, featuring white cabinets and a clean layout. The open space allows for easy movement and functionality.",
+      image: "/assets/header10.jpg",
+    },
+    {
+      name: "Cozy living room with a warm ambiance",
+      description:
+        "This living room is designed to be cozy and inviting, with warm colors and comfortable furniture. The layout encourages relaxation and socializing.",
+      image: "/assets/header10.jpg",
+    },
+    {
+      name: "Elegant bedroom with a serene atmosphere",
+      description:
+        "This bedroom is designed to be elegant and serene, with soft colors and luxurious bedding. The layout promotes restful sleep and tranquility.",
+      image: "/assets/header10.jpg",
+    },
+  ];
 
   const buttons = [
     {
@@ -105,119 +115,149 @@ const ServiceView = () => {
     },
   ];
 
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const maxLength = 70;
+
+  const toggleExpanded = (index: number) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
+
   return (
-    <VStack className=" bg-[#F6F6F6]">
-      <HStack space="xl" className="p-20 gap-8 bg-[#F6F6F6] pt-40">
+    <VStack className="bg-[#F6F6F6]">
+      <HStack space="xl" className="gap-4 bg-[#F6F6F6]">
+        {/* LEFT SIDE */}
         <VStack className="w-2/3 gap-4 bg-white p-4">
-          <HStack className="gap-6">
+          {/* Company Header */}
+          <HStack className="justify-between">
             <Avatar size="xl">
               <AvatarFallbackText>
                 {getInitial(
-                  services?.company?.companyEmail ||
-                    services?.company?.companyName ||
+                  data?.activeRoleId?.companyEmail ||
+                    data?.activeRoleId?.companyName ||
                     ""
                 )}
               </AvatarFallbackText>
-              <AvatarImage source={{ uri: services?.company?.companyLogo }} />
+              <AvatarImage source={{ uri: data?.activeRoleId?.companyLogo }} />
             </Avatar>
             <VStack space="xs">
-              <Link href={`/cpc/${services?.company?.owner?._id}`} className="">
-                <Heading
-                  size="4xl"
-                  className="font-extrablack break-words whitespace-normal"
-                >
-                  {services?.company?.companyName}
-                </Heading>
-              </Link>
-              <HStack>
-                <Heading className="text-text-tertiary">
-                  5.0 (226 reviews)
-                </Heading>
-              </HStack>
-              <Heading className="text-text-tertiary">
-                {services?.company?.clients}
+              <Heading size="2xl" className="font-extrablack break-words">
+                {data?.activeRoleId?.companyName}
               </Heading>
-
-              <HStack className="justify-between gap-4 flex-wrap">
-                {buttons.map((button, index) => (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    size="md"
-                    onPress={button.action}
+              <Heading className="text-text-tertiary">
+                5.0 (226 reviews)
+              </Heading>
+              <Heading className="text-text-tertiary">
+                {data?.activeRoleId?.clients}
+              </Heading>
+            </VStack>
+            <VStack className="items-start">
+              {buttons.map((button, index) => (
+                <Button
+                  key={index}
+                  variant="link"
+                  size="md"
+                  onPress={button.action}
+                  className={`${
+                    isFavourite && " data-[hover=true]:bg-[#FFFFF70]"
+                  }`}
+                >
+                  <ButtonIcon
+                    size="lg"
                     className={`${
                       isFavourite &&
-                      "bg-red-500 border-red-500 data-[hover=true]:bg-red-500"
+                      "fill-red-500 border-red-500 text-white font-extrabold"
                     }`}
+                    as={button.icon}
+                  />
+                  <ButtonText
+                    size="sm"
+                    className="data-[hover=true]:no-underline data-[active=true]:no-underline"
                   >
-                    <ButtonIcon
-                      size="xl"
-                      className={`${
-                        isFavourite && "fill-red-500 text-white font-extrabold"
-                      }`}
-                      as={button.icon}
-                    />
-                    <ButtonText
-                      className={`${
-                        isFavourite && "text-white data-[hover=true]:text-white"
-                      }`}
-                    >
-                      {button.name}
-                    </ButtonText>
-                  </Button>
-                ))}
-              </HStack>
+                    {button.name}
+                  </ButtonText>
+                </Button>
+              ))}
             </VStack>
           </HStack>
-          <VStack className="p-4">
-            <Heading
-              size="2xl"
-              className="font-extrablack break-words whitespace-normal"
-            >
-              {services?.title}
-            </Heading>
-            <Link
-              href={`/cpc/${services?.company?.owner?._id}`}
-              className="flex flex-row gap-4 items-center"
-            >
-              <Avatar size="sm">
-                <AvatarFallbackText>
-                  {getInitial(
-                    services?.company?.owner?.email ||
-                      services?.company?.owner?.firstName ||
-                      ""
-                  )}
-                </AvatarFallbackText>
-                <AvatarImage
-                  source={{ uri: services?.company?.owner?.profilePicture }}
-                />
-                <AvatarBadge />
-              </Avatar>
-              <Text className="text-sm font-semibold">
-                {services?.company?.owner?.firstName}{" "}
-                {services?.company?.owner?.lastName}
-              </Text>
-            </Link>
-          </VStack>
-          <VStack>
-            <Image
-              className="object-cover h-96"
-              src={
-                services?.media.image.primary || "/assets/default-profile.jpg"
-              }
-              alt="service-image"
-              width={1200}
-              height={1200}
-              priority
-            />
-          </VStack>
+
+          {/* Content Sections */}
           <VStack space="4xl" className="py-6">
-            <VStack space="xs">
-              <Heading className="text-text-tertiary">Service Overview</Heading>
-              <Text className="break-words whitespace-normal">
-                {services?.description}
-              </Text>
+            {/* Service Updates */}
+            <VStack space="2xl">
+              <Heading>Update from this service provider</Heading>
+
+              <div className="relative w-full">
+                {/* Left button */}
+                <Button
+                  size="sm"
+                  className="swiper-button-prev absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+                >
+                  <ButtonIcon as={ArrowLeftIcon} />
+                </Button>
+
+                {/* Swiper */}
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  className="w-full"
+                  spaceBetween={10}
+                  slidesPerView={1.3}
+                  navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  }}
+                >
+                  {serviceUpdates.map((item, index) => {
+                    const isLong = item.description.length > maxLength;
+                    const isExpanded = expandedIndex === index;
+                    const shortText =
+                      item.description.slice(0, maxLength) + "...";
+
+                    return (
+                      <SwiperSlide key={index}>
+                        <Card variant="outline" className="flex-row gap-2">
+                          <Image
+                            className="object-cover h-32 w-32"
+                            src={item.image}
+                            alt="portfolio-image"
+                            width={1200}
+                            height={1200}
+                          />
+                          <VStack className="gap-2 h-20">
+                            <Heading size="md">{item.name}</Heading>
+                            <Text size="md">
+                              {isExpanded || !isLong
+                                ? item.description
+                                : shortText}
+                            </Text>
+                            {isLong && (
+                              <Button
+                                size="xs"
+                                variant="link"
+                                onPress={() => toggleExpanded(index)}
+                              >
+                                <ButtonText>
+                                  {isExpanded ? "Show Less" : "Read More"}
+                                </ButtonText>
+                              </Button>
+                            )}
+                          </VStack>
+                        </Card>
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
+
+                {/* Right button */}
+                <Button
+                  size="sm"
+                  className="swiper-button-next absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+                >
+                  <ButtonIcon as={ArrowRightIcon} />
+                </Button>
+              </div>
             </VStack>
+
+            {/* Portfolio */}
             <VStack>
               <Heading className="text-text-tertiary">Portfolio</Heading>
               <HStack className="flex-wrap justify-between">
@@ -235,11 +275,12 @@ const ServiceView = () => {
                 ))}
               </HStack>
             </VStack>
+
+            {/* Placeholder sections */}
             <VStack>
               <Heading className="text-text-tertiary">
-                Other services by this company
+                Other data by this company
               </Heading>
-              <HStack></HStack>
             </VStack>
             <VStack>
               <Heading className="text-text-tertiary">
@@ -251,9 +292,11 @@ const ServiceView = () => {
             </VStack>
           </VStack>
         </VStack>
+
+        {/* RIGHT SIDE */}
         <VStack className="w-1/3 sticky top-32 self-start h-fit gap-4 bg-[#F6F6F6]">
           <VStack className="bg-white p-4 gap-4">
-            <Heading className="text-3xl font-extrablack">
+            <Heading className="text-xl font-extrablack">
               Request quote & availability
             </Heading>
             <div className="flex flex-row gap-10">
@@ -270,13 +313,18 @@ const ServiceView = () => {
                 <Heading className="text-sm text-green-700">100%</Heading>
               </VStack>
             </div>
-            <Button className="bg-blue-600 data-[hover=true]:bg-blue-500">
+            <Button
+              size="sm"
+              className="bg-blue-600 data-[hover=true]:bg-blue-500"
+            >
               <ButtonText>Request quote & availability</ButtonText>
             </Button>
             <small className="text-center text-text-secondary">
               107 locals recently requested a quote
             </small>
           </VStack>
+
+          {/* Contact Card */}
           <Card className="bg-white p-4 gap-4">
             <div className="flex flex-row justify-between">
               <Link href="#" className="font-extrablack text-lg text-cyan-700">
@@ -302,11 +350,10 @@ const ServiceView = () => {
                 >
                   Get Directions
                 </Link>
-                <p className="font-bold textt-lg text-text-secondary">
-                  {services?.company?.location?.primary?.address?.address}
+                <p className="font-bold text-lg text-text-secondary">
+                  {data?.activeRoleId?.location?.primary?.address?.address}
                 </p>
               </div>
-
               <Icon as={GlobeIcon} />
             </div>
           </Card>

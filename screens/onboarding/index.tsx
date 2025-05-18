@@ -29,10 +29,19 @@ const Onboarding = () => {
         <PageOne />
       ) : (
         <VStack className="w-full h-screen">
-          <HStack className="w-full h-full bg-[#F7F7F7]">
+          <HStack className="w-full h-full bg-white">
             <VStack className="bg-brand-primary h-full w-1/5">
-              <Button className="mt-4 justify-start bg-transparent data-[hover=true]:bg-btn-primary" onPress={() => router.push("/")}>
-                <ButtonText size="xl">CompanyCenterLLC</ButtonText>
+              <Button
+                variant="link"
+                className="mt-4 justify-start"
+                onPress={() => router.push("/")}
+              >
+                <ButtonText
+                  size="lg"
+                  className="text-white data-[hover=true]:no-underline data-[hover=true]:text-white data-[activer=true]:no-underline"
+                >
+                  CompanyCenterLLC
+                </ButtonText>
               </Button>
             </VStack>
             {currentStep === 2 && <BasicInfo />}

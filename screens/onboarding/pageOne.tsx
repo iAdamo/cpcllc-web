@@ -49,13 +49,13 @@ const PageOne = () => {
         onPress={() => router.push("/")}
       >
         <ButtonText
-          size="xl"
-          className="data-[hover=true]:no-underline data-[hover=true]:text-btn-primary"
+          size="lg"
+          className="text-black data-[hover=true]:no-underline"
         >
           CompanyCenterLLC
         </ButtonText>
       </Button>
-      <VStack className="h-full rounded-3xl mx-96 px-6 mt-14 py-10 gap-10">
+      <VStack className="h-full rounded-3xl mx-96 px-6 mt-14 py-1 gap-10">
         <Heading size="2xl" className="text-center font-medium">
           Join as a Client or service provider
         </Heading>
@@ -63,41 +63,41 @@ const PageOne = () => {
           <RadioGroup value={values} onChange={setValues}>
             <HStack className="justify-between h-40 w-full">
               <Pressable
-                className="w-64 p-2 h-full border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
+                className="w-64 p-4 h-full hover:bg-[#F6F6F6] border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
                 onPress={() => {
                   setValues("Client");
                   if (!session) setIsAuthModalOpen(true);
                 }}
               >
                 <Radio value="Client" className="ml-auto">
-                  <RadioIndicator>
+                  <RadioIndicator className="w-6 h-6">
                     <RadioIcon
                       as={CircleIcon}
-                      className="fill-brand-secondary text-brand-secondary"
+                      className="fill-brand-secondary w-6 h-6 text-brand-secondary"
                     />
                   </RadioIndicator>
                 </Radio>
-                <Text className="text-xl font-semibold text-center my-auto">
-                  Client
+                <Text className="text-xl text-left text-black font-semibold my-auto">
+                  I&apos;m a Client, hiring for a project
                 </Text>
               </Pressable>
               <Pressable
-                className="w-64 p-2 h-full border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
+                className="w-64 p-4 h-full hover:bg-[#F6F6F6] border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
                 onPress={() => {
                   setValues("Company");
                   if (!session) setIsAuthModalOpen(true);
                 }}
               >
                 <Radio value="Company" className="ml-auto">
-                  <RadioIndicator>
+                  <RadioIndicator className="w-6 h-6">
                     <RadioIcon
                       as={CircleIcon}
-                      className="fill-brand-secondary text-brand-secondary"
+                      className="fill-brand-secondary w-6 h-6 text-brand-secondary"
                     />
                   </RadioIndicator>
                 </Radio>
-                <Text className="text-xl font-semibold text-center my-auto">
-                  Service Provider
+                <Text className="text-xl text-black font-semibold text-left my-auto">
+                  I&apos;m a Service Provider, ready to render my services
                 </Text>
               </Pressable>
             </HStack>
@@ -123,9 +123,28 @@ const PageOne = () => {
           }`}</ButtonText>
         </Button>
       </VStack>
+      <HStack className="w-full justify-center mt-8">
+        <Text className="text-black font-semibold">
+          Already have an account?
+        </Text>
+        <Button
+          variant="link"
+          size="md"
+          className="ml-2 items-start"
+          onPress={() => {
+            setValues("");
+            setIsAuthModalOpen(true);
+          }}
+        >
+          <ButtonText className="text-blue-600 m-0 data-[hover=true]:no-underline">
+            Sign In
+          </ButtonText>
+        </Button>
+      </HStack>
       <AuthModalManager
         isModalOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
+        initialView={values !== "" ? "signUp" : "signIn"}
       />
     </VStack>
   );

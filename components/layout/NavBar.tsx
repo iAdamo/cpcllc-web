@@ -7,10 +7,9 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { SearchIcon } from "@/components/ui/icon";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useSession } from "@/context/AuthContext";
+import SearchEngine from "../SearchEngine";
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
@@ -21,13 +20,12 @@ const NavBar = () => {
 
   const options = [
     { name: "Home", href: "/" },
-    { name: "Services", href: "/service" },
+    { name: "Services", href: "/services" },
     { name: "Hire", href: "/hire" },
   ];
 
   const options2 = [
     { name: "My Requests", href: "/requests" },
-    { name: "Inbox", href: "/inbox" },
     { name: "Favorites", href: "/favorites" },
     ...(userData?.activeRole !== "Company"
       ? [{ name: "Be a Company", href: "/onboarding" }]
@@ -50,11 +48,11 @@ const NavBar = () => {
   return (
     <>
       <VStack
-        className={`bg-transparent h-20 justify-center items-center ${
-          currentPath !== "/" && "fixed top-0"
+        className={`bg-transparent justify-center items-center ${
+          currentPath !== "/" ? "fixed top-0 h-32" : "h-20"
         } z-10 w-full ${styles.navBarClass}`}
       >
-        <HStack className="py-10 w-full items-center pr-5">
+        <HStack className="py-10 w-full gap-10 items-center pr-5">
           <HStack className="gap-10">
             <Button
               variant="link"
@@ -80,17 +78,9 @@ const NavBar = () => {
 
           {/** Search */}
           {currentPath !== "/" && (
-            <Input className="hidden md:flex w-1/3 bg-white">
-              <InputField
-                type="text"
-                placeholder="Search..."
-                className="bg-transparent text-text-primary"
-              />
-
-              <InputSlot className="pr-3">
-                <InputIcon as={SearchIcon} />
-              </InputSlot>
-            </Input>
+            <div>
+              <SearchEngine />
+            </div>
           )}
           <HStack className="gap-32 ml-auto">
             {currentPath === "/" ? (
@@ -127,7 +117,7 @@ const NavBar = () => {
                 <MobileSideBar />
               </>
             ) : (
-              <HStack className="items-center gap-6 hidden md:flex ml-8">
+              <HStack className="items-center gap-4 hidden md:flex ml-8">
                 {options2.map((option) => (
                   <Link
                     key={option.name}
@@ -164,6 +154,7 @@ const NavBar = () => {
         <AuthModalManager
           isModalOpen={isAuthodalOpen}
           onClose={() => setIsAuthodalOpen(false)}
+          initialView="signIn"
         />
       </VStack>
     </>
