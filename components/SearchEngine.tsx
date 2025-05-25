@@ -5,7 +5,7 @@ import { Divider } from "@/components/ui/divider";
 import { VStack } from "@/components/ui/vstack";
 import { SearchIcon } from "@/components/ui/icon";
 
-const SearchEngine = () => {
+export const SearchEngine = () => {
   const [isFirstDropdownVisible, setIsFirstDropdownVisible] = useState(false);
   const [isSecondDropdownVisible, setIsSecondDropdownVisible] = useState(false);
 
@@ -24,30 +24,17 @@ const SearchEngine = () => {
 
   return (
     <VStack className="hidden md:flex md:flex-row h-full bg-black">
-      <FormControl className="w-1/2">
+      <FormControl className="w-full">
         <Input className="h-14 w-full bg-white rounded-none">
           <InputField
             type="text"
             placeholder="services, companies, jobs..."
-            className="bg-transparent w-2/5  placeholder:text-md"
+            className="bg-transparent placeholder:text-md"
             onFocus={handleFirstFocus}
             onBlur={handleBlur}
           />
-        </Input>
-        {isFirstDropdownVisible && (
-          <VStack className="absolute top-16 left-0 w-full bg-white border border-gray-300 shadow-lg z-10">
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">New York</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">
-              Los Angeles
-            </div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Chicago</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Houston</div>
-          </VStack>
-        )}
-      </FormControl>
-      <Divider orientation="vertical" className="" />
-      <FormControl className="w-1/2">
-        <Input className="h-14 w-full bg-white rounded-none">
+
+          <Divider orientation="vertical" className="h-full bg-gray-300" />
           <InputField
             type="text"
             placeholder="location"
@@ -55,23 +42,49 @@ const SearchEngine = () => {
             onFocus={handleSecondFocus}
             onBlur={handleBlur}
           />
+
           <InputSlot className="h-full bg-blue-500 w-12">
             <InputIcon as={SearchIcon} className="w-8 h-8" />
           </InputSlot>
         </Input>
-        {isSecondDropdownVisible && (
-          <VStack className="absolute top-16 left-0 w-4/5 bg-white border border-gray-300 shadow-lg z-10">
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">New York</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">
-              Los Angeles
-            </div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Chicago</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Houston</div>
-          </VStack>
-        )}
       </FormControl>
+      {isFirstDropdownVisible && (
+        <VStack className="absolute top-14 left-0 w-[46%] bg-white border border-gray-300 shadow-lg z-10">
+          <div className="p-2 hover:bg-gray-100 cursor-pointer">New York</div>
+          <div className="p-2 hover:bg-gray-100 cursor-pointer">
+            Los Angeles
+          </div>
+          <div className="p-2 hover:bg-gray-100 cursor-pointer">Chicago</div>
+          <div className="p-2 hover:bg-gray-100 cursor-pointer">Houston</div>
+        </VStack>
+      )}
+      {isSecondDropdownVisible && (
+        <VStack className="absolute top-14 right-12 w-[46%] bg-white border border-gray-300 shadow-lg z-10">
+          <div className="p-2 hover:bg-gray-100 cursor-pointer">New York</div>
+          <div className="p-2 hover:bg-gray-100 cursor-pointer">
+            Los Angeles
+          </div>
+          <div className="p-2 hover:bg-gray-100 cursor-pointer">Chicago</div>
+          <div className="p-2 hover:bg-gray-100 cursor-pointer">Houston</div>
+        </VStack>
+      )}
     </VStack>
   );
 };
 
-export default SearchEngine;
+export const MSearchEngine = () => {
+  return (
+    <FormControl className="w-full">
+      <Input className="h-14 w-full bg-white rounded-none">
+        <InputField
+          type="text"
+          placeholder="location"
+          className="bg-transparent placeholder:text-md"
+        />
+        <InputSlot className="h-full bg-blue-500 w-12">
+          <InputIcon as={SearchIcon} className="w-8 h-8" />
+        </InputSlot>
+      </Input>
+    </FormControl>
+  );
+};

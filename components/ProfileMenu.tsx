@@ -29,8 +29,6 @@ interface ProfileMenuProps {
 const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
   const { userData, logout, setUserData } = useSession();
 
-
-
   return userData ? (
     <Menu
       offset={offset}
@@ -49,7 +47,7 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
       }}
     >
       <MenuItem className="data-[hover=true]:bg-transparent">
-        <VStack className="items-center gap-4">
+        <VStack className="items-center justify-center gap-4">
           <Avatar>
             <AvatarFallbackText>
               {getInitial(userData?.email || userData?.firstName || "")}
@@ -57,24 +55,21 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
             <AvatarImage source={{ uri: userData?.profilePicture }} />
             <AvatarBadge />
           </Avatar>
-          <Button
-            variant="outline"
-            onPress={() => {
+          {userData?.activeRole === "Company" && (
+            <Button
+              variant="outline"
+              onPress={() => {
                 setUserData({
                   ...userData,
                   activeRole:
                     userData?.activeRole === "Client" ? "Company" : "Client",
                 });
-
-            }}
-            className="w-52"
-          >
-            <ButtonText>
-              {userData?.activeRole === "Client"
-                ? "Switch to Company"
-                : "Switch to Client"}
-            </ButtonText>
-          </Button>
+              }}
+              className="w-52"
+            >
+              <ButtonText>{`Switch to ${userData?.activeRole}`}</ButtonText>
+            </Button>
+          )}
         </VStack>
       </MenuItem>
       <MenuSeparator />

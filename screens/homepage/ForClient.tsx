@@ -10,7 +10,7 @@ import { HomeClient } from "@/public/assets/homepage";
 
 const ForClient = () => {
   return (
-    <VStack className="p-20 w-full relative rounded-lg">
+    <VStack className="hidden md:flex p-20 w-full relative rounded-lg">
       <Image
         className="object-cover w-full h-[36rem] top-0 left-0 rounded-lg"
         src={HomeClient}

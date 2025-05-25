@@ -9,7 +9,7 @@ import Image from "next/image";
 
 const WhyChooseUs = () => {
   return (
-    <VStack className="mx-20 my-10 rounded-xl bg-text-primary">
+    <VStack className="hidden md:flex mx-20 my-10 rounded-xl bg-text-primary">
         <Heading size="2xl" className="py-8 text-center">Why businesses turn to CompaniesCenterLLC</Heading>
       <HStack className="px-10 flex-wrap justify-between">
         <Card className="w-60 flex-row md:flex-col gap-4">

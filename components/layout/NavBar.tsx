@@ -1,15 +1,16 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import MobileSideBar from "../../components/Overlays/MobileSideBar";
+// import MobileSideBar from "../../components/Overlays/MobileSideBar";
 import { useRouter, usePathname } from "next/navigation";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
+import { Pressable } from "@/components/ui/pressable";
 import { Button, ButtonText } from "@/components/ui/button";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useSession } from "@/context/AuthContext";
-import SearchEngine from "../SearchEngine";
+import { SearchEngine, MSearchEngine } from "../SearchEngine";
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
@@ -47,17 +48,13 @@ const NavBar = () => {
   return (
     <>
       <VStack
-        className={`justify-center items-center ${
+        className={`hidden md:flex justify-center items-center ${
           currentPath !== "/" ? "fixed top-0 h-32" : "h-20"
         } z-10 w-full ${styles.navBarClass}`}
       >
         <HStack className="py-10 w-full items-center gap-10 pr-5">
-          <HStack className="gap-10">
-            <Button
-              variant="link"
-              onPress={() => router.replace("/")}
-              className="p-0"
-            >
+          <HStack className="items-center">
+            <Pressable onPress={() => router.replace("/")}>
               <Image
                 src={styles.navBarLogo}
                 alt="Logo"
@@ -65,10 +62,10 @@ const NavBar = () => {
                 height={80}
                 priority
               />
-            </Button>
+            </Pressable>
 
             {/** Language */}
-            <Button variant="link" className="">
+            <Button variant="link" size="xs" className="">
               <ButtonText
                 className={`${
                   currentPath === "/" && "text-white"
@@ -116,8 +113,6 @@ const NavBar = () => {
                     <ButtonText className="text-white ">Get Started</ButtonText>
                   </Button>
                 </HStack>
-
-                <MobileSideBar />
               </>
             ) : (
               <HStack className="items-center gap-4 hidden md:flex ml-8">
@@ -159,6 +154,20 @@ const NavBar = () => {
           onClose={() => setIsAuthodalOpen(false)}
           initialView="signIn"
         />
+      </VStack>
+      <VStack className="md:hidden gap-2 mb-10 p-2 sticky top-0 bg-blue-500">
+        <HStack className="justify-between items-center">
+          <Button className="bg-blue-600">
+            <ButtonText>Open in App</ButtonText>
+          </Button>
+          <Button variant="outline" className="border-none">
+            <ButtonText>CPCLLC</ButtonText>
+          </Button>
+          <Button className="bg-blue-600">
+            <ButtonText>Open in App</ButtonText>
+          </Button>
+        </HStack>
+        <MSearchEngine />
       </VStack>
     </>
   );

@@ -1,6 +1,5 @@
 "use client";
 
-import { SafeAreaView } from "@/components/ui/safe-area-view";
 import HomeHeader from "@/screens/homepage/HomeHeader";
 import FeaturedCompanies from "@/screens/homepage/FeaturedCompanies";
 import BrowseCompanies from "@/screens/homepage/BrowseCompanies";
@@ -12,7 +11,7 @@ import AiChat from "@/components/AiChatFab";
 
 const HomePage = () => {
   return (
-    <SafeAreaView>
+    <header>
       <HomeHeader />
       <Categories />
       <FeaturedCompanies />
@@ -21,7 +20,7 @@ const HomePage = () => {
       <WhyChooseUs />
       <ForCompany />
       <AiChat />
-    </SafeAreaView>
+    </header>
   );
 };
 

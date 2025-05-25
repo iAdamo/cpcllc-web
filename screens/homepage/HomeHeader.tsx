@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { VStack } from "@/components/ui/vstack";
-import SearchEngine from "@/components/SearchEngine";
+import { SearchEngine } from "@/components/SearchEngine";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -17,7 +17,7 @@ const carouselImages = [carousel0, carousel1, carousel2, carousel3, carousel4];
 
 const HomeHeader = () => {
   return (
-    <VStack className="-mt-20 mb-20 relative">
+    <VStack className="hidden md:flex -mt-20 mb-20 relative">
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 4000 }}

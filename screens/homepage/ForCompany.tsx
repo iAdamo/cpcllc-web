@@ -8,7 +8,7 @@ import Image from "next/image";
 
 const ForCompany = () => {
   return (
-    <VStack className="px-20">
+    <VStack className="hidden md:flex px-20">
       <HStack className="rounded-xl">
         <VStack className="w-1/2">
           <Image
