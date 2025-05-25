@@ -11,7 +11,7 @@ const WhyChooseUs = () => {
   return (
     <VStack className="mx-20 my-10 rounded-xl bg-text-primary">
         <Heading size="2xl" className="py-8 text-center">Why businesses turn to CompaniesCenterLLC</Heading>
-      <HStack className="flex-wrap justify-between">
+      <HStack className="px-10 flex-wrap justify-between">
         <Card className="w-60 flex-row md:flex-col gap-4">
           <Image src={categories} alt="first" width={60} height={60} />
           <Heading>Extensive Network</Heading>

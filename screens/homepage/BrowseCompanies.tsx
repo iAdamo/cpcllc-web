@@ -7,14 +7,21 @@ import { Text } from "@/components/ui/text";
 import Link from "next/link";
 import { star } from "@/public/assets/icons";
 import Image from "next/image";
-import { getRandomServices } from "@/axios/services";
-import { ServiceData } from "@/types";
+import { getUsers } from "@/axios/users";
+import { UserData } from "@/types";
 
 const BrowseCompanies = () => {
-  const [services, setServices] = useState<ServiceData[]>([]);
+  const [users, setUsers] = useState<UserData[]>([]);
 
   useEffect(() => {
-    getRandomServices(1, 10).then((data) => setServices(data.services));
+    const fetchCompanies = async () => {
+      const { users: response, totalPages } = await getUsers(
+        1,
+        10
+      );
+      setUsers(response);
+    };
+    fetchCompanies();
   }, []);
 
   return (
@@ -26,18 +33,20 @@ const BrowseCompanies = () => {
           offering a wide range of services.
         </Text>
         <Link
-          href="#"
+          href="/services"
           className="text-2xl text-btn-primary hover:text-brand-secondary font-semibold underline"
         >
           Browse companies
         </Link>
       </VStack>
       <HStack className="w-full flex flex-wrap justify-between gap-y-8">
-        {services.map((service, index) => (
-          <Link key={index} href={service.link || ""}>
+        {users.map((user, index) => (
+          <Link key={index} href={user?.activeRoleId?._id || ""}>
             <Card className="bg-card-primary-1 hover:bg-card-primary-2 w-72 h-32 items-start">
               <VStack className="h-1/2">
-                <Heading className="">{service.title}</Heading>
+                <Heading className="">
+                  {user?.activeRoleId?.companyName}
+                </Heading>
               </VStack>
               <HStack className="h-1/2 w-full justify-between items-center pr-8">
                 <HStack className="gap-2 items-center">
@@ -49,11 +58,10 @@ const BrowseCompanies = () => {
                     height={20}
                   />
 
-                  <Text className="font-semibold">{`${service.ratings}/5.0`}</Text>
+                  <Text className="font-semibold">
+                    {`${user?.activeRoleId?.ratings}/5.0` || "5.0"}
+                  </Text>
                 </HStack>
-                <VStack>
-                  <Text className="font-semibold">{`${service.title} companies`}</Text>
-                </VStack>
               </HStack>
             </Card>
           </Link>

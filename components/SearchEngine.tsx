@@ -23,13 +23,13 @@ const SearchEngine = () => {
   };
 
   return (
-    <VStack className="hidden md:flex md:flex-row shadow-lg h-full">
-      <FormControl>
-        <Input className="h-14 w-full bg-white border-none rounded-none">
+    <VStack className="hidden md:flex md:flex-row h-full bg-black">
+      <FormControl className="w-1/2">
+        <Input className="h-14 w-full bg-white rounded-none">
           <InputField
             type="text"
             placeholder="services, companies, jobs..."
-            className="bg-transparent w-2/5 font-bold text-lg"
+            className="bg-transparent w-2/5  placeholder:text-md"
             onFocus={handleFirstFocus}
             onBlur={handleBlur}
           />
@@ -46,17 +46,17 @@ const SearchEngine = () => {
         )}
       </FormControl>
       <Divider orientation="vertical" className="" />
-      <FormControl>
-        <Input className="h-14 w-full border-0 bg-white rounded-none">
+      <FormControl className="w-1/2">
+        <Input className="h-14 w-full bg-white rounded-none">
           <InputField
             type="text"
             placeholder="location"
-            className="bg-transparent font-bold text-lg"
+            className="bg-transparent placeholder:text-md"
             onFocus={handleSecondFocus}
             onBlur={handleBlur}
           />
-          <InputSlot className="h-full">
-            <InputIcon as={SearchIcon} className="" />
+          <InputSlot className="h-full bg-blue-500 w-12">
+            <InputIcon as={SearchIcon} className="w-8 h-8" />
           </InputSlot>
         </Input>
         {isSecondDropdownVisible && (

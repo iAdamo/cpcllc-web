@@ -42,6 +42,7 @@ export interface CompanyData {
   owner?: UserData;
   favoritedBy: string[];
   favoriteCount: number;
+  ratings: number;
   location: {
     primary: {
       coordinates: {
@@ -143,6 +144,7 @@ export interface OnboardingData {
   state: string;
   country: string;
   addresses?: string[];
+  selectedServices?: { category: string }[];
 }
 
 export interface OnboardingContextType {

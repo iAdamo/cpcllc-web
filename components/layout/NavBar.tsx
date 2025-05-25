@@ -14,7 +14,7 @@ import SearchEngine from "../SearchEngine";
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
 
-  const { userData } = useSession();
+  const { session, userData } = useSession();
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -25,13 +25,12 @@ const NavBar = () => {
   ];
 
   const options2 = [
-    { name: "My Requests", href: "/requests" },
+    ...(session ? [{ name: "My Requests", href: "/requests" }] : []),
     { name: "Favorites", href: "/favorites" },
     ...(userData?.activeRole !== "Company"
       ? [{ name: "Be a Company", href: "/onboarding" }]
       : []),
   ];
-
   const styles = useMemo(() => {
     const isHome = currentPath === "/";
 
@@ -48,11 +47,11 @@ const NavBar = () => {
   return (
     <>
       <VStack
-        className={`bg-transparent justify-center items-center ${
+        className={`justify-center items-center ${
           currentPath !== "/" ? "fixed top-0 h-32" : "h-20"
         } z-10 w-full ${styles.navBarClass}`}
       >
-        <HStack className="py-10 w-full gap-10 items-center pr-5">
+        <HStack className="py-10 w-full items-center gap-10 pr-5">
           <HStack className="gap-10">
             <Button
               variant="link"
@@ -70,7 +69,11 @@ const NavBar = () => {
 
             {/** Language */}
             <Button variant="link" className="">
-              <ButtonText className="text-white text-lg data-[hover=true]:no-underline data-[hover=true]:text-text-primary">
+              <ButtonText
+                className={`${
+                  currentPath === "/" && "text-white"
+                } text-lg data-[hover=true]:no-underline data-[hover=true]:text-text-primary`}
+              >
                 English
               </ButtonText>
             </Button>
@@ -78,7 +81,7 @@ const NavBar = () => {
 
           {/** Search */}
           {currentPath !== "/" && (
-            <div>
+            <div className="w-[35rem]">
               <SearchEngine />
             </div>
           )}

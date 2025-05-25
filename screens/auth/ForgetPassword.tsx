@@ -185,7 +185,6 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             code: "",
             password: "",
             confirmPassword: "",
-            username: "",
           })
         } // Use the stored email
         fields={[

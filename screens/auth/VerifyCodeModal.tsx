@@ -132,7 +132,6 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
         email: true,
         password: true,
         confirmPassword: true,
-        username: true,
       })}
     />
   );

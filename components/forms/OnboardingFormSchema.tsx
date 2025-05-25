@@ -3,7 +3,7 @@ import { z } from "zod";
 const MAX_IMAGE_SIZE_MB = 10;
 const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 
-export const OnboardingFormSchema = z.object({
+export const onboardingFormSchema = z.object({
   firstName: z
     .string()
     .min(3, "First name must be at least 3 characters long")
@@ -22,7 +22,7 @@ export const OnboardingFormSchema = z.object({
     .max(50, "Company name must be at most 50 characters long"),
   companyDescription: z
     .string()
-    .min(300, "Company description must be at least 300 characters long")
+    .min(100, "Company description must be at least 100 characters long")
     .max(1500, "Company description must be at most 1500 characters long"),
   companyPhoneNumber: z
     .string()
@@ -61,4 +61,29 @@ export const OnboardingFormSchema = z.object({
     ),
 });
 
-export type OnboardingFormSchemaType = z.infer<typeof OnboardingFormSchema>;
+const coordinatesSchema = z.object({
+  lat: z.number().optional(),
+  long: z.number().optional(),
+});
+
+const addressSchema = z.object({
+  zip: z.string().min(1, "Zip code is required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(1, "State is required"),
+  country: z.string().min(1, "Country is required"),
+  address: z.string().optional(),
+});
+
+const locationSchema = z.object({
+  coordinates: coordinatesSchema.optional(),
+  address: addressSchema,
+});
+
+export const fullLocationSchema = z.object({
+  primary: locationSchema,
+  secondary: locationSchema.optional(),
+  tertiary: locationSchema.optional(),
+});
+
+export type onboardingFormSchemaType = z.infer<typeof onboardingFormSchema>;
+export type fullLocationSchemaType = z.infer<typeof fullLocationSchema>;

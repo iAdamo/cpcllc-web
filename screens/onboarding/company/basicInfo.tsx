@@ -21,8 +21,8 @@ import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import {
-  OnboardingFormSchema,
-  OnboardingFormSchemaType,
+  onboardingFormSchema,
+  onboardingFormSchemaType,
 } from "@/components/forms/OnboardingFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -41,8 +41,8 @@ const BasicInfo = () => {
     setError,
     clearErrors,
     formState: { errors },
-  } = useForm<OnboardingFormSchemaType>({
-    resolver: zodResolver(OnboardingFormSchema),
+  } = useForm<onboardingFormSchemaType>({
+    resolver: zodResolver(onboardingFormSchema),
     defaultValues: {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -63,7 +63,7 @@ const BasicInfo = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
- const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
 
     const MAX_IMAGE_SIZE_MB = 9;
@@ -74,7 +74,6 @@ const BasicInfo = () => {
       6 - selectedImages.length
     );
 
-    // Check if any file exceeds the size limit
     const oversizedFile = newFiles.find(
       (file) => file.size > MAX_IMAGE_SIZE_BYTES
     );
@@ -87,22 +86,39 @@ const BasicInfo = () => {
       return;
     }
 
-    // If all files are valid, update the selected images
     const updated = [...selectedImages, ...newFiles];
     setSelectedImages(updated);
     setValue("companyImages", updated);
-    clearErrors("companyImages"); // Clear any previous errors
+    clearErrors("companyImages");
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+
+    const MAX_IMAGE_SIZE_MB = 9;
+    const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
+
     const droppedFiles = Array.from(event.dataTransfer.files).slice(
       0,
       6 - selectedImages.length
     );
+
+    const oversizedFile = droppedFiles.find(
+      (file) => file.size > MAX_IMAGE_SIZE_BYTES
+    );
+
+    if (oversizedFile) {
+      setError("companyImages", {
+        type: "manual",
+        message: `Each image must be less than ${MAX_IMAGE_SIZE_MB}MB`,
+      });
+      return;
+    }
+
     const updated = [...selectedImages, ...droppedFiles];
     setSelectedImages(updated);
     setValue("companyImages", updated);
+    clearErrors("companyImages");
   };
 
   const handleRemoveImage = (index: number) => {
@@ -120,20 +136,27 @@ const BasicInfo = () => {
     }
   };
 
-  const onSubmit = (formData: OnboardingFormSchemaType) => {
-    console.log("Form Data:", formData);
-    setData({ ...formData, profilePicture: selectedProfileImage });
+  const onSubmit = (formData: onboardingFormSchemaType) => {
+    setData({
+      ...formData,
+      profilePicture: selectedProfileImage,
+      companyImages: selectedImages,
+    });
     nextStep();
   };
 
+  const handleFormSubmit = handleSubmit(onSubmit, (errors) => {
+    console.log("Validation Errors:", errors);
+  });
+
   return (
-    <VStack className="w-full mx-10 mt-4 gap-10 rounded-lg">
+    <VStack className="w-full mx-10 my-auto">
       <HStack className="gap-4">
-        <VStack className="w-1/2 gap-4">
+        <VStack className="w-1/2 gap-6">
           <HStack className="justify-between">
             <FormControl isInvalid={!!errors.firstName} className="w-[48%]">
               <FormControlLabel>
-                <FormControlLabelText className="font-semibold">
+                <FormControlLabelText className="font-semibold text-md">
                   First Name
                 </FormControlLabelText>
               </FormControlLabel>
@@ -163,7 +186,7 @@ const BasicInfo = () => {
             </FormControl>
             <FormControl isInvalid={!!errors.lastName} className="w-[48%]">
               <FormControlLabel>
-                <FormControlLabelText className="font-semibold">
+                <FormControlLabelText className="font-semibold text-md">
                   Last Name
                 </FormControlLabelText>
               </FormControlLabel>
@@ -195,7 +218,7 @@ const BasicInfo = () => {
           {/** Company Name */}
           <FormControl isInvalid={!!errors.companyName}>
             <FormControlLabel>
-              <FormControlLabelText className="font-semibold">
+              <FormControlLabelText className="font-semibold text-md">
                 Company Name
               </FormControlLabelText>
             </FormControlLabel>
@@ -267,7 +290,7 @@ const BasicInfo = () => {
           {/** Company Email */}
           <FormControl isInvalid={!!errors.companyEmail}>
             <FormControlLabel>
-              <FormControlLabelText className="font-semibold">
+              <FormControlLabelText className="font-semibold text-md">
                 Company Email
               </FormControlLabelText>
             </FormControlLabel>
@@ -303,7 +326,7 @@ const BasicInfo = () => {
           {/** Description */}
           <FormControl isInvalid={!!errors.companyDescription}>
             <FormControlLabel>
-              <FormControlLabelText className="font-semibold">
+              <FormControlLabelText className="font-semibold text-md">
                 Company Description
               </FormControlLabelText>
             </FormControlLabel>
@@ -335,7 +358,7 @@ const BasicInfo = () => {
             <Button variant="outline" onPress={prevStep} className="">
               <ButtonText>Back</ButtonText>
             </Button>
-            <Button onPress={handleSubmit(onSubmit)} className="">
+            <Button onPress={handleFormSubmit} className="">
               <ButtonText>Continue</ButtonText>
             </Button>
           </HStack>
@@ -362,13 +385,15 @@ const BasicInfo = () => {
                         className="hidden"
                       />
                       {selectedProfileImage instanceof File ? (
-                        <Image
-                          src={URL.createObjectURL(selectedProfileImage)}
-                          alt="Selected image"
-                          layout="fill"
-                          objectFit="cover"
-                          className=""
-                        />
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={URL.createObjectURL(selectedProfileImage)}
+                            alt="Selected image"
+                            fill
+                            style={{ objectFit: "cover" }}
+                            className="rounded-lg"
+                          />
+                        </div>
                       ) : (
                         <p className="text-gray-500 mt-16">Click to Upload</p>
                       )}
@@ -379,7 +404,7 @@ const BasicInfo = () => {
             </VStack>
             <VStack className="w-1/2 ml-auto">
               <FormControlLabel>
-                <FormControlLabelText className="font-semibold">
+                <FormControlLabelText className="font-semibold text-md">
                   Profile Picture
                 </FormControlLabelText>
               </FormControlLabel>
@@ -405,15 +430,14 @@ const BasicInfo = () => {
           </FormControl>
           {/**Company Images */}
           <FormControl
-            isInvalid={selectedImages.length === 0}
-            className="border border-gray-300 rounded-xl p-4 pb-0 gap-2"
+            isInvalid={selectedImages.length === 0 || !!errors.companyImages}
+            className="border border-gray-300 rounded-xl p-4 gap-2"
           >
             <Heading size="md">Professional Company Images</Heading>
             <FormControlLabel className="flex-col flex items-start">
               <FormControlLabelText className="text-md">
                 Upload up to 6 professional companyImages (.jpg or .png) that
-                showcase your company. Ensure each image is under 10MB and less
-                than 4,000 pixels in width or height.
+                showcase your company. Ensure each image is under 10MB.
               </FormControlLabelText>
             </FormControlLabel>
             <HStack className="gap-4 grid grid-cols-3">
@@ -441,38 +465,27 @@ const BasicInfo = () => {
               ))}
               {selectedImages.length < 6 && (
                 <Card variant="filled" className="border h-36">
-                  <Controller
-                    name="companyImages"
-                    control={control}
-                    render={({ field: { onChange } }) => (
-                      <div
-                        className="text-center cursor-pointer h-36 w-full flex items-center justify-center"
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={handleDrop}
-                        onChange={(e) => {
-                          onChange((e.target as HTMLInputElement).files?.[0]);
-                        }}
-                      >
-                        <label className="cursor-pointer w-full h-full">
-                          <input
-                            type="file"
-                            multiple
-                            accept="image/*"
-                            onChange={
-                              handleImageChange
-                            }
-                            className="hidden"
-                          />
-                          <p className="text-gray-500 text-md">
-                            Drag companyImages here or{" "}
-                            <span className="text-blue-500 mt-10">
-                              Click to Upload
-                            </span>
-                          </p>
-                        </label>
-                      </div>
-                    )}
-                  />
+                  <div
+                    className="text-center cursor-pointer h-36 w-full flex items-center justify-center"
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={handleDrop}
+                  >
+                    <label className="cursor-pointer w-full h-full">
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                      <p className="text-gray-500 text-sm mt-4">
+                        Drag companyImages here or{" "}
+                        <span className="text-blue-500 mt-10">
+                          Click to Upload
+                        </span>
+                      </p>
+                    </label>
+                  </div>
                 </Card>
               )}
             </HStack>

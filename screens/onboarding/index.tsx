@@ -5,8 +5,9 @@ import { useOnboarding } from "@/context/OnboardingContext";
 import { useEffect, useState } from "react";
 import PageOne from "@/screens/onboarding/pageOne";
 import BasicInfo from "@/screens/onboarding/company/basicInfo";
-import InfoOne from "@/screens/onboarding/company/infoOne";
-import InfoTwo from "./company/infoTwo";
+import ServicesInfo from "./company/serviceInfo";
+// import InfoOne from "@/screens/onboarding/company/infoOne";
+import LocationBoard from "./company/locationBoard";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import FinalStep from "@/screens/onboarding/company/finalStep";
@@ -44,9 +45,9 @@ const Onboarding = () => {
                 </ButtonText>
               </Button>
             </VStack>
-            {currentStep === 2 && <BasicInfo />}
-            {currentStep === 3 && <InfoOne />}
-            {currentStep === 4 && <InfoTwo />}
+            {currentStep === 4 && <BasicInfo />}
+            {currentStep === 3 && <LocationBoard />}
+            {currentStep === 2 && <ServicesInfo />}
             {currentStep === 5 && <FinalStep />}
           </HStack>
         </VStack>

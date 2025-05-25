@@ -21,13 +21,23 @@ const FinalStep = () => {
     try {
       setLoading(true);
       const formData = new FormData();
+
       Object.entries(data).forEach(([key, value]) => {
-        if (value instanceof File) {
+        if (Array.isArray(value)) {
+          value.forEach((file) => {
+            if (file instanceof File) {
+              formData.append(key, file);
+            } else {
+              formData.append(key, file);
+            }
+          });
+        } else if (value instanceof File) {
           formData.append(key, value);
         } else {
-          formData.append(key, value as string);
+          formData.append(key, value);
         }
       });
+
       await registerCompany(formData);
       await fetchUserProfile();
       setSuccess(true);

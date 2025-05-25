@@ -13,3 +13,12 @@ export { default as star } from "./star.svg";
 export { default as message } from "./message.svg";
 export { default as sentarrow } from "./sentarrow.svg";
 export { default as phone } from "./phone.svg";
+export { default as plumbing } from "./plumbing.svg";
+export { default as electrical } from "./electrical.svg";
+export { default as cleaning } from "./cleaning.svg";
+export { default as hvac } from "./hvac.svg";
+
+
+
+
+

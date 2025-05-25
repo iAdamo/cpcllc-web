@@ -104,14 +104,14 @@ const PageOne = () => {
           </RadioGroup>
         </FormControl>
         <Button
-          className={`w-auto mx-auto rounded-lg border-none bg-text-primary ${
+          className={`w-auto mx-auto rounded-lg  bg-text-primary ${
             values && "bg-blue-500 data-[hover=true]:bg-blue-400"
           }`}
           onPress={handleSubmit}
           isDisabled={!values}
         >
           <ButtonText
-            className={`text-text-secondary data-[hover=true]:text-text-secondary ${
+            className={`text-text-secondary data-[hover=true]:text-white ${
               values && "text-white"
             }`}
           >{`Apply ${

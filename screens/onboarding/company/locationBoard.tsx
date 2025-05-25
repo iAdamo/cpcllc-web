@@ -2,7 +2,9 @@
 
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
+import { Card } from "@/components/ui/card";
 import { Button, ButtonText } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
 import {
   FormControl,
   FormControlLabel,
@@ -13,55 +15,71 @@ import {
 import { Input, InputField } from "@/components/ui/input";
 import { useForm, Controller } from "react-hook-form";
 import { useOnboarding } from "@/context/OnboardingContext";
+import {
+  fullLocationSchema,
+  fullLocationSchemaType,
+} from "@/components/forms/OnboardingFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type FormData = {
-  companyAddress: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-};
-
-const InfoTwo = () => {
+const LocationBoard = () => {
   const { prevStep, nextStep, setData, data } = useOnboarding();
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<fullLocationSchemaType>({
+    resolver: zodResolver(fullLocationSchema),
     defaultValues: {
-      companyAddress: data.companyAddress || "",
-      city: data.city || "",
-      state: data.state || "",
-      zip: data.zip || "",
-      country: data.country || "",
+      primary: {
+        address: {
+          address: data.companyAddress,
+          city: data.city,
+          state: data.state,
+          country: data.country,
+          zip: data.zip,
+        },
+        coordinates: {
+          lat: data.latitude,
+          long: data.longitude,
+        },
+      },
     },
   });
 
-  const onSubmit = (formData: FormData) => {
+  const onSubmit = (formData: fullLocationSchemaType) => {
     const payload = {
-        companyAddress: formData.companyAddress,
-        city: formData.city,
-        state: formData.state,
-        zip: formData.zip,
-        country: formData.country,
+      companyAddress: formData.primary.address.address,
+      city: formData.primary.address.city,
+      state: formData.primary.address.state,
+      zip: formData.primary.address.zip,
+      country: formData.primary.address.country,
     };
     setData(payload);
     nextStep();
   };
 
   return (
-    <VStack className="bg-white w-full  p-8 gap-8 rounded-lg h-screen">
-      <HStack className="w-full gap-8">
-        {/* Left Side - Form */}
-        <VStack className="w-2/5 gap-4">
+    <VStack className="w-full p-8 gap-8 h-screen ">
+      <VStack className="w-full gap-8 justify-center items-center h-full">
+        <Card variant="filled" className="w-[32rem]">
+          <Text className="text-gray-600 text-sm">
+            Providing your company location helps us ensure accurate service
+            delivery, compliance with local regulations, and better
+            communication with your clients. This information will also help
+            customers find and connect with your business more easily.
+          </Text>
+        </Card>
+        <Card variant="outline" className="gap-4">
           {/* Address */}
-          <FormControl isInvalid={!!errors.companyAddress}>
+          <FormControl isInvalid={!!errors.primary?.address?.address}>
             <FormControlLabel>
-              <FormControlLabelText>Address</FormControlLabelText>
+              <FormControlLabelText className="font-semibold text-md">
+                Address
+              </FormControlLabelText>
             </FormControlLabel>
+
             <Controller
-              name="companyAddress"
+              name="primary.address.address"
               control={control}
               rules={{ required: "Company address is required" }}
               render={({ field }) => (
@@ -70,10 +88,10 @@ const InfoTwo = () => {
                 </Input>
               )}
             />
-            {errors.companyAddress && (
+            {errors.primary?.address?.address && (
               <FormControlError>
                 <FormControlErrorText>
-                  {errors.companyAddress.message}
+                  {errors.primary?.address?.address.message}
                 </FormControlErrorText>
               </FormControlError>
             )}
@@ -82,12 +100,17 @@ const InfoTwo = () => {
           {/* Other Address Fields */}
           <HStack className="gap-4">
             {/* City */}
-            <FormControl isInvalid={!!errors.city} className="w-1/2">
+            <FormControl
+              isInvalid={!!errors.primary?.address?.city}
+              className=""
+            >
               <FormControlLabel>
-                <FormControlLabelText>City</FormControlLabelText>
+                <FormControlLabelText className="font-semibold text-md">
+                  City
+                </FormControlLabelText>
               </FormControlLabel>
               <Controller
-                name="city"
+                name="primary.address.city"
                 control={control}
                 rules={{ required: "City is required" }}
                 render={({ field }) => (
@@ -96,22 +119,27 @@ const InfoTwo = () => {
                   </Input>
                 )}
               />
-              {errors.city && (
+              {errors.primary?.address?.city && (
                 <FormControlError>
                   <FormControlErrorText>
-                    {errors.city.message}
+                    {errors.primary?.address?.city?.message}
                   </FormControlErrorText>
                 </FormControlError>
               )}
             </FormControl>
 
             {/* State */}
-            <FormControl isInvalid={!!errors.state} className="w-1/2">
+            <FormControl
+              isInvalid={!!errors.primary?.address?.state}
+              className=""
+            >
               <FormControlLabel>
-                <FormControlLabelText>State</FormControlLabelText>
+                <FormControlLabelText className="font-semibold text-md">
+                  State
+                </FormControlLabelText>
               </FormControlLabel>
               <Controller
-                name="state"
+                name="primary.address.state"
                 control={control}
                 rules={{ required: "State is required" }}
                 render={({ field }) => (
@@ -120,10 +148,10 @@ const InfoTwo = () => {
                   </Input>
                 )}
               />
-              {errors.state && (
+              {errors.primary?.address?.state && (
                 <FormControlError>
                   <FormControlErrorText>
-                    {errors.state.message}
+                    {errors.primary?.address?.state.message}
                   </FormControlErrorText>
                 </FormControlError>
               )}
@@ -132,12 +160,17 @@ const InfoTwo = () => {
 
           <HStack className="gap-4">
             {/* ZIP Code */}
-            <FormControl isInvalid={!!errors.zip} className="w-1/2">
+            <FormControl
+              isInvalid={!!errors.primary?.address?.zip}
+              className=""
+            >
               <FormControlLabel>
-                <FormControlLabelText>ZIP Code</FormControlLabelText>
+                <FormControlLabelText className="font-semibold text-md">
+                  ZIP Code
+                </FormControlLabelText>
               </FormControlLabel>
               <Controller
-                name="zip"
+                name="primary.address.zip"
                 control={control}
                 rules={{ required: "ZIP Code is required" }}
                 render={({ field }) => (
@@ -146,22 +179,27 @@ const InfoTwo = () => {
                   </Input>
                 )}
               />
-              {errors.zip && (
+              {errors.primary?.address?.zip && (
                 <FormControlError>
                   <FormControlErrorText>
-                    {errors.zip.message}
+                    {errors.primary?.address?.zip.message}
                   </FormControlErrorText>
                 </FormControlError>
               )}
             </FormControl>
 
             {/* Country */}
-            <FormControl isInvalid={!!errors.country} className="w-1/2">
+            <FormControl
+              isInvalid={!!errors.primary?.address?.country}
+              className=""
+            >
               <FormControlLabel>
-                <FormControlLabelText>Country</FormControlLabelText>
+                <FormControlLabelText className="font-semibold text-md">
+                  Country
+                </FormControlLabelText>
               </FormControlLabel>
               <Controller
-                name="country"
+                name="primary.address.country"
                 control={control}
                 rules={{ required: "Country is required" }}
                 render={({ field }) => (
@@ -170,29 +208,27 @@ const InfoTwo = () => {
                   </Input>
                 )}
               />
-              {errors.country && (
+              {errors.primary?.address?.country && (
                 <FormControlError>
                   <FormControlErrorText>
-                    {errors.country.message}
+                    {errors.primary?.address?.country.message}
                   </FormControlErrorText>
                 </FormControlError>
               )}
             </FormControl>
           </HStack>
-        </VStack>
-      </HStack>
-
-      {/* Navigation Buttons */}
-      <HStack className="justify-between mt-auto">
-        <Button variant="outline" onPress={prevStep}>
-          <ButtonText>Back</ButtonText>
-        </Button>
-        <Button onPress={handleSubmit(onSubmit)}>
-          <ButtonText>Continue</ButtonText>
-        </Button>
-      </HStack>
+          <HStack className="justify-between mt-auto">
+            <Button variant="outline" onPress={prevStep}>
+              <ButtonText>Back</ButtonText>
+            </Button>
+            <Button onPress={handleSubmit(onSubmit)}>
+              <ButtonText>Continue</ButtonText>
+            </Button>
+          </HStack>
+        </Card>
+      </VStack>
     </VStack>
   );
 };
 
-export default InfoTwo;
+export default LocationBoard;

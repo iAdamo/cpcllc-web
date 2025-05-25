@@ -10,6 +10,7 @@ import Image from "next/image";
 import { Pressable } from "@/components/ui/pressable";
 import ServiceView from "./ServiceView";
 
+
 const ServicesSection = () => {
   const [showInfo, setShowInfo] = useState(true);
   const [users, setUsers] = useState<UserData[]>([]);
@@ -39,11 +40,11 @@ const ServicesSection = () => {
     fetchCompanies();
   }, [currentPage]);
 
-  const changePage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+  // const changePage = (page: number) => {
+  //  if (page >= 1 && page <= totalPages) {
+  //    setCurrentPage(page);
+  //  }
+  //};
 
   const handleCompanySelect = (index: number) => {
     setSelectedCompanyIndex(index);
@@ -77,7 +78,7 @@ const ServicesSection = () => {
           {options.map((option, index) => (
             <Button variant="link" key={index} onPress={option.action}>
               <ButtonIcon
-                as={option.icon}
+                // as={option.icon}
                 className="text-gray-500 hover:text-gray-700"
                 size="lg"
               />

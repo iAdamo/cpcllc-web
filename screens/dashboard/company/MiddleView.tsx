@@ -8,7 +8,7 @@ import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
 import { AddIcon } from "@/components/ui/icon";
 import { Divider } from "@/components/ui/divider";
-import ServiceCard from "@/components/ServiceCard";
+// import ServiceCard from "@/components/ServiceCard";
 import { useSession } from "@/context/AuthContext";
 
 const MiddleView = () => {
@@ -36,9 +36,9 @@ const MiddleView = () => {
       </Card>
       <HStack className="w-full gap-4">
         <VStack className="grid grid-cols-2 gap-4 w-3/5">
-          {userData?.activeRoleId?.services.map((service, index) => (
+          {/** {userData?.activeRoleId?.services.map((service, index) => (
             <ServiceCard key={index} service={service} index={index} />
-          ))}
+          ))} **/}
         </VStack>
         <VStack className="w-2/5">
           <VStack className="bg-white">

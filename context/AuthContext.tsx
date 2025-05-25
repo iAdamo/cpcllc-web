@@ -10,6 +10,8 @@ import { useRouter, usePathname } from "next/navigation";
 import type { AuthContextProps, UserData, CompanyData } from "@/types";
 import { registerCompany, userProfile } from "@/axios/users";
 import { Spinner } from "@/components/ui/spinner";
+// import { Heading } from "@/components/ui/heading";
+// import { Center } from "@/components/ui/center";
 
 // Create the AuthContext
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -56,7 +58,8 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     setUserData(null);
     setCompanyData(null);
     await logoutRequest();
-  }, [setSession, setUserData, setCompanyData]);
+    router.replace("/");
+  }, [router, setSession, setUserData, setCompanyData]);
 
   const registerCompanyHandler = useCallback(
     async (data: FormData) => {
@@ -89,9 +92,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     }
   }, [userData, session, setUserData]);
 
-  if (!session && pathname !== "/services" && pathname !== "/onboarding") {
-    router.replace("/");
-  }
+
   if (isLoading || loading || loadingCompany)
     return (
       <Spinner size="large" className="h-full items-center justify-center" />
