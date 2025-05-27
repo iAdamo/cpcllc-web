@@ -25,7 +25,7 @@ import {
   FavouriteIcon,
 } from "@/components/ui/icon";
 import { setUserFavourites } from "@/axios/users";
-import { UserData } from "@/types";
+import { CompanyData } from "@/types";
 import { getInitial } from "@/utils/GetInitials";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/context/AuthContext";
@@ -34,25 +34,25 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-const ServiceView = (data: UserData) => {
+const ServiceView = (data: CompanyData) => {
   const [isFavourite, setIsFavourite] = useState(false);
 
   const { userData } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    const hasFavourited = data?.activeRoleId?.favoritedBy.includes(
+    const hasFavourited = data?.favoritedBy.includes(
       userData?.id ?? ""
     );
     setIsFavourite(hasFavourited ?? false);
-  }, [data?.activeRoleId?.favoritedBy, userData?.id]);
+  }, [data?.favoritedBy, userData?.id]);
 
   const handleFavourite = async () => {
     try {
-      if (!data?.activeRoleId?._id)
-        return console.error("Service ID is undefined");
+      if (!data?._id)
+        return console.error("Company ID is undefined");
 
-      const updatedCompany = await setUserFavourites(data?.activeRoleId?._id);
+      const updatedCompany = await setUserFavourites(data?._id);
       console.log(updatedCompany);
       const hasFavourited = updatedCompany?.favoritedBy.includes(
         userData?.id ?? ""
@@ -132,22 +132,22 @@ const ServiceView = (data: UserData) => {
             <Avatar size="xl">
               <AvatarFallbackText>
                 {getInitial(
-                  data?.activeRoleId?.companyEmail ||
-                    data?.activeRoleId?.companyName ||
+                  data?.companyEmail ||
+                    data?.companyName ||
                     ""
                 )}
               </AvatarFallbackText>
-              <AvatarImage source={{ uri: data?.activeRoleId?.companyLogo }} />
+              <AvatarImage source={{ uri: data?.companyLogo }} />
             </Avatar>
             <VStack space="xs">
               <Heading size="2xl" className="font-extrablack break-words">
-                {data?.activeRoleId?.companyName}
+                {data?.companyName}
               </Heading>
               <Heading className="text-text-tertiary">
                 5.0 (226 reviews)
               </Heading>
               <Heading className="text-text-tertiary">
-                {data?.activeRoleId?.clients}
+                {data?.clients}
               </Heading>
             </VStack>
             <VStack className="items-start">
@@ -351,7 +351,7 @@ const ServiceView = (data: UserData) => {
                   Get Directions
                 </Link>
                 <p className="font-bold text-lg text-text-secondary">
-                  {data?.activeRoleId?.location?.primary?.address?.address}
+                  {data?.location?.primary?.address?.address}
                 </p>
               </div>
               <Icon as={GlobeIcon} />
