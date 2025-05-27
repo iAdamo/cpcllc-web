@@ -19,7 +19,7 @@ import {
   FormControlErrorText,
 } from "@/components/ui/form-control";
 import Link from "next/link";
-import { HStack } from "@/components/ui/hstack";
+// import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
@@ -130,12 +130,12 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
           onClose();
           reset();
         }}
-        className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm overflow-hidden"
+        className="fixed inset-0 backdrop-blur-sm overflow-hidden "
       >
         <ModalBackdrop />
-        <VStack className="w-9/12 h-[90%]">
-          <HStack className="h-full bg-white rounded-2xl">
-            <VStack className="w-1/2 justify-center items-center rounded-l-2xl bg-brand-primary">
+        <VStack className="md:w-9/12 md:h-[90%] w-11/12">
+          <VStack className="md:flex-row h-full w-full md:rounded-2xl">
+            <VStack className="hidden md:flex w-1/2 justify-center items-center rounded-l-2xl bg-brand-primary">
               <Image
                 className="object-cover w-full rounded-lg"
                 src="/assets/logo-color.png"
@@ -144,15 +144,17 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                 height={2448}
               />
             </VStack>
-            <ModalContent className="w-1/2 h-full border-none">
+            <ModalContent className="md:w-1/2 w-full h-full md:border-none">
               <ModalHeader>
-                <Heading size="2xl">Sign In</Heading>
+                <Heading size="lg" className="md:text-3xl">
+                  Sign In
+                </Heading>
               </ModalHeader>
               <ModalBody>
-                <VStack className="gap-6 items-center pt-14 justify-center w-full h-full">
+                <VStack className="gap-6 items-center md:pt-14 pt-6 justify-center w-full h-full">
                   {/** Email */}
                   <FormControl
-                    className="w-96"
+                    className="md:w-10/12 w-full"
                     isInvalid={!!errors?.email || !validated.emailValid}
                   >
                     <Controller
@@ -186,14 +188,14 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorText>
+                      <FormControlErrorText className="md:text-lg text-sm">
                         {errors?.email?.message || !validated.emailValid}
                       </FormControlErrorText>
                     </FormControlError>
                   </FormControl>
                   {/** Password */}
                   <FormControl
-                    className=" w-96"
+                    className="md:w-10/12 w-full"
                     isInvalid={!!errors.password || !validated.passwordValid}
                   >
                     <Controller
@@ -233,12 +235,12 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorText>
+                      <FormControlErrorText className="md:text-lg text-sm">
                         {errors?.password?.message || !validated.passwordValid}
                       </FormControlErrorText>
                     </FormControlError>
                   </FormControl>
-                  <VStack className="gap-2">
+                  <VStack className="gap-2 w-full md:px-10">
                     <Button
                       variant="link"
                       onPress={() => setShowForgotPasswordModal(true)}
@@ -250,7 +252,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                     </Button>
                     <Button
                       isDisabled={isLoading}
-                      className="w-96 h-12 bg-btn-primary hover:bg-btn-secondary active:bg-brand-primary"
+                      className="w-full h-12 bg-btn-primary hover:bg-btn-secondary active:bg-brand-primary"
                       onPress={handleSubmit(onSubmit)}
                     >
                       <ButtonText>
@@ -258,14 +260,17 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                       </ButtonText>
                     </Button>
                   </VStack>
-                  <Text className="text-md text-text-secondary">
+                  <Text size="sm" className="md:text-md text-text-secondary">
                     Don&apos;t have an account yet?
                     <Button
                       onPress={switchToSignUp}
                       variant="link"
                       className="inline"
                     >
-                      <ButtonText className="text-md ml-2 text-brand-primary underline hover:text-brand-secondary">
+                      <ButtonText
+                        size="sm"
+                        className="md:text-md ml-2 text-brand-primary underline hover:text-brand-secondary"
+                      >
                         Sign Up Here
                       </ButtonText>
                     </Button>
@@ -273,11 +278,11 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                 </VStack>
               </ModalBody>
               <ModalFooter className="">
-                <Text className="text-md">
+                <Text size="xs" className="md:text-md">
                   By joining, you agree to the
                   <Link
                     href="#"
-                    className="text-md text-blue-600 mx-1 inline underline hover:no-underline"
+                    className="text-blue-600 mx-1 inline underline hover:no-underline"
                   >
                     CPCLLC
                   </Link>
@@ -285,14 +290,14 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
                   Please read our
                   <Link
                     href="#"
-                    className="text-md text-blue-600 mx-1 inline underline hover:no-underline"
+                    className="text-blue-600 mx-1 inline underline hover:no-underline"
                   >
                     Privacy
                   </Link>
                 </Text>
               </ModalFooter>
             </ModalContent>
-          </HStack>
+          </VStack>
         </VStack>
       </Modal>
       {/** Forgot password modal */}

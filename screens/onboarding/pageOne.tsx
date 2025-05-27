@@ -108,7 +108,7 @@ const PageOne = () => {
             values && "bg-blue-500 data-[hover=true]:bg-blue-400"
           }`}
           onPress={handleSubmit}
-          isDisabled={!values}
+          isDisabled={!values || !session}
         >
           <ButtonText
             className={`text-text-secondary data-[hover=true]:text-white ${

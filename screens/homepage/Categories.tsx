@@ -6,7 +6,17 @@ import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
 import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
-import { cleaning, electrical, hvac, plumbing } from "@/public/assets/icons";
+import {
+  cleaning,
+  electrical,
+  hvac,
+  painting,
+  pestcontrol,
+  plumbing,
+  roofing,
+  poolservice,
+  solar,
+} from "@/public/assets/icons";
 
 const Categories = () => {
   const mcategories = [
@@ -31,18 +41,18 @@ const Categories = () => {
       url: "",
     },
     {
-      title: "E-Commerce Marketing & Management",
-      image: electrical,
+      title: "Painting",
+      image: painting,
       url: "",
     },
     {
-      title: "Content Marketing & Copywriting",
-      image: electrical,
+      title: "Pest Control",
+      image: pestcontrol,
       url: "",
     },
     {
-      title: "Video & Multimedia Marketing",
-      image: electrical,
+      title: "Roofing",
+      image: roofing,
       url: "",
     },
   ];
@@ -68,28 +78,28 @@ const Categories = () => {
       url: "",
     },
     {
-      title: "E-Commerce Marketing & Management",
-      image: electrical,
+      title: "Painting",
+      image: painting,
       url: "",
     },
     {
-      title: "Content Marketing & Copywriting",
-      image: electrical,
+      title: "Pest Control",
+      image: pestcontrol,
       url: "",
     },
     {
-      title: "Video & Multimedia Marketing",
-      image: electrical,
+      title: "Roofing",
+      image: roofing,
       url: "",
     },
     {
-      title: "Web Design & Development",
-      image: electrical,
+      title: "Pool Service",
+      image: poolservice,
       url: "",
     },
     {
-      title: "Marketing Design & Branding",
-      image: electrical,
+      title: "Solar Panel Installation",
+      image: solar,
       url: "",
     },
     {
@@ -133,23 +143,23 @@ const Categories = () => {
       url: "",
     },
     {
-      title: "E-Commerce Marketing & Management",
-      image: electrical,
+      title: "Painting",
+      image: painting,
       url: "",
     },
     {
-      title: "Content Marketing & Copywriting",
-      image: electrical,
+      title: "Pest Control",
+      image: pestcontrol,
       url: "",
     },
     {
-      title: "Video & Multimedia Marketing",
-      image: electrical,
+      title: "Roofing",
+      image: roofing,
       url: "",
     },
     {
-      title: "Web Design & Development",
-      image: electrical,
+      title: "Pool Service",
+      image: poolservice,
       url: "",
     },
     {
@@ -179,15 +189,15 @@ const Categories = () => {
     },
   ];
   return (
-    <VStack className="md:px-12 px-6 gap-4 ">
+    <VStack className="md:px-12 px-4 gap-4 mt-40 md:mt-0 ">
       <Heading size="md" className="md:text-2xl">
         Home Services
       </Heading>
-      <HStack className="hidden md:flex flex-wrap gap-4 justify-between rounded-lg">
+      <HStack className="hidden md:grid grid-cols-7 gap-4 justify-between rounded-lg">
         {categories.map((category, index) => (
           <Link
             key={index}
-            href={category.title}
+            href={category.title.toLowerCase().replace("&", "")}
             className="w-36 h-36 text-center rounded-lg transform transition-transform duration-300 hover:scale-105"
           >
             <Card className="pt-4 p-1 w-36 h-36 justify-between rounded-lg shadow-hard-5">
@@ -208,32 +218,38 @@ const Categories = () => {
         ))}
       </HStack>
       {/**mobile */}
-      <HStack className="md:hidden flex-wrap justify-between items-center gap-1 rounded-lg">
+      <Card
+        variant="filled"
+        className="md:hidden flex-row flex-wrap justify-between items-center gap-y-2"
+      >
         {mcategories.map((category, index) => (
           <Link
             key={index}
             href={category.title}
-            className="w-20 text-center rounded-lg transform transition-transform duration-300 hover:scale-105"
+            className="w-[4.3rem] text-center rounded-lg transform transition-transform duration-300 hover:scale-105"
           >
-            <Card className="p-1 justify-between rounded-sm">
-              <HStack className="justify-center items-center">
-                <Image
-                  className="w-14 h-14"
-                  src={category.image}
-                  alt={category.title}
-                  width={100}
-                  height={100}
-                />
-              </HStack>
+            <Card className="bg-[#1E40AF10] p-2 justify-center items-center">
+              <Image
+                className="w-[3rem] h-[3rem]"
+                src={category.image}
+                alt={category.title}
+                width={100}
+                height={100}
+                priority
+              />
             </Card>
             <Text className="text-xs">{category.title}</Text>
           </Link>
         ))}
         <Button variant="outline" className="flex-col border-none">
-          <ButtonText className="font-normal text-sm">...</ButtonText>
-          <ButtonText className="font-normal text-sm">More</ButtonText>
+          <ButtonText className="font-normal text-sm text-typography-600">
+            ...
+          </ButtonText>
+          <ButtonText className="font-normal text-sm text-typography-600">
+            More
+          </ButtonText>
         </Button>
-      </HStack>
+      </Card>
     </VStack>
   );
 };

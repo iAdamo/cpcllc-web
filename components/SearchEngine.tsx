@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { FormControl } from "@/components/ui/form-control";
+import { Button, ButtonIcon } from "@/components/ui/button";
 import { Input, InputField, InputSlot, InputIcon } from "@/components/ui/input";
 import { Divider } from "@/components/ui/divider";
 import { VStack } from "@/components/ui/vstack";
 import { SearchIcon } from "@/components/ui/icon";
+import { useRouter, usePathname } from "next/navigation";
 
 export const SearchEngine = () => {
   const [isFirstDropdownVisible, setIsFirstDropdownVisible] = useState(false);
   const [isSecondDropdownVisible, setIsSecondDropdownVisible] = useState(false);
+
+  const router = useRouter();
+  const currentPath = usePathname();
 
   const handleFirstFocus = () => {
     setIsFirstDropdownVisible(true);
@@ -16,16 +21,20 @@ export const SearchEngine = () => {
     setIsSecondDropdownVisible(true);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (event) => {
     // Add a slight delay to allow clicks on dropdown items before hiding
-    setIsFirstDropdownVisible(false);
-    setIsSecondDropdownVisible(false);
+    setTimeout(() => {
+      setIsFirstDropdownVisible(false);
+      setIsSecondDropdownVisible(false);
+    }, 150);
   };
 
   return (
-    <VStack className="hidden md:flex md:flex-row h-full bg-black">
-      <FormControl className="w-full">
-        <Input className="h-14 w-full bg-white rounded-none">
+    <VStack className="hidden md:flex md:flex-row h-full">
+      <FormControl
+        className={`w-full ${currentPath !== "/" && "drop-shadow-xl"} flex-row`}
+      >
+        <Input className="h-14 w-full bg-white border-0 rounded-none">
           <InputField
             type="text"
             placeholder="services, companies, jobs..."
@@ -34,7 +43,7 @@ export const SearchEngine = () => {
             onBlur={handleBlur}
           />
 
-          <Divider orientation="vertical" className="h-full bg-gray-300" />
+          <Divider orientation="vertical" className="h-4/5 w-1" />
           <InputField
             type="text"
             placeholder="location"
@@ -42,14 +51,13 @@ export const SearchEngine = () => {
             onFocus={handleSecondFocus}
             onBlur={handleBlur}
           />
-
-          <InputSlot className="h-full bg-blue-500 w-12">
-            <InputIcon as={SearchIcon} className="w-8 h-8" />
-          </InputSlot>
+          <Button className="h-full bg-blue-600 w-14 ">
+            <ButtonIcon as={SearchIcon} className="w-8 h-8" />
+          </Button>
         </Input>
       </FormControl>
       {isFirstDropdownVisible && (
-        <VStack className="absolute top-14 left-0 w-[46%] bg-white border border-gray-300 shadow-lg z-10">
+        <VStack className="absolute top-14 left-0 w-[45%] bg-white border border-gray-300 shadow-lg z-10">
           <div className="p-2 hover:bg-gray-100 cursor-pointer">New York</div>
           <div className="p-2 hover:bg-gray-100 cursor-pointer">
             Los Angeles
@@ -59,8 +67,31 @@ export const SearchEngine = () => {
         </VStack>
       )}
       {isSecondDropdownVisible && (
-        <VStack className="absolute top-14 right-12 w-[46%] bg-white border border-gray-300 shadow-lg z-10">
-          <div className="p-2 hover:bg-gray-100 cursor-pointer">New York</div>
+        <VStack className="absolute top-14 right-14 w-[45%] bg-white border border-gray-300 shadow-lg z-10">
+          <button
+            className="p-2 hover:bg-gray-100 cursor-pointer"
+            onClick={() => {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                  (position) => {
+                    const { latitude, longitude } = position.coords;
+                    console.log("User's Location:", { latitude, longitude });
+                    // You can now use latitude and longitude in your app
+                  },
+                  (error) => {
+                    console.error("Error getting location:", error.message);
+                    alert(
+                      "Unable to retrieve your location. Please try again."
+                    );
+                  }
+                );
+              } else {
+                alert("Geolocation is not supported by your browser.");
+              }
+            }}
+          >
+            Use Current Location
+          </button>{" "}
           <div className="p-2 hover:bg-gray-100 cursor-pointer">
             Los Angeles
           </div>

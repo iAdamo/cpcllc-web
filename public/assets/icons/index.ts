@@ -17,8 +17,11 @@ export { default as plumbing } from "./plumbing.svg";
 export { default as electrical } from "./electrical.svg";
 export { default as cleaning } from "./cleaning.svg";
 export { default as hvac } from "./hvac.svg";
-
-
+export { default as painting } from "./painting.svg";
+export { default as pestcontrol } from "./pestcontrol.svg";
+export { default as roofing } from "./roofing.svg";
+export { default as poolservice } from "./poolservice.svg";
+export { default as solar } from "./solar.svg";
 
 
 

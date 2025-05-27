@@ -3,8 +3,8 @@ import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
-import { getUsers } from "@/axios/users";
-import { UserData } from "@/types";
+import { getCompanies } from "@/axios/users";
+import { CompanyData } from "@/types";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { Pressable } from "@/components/ui/pressable";
@@ -13,7 +13,7 @@ import ServiceView from "./ServiceView";
 
 const ServicesSection = () => {
   const [showInfo, setShowInfo] = useState(true);
-  const [users, setUsers] = useState<UserData[]>([]);
+  const [companies, setCompanies] = useState<CompanyData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedCompanyIndex, setSelectedCompanyIndex] = useState<number>(0);
@@ -30,11 +30,11 @@ const ServicesSection = () => {
 
   useEffect(() => {
     const fetchCompanies = async () => {
-      const { users: response, totalPages } = await getUsers(
+      const { companies: response, totalPages } = await getCompanies(
         currentPage,
-        limit
+        limit,
       );
-      setUsers(response);
+      setCompanies(response);
       setTotalPages(totalPages);
     };
     fetchCompanies();
@@ -66,7 +66,7 @@ const ServicesSection = () => {
     },
   ];
 
-  const selectedCompany = users[selectedCompanyIndex];
+  const selectedCompany = companies[selectedCompanyIndex];
 
   return (
     <VStack className="md:flex-row mt-32 px-4 bg-[#F6F6F6]">
@@ -88,7 +88,7 @@ const ServicesSection = () => {
         </Card>
 
         <VStack className="overflow-y-auto bg-white p-4 h-4/5">
-          {users.map((user, index) => (
+          {companies.map((company, index) => (
             <Pressable
               key={index}
               onPress={() => handleCompanySelect(index)}
@@ -103,18 +103,18 @@ const ServicesSection = () => {
                   <Image
                     className="h-32 w-32 rounded-l-md object-cover"
                     src={
-                      user?.activeRoleId?.companyLogo ||
+                      company.companyLogo ||
                       "/assets/placeholder.jpg"
                     }
-                    alt={user?.activeRoleId?.companyName || "Company Logo"}
+                    alt={company.companyName || "Company Logo"}
                     width={1400}
                     height={600}
                   />
                 </VStack>
                 <VStack className="justify-between p-2">
-                  <Heading>{user?.activeRoleId?.companyName}</Heading>
+                  <Heading>{company.companyName}</Heading>
                   <Text>
-                    {user?.activeRoleId?.location?.primary?.address?.address}
+                    {company.location?.primary?.address?.address}
                   </Text>
                 </VStack>
               </Card>
@@ -139,7 +139,7 @@ const ServicesSection = () => {
             <Text className="text-lg font-semibold">Company Map</Text>
             <Text>
               {selectedCompany
-                ? `Map for ${selectedCompany?.activeRoleId?.companyName} would go here.`
+                ? `Map for ${selectedCompany?.companyName} would go here.`
                 : "Select a company to see its map."}
             </Text>
           </VStack>

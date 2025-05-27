@@ -39,11 +39,9 @@ export const getUsers = async (
   page: number,
   limit: number
 ): Promise<{ users: UserData[]; totalPages: number }> => {
-  const response = await axiosInstance.get(
-    `users?page=${page}&limit=${limit}`
-  );
+  const response = await axiosInstance.get(`users?page=${page}&limit=${limit}`);
   return response.data;
-}
+};
 
 export const getCompanies = async (
   page: number,
@@ -53,9 +51,11 @@ export const getCompanies = async (
     `users/company?page=${page}&limit=${limit}`
   );
   return response.data;
-}
+};
 
-export const setUserFavourites = async (companyId: string): Promise<CompanyData> => {
+export const setUserFavourites = async (
+  companyId: string
+): Promise<CompanyData> => {
   const response = await axiosInstance.patch(`users/${companyId}/favorite`);
   return response.data;
 };

@@ -21,7 +21,7 @@ import {
   FormControlLabelText,
 } from "@/components/ui/form-control";
 import Link from "next/link";
-import { HStack } from "@/components/ui/hstack";
+// import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
@@ -175,12 +175,12 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
           reset();
           setShowVerifyEmailModal(false);
         }}
-        className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm overflow-hidden"
+        className="fixed inset-0 backdrop-blur-sm overflow-hidden"
       >
         <ModalBackdrop />
-        <VStack className="w-9/12 h-[90%]">
-          <HStack className="h-full bg-white rounded-2xl">
-            <VStack className="w-1/2 justify-center items-center rounded-l-2xl bg-brand-primary">
+        <VStack className="md:w-9/12 md:h-[90%] w-11/12">
+          <VStack className="md:flex-row h-full w-full md:rounded-2xl">
+            <VStack className="hidden md:flex w-1/2 justify-center items-center rounded-l-2xl bg-brand-primary">
               <Image
                 className="object-cover w-full rounded-lg"
                 src="/assets/logo-color.png"
@@ -189,19 +189,23 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                 height={2448}
               />
             </VStack>
-            <ModalContent className="w-1/2 pt-2 h-full border-none">
+            <ModalContent className="md:w-1/2 w-full h-full md:border-none">
               <ModalHeader>
-                <Heading size="xl">Sign Up</Heading>
+                <Heading size="lg" className="md:text-3xl">
+                  Sign Up
+                </Heading>
               </ModalHeader>
               <ModalBody>
-                <VStack className="gap-4 pt-8 items-center justify-center w-full h-full">
+                <VStack className="md:gap-6 gap-4 items-center md:pt-14 justify-center w-full h-full">
                   {/** Email */}
                   <FormControl
-                    className="w-96"
+                    className="md:w-96 w-full"
                     isInvalid={!!errors?.email || !validated.emailValid}
                   >
                     <FormControlLabel>
-                      <FormControlLabelText>Email</FormControlLabelText>
+                      <FormControlLabelText className="md:text-lg text-sm">
+                        Email
+                      </FormControlLabelText>
                     </FormControlLabel>
                     <Controller
                       defaultValue=""
@@ -224,18 +228,20 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorText>
+                      <FormControlErrorText className="md:text-lg text-sm">
                         {errors?.email?.message || !validated.emailValid}
                       </FormControlErrorText>
                     </FormControlError>
                   </FormControl>
                   {/** Password */}
                   <FormControl
-                    className=" w-96"
+                    className="md:w-96 w-full"
                     isInvalid={!!errors.password || !validated.passwordValid}
                   >
                     <FormControlLabel>
-                      <FormControlLabelText>Password</FormControlLabelText>
+                      <FormControlLabelText className="md:text-lg text-sm">
+                        Password
+                      </FormControlLabelText>
                     </FormControlLabel>
                     <Controller
                       defaultValue=""
@@ -264,18 +270,18 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorText>
+                      <FormControlErrorText className="md:text-lg text-sm">
                         {errors?.password?.message || !validated.passwordValid}
                       </FormControlErrorText>
                     </FormControlError>
                   </FormControl>
                   {/* ------------------------------------------ Confirm Password -------------------------------------------*/}
                   <FormControl
-                    className="w-96"
+                    className="md:w-96 w-full"
                     isInvalid={!!errors.confirmPassword}
                   >
                     <FormControlLabel>
-                      <FormControlLabelText>
+                      <FormControlLabelText className="md:text-lg text-sm">
                         Confirm Password
                       </FormControlLabelText>
                     </FormControlLabel>
@@ -308,16 +314,16 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorText>
+                      <FormControlErrorText className="md:text-lg text-sm">
                         {errors?.confirmPassword?.message}
                       </FormControlErrorText>
                     </FormControlError>
                   </FormControl>
                   {/* ----------------------------------- Sign Up Button ------------------------------------------ */}
-                  <VStack className="gap-2">
+                  <VStack className="gap-2 w-full md:px-8">
                     <Button
                       isDisabled={isLoading}
-                      className="w-96 h-12 bg-btn-primary hover:bg-btn-secondary active:bg-brand-primary"
+                      className="w-full h-12 bg-btn-primary hover:bg-btn-secondary active:bg-brand-primary"
                       onPress={handleSubmit(onSubmit)}
                     >
                       <ButtonText>
@@ -325,14 +331,14 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       </ButtonText>
                     </Button>
                   </VStack>
-                  <Text className="text-md text-text-secondary">
+                  <Text className="md:text-md text-sm text-text-secondary">
                     Already have an account?
                     <Button
                       onPress={switchToSignIn}
                       variant="link"
                       className="inline"
                     >
-                      <ButtonText className="text-md ml-2 text-brand-primary underline hover:text-brand-secondary">
+                      <ButtonText className="md:text-md text-sm ml-2 text-brand-primary underline hover:text-brand-secondary">
                         Sign In Here
                       </ButtonText>
                     </Button>
@@ -340,11 +346,11 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                 </VStack>
               </ModalBody>
               <ModalFooter>
-                <Text className="text-md">
+                <Text className="md:text-md text-xs">
                   By joining, you agree to the
                   <Link
                     href="#"
-                    className="text-md text-blue-600 mx-1 inline underline hover:no-underline"
+                    className="text-blue-600 mx-1 inline underline hover:no-underline"
                   >
                     CPCLLC
                   </Link>
@@ -352,14 +358,14 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                   Please read our
                   <Link
                     href="#"
-                    className="text-md text-blue-600 mx-1 inline underline hover:no-underline"
+                    className="text-blue-600 mx-1 inline underline hover:no-underline"
                   >
                     Privacy
                   </Link>
                 </Text>
               </ModalFooter>
             </ModalContent>
-          </HStack>
+          </VStack>
         </VStack>
       </Modal>
       {showVerifyEmailModal && (

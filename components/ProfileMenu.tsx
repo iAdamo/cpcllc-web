@@ -55,21 +55,22 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
             <AvatarImage source={{ uri: userData?.profilePicture }} />
             <AvatarBadge />
           </Avatar>
-          {userData?.activeRole === "Company" && (
-            <Button
-              variant="outline"
-              onPress={() => {
-                setUserData({
-                  ...userData,
-                  activeRole:
-                    userData?.activeRole === "Client" ? "Company" : "Client",
-                });
-              }}
-              className="w-52"
-            >
-              <ButtonText>{`Switch to ${userData?.activeRole}`}</ButtonText>
-            </Button>
-          )}
+          <Button
+            isDisabled={!userData?.activeRoleId}
+            variant="outline"
+            onPress={() => {
+              setUserData({
+                ...userData,
+                activeRole:
+                  userData?.activeRole === "Client" ? "Company" : "Client",
+              });
+            }}
+            className="w-52"
+          >
+            <ButtonText>{`Switch to ${
+              userData?.activeRole === "Client" ? "Company" : "Client"
+            }`}</ButtonText>
+          </Button>
         </VStack>
       </MenuItem>
       <MenuSeparator />

@@ -10,7 +10,16 @@ import { Button, ButtonText } from "@/components/ui/button";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useSession } from "@/context/AuthContext";
-import { SearchEngine, MSearchEngine } from "../SearchEngine";
+import { SearchEngine, MSearchEngine } from "@/components/SearchEngine";
+import { MenuIcon, CloseIcon } from "@/components/ui/icon";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionIcon,
+  AccordionContent,
+} from "@/components/ui/accordion";
+import { Divider } from "@/components/ui/divider";
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
@@ -41,7 +50,7 @@ const NavBar = () => {
       linkClass: !isHome
         ? "no-underline text-white text-lg font-bold hover:text-brand-1"
         : "no-underline text-text-primary text-lg font-bold hover:text-brand-0",
-      buttonClass: !isHome ? "bg-white" : "bg-brand-0",
+      buttonClass: !isHome ? "bg-white" : "bg-brand-primary",
     };
   }, [currentPath]);
 
@@ -49,7 +58,7 @@ const NavBar = () => {
     <>
       <VStack
         className={`hidden md:flex justify-center items-center ${
-          currentPath !== "/" ? "fixed top-0 h-32" : "h-20"
+          currentPath !== "/" ? "fixed top-0 h-28" : "h-20"
         } z-10 w-full ${styles.navBarClass}`}
       >
         <HStack className="py-10 w-full items-center gap-10 pr-5">
@@ -108,8 +117,8 @@ const NavBar = () => {
 
                   <Button
                     onPress={() => router.push("/onboarding")}
-                    className="bg-btn-primary data-[hover=true]:bg-blue-500"
-                  >
+                    className="bg-btn-primary data-[hover=true]:bg-brand-primary">
+
                     <ButtonText className="text-white ">Get Started</ButtonText>
                   </Button>
                 </HStack>
@@ -155,19 +164,73 @@ const NavBar = () => {
           initialView="signIn"
         />
       </VStack>
-      <VStack className="md:hidden gap-2 mb-10 p-2 sticky top-0 bg-blue-500">
+      <VStack className="md:hidden w-full z-50 gap-2 p-2 fixed top-0 bg-brand-primary">
         <HStack className="justify-between items-center">
-          <Button className="bg-blue-600">
+          <Button size="sm" className="bg-brand-secondary">
             <ButtonText>Open in App</ButtonText>
           </Button>
-          <Button variant="outline" className="border-none">
+          <Button
+            variant="outline"
+            className="border-none"
+            onPress={() => router.replace("/")}
+          >
             <ButtonText>CPCLLC</ButtonText>
           </Button>
-          <Button className="bg-blue-600">
-            <ButtonText>Open in App</ButtonText>
-          </Button>
+
+          <Accordion className="w-1/5 shadow-none">
+            <AccordionItem value="a">
+              <AccordionTrigger className="bg-brand-primary">
+                {({ isExpanded }) => {
+                  return (
+                    <>
+                      {isExpanded ? (
+                        <AccordionIcon
+                          as={CloseIcon}
+                          size="lg"
+                          className="ml-3 text-white"
+                        />
+                      ) : (
+                        <AccordionIcon
+                          as={MenuIcon}
+                          size="lg"
+                          className="ml-3 text-white"
+                        />
+                      )}
+                    </>
+                  );
+                }}
+              </AccordionTrigger>
+              <AccordionContent className="w-full h-full items-start z-50 top-14 left-0 fixed px-4 gap-2 bg-white">
+                <Button
+                  variant="link"
+                  onPress={() => router.push("/onboarding")}
+                >
+                  <ButtonText className="font-normal">Sign Up</ButtonText>
+                </Button>
+                <Divider orientation="horizontal" className="w-full" />
+                <Button
+                  variant="link"
+                  onPress={() => setIsAuthodalOpen(true)}
+                  className=""
+                >
+                  <ButtonText className="font-normal">Log In</ButtonText>
+                </Button>
+                <Divider orientation="horizontal" className="w-full" />
+                <Button
+                  variant="link"
+                  onPress={() => router.push("/services")}
+                  className=""
+                >
+                  <ButtonText className="font-normal">Services</ButtonText>
+                </Button>
+                <Divider orientation="horizontal" className="w-full" />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </HStack>
-        <MSearchEngine />
+        <VStack className="-z-50">
+          <MSearchEngine />
+        </VStack>
       </VStack>
     </>
   );

@@ -112,7 +112,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       );
     }
   } else if (session && userData?.activeRole === "Company") {
-    if (pathname.startsWith("/service")) {
+    if (pathname.startsWith("/services")) {
       router.replace("/dashboard");
       return (
         <Spinner size="large" className="h-full items-center justify-center" />
@@ -125,7 +125,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     }
   } else if (session && userData?.activeRole === "Client") {
     if (pathname === "/dashboard") {
-      router.replace("/service");
+      router.replace("/services");
       return (
         <Spinner size="large" className="h-full items-center justify-center" />
       );
