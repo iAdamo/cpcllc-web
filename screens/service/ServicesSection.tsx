@@ -9,7 +9,8 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { Pressable } from "@/components/ui/pressable";
 import ServiceView from "./ServiceView";
-
+import { GoogleMapsProvider } from "@/components/maps/GoogleMapsProvider";
+import { InteractiveMap } from "@/components/maps/InteractiveMap";
 
 const ServicesSection = () => {
   const [showInfo, setShowInfo] = useState(true);
@@ -66,6 +67,28 @@ const ServicesSection = () => {
     },
   ];
 
+   const handleMarkerClick = (id: string) => {
+     console.log("Marker clicked:", id);
+     // Fetch more details about the listing, etc.
+   };
+
+   const handleMapClick = (location: google.maps.LatLngLiteral) => {
+     console.log("Map clicked at:", location);
+     // Maybe add a new listing at this location
+   };
+
+   // Example markers - in a real app these would come from your database
+   const markers = [
+     {
+       id: "1",
+       position: { lat: 40.7128, lng: -74.006 },
+       title: "Sample Listing 1",
+       content: "This is a sample listing for your marketplace",
+     },
+     // ... more markers
+   ];
+
+
   const selectedCompany = companies[selectedCompanyIndex];
 
   return (
@@ -98,14 +121,14 @@ const ServicesSection = () => {
                   : ""
               }`}
             >
-              <Card variant="outline" className="flex-row w-full p-0 gap-4 bg-white">
+              <Card
+                variant="outline"
+                className="flex-row w-full p-0 gap-4 bg-white"
+              >
                 <VStack>
                   <Image
                     className="h-32 w-32 rounded-l-md object-cover"
-                    src={
-                      company.companyImages[0] ||
-                      "/assets/placeholder.jpg"
-                    }
+                    src={company.companyImages[0] || "/assets/placeholder.jpg"}
                     alt={company.companyName || "Company Logo"}
                     width={1400}
                     height={600}
@@ -113,9 +136,7 @@ const ServicesSection = () => {
                 </VStack>
                 <VStack className="justify-between p-2">
                   <Heading>{company.companyName}</Heading>
-                  <Text>
-                    {company.location?.primary?.address?.address}
-                  </Text>
+                  <Text>{company.location?.primary?.address?.address}</Text>
                 </VStack>
               </Card>
             </Pressable>
@@ -138,9 +159,24 @@ const ServicesSection = () => {
           <VStack className="p-4">
             <Text className="text-lg font-semibold">Company Map</Text>
             <Text>
-              {selectedCompany
-                ? `Map for ${selectedCompany?.companyName} would go here.`
-                : "Select a company to see its map."}
+              {selectedCompany ? (
+                <GoogleMapsProvider>
+                  <div className="h-screen flex flex-col">
+                    <header className="bg-white shadow-sm p-4">
+                      <h1 className="text-xl font-bold">
+                        Hyperlocal Marketplace
+                      </h1>
+                    </header>
+                    <InteractiveMap
+                      markers={markers}
+                      onMarkerClick={handleMarkerClick}
+                      onMapClick={handleMapClick}
+                    />
+                  </div>
+                </GoogleMapsProvider>
+              ) : (
+                "Select a company to see its map."
+              )}
             </Text>
           </VStack>
         )}

@@ -78,6 +78,7 @@ const ServiceView = (companyData: CompanyData) => {
     }
   };
 
+
   const portfolio = [
     { name: "Portfolio 1", image: "/assets/header10.jpg" },
     { name: "Portfolio 2", image: "/assets/header10.jpg" },
