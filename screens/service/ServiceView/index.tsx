@@ -25,34 +25,48 @@ import {
   FavouriteIcon,
 } from "@/components/ui/icon";
 import { setUserFavourites } from "@/axios/users";
-import { CompanyData } from "@/types";
+import { getReviews } from "@/axios/reviews";
+import { CompanyData, ReviewData } from "@/types";
 import { getInitial } from "@/utils/GetInitials";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/context/AuthContext";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { Pressable } from "@/components/ui/pressable";
+import { reviewModal } from "@/components/Overlays/ReviewModal";
 
-const ServiceView = (data: CompanyData) => {
+const ServiceView = (companyData: CompanyData) => {
   const [isFavourite, setIsFavourite] = useState(false);
+  const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [showWriteReview, setWriteReview] = useState(false);
 
   const { userData } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    const hasFavourited = data?.favoritedBy.includes(
-      userData?.id ?? ""
-    );
+    const hasFavourited = companyData?.favoritedBy.includes(userData?.id ?? "");
     setIsFavourite(hasFavourited ?? false);
-  }, [data?.favoritedBy, userData?.id]);
+
+    const handleReview = async () => {
+      try {
+        const reviews = await getReviews(companyData?._id);
+        console.log(reviews);
+        setReviews(reviews);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    handleReview();
+  }, [companyData?.favoritedBy, userData?.id, companyData?._id]);
 
   const handleFavourite = async () => {
     try {
-      if (!data?._id)
-        return console.error("Company ID is undefined");
+      if (!companyData?._id) return console.error("Company ID is undefined");
 
-      const updatedCompany = await setUserFavourites(data?._id);
+      const updatedCompany = await setUserFavourites(companyData?._id);
       console.log(updatedCompany);
       const hasFavourited = updatedCompany?.favoritedBy.includes(
         userData?.id ?? ""
@@ -95,7 +109,15 @@ const ServiceView = (data: CompanyData) => {
     {
       name: "Write a Review",
       icon: FavouriteIcon,
-      action: () => router.forward(),
+      action: () => {
+        reviewModal({
+          companyId: companyData?._id,
+          companyName: companyData?.companyName,
+          isOpen: showWriteReview,
+          onClose: () => setWriteReview(false),
+        });
+        setWriteReview(true);
+      },
     },
     {
       name: "Share",
@@ -123,242 +145,301 @@ const ServiceView = (data: CompanyData) => {
   };
 
   return (
-    <VStack className="bg-[#F6F6F6]">
-      <HStack space="xl" className="gap-4 bg-[#F6F6F6]">
-        {/* LEFT SIDE */}
-        <VStack className="w-2/3 gap-4 bg-white p-4">
-          {/* Company Header */}
-          <HStack className="justify-between">
-            <Avatar size="xl">
-              <AvatarFallbackText>
-                {getInitial(
-                  data?.companyEmail ||
-                    data?.companyName ||
-                    ""
-                )}
-              </AvatarFallbackText>
-              <AvatarImage source={{ uri: data?.companyLogo }} />
-            </Avatar>
-            <VStack space="xs">
-              <Heading size="2xl" className="font-extrablack break-words">
-                {data?.companyName}
-              </Heading>
-              <Heading className="text-text-tertiary">
-                5.0 (226 reviews)
-              </Heading>
-              <Heading className="text-text-tertiary">
-                {data?.clients}
-              </Heading>
-            </VStack>
-            <VStack className="items-start">
-              {buttons.map((button, index) => (
-                <Button
-                  key={index}
-                  variant="link"
-                  size="md"
-                  onPress={button.action}
-                  className={`${
-                    isFavourite && " data-[hover=true]:bg-[#FFFFF70]"
-                  }`}
-                >
-                  <ButtonIcon
-                    size="lg"
-                    className={`${
-                      isFavourite &&
-                      "fill-red-500 border-red-500 text-white font-extrabold"
-                    }`}
-                    as={button.icon}
+    <VStack className="w-full gap-4 p-4">
+      {reviewModal({
+        companyId: companyData?._id,
+        companyName: companyData?.companyName,
+        isOpen: showWriteReview,
+        onClose: () => setWriteReview(false),
+      })}
+      <VStack className="bg-[#F6F6F6] gap-4">
+        <Card className="h-96">
+          <VStack className="">
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              autoplay={{ delay: 4000 }}
+              loop
+              pagination={{ clickable: true }}
+              className="w-full h-full"
+            >
+              {companyData?.companyImages.map((src, index) => (
+                <SwiperSlide key={index}>
+                  <Image
+                    className="object-cover w-full h-full rounded-lg bg-red-600"
+                    src={src}
+                    alt={`slide-${index}`}
+                    width={1920}
+                    height={1080}
+                    priority
                   />
-                  <ButtonText
-                    size="sm"
-                    className="data-[hover=true]:no-underline data-[active=true]:no-underline"
-                  >
-                    {button.name}
-                  </ButtonText>
-                </Button>
+                </SwiperSlide>
               ))}
-            </VStack>
-          </HStack>
+            </Swiper>
+          </VStack>
+        </Card>
+        <HStack space="xl" className="gap-4 bg-[#F6F6F6]">
+          {/* LEFT SIDE */}
+          <VStack className="w-2/3 gap-4 bg-white p-4">
+            {/* Company Header */}
 
-          {/* Content Sections */}
-          <VStack space="4xl" className="py-6">
-            {/* Service Updates */}
-            <VStack space="2xl">
-              <Heading>Update from this service provider</Heading>
-
-              <div className="relative w-full">
-                {/* Left button */}
-                <Button
-                  size="sm"
-                  className="swiper-button-prev absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
-                >
-                  <ButtonIcon as={ArrowLeftIcon} />
-                </Button>
-
-                {/* Swiper */}
-                <Swiper
-                  modules={[Navigation, Pagination]}
-                  className="w-full"
-                  spaceBetween={10}
-                  slidesPerView={1.3}
-                  navigation={{
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                  }}
-                >
-                  {serviceUpdates.map((item, index) => {
-                    const isLong = item.description.length > maxLength;
-                    const isExpanded = expandedIndex === index;
-                    const shortText =
-                      item.description.slice(0, maxLength) + "...";
-
-                    return (
-                      <SwiperSlide key={index}>
-                        <Card variant="outline" className="flex-row gap-2">
-                          <Image
-                            className="object-cover h-32 w-32"
-                            src={item.image}
-                            alt="portfolio-image"
-                            width={1200}
-                            height={1200}
-                          />
-                          <VStack className="gap-2 h-20">
-                            <Heading size="md">{item.name}</Heading>
-                            <Text size="md">
-                              {isExpanded || !isLong
-                                ? item.description
-                                : shortText}
-                            </Text>
-                            {isLong && (
-                              <Button
-                                size="xs"
-                                variant="link"
-                                onPress={() => toggleExpanded(index)}
-                              >
-                                <ButtonText>
-                                  {isExpanded ? "Show Less" : "Read More"}
-                                </ButtonText>
-                              </Button>
-                            )}
-                          </VStack>
-                        </Card>
-                      </SwiperSlide>
-                    );
-                  })}
-                </Swiper>
-
-                {/* Right button */}
-                <Button
-                  size="sm"
-                  className="swiper-button-next absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
-                >
-                  <ButtonIcon as={ArrowRightIcon} />
-                </Button>
-              </div>
-            </VStack>
-
-            {/* Portfolio */}
-            <VStack>
-              <Heading className="text-text-tertiary">Portfolio</Heading>
-              <HStack className="flex-wrap justify-between">
-                {portfolio.map((item, index) => (
-                  <Card key={index}>
-                    <Image
-                      className="object-cover h-52 w-52"
-                      src={item.image}
-                      alt="portfolio-image"
-                      width={1200}
-                      height={1200}
-                    />
-                    <Text>{item.name}</Text>
-                  </Card>
-                ))}
+            <VStack space="xs">
+              <HStack className="justify-between">
+                <VStack>
+                  <Heading size="2xl" className="font-extrablack break-words">
+                    {companyData?.companyName}
+                  </Heading>
+                  <Heading className="text-text-tertiary">
+                    5.0 (226 reviews)
+                  </Heading>
+                  <Heading className="text-text-tertiary">
+                    {companyData?.clients}
+                  </Heading>
+                </VStack>
+                <VStack className="items-start">
+                  {buttons.map((button, index) => (
+                    <Button
+                      key={index}
+                      variant="link"
+                      size="md"
+                      onPress={button.action}
+                      className={`${
+                        isFavourite && " companyData-[hover=true]:bg-[#FFFFF70]"
+                      }`}
+                    >
+                      <ButtonIcon
+                        size="lg"
+                        className={`${
+                          isFavourite &&
+                          "fill-red-500 border-red-500 text-white font-extrabold"
+                        }`}
+                        as={button.icon}
+                      />
+                      <ButtonText
+                        size="sm"
+                        className="companyData-[hover=true]:no-underline companyData-[active=true]:no-underline"
+                      >
+                        {button.name}
+                      </ButtonText>
+                    </Button>
+                  ))}
+                </VStack>
               </HStack>
             </VStack>
 
-            {/* Placeholder sections */}
-            <VStack>
-              <Heading className="text-text-tertiary">
-                Other data by this company
-              </Heading>
-            </VStack>
-            <VStack>
-              <Heading className="text-text-tertiary">
-                Photos and Videos
-              </Heading>
-            </VStack>
-            <VStack>
-              <Heading className="text-text-tertiary">Reviews</Heading>
-            </VStack>
-          </VStack>
-        </VStack>
+            {/* Content Sections */}
+            <VStack space="4xl" className="py-6">
+              {/* Service Updates */}
+              <VStack space="2xl">
+                <Heading>Update from this service provider</Heading>
 
-        {/* RIGHT SIDE */}
-        <VStack className="w-1/3 sticky top-32 self-start h-fit gap-4 bg-[#F6F6F6]">
-          <VStack className="bg-white p-4 gap-4">
-            <Heading className="text-xl font-extrablack">
-              Request quote & availability
-            </Heading>
-            <div className="flex flex-row gap-10">
+                <div className="relative w-full">
+                  {/* Left button */}
+                  <Button
+                    size="sm"
+                    className="swiper-button-prev absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+                  >
+                    <ButtonIcon as={ArrowLeftIcon} />
+                  </Button>
+
+                  {/* Swiper */}
+                  <Swiper
+                    modules={[Navigation, Pagination]}
+                    className="w-full"
+                    spaceBetween={10}
+                    slidesPerView={1.3}
+                    navigation={{
+                      nextEl: ".swiper-button-next",
+                      prevEl: ".swiper-button-prev",
+                    }}
+                  >
+                    {serviceUpdates.map((item, index) => {
+                      const isLong = item.description.length > maxLength;
+                      const isExpanded = expandedIndex === index;
+                      const shortText =
+                        item.description.slice(0, maxLength) + "...";
+
+                      return (
+                        <SwiperSlide key={index}>
+                          <Card variant="outline" className="flex-row gap-2">
+                            <Image
+                              className="object-cover h-32 w-32"
+                              src={item.image}
+                              alt="portfolio-image"
+                              width={1200}
+                              height={1200}
+                            />
+                            <VStack className="gap-2 h-20">
+                              <Heading size="md">{item.name}</Heading>
+                              <Text size="md">
+                                {isExpanded || !isLong
+                                  ? item.description
+                                  : shortText}
+                              </Text>
+                              {isLong && (
+                                <Button
+                                  size="xs"
+                                  variant="link"
+                                  onPress={() => toggleExpanded(index)}
+                                >
+                                  <ButtonText>
+                                    {isExpanded ? "Show Less" : "Read More"}
+                                  </ButtonText>
+                                </Button>
+                              )}
+                            </VStack>
+                          </Card>
+                        </SwiperSlide>
+                      );
+                    })}
+                  </Swiper>
+
+                  {/* Right button */}
+                  <Button
+                    size="sm"
+                    className="swiper-button-next absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+                  >
+                    <ButtonIcon as={ArrowRightIcon} />
+                  </Button>
+                </div>
+              </VStack>
+
+              {/* Portfolio */}
               <VStack>
-                <Heading className="text-xs text-text-secondary">
-                  Response time
+                <Heading className="text-text-tertiary">Portfolio</Heading>
+                <HStack className="flex-wrap justify-between">
+                  {portfolio.map((item, index) => (
+                    <Card key={index}>
+                      <Image
+                        className="object-cover h-52 w-52"
+                        src={item.image}
+                        alt="portfolio-image"
+                        width={1200}
+                        height={1200}
+                      />
+                      <Text>{item.name}</Text>
+                    </Card>
+                  ))}
+                </HStack>
+              </VStack>
+
+              {/* Placeholder sections */}
+              <VStack>
+                <Heading className="text-text-tertiary">
+                  Other companyData by this company
                 </Heading>
-                <Heading className="text-sm text-green-700">10 minutes</Heading>
               </VStack>
               <VStack>
-                <Heading className="text-xs text-text-secondary">
-                  Response rate
+                <Heading className="text-text-tertiary">
+                  Photos and Videos
                 </Heading>
-                <Heading className="text-sm text-green-700">100%</Heading>
               </VStack>
-            </div>
-            <Button
-              size="sm"
-              className="bg-blue-600 data-[hover=true]:bg-blue-500"
-            >
-              <ButtonText>Request quote & availability</ButtonText>
-            </Button>
-            <small className="text-center text-text-secondary">
-              107 locals recently requested a quote
-            </small>
+              <VStack>
+                <Heading className="text-text-tertiary">Reviews</Heading>
+                {reviews.map((review, index) => (
+                  <Pressable key={index}>
+                    <Card variant="filled">
+                      <HStack className="justify-between">
+                        <Avatar>
+                          <AvatarFallbackText>
+                            {getInitial(
+                              review.user?.firstName || review.user?.email
+                            )}
+                          </AvatarFallbackText>
+                          <AvatarImage
+                            source={{ uri: review.user?.profilePicture || "" }}
+                          />
+                        </Avatar>
+                        <Heading size="sm" className="font-bold">
+                          {review.user?.firstName} {review.user?.lastName}
+                        </Heading>
+                      </HStack>
+                      <Text className="text-text-secondary">
+                        {review.description}
+                      </Text>
+                      <HStack className="justify-between mt-2">
+                        <Text className="text-yellow-500">
+                          Rating: {review.rating} ⭐
+                        </Text>
+                      </HStack>
+                    </Card>
+                  </Pressable>
+                ))}
+              </VStack>
+            </VStack>
           </VStack>
 
-          {/* Contact Card */}
-          <Card className="bg-white p-4 gap-4">
-            <div className="flex flex-row justify-between">
-              <Link href="#" className="font-extrablack text-lg text-cyan-700">
-                kajola.org
-              </Link>
-              <Icon as={ExternalLinkIcon} />
-            </div>
-            <Divider />
+          {/* RIGHT SIDE */}
+          <VStack className="w-1/3 sticky top-32 self-start h-fit gap-4 bg-[#F6F6F6]">
+            <VStack className="bg-white p-4 gap-4">
+              <Heading className="text-xl font-extrablack">
+                Request quote & availability
+              </Heading>
+              <div className="flex flex-row gap-10">
+                <VStack>
+                  <Heading className="text-xs text-text-secondary">
+                    Response time
+                  </Heading>
+                  <Heading className="text-sm text-green-700">
+                    10 minutes
+                  </Heading>
+                </VStack>
+                <VStack>
+                  <Heading className="text-xs text-text-secondary">
+                    Response rate
+                  </Heading>
+                  <Heading className="text-sm text-green-700">100%</Heading>
+                </VStack>
+              </div>
+              <Button
+                size="sm"
+                className="bg-blue-600 companyData-[hover=true]:bg-blue-500"
+              >
+                <ButtonText>Request quote & availability</ButtonText>
+              </Button>
+              <small className="text-center text-text-secondary">
+                107 locals recently requested a quote
+              </small>
+            </VStack>
 
-            <div className="flex flex-row justify-between">
-              <Text className="font-extrablack text-lg text-cyan-700">
-                (415) 123-4567
-              </Text>
-              <Icon as={PhoneIcon} />
-            </div>
-            <Divider />
-
-            <div className="flex flex-row justify-between">
-              <div>
+            {/* Contact Card */}
+            <Card className="bg-white p-4 gap-4">
+              <div className="flex flex-row justify-between">
                 <Link
                   href="#"
-                  className="font-extrablack text-md text-cyan-700"
+                  className="font-extrablack text-lg text-cyan-700"
                 >
-                  Get Directions
+                  kajola.org
                 </Link>
-                <p className="font-bold text-lg text-text-secondary">
-                  {data?.location?.primary?.address?.address}
-                </p>
+                <Icon as={ExternalLinkIcon} />
               </div>
-              <Icon as={GlobeIcon} />
-            </div>
-          </Card>
-        </VStack>
-      </HStack>
+              <Divider />
+
+              <div className="flex flex-row justify-between">
+                <Text className="font-extrablack text-lg text-cyan-700">
+                  (415) 123-4567
+                </Text>
+                <Icon as={PhoneIcon} />
+              </div>
+              <Divider />
+
+              <div className="flex flex-row justify-between">
+                <div>
+                  <Link
+                    href="#"
+                    className="font-extrablack text-md text-cyan-700"
+                  >
+                    Get Directions
+                  </Link>
+                  <p className="font-bold text-lg text-text-secondary">
+                    {companyData?.location?.primary?.address?.address}
+                  </p>
+                </div>
+                <Icon as={GlobeIcon} />
+              </div>
+            </Card>
+          </VStack>
+        </HStack>
+      </VStack>
     </VStack>
   );
 };

@@ -193,12 +193,12 @@ const Categories = () => {
       <Heading size="md" className="md:text-2xl">
         Home Services
       </Heading>
-      <HStack className="hidden md:grid grid-cols-7 gap-4 justify-between rounded-lg">
+      <HStack className="hidden md:grid grid-cols-7 gap-4 rounded-lg">
         {categories.map((category, index) => (
           <Link
             key={index}
             href={category.title.toLowerCase().replace("&", "")}
-            className="w-36 h-36 text-center rounded-lg transform transition-transform duration-300 hover:scale-105"
+            className="aspect-square text-center rounded-lg transform transition-transform duration-300 hover:scale-105"
           >
             <Card className="pt-4 p-1 w-36 h-36 justify-between rounded-lg shadow-hard-5">
               <HStack className="justify-center items-center">
@@ -220,17 +220,17 @@ const Categories = () => {
       {/**mobile */}
       <Card
         variant="filled"
-        className="md:hidden flex-row flex-wrap justify-between items-center gap-y-2"
+        className="md:hidden grid grid-cols-4 items-center gap-2"
       >
         {mcategories.map((category, index) => (
           <Link
             key={index}
             href={category.title}
-            className="w-[4.3rem] text-center rounded-lg transform transition-transform duration-300 hover:scale-105"
+            className="aspect-square text-center rounded-lg transform transition-transform duration-300 hover:scale-105"
           >
             <Card className="bg-[#1E40AF10] p-2 justify-center items-center">
               <Image
-                className="w-[3rem] h-[3rem]"
+                className="w-14 h-14"
                 src={category.image}
                 alt={category.title}
                 width={100}

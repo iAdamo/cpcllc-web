@@ -70,7 +70,7 @@ const ProfilePage = () => {
                         <Image
                           className="object-cover h-56 w-56"
                           src={
-                            data?.activeRoleId?.companyLogo ||
+                            data?.activeRoleId?.companyImages[0] ||
                             "/assets/default-profile.jpg"
                           }
                           alt={data?.activeRoleId?.companyName}
@@ -158,7 +158,7 @@ const ProfilePage = () => {
                 <HStack className="justify-between px-4 items-end">
                   <VStack className="gap-1">
                     <Heading className="mb-2" size="sm">
-                      {data?.username}
+                      {data?.firstName} {data?.lastName}  
                     </Heading>
                     <Text size="sm">
                       {data?.activeRoleId?.location?.primary?.address?.country}

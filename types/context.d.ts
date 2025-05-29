@@ -34,7 +34,7 @@ export interface CompanyData {
   companyDescription: string;
   companyEmail: string;
   phoneNumber: string;
-  companyLogo: string;
+  companyImages: string[];
   services: any[];
   clients: any[];
   latitude: number;

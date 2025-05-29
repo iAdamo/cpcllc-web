@@ -69,7 +69,7 @@ const ServicesSection = () => {
   const selectedCompany = companies[selectedCompanyIndex];
 
   return (
-    <VStack className="md:flex-row mt-32 px-4 bg-[#F6F6F6]">
+    <VStack className="md:flex-row mt-40 px-4 bg-[#F6F6F6]">
       <VStack className="w-1/3 h-3/5 mt-6  gap-4">
         <Card
           variant="outline"
@@ -103,7 +103,7 @@ const ServicesSection = () => {
                   <Image
                     className="h-32 w-32 rounded-l-md object-cover"
                     src={
-                      company.companyLogo ||
+                      company.companyImages[0] ||
                       "/assets/placeholder.jpg"
                     }
                     alt={company.companyName || "Company Logo"}
