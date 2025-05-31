@@ -55,7 +55,7 @@ const PageOne = () => {
           CompanyCenterLLC
         </ButtonText>
       </Button>
-      <VStack className="h-full rounded-3xl mx-96 px-6 mt-14 py-1 gap-10">
+      <VStack className="h-full rounded-3xl mx-96 mt-14 py-1 gap-10">
         <Heading size="2xl" className="text-center font-medium">
           Join as a Client or service provider
         </Heading>

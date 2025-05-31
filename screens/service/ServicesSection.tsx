@@ -9,8 +9,7 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { Pressable } from "@/components/ui/pressable";
 import ServiceView from "./ServiceView";
-import { GoogleMapsProvider } from "@/components/maps/GoogleMapsProvider";
-import { InteractiveMap } from "@/components/maps/InteractiveMap";
+
 
 const ServicesSection = () => {
   const [showInfo, setShowInfo] = useState(true);
@@ -18,6 +17,7 @@ const ServicesSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedCompanyIndex, setSelectedCompanyIndex] = useState<number>(0);
+
 
   const limit = 20;
 
@@ -33,7 +33,7 @@ const ServicesSection = () => {
     const fetchCompanies = async () => {
       const { companies: response, totalPages } = await getCompanies(
         currentPage,
-        limit,
+        limit
       );
       setCompanies(response);
       setTotalPages(totalPages);
@@ -46,6 +46,7 @@ const ServicesSection = () => {
   //    setCurrentPage(page);
   //  }
   //};
+
 
   const handleCompanySelect = (index: number) => {
     setSelectedCompanyIndex(index);
@@ -67,28 +68,7 @@ const ServicesSection = () => {
     },
   ];
 
-   const handleMarkerClick = (id: string) => {
-     console.log("Marker clicked:", id);
-     // Fetch more details about the listing, etc.
-   };
-
-   const handleMapClick = (location: google.maps.LatLngLiteral) => {
-     console.log("Map clicked at:", location);
-     // Maybe add a new listing at this location
-   };
-
-   // Example markers - in a real app these would come from your database
-   const markers = [
-     {
-       id: "1",
-       position: { lat: 40.7128, lng: -74.006 },
-       title: "Sample Listing 1",
-       content: "This is a sample listing for your marketplace",
-     },
-     // ... more markers
-   ];
-
-
+  // Removed duplicate declaration of selectedCoords
   const selectedCompany = companies[selectedCompanyIndex];
 
   return (
@@ -158,22 +138,11 @@ const ServicesSection = () => {
         ) : (
           <VStack className="p-4">
             <Text className="text-lg font-semibold">Company Map</Text>
+
             <Text>
               {selectedCompany ? (
-                <GoogleMapsProvider>
-                  <div className="h-screen flex flex-col">
-                    <header className="bg-white shadow-sm p-4">
-                      <h1 className="text-xl font-bold">
-                        Hyperlocal Marketplace
-                      </h1>
-                    </header>
-                    <InteractiveMap
-                      markers={markers}
-                      onMarkerClick={handleMarkerClick}
-                      onMapClick={handleMapClick}
-                    />
-                  </div>
-                </GoogleMapsProvider>
+                <p>hello</p>
+
               ) : (
                 "Select a company to see its map."
               )}
