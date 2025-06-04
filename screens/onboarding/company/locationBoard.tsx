@@ -11,6 +11,37 @@ import { useOnboarding } from "@/context/OnboardingContext";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { Loader2, MapPin, Search } from "lucide-react"; // Importing icons for better UX
 
+const parseAddressComponents = (
+  addressComponents: google.maps.GeocoderAddressComponent[]
+) => {
+  const parsedData: Partial<{
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  }> = {};
+
+  addressComponents.forEach((component) => {
+    if (
+      component.types.includes("street_address") ||
+      component.types.includes("route")
+    ) {
+      parsedData.street = component.long_name;
+    } else if (component.types.includes("locality")) {
+      parsedData.city = component.long_name;
+    } else if (component.types.includes("administrative_area_level_1")) {
+      parsedData.state = component.long_name;
+    } else if (component.types.includes("country")) {
+      parsedData.country = component.long_name;
+    } else if (component.types.includes("postal_code")) {
+      parsedData.zip = component.long_name;
+    }
+  });
+
+  return parsedData;
+};
+
 // Define libraries as a constant outside the component
 const libraries: Array<"places"> = ["places"];
 
@@ -20,6 +51,7 @@ const LocationBoard = () => {
   const [autocompleteInput, setAutocompleteInput] = useState(
     data.companyAddress || ""
   ); // State for input value
+
   const autocompleteRef = useRef<HTMLInputElement>(null); // Ref for the input element
   const googleAutocompleteInstance =
     useRef<google.maps.places.Autocomplete | null>(null); // Ref for the Google Autocomplete object
@@ -53,12 +85,18 @@ const LocationBoard = () => {
               location: { lat: latitude, lng: longitude },
             });
             if (results && results[0]) {
-              const address = results[0].formatted_address;
-              setAutocompleteInput(address); // Update input field with detected address
+              const address = results[0];
+              const parsedAddress = parseAddressComponents(
+                address.address_components
+              );
+              console.log(parsedAddress);
+
+              setAutocompleteInput(address.formatted_address || ""); // Update input field with detected address
               setData({
-                companyAddress: address,
+                companyAddress: address.formatted_address || "",
                 latitude,
                 longitude,
+                ...parsedAddress, // Spread parsed address fields into the onboarding data
               });
             } else {
               // If no address found, just set coordinates

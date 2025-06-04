@@ -59,3 +59,19 @@ export const setUserFavourites = async (
   const response = await axiosInstance.patch(`users/${companyId}/favorite`);
   return response.data;
 };
+
+export const searchCompanies = async (
+  searchInput?: string,
+  lat?: string,
+  long?: string,
+  address?: string
+): Promise<CompanyData[]> => {
+  const params: Record<string, any> = {};
+  if (searchInput) params.searchInput = searchInput;
+  if (lat) params.lat = lat;
+  if (long) params.long = long;
+  if (address) params.address = address;
+
+  const response = await axiosInstance.get("users/search", { params });
+  return response.data;
+};

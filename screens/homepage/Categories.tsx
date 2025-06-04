@@ -193,7 +193,7 @@ const Categories = () => {
       <Heading size="md" className="md:text-2xl">
         Home Services
       </Heading>
-      <HStack className="hidden md:grid grid-cols-7 gap-4 rounded-lg">
+      <HStack className="hidden md:grid grid-cols-8 gap-4 rounded-lg">
         {categories.map((category, index) => (
           <Link
             key={index}

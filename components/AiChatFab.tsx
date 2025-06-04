@@ -100,7 +100,7 @@ const AiChat = () => {
       <Fab
         size="lg"
         placement="bottom right"
-        className="bg-white hover:bg-white border-4 border-brand-primary fixed  h-16 shadow-lg shadow-brand-secondary hover:shadow-xl hover:border-btn-primary hover:shadow-btn-primary active:bg-white transition-shadow duration-300 group"
+        className="bg-white z-50 hover:bg-white border-4 border-brand-primary fixed  h-16 shadow-lg shadow-brand-secondary hover:shadow-xl hover:border-btn-primary hover:shadow-btn-primary active:bg-white transition-shadow duration-300 group"
         onPress={() => setShowChatDrawer(true)}
       >
         <FabLabel className="text-btn-primary mr-1 font-bold group-hover:text-brand-primary transition-colors duration-300">

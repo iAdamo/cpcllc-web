@@ -41,27 +41,25 @@ const BrowseCompanies = () => {
           Browse companies
         </Link>
       </VStack>
-      <VStack className="md:flex-row w-full flex flex-wrap justify-between gap-y-8">
+      <VStack className="md:flex-row w-full flex flex-wrap gap-x-4 gap-y-8">
         {users.map((user, index) => (
           <Link key={index} href={user?.activeRoleId?._id || ""}>
             <Card
               variant="outline"
-              className="flex-row w-full p-0 gap-4 bg-white"
+              className="flex-row h-32 w-96 p-0 gap-4 bg-white"
             >
-              <VStack>
                 <Image
                   className="h-32 w-32 rounded-l-md object-cover"
                   src={
-                    user?.activeRoleId?.companyLogo || "/assets/placeholder.jpg"
+                    user?.activeRoleId?.companyImages[0] || "/assets/placeholder.jpg"
                   }
                   alt={user?.activeRoleId?.companyName || "Company Logo"}
                   width={1400}
                   height={600}
                 />
-              </VStack>
               <VStack className="justify-between p-2">
                 <Heading>{user?.activeRoleId?.companyName}</Heading>
-                <Text>
+                <Text size="sm" className="md:text-md font-semibold">
                   {user?.activeRoleId?.location?.primary?.address?.address}
                 </Text>
               </VStack>

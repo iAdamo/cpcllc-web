@@ -71,7 +71,7 @@ const PreFooter = () => {
   };
 
   return (
-    <VStack className="mt-20">
+    <VStack className="mt-20 z-50">
       <HStack className="md:hidden p-4 flex-wrap justify-between">
         {info.map((item, index) => (
           <VStack

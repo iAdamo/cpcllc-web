@@ -9,7 +9,10 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { Pressable } from "@/components/ui/pressable";
 import ServiceView from "./ServiceView";
-
+import GoogleMapComponent from "@/components/maps/GoogleMap";
+import { useMapContext } from "@/context/MapContext";
+import { useUserLocation } from "@/hooks/useUserLocation";
+import Loader from "@/components/Loader";
 
 const ServicesSection = () => {
   const [showInfo, setShowInfo] = useState(true);
@@ -17,8 +20,8 @@ const ServicesSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedCompanyIndex, setSelectedCompanyIndex] = useState<number>(0);
-
-
+  const { loading, error } = useMapContext();
+  useUserLocation();
   const limit = 20;
 
   // Load from localStorage on initial mount
@@ -41,16 +44,22 @@ const ServicesSection = () => {
     fetchCompanies();
   }, [currentPage]);
 
+  if (loading && companies.length === 0) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
   // const changePage = (page: number) => {
   //  if (page >= 1 && page <= totalPages) {
   //    setCurrentPage(page);
   //  }
   //};
 
-
   const handleCompanySelect = (index: number) => {
     setSelectedCompanyIndex(index);
-    setShowInfo(true);
+    // setShowInfo(true);
     localStorage.setItem("selectedCompanyIndex", index.toString());
   };
 
@@ -72,7 +81,7 @@ const ServicesSection = () => {
   const selectedCompany = companies[selectedCompanyIndex];
 
   return (
-    <VStack className="md:flex-row mt-40 px-4 bg-[#F6F6F6]">
+    <VStack className="md:flex-row mt-40 p-4 bg-[#F6F6F6]">
       <VStack className="w-1/3 h-3/5 mt-6  gap-4">
         <Card
           variant="outline"
@@ -90,7 +99,10 @@ const ServicesSection = () => {
           ))}
         </Card>
 
-        <VStack className="overflow-y-auto bg-white p-4 h-4/5">
+        <Card
+          variant="filled"
+          className="overflow-y-auto bg-white min-h-0 max-h-[1500px]"
+        >
           {companies.map((company, index) => (
             <Pressable
               key={index}
@@ -105,15 +117,13 @@ const ServicesSection = () => {
                 variant="outline"
                 className="flex-row w-full p-0 gap-4 bg-white"
               >
-                <VStack>
-                  <Image
-                    className="h-32 w-32 rounded-l-md object-cover"
-                    src={company.companyImages[0] || "/assets/placeholder.jpg"}
-                    alt={company.companyName || "Company Logo"}
-                    width={1400}
-                    height={600}
-                  />
-                </VStack>
+                <Image
+                  className="h-32 w-32 rounded-l-md object-cover"
+                  src={company.companyImages[0] || "/assets/placeholder.jpg"}
+                  alt={company.companyName || "Company Logo"}
+                  width={1400}
+                  height={600}
+                />
                 <VStack className="justify-between p-2">
                   <Heading>{company.companyName}</Heading>
                   <Text>{company.location?.primary?.address?.address}</Text>
@@ -121,35 +131,33 @@ const ServicesSection = () => {
               </Card>
             </Pressable>
           ))}
-        </VStack>
+        </Card>
       </VStack>
 
-      <VStack className="w-2/3 rounded-none p-6 bg-[#F6F6F6]">
-        {showInfo ? (
-          selectedCompany ? (
-            <VStack className="">
-              <ServiceView {...selectedCompany} />
-            </VStack>
-          ) : (
-            <VStack className="p-4">
-              <Text>No company selected.</Text>
-            </VStack>
-          )
-        ) : (
-          <VStack className="p-4">
-            <Text className="text-lg font-semibold">Company Map</Text>
-
-            <Text>
-              {selectedCompany ? (
-                <p>hello</p>
-
-              ) : (
-                "Select a company to see its map."
-              )}
-            </Text>
+      {showInfo ? (
+        selectedCompany ? (
+          <VStack className="w-2/3 rounded-none p-6 bg-[#F6F6F6]">
+            <ServiceView {...selectedCompany} />
           </VStack>
-        )}
-      </VStack>
+        ) : (
+          <VStack className="w-2/3 rounded-none p-6 bg-[#F6F6F6]">
+            <Text>No company selected.</Text>
+          </VStack>
+        )
+      ) : (
+        <VStack className="w-2/3 rounded-none p-6 bg-[#F6F6F6] sticky top-24 h-[80vh] overflow-hidden">
+          {selectedCompany.location.primary.coordinates.lat ? (
+            <div className="relative w-full h-full rounded-lg">
+              <GoogleMapComponent
+                apiKey={process.env.NEX_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+                companies={[selectedCompany]}
+              />
+            </div>
+          ) : (
+            <Text className="p-4">This user has no company data</Text>
+          )}
+        </VStack>
+      )}
     </VStack>
   );
 };

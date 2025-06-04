@@ -52,7 +52,6 @@ const ServiceView = (companyData: CompanyData) => {
     const handleReview = async () => {
       try {
         const reviews = await getReviews(companyData?._id);
-        console.log(reviews);
         setReviews(reviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -67,7 +66,6 @@ const ServiceView = (companyData: CompanyData) => {
       if (!companyData?._id) return console.error("Company ID is undefined");
 
       const updatedCompany = await setUserFavourites(companyData?._id);
-      console.log(updatedCompany);
       const hasFavourited = updatedCompany?.favoritedBy.includes(
         userData?.id ?? ""
       );
@@ -77,7 +75,6 @@ const ServiceView = (companyData: CompanyData) => {
       console.error("Error toggling favorite:", error);
     }
   };
-
 
   const portfolio = [
     { name: "Portfolio 1", image: "/assets/header10.jpg" },
@@ -166,7 +163,7 @@ const ServiceView = (companyData: CompanyData) => {
               {companyData?.companyImages.map((src, index) => (
                 <SwiperSlide key={index}>
                   <Image
-                    className="object-cover w-full h-full rounded-lg bg-red-600"
+                    className="object-cover w-full h-full rounded-lg"
                     src={src}
                     alt={`slide-${index}`}
                     width={1920}

@@ -7,6 +7,7 @@ import PreFooter from "@/components/layout/PreFooter";
 import Footer from "@/components/layout/Footer";
 import { usePathname } from "next/navigation";
 // import { GoogleMapsProvider } from "@/components/maps/GoogleMapsProvider";
+import { MapProvider } from "@/context/MapContext";
 
 export default function RootLayout({
   children,
@@ -25,10 +26,12 @@ export default function RootLayout({
         <StyledJsxRegistry>
           <GluestackUIProvider mode="light">
             <SessionProvider>
+              <MapProvider>
                 {!shouldHideLayout && <NavBar />}
                 {children}
                 {!shouldHideLayout && <PreFooter />}
                 {!shouldHideLayout && <Footer />}
+              </MapProvider>
             </SessionProvider>
           </GluestackUIProvider>
         </StyledJsxRegistry>
