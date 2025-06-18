@@ -2,7 +2,7 @@ export async function getCurrentLocation(): Promise<{
   lat: string;
   long: string;
 } | null> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!navigator.geolocation) return resolve(null);
 
     navigator.geolocation.getCurrentPosition(
@@ -17,13 +17,29 @@ export async function getCurrentLocation(): Promise<{
   });
 }
 
-export async function getAddressFromCoords(
-  lat: string,
-  long: string
-): Promise<string> {
-  const res = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${long}`
+export async function getnPlaceSuggestions(query: string): Promise<string[]> {
+  const response = await fetch(
+    `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+      query
+    )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
   );
-  const data = await res.json();
-  return data.display_name || `${lat}, ${long}`;
+  const data = await response.json();
+  return data.predictions.map((p: any) => p.description);
+}
+
+export async function getPlaceSuggestions(query: string): Promise<string[]> {
+  if (!query) return [];
+
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        query
+      )}&addressdetails=1&limit=10`
+    );
+    const data = await response.json();
+    return data.map((item: any) => item.display_name);
+  } catch (error) {
+    console.error("Error fetching suggestions:", error);
+    return [];
+  }
 }

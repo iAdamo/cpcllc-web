@@ -33,7 +33,8 @@ export interface CompanyData {
   companyName: string;
   companyDescription: string;
   companyEmail: string;
-  phoneNumber: string;
+  companyPhoneNumber: string;
+  website: string;
   companyImages: string[];
   services: any[];
   clients: any[];
@@ -43,6 +44,8 @@ export interface CompanyData {
   favoritedBy: string[];
   favoriteCount: number;
   ratings: number;
+  createdAt: string;
+  updatedAt: string;
   location: {
     primary: {
       coordinates: {

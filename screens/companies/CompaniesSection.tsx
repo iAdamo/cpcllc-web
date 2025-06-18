@@ -14,7 +14,7 @@ import { useMapContext } from "@/context/MapContext";
 import { useUserLocation } from "@/hooks/useUserLocation";
 import Loader from "@/components/Loader";
 
-const ServicesSection = () => {
+const CompaniesSection = () => {
   const [showInfo, setShowInfo] = useState(true);
   const [companies, setCompanies] = useState<CompanyData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,30 +32,38 @@ const ServicesSection = () => {
     }
   }, []);
 
-  useEffect(() => {
+    useEffect(() => {
     const fetchCompanies = async () => {
-      const { companies: response, totalPages } = await getCompanies(
-        currentPage,
-        limit
-      );
-      setCompanies(response);
-      setTotalPages(totalPages);
+      try {
+        const { companies: response, totalPages } = await getCompanies(
+          currentPage,
+          limit
+        );
+        setCompanies(response);
+        setTotalPages(totalPages);
+      } catch (error) {
+        console.error("Error fetching companies:", error);
+        setCompanies([]); // Ensure companies is set to an empty array
+      }
     };
     fetchCompanies();
-  }, [currentPage]);
+  }, [currentPage, limit]);
 
-  if (loading && companies.length === 0) {
-    return <Loader />;
-  }
+  // Uncomment if you want to implement pagination
 
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
   // const changePage = (page: number) => {
   //  if (page >= 1 && page <= totalPages) {
   //    setCurrentPage(page);
   //  }
   //};
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <Text className="text-red-500">Error: {error}</Text>;
+  }
 
   const handleCompanySelect = (index: number) => {
     setSelectedCompanyIndex(index);
@@ -81,8 +89,9 @@ const ServicesSection = () => {
   const selectedCompany = companies[selectedCompanyIndex];
 
   return (
-    <VStack className="md:flex-row mt-40 p-4 bg-[#F6F6F6]">
-      <VStack className="w-1/3 h-3/5 mt-6  gap-4">
+    <VStack className="md:flex-row mt-20 p-4 z-50 bg-[#F6F6F6]">
+      <Heading>hello</Heading>
+      <VStack className="w-1/3 h-3/5 mt-6 gap-4">
         <Card
           variant="outline"
           className="md:flex-row justify-between bg-white px-8 h-20 top-0"
@@ -149,9 +158,10 @@ const ServicesSection = () => {
           {selectedCompany.location.primary.coordinates.lat ? (
             <div className="relative w-full h-full rounded-lg">
               <GoogleMapComponent
-                apiKey={process.env.NEX_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-                companies={[selectedCompany]}
+                apiKey="YOUR_GOOGLE_MAPS_API_KEY"
+                companies={companies}
               />
+
             </div>
           ) : (
             <Text className="p-4">This user has no company data</Text>
@@ -162,4 +172,4 @@ const ServicesSection = () => {
   );
 };
 
-export default ServicesSection;
+export default CompaniesSection;

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CPCLLC | Services",
+  title: "CPCLLC | Companies",
   description: "Multi-service app",
 };
 
-import Service from "@/screens/service";
+import Companies from "@/screens/companies";
 
-export default Service;
+export default Companies;

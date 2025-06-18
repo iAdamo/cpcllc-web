@@ -17,6 +17,7 @@ import {
   poolservice,
   solar,
 } from "@/public/assets/icons";
+import { useRouter } from "next/navigation";
 
 const Categories = () => {
   const mcategories = [
@@ -132,62 +133,8 @@ const Categories = () => {
       image: electrical,
       url: "",
     },
-    {
-      title: "Cleaning",
-      image: cleaning,
-      url: "",
-    },
-    {
-      title: "HVAC",
-      image: hvac,
-      url: "",
-    },
-    {
-      title: "Painting",
-      image: painting,
-      url: "",
-    },
-    {
-      title: "Pest Control",
-      image: pestcontrol,
-      url: "",
-    },
-    {
-      title: "Roofing",
-      image: roofing,
-      url: "",
-    },
-    {
-      title: "Pool Service",
-      image: poolservice,
-      url: "",
-    },
-    {
-      title: "Marketing Design & Branding",
-      image: electrical,
-      url: "",
-    },
-    {
-      title: "Analytics & Strategy",
-      image: electrical,
-      url: "",
-    },
-    {
-      title: "Operations & Business Consulting",
-      image: electrical,
-      url: "",
-    },
-    {
-      title: "Sales & Customer Care",
-      image: electrical,
-      url: "",
-    },
-    {
-      title: "Tech & Marketing Consulting",
-      image: electrical,
-      url: "",
-    },
   ];
+  const router = useRouter();
   return (
     <VStack className="md:px-12 px-4 gap-4 mt-40 md:mt-0 ">
       <Heading size="md" className="md:text-2xl">
@@ -216,6 +163,13 @@ const Categories = () => {
             </Card>
           </Link>
         ))}
+        <Button
+          variant="outline"
+          onPress={() => {router.push("companies/home-services")}}
+          className="flex-col justify-center items-center h-full border-none"
+        >
+          <ButtonText className="text-typography-600">More...</ButtonText>
+        </Button>
       </HStack>
       {/**mobile */}
       <Card

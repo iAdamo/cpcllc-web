@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { searchCompanies } from "@/axios/users";
 import { debounce } from "lodash";
+import { Company, CompanyData } from "@/types";
 
 export function useCompanySearch({
   searchInput,
@@ -13,7 +14,7 @@ export function useCompanySearch({
   long?: string;
   address?: string;
 }) {
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<CompanyData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 

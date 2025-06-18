@@ -15,14 +15,14 @@ const FeaturedCompanies = () => {
   const scrollRef = useRef<ScrollView>(null);
 
   const companies = [
-    { title: "Kajola Technologies", review: "4.6/5.0", color: "bg-blue-500" },
-    { title: "Sanux Technologies", review: "4.6/5.0", color: "bg-green-500" },
-    { title: "Product 3", review: "4.6/5.0", color: "bg-red-500" },
-    { title: "Product 4", review: "4.6/5.0", color: "bg-yellow-500" },
-    { title: "Product 1", review: "4.6/5.0", color: "bg-purple-500" },
-    { title: "Product 2", review: "4.6/5.0", color: "bg-pink-500" },
-    { title: "Product 3", review: "4.6/5.0", color: "bg-indigo-500" },
-    { title: "Product 4", review: "4.6/5.0", color: "bg-teal-500" },
+    { title: "Kajola Technologies", review: "4.6/5.0" },
+    { title: "Sanux Technologies", review: "4.6/5.0" },
+    { title: "Product 3", review: "4.6/5.0" },
+    { title: "Product 4", review: "4.6/5.0" },
+    { title: "Product 1", review: "4.6/5.0" },
+    { title: "Product 2", review: "4.6/5.0" },
+    { title: "Product 3", review: "4.6/5.0" },
+    { title: "Product 4", review: "4.6/5.0" },
   ];
 
   const scrollLeft = () => {
@@ -59,7 +59,7 @@ const FeaturedCompanies = () => {
         >
           {companies.map((company, index) => (
             <Link href="#" key={index}>
-              <Card className={`rounded-lg w-52 shadow-hard-5 ${company.color}`}>
+              <Card variant="filled" className="rounded-lg w-52 shadow-hard-5">
                 <Image
                   className="object-cover w-full rounded-lg"
                   src={HomeClient}
@@ -68,10 +68,10 @@ const FeaturedCompanies = () => {
                   height={500}
                 />
                 <VStack className="h-24 justify-center">
-                  <Heading size="lg" className="mb-4 text-white">
+                  <Heading size="md" className="mb-4">
                     {company.title}
                   </Heading>
-                  <Text className="font-semibold text-white">
+                  <Text className="font-semibold">
                     {company.review}
                   </Text>
                 </VStack>

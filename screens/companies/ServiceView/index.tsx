@@ -35,7 +35,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pressable } from "@/components/ui/pressable";
-import { reviewModal } from "@/components/Overlays/ReviewModal";
+import { ReviewModal } from "@/components/Overlays/ReviewModal";
 
 const ServiceView = (companyData: CompanyData) => {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -52,6 +52,7 @@ const ServiceView = (companyData: CompanyData) => {
     const handleReview = async () => {
       try {
         const reviews = await getReviews(companyData?._id);
+        console.log("Reviews", reviews);
         setReviews(reviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -108,12 +109,6 @@ const ServiceView = (companyData: CompanyData) => {
       name: "Write a Review",
       icon: FavouriteIcon,
       action: () => {
-        reviewModal({
-          companyId: companyData?._id,
-          companyName: companyData?.companyName,
-          isOpen: showWriteReview,
-          onClose: () => setWriteReview(false),
-        });
         setWriteReview(true);
       },
     },
@@ -144,7 +139,7 @@ const ServiceView = (companyData: CompanyData) => {
 
   return (
     <VStack className="w-full gap-4 p-4">
-      {reviewModal({
+      {ReviewModal({
         companyId: companyData?._id,
         companyName: companyData?.companyName,
         isOpen: showWriteReview,
@@ -180,48 +175,41 @@ const ServiceView = (companyData: CompanyData) => {
           <VStack className="w-2/3 gap-4 bg-white p-4">
             {/* Company Header */}
 
-            <VStack space="xs">
-              <HStack className="justify-between">
-                <VStack>
-                  <Heading size="2xl" className="font-extrablack break-words">
-                    {companyData?.companyName}
-                  </Heading>
-                  <Heading className="text-text-tertiary">
-                    5.0 (226 reviews)
-                  </Heading>
-                  <Heading className="text-text-tertiary">
-                    {companyData?.clients}
-                  </Heading>
-                </VStack>
-                <VStack className="items-start">
-                  {buttons.map((button, index) => (
-                    <Button
-                      key={index}
-                      variant="link"
-                      size="md"
-                      onPress={button.action}
+            <VStack space="xs" className="gap-4">
+              <VStack>
+                <Heading size="2xl" className="font-extrablack break-words">
+                  {companyData?.companyName}
+                </Heading>
+                <Heading className="text-text-tertiary">
+                  5.0 (226 reviews)
+                </Heading>
+                <Heading className="text-text-tertiary">
+                  {companyData?.clients}
+                </Heading>
+              </VStack>
+              <VStack className="flex-row w-2/3 justify-between items-start">
+                {buttons.map((button, index) => (
+                  <Button
+                    key={index}
+                    variant="link"
+                    onPress={button.action}
+                    className={`${
+                      isFavourite && " companyData-[hover=true]:bg-[#FFFFF70]"
+                    }`}
+                  >
+                    <ButtonIcon
                       className={`${
-                        isFavourite && " companyData-[hover=true]:bg-[#FFFFF70]"
+                        isFavourite &&
+                        "fill-red-500 border-red-500 text-white font-extrabold"
                       }`}
-                    >
-                      <ButtonIcon
-                        size="lg"
-                        className={`${
-                          isFavourite &&
-                          "fill-red-500 border-red-500 text-white font-extrabold"
-                        }`}
-                        as={button.icon}
-                      />
-                      <ButtonText
-                        size="sm"
-                        className="companyData-[hover=true]:no-underline companyData-[active=true]:no-underline"
-                      >
-                        {button.name}
-                      </ButtonText>
-                    </Button>
-                  ))}
-                </VStack>
-              </HStack>
+                      as={button.icon}
+                    />
+                    <ButtonText className="companyData-[hover=true]:no-underline companyData-[active=true]:no-underline">
+                      {button.name}
+                    </ButtonText>
+                  </Button>
+                ))}
+              </VStack>
             </VStack>
 
             {/* Content Sections */}
@@ -331,13 +319,13 @@ const ServiceView = (companyData: CompanyData) => {
                   Photos and Videos
                 </Heading>
               </VStack>
-              <VStack>
+              <VStack className="gap-2">
                 <Heading className="text-text-tertiary">Reviews</Heading>
                 {reviews.map((review, index) => (
                   <Pressable key={index}>
-                    <Card variant="filled">
-                      <HStack className="justify-between">
-                        <Avatar>
+                    <Card className="gap-2">
+                      <HStack className="gap-4 items-center">
+                        <Avatar className="w-10 h-10">
                           <AvatarFallbackText>
                             {getInitial(
                               review.user?.firstName || review.user?.email
@@ -347,12 +335,16 @@ const ServiceView = (companyData: CompanyData) => {
                             source={{ uri: review.user?.profilePicture || "" }}
                           />
                         </Avatar>
-                        <Heading size="sm" className="font-bold">
-                          {review.user?.firstName} {review.user?.lastName}
+                        <Heading size="xs" className="font-bold">
+                          {(review.user?.firstName && review.user?.lastName)
+                            ? `${review.user?.firstName} ${review.user?.lastName}`
+                            : "Anonymous User"}
                         </Heading>
                       </HStack>
-                      <Text className="text-text-secondary">
-                        {review.description}
+                      <Text className="text-sm text-text-secondary">
+                        {review.description.length > 80
+                          ? `${review.description.substring(0, 80)}...`
+                          : review.description}
                       </Text>
                       <HStack className="justify-between mt-2">
                         <Text className="text-yellow-500">
@@ -368,7 +360,7 @@ const ServiceView = (companyData: CompanyData) => {
 
           {/* RIGHT SIDE */}
           <VStack className="w-1/3 sticky top-32 self-start h-fit gap-4 bg-[#F6F6F6]">
-            <VStack className="bg-white p-4 gap-4">
+            <VStack className="hidden bg-white p-4 gap-4">
               <Heading className="text-xl font-extrablack">
                 Request quote & availability
               </Heading>
@@ -389,10 +381,12 @@ const ServiceView = (companyData: CompanyData) => {
                 </VStack>
               </div>
               <Button
-                size="sm"
+                onPress={() => router.push("/service/request-quote")}
                 className="bg-blue-600 companyData-[hover=true]:bg-blue-500"
               >
-                <ButtonText>Request quote & availability</ButtonText>
+                <ButtonText className="text-md">
+                  Request quote & availability
+                </ButtonText>
               </Button>
               <small className="text-center text-text-secondary">
                 107 locals recently requested a quote
@@ -403,36 +397,49 @@ const ServiceView = (companyData: CompanyData) => {
             <Card className="bg-white p-4 gap-4">
               <div className="flex flex-row justify-between">
                 <Link
-                  href="#"
-                  className="font-extrablack text-lg text-cyan-700"
+                  href={`mailto:${companyData?.companyEmail}`}
+                  className="font-extrablack text-md text-cyan-700 w-11/12 break-words"
                 >
-                  kajola.org
+                  {companyData?.companyEmail || "No email provided"}
                 </Link>
                 <Icon as={ExternalLinkIcon} />
               </div>
               <Divider />
 
               <div className="flex flex-row justify-between">
-                <Text className="font-extrablack text-lg text-cyan-700">
-                  (415) 123-4567
+                <Link
+                  href={`https://${companyData?.website || "google.com"}`}
+                  className="font-extrablack text-md text-cyan-700 w-11/12 break-words"
+                >
+                  {companyData?.website || "google.com"}
+                </Link>
+                <Icon as={GlobeIcon} />
+              </div>
+
+              <Divider />
+
+              <div className="flex flex-row justify-between">
+                <Text className="font-extrablack text-md text-cyan-700 w-11/12 break-words">
+                  {companyData?.companyPhoneNumber ||
+                    "No phone number provided"}
                 </Text>
                 <Icon as={PhoneIcon} />
               </div>
               <Divider />
 
               <div className="flex flex-row justify-between">
-                <div>
+                <div className="w-11/12">
                   <Link
                     href="#"
-                    className="font-extrablack text-md text-cyan-700"
+                    className="font-extrablack text-md text-cyan-700  break-words"
                   >
                     Get Directions
                   </Link>
-                  <p className="font-bold text-lg text-text-secondary">
+                  <p className="font-semibold text- text-text-secondary break-words">
                     {companyData?.location?.primary?.address?.address}
                   </p>
                 </div>
-                <Icon as={GlobeIcon} />
+                <Icon as={GlobeIcon} className="" />
               </div>
             </Card>
           </VStack>

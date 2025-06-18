@@ -6,10 +6,10 @@ import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { Input, InputField } from "@/components/ui/input";
+// import { Input, InputField } from "@/components/ui/input";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useJsApiLoader } from "@react-google-maps/api";
-import { Loader2, MapPin, Search } from "lucide-react"; // Importing icons for better UX
+import { Loader2, MapPin } from "lucide-react"; // Importing icons for better UX
 
 const parseAddressComponents = (
   addressComponents: google.maps.GeocoderAddressComponent[]
@@ -257,20 +257,16 @@ const LocationBoard = () => {
             <Text className="text-gray-700 text-sm font-medium">
               Search for your company address
             </Text>
-            <Input className="h-12 border-gray-300 focus-within:border-blue-500 transition-colors duration-200">
-              <InputField
+            <input className="h-12 pl-4 border-gray-300 focus-within:border-blue-500 transition-colors duration-200"
                 ref={autocompleteRef} // Attach ref to the input field
                 id="place-autocomplete-input"
                 placeholder="E.g., 123 Main Street, Victoria Island, Lagos"
                 value={autocompleteInput}
-                onChange={handleInputChange} // Handle manual typing
+                onChange={handleInputChange}
                 disabled={isLoadingGeolocation}
-                className="pl-10 pr-4" // Padding for icon
-              />
-              <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
-              </div>
-            </Input>
+                />
+
+
           </VStack>
 
           <Text className="text-gray-500 text-sm text-center">- OR -</Text>

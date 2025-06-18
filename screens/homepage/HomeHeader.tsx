@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { VStack } from "@/components/ui/vstack";
-import { SearchEngine, SearchBarWithMap } from "@/components/SearchEngine";
+import { SearchEngine } from "@/components/SearchEngine";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -12,6 +12,7 @@ import {
   carousel3,
   carousel4,
 } from "@/public/assets/homepage";
+
 
 const carouselImages = [carousel0, carousel1, carousel2, carousel3, carousel4];
 
@@ -56,7 +57,6 @@ const HomeHeader = () => {
             marketplace for businesses and job seekers.
           </p>
           <SearchEngine />
-          <SearchBarWithMap />
         </VStack>
       </VStack>
     </VStack>

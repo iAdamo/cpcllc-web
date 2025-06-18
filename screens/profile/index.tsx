@@ -43,6 +43,12 @@ const ProfilePage = () => {
   if (!data) return null;
 
   const date = new Date(data.createdAt);
+  const companyDate = new Date(data.activeRoleId?.createdAt || 0);
+   const formattedCompanyDate = companyDate.toLocaleDateString(undefined, {
+     month: "long",
+     day: "numeric",
+     year: "numeric",
+   });
   const formattedDate = date.toLocaleDateString(undefined, {
     month: "long",
     day: "numeric",
@@ -106,7 +112,7 @@ const ProfilePage = () => {
                     <Text size="sm">
                       {data?.activeRoleId?.location?.primary?.address?.country}
                     </Text>
-                    <Text size="sm">Joined {formattedDate}</Text>
+                    <Text size="sm">Registered on the {formattedCompanyDate}</Text>
                     <Text size="sm">Online</Text>
                   </VStack>
                   <Button
@@ -158,7 +164,7 @@ const ProfilePage = () => {
                 <HStack className="justify-between px-4 items-end">
                   <VStack className="gap-1">
                     <Heading className="mb-2" size="sm">
-                      {data?.firstName} {data?.lastName}  
+                      {data?.firstName} {data?.lastName}
                     </Heading>
                     <Text size="sm">
                       {data?.activeRoleId?.location?.primary?.address?.country}

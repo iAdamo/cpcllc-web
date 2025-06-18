@@ -35,7 +35,7 @@ const BrowseCompanies = () => {
           offering a wide range of services.
         </Text>
         <Link
-          href="/services"
+          href="/companies"
           className="hidden md:inline text-2xl text-btn-primary hover:text-brand-secondary font-semibold underline"
         >
           Browse companies
@@ -43,7 +43,7 @@ const BrowseCompanies = () => {
       </VStack>
       <VStack className="md:flex-row w-full flex flex-wrap gap-x-4 gap-y-8">
         {users.map((user, index) => (
-          <Link key={index} href={user?.activeRoleId?._id || ""}>
+          <Link key={index} href={`companies/${user?.activeRoleId?._id || ""}`}>
             <Card
               variant="outline"
               className="flex-row h-32 w-96 p-0 gap-4 bg-white"
@@ -69,7 +69,7 @@ const BrowseCompanies = () => {
       </VStack>
       <Button
         variant="outline"
-        onPress={() => router.push("/services")}
+        onPress={() => router.push("/companies")}
         className="md:hidden"
       >
         <ButtonText> Browse companies</ButtonText>

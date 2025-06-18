@@ -30,8 +30,7 @@ const NavBar = () => {
 
   const options = [
     { name: "Home", href: "/" },
-    { name: "Services", href: "/services" },
-    { name: "Hire", href: "/hire" },
+    { name: "Companies", href: "/companies" },
   ];
 
   const options2 = [
@@ -94,7 +93,7 @@ const NavBar = () => {
           <HStack className="gap-32 ml-auto">
             {currentPath === "/" ? (
               <>
-                <HStack className="items-center gap-8 hidden md:flex">
+                <HStack className="items-center gap-14 hidden md:flex">
                   {options.map((option) => (
                     <Link
                       key={option.name}
@@ -124,12 +123,12 @@ const NavBar = () => {
                 </HStack>
               </>
             ) : (
-              <HStack className="items-center gap-4 hidden md:flex ml-8">
+              <HStack className="items-center justify-between gap-4 hidden md:flex ">
                 {options2.map((option) => (
                   <Link
                     key={option.name}
                     href={option.href}
-                    className={`no-underline text-md font-semibold ${
+                    className={`no-underline text-md leading-sm font-semibold ${
                       currentPath === option.href ? "font-extrabold" : ""
                     }`}
                   >
@@ -164,6 +163,7 @@ const NavBar = () => {
           initialView="signIn"
         />
       </VStack>
+      {/**Mobile */}
       <VStack className="md:hidden w-full z-50 gap-2 p-2 fixed top-0 bg-brand-primary">
         <HStack className="justify-between items-center">
           <Button size="sm" className="bg-brand-secondary">
@@ -218,10 +218,10 @@ const NavBar = () => {
                 <Divider orientation="horizontal" className="w-full" />
                 <Button
                   variant="link"
-                  onPress={() => router.push("/services")}
+                  onPress={() => router.push("/companies")}
                   className=""
                 >
-                  <ButtonText className="font-normal">Services</ButtonText>
+                  <ButtonText className="font-normal">Companies</ButtonText>
                 </Button>
                 <Divider orientation="horizontal" className="w-full" />
               </AccordionContent>

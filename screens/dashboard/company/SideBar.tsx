@@ -31,7 +31,7 @@ const SideBar = () => {
           variant="outline"
           className="w-full"
           onPress={() => {
-            router.push("/cpc");
+            router.push(`/cpc/${userData?._id || ""}`);
           }}
         >
           <ButtonText className="text-text-cpc1 data-[hover=true]:no-underline data-[hover=true]:text-text-primary">

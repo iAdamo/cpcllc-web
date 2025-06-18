@@ -7,14 +7,55 @@ import { VStack } from "@/components/ui/vstack";
 import { SearchIcon } from "@/components/ui/icon";
 import { useRouter, usePathname } from "next/navigation";
 import { useCompanySearch } from "@/hooks/useCompanySearch";
-import { getAddressFromCoords, getCurrentLocation } from "@/utils/GeoLocation";
+import { getCurrentLocation } from "@/utils/GeoLocation";
+import { getPlaceSuggestions } from "@/utils/GeoLocation";
 
 export const SearchEngine = () => {
   const [isFirstDropdownVisible, setIsFirstDropdownVisible] = useState(false);
   const [isSecondDropdownVisible, setIsSecondDropdownVisible] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [locationInput, setLocationInput] = useState("");
+  const [lat, setLat] = useState<string | undefined>(undefined);
+  const [long, setLong] = useState<string | undefined>(undefined);
+  const [useCurrent, setUseCurrent] = useState(false);
+  // const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  // const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
+  // const [useCurrentLocation, setUseCurrentLocation] = useState(false);
+  // const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   const router = useRouter();
   const currentPath = usePathname();
+
+  useEffect(() => {
+    if (!useCurrent) return;
+
+    (async () => {
+      const coords = await getCurrentLocation();
+      if (coords) {
+        setLat(coords.lat);
+        setLong(coords.long);
+      }
+    })();
+  }, [useCurrent]);
+
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      if (locationInput && !useCurrent) {
+        const suggestions = await getPlaceSuggestions(locationInput);
+        setLocationSuggestions(suggestions);
+      }
+    }, 300); // debounce to avoid flooding API
+
+    return () => clearTimeout(timeout);
+  }, [locationInput, useCurrent]);
+
+  const { results } = useCompanySearch({
+    searchInput,
+    lat: useCurrent ? lat : undefined,
+    long: useCurrent ? long : undefined,
+    address: !useCurrent ? locationInput : undefined,
+  });
 
   const handleFirstFocus = () => {
     setIsFirstDropdownVisible(true);
@@ -23,12 +64,37 @@ export const SearchEngine = () => {
     setIsSecondDropdownVisible(true);
   };
 
-  const handleBlur = (event) => {
-    // Add a slight delay to allow clicks on dropdown items before hiding
+  const handleFirstBlur = () => {
+    setTimeout(() => setIsFirstDropdownVisible(false), 150);
+  };
+
+  const handleSecondBlur = () => {
     setTimeout(() => {
-      setIsFirstDropdownVisible(false);
       setIsSecondDropdownVisible(false);
+      setLocationSuggestions([]);
     }, 150);
+  };
+
+  const selectCurrentLocation = async () => {
+    // setUseCurrentLocation(true);
+    const coords = await getCurrentLocation();
+    if (coords) {
+      // console.log(coords);
+      setLat(coords.lat);
+      setLong(coords.long);
+    }
+  };
+  const handleSearch = () => {
+    if (results.length === 1) {
+      const company = results[0];
+      router.push(`/companies/${company._id}`);
+    } else if (results.length > 1) {
+      router.push(
+        `/search?query=${encodeURIComponent(
+          searchInput
+        )}&location=${encodeURIComponent(locationInput)}`
+      );
+    }
   };
 
   return (
@@ -40,65 +106,86 @@ export const SearchEngine = () => {
           <InputField
             type="text"
             placeholder="services, companies, jobs..."
+            value={searchInput}
+            onChange={(e) => {
+              const value = e.nativeEvent.text;
+              setSearchInput(value);
+              if (!value.trim()) {
+                setIsFirstDropdownVisible(false);
+              } else {
+                setIsFirstDropdownVisible(true);
+              }
+            }}
             className="bg-transparent placeholder:text-md"
             onFocus={handleFirstFocus}
-            onBlur={handleBlur}
+            onBlur={handleFirstBlur}
           />
-
           <Divider orientation="vertical" className="h-4/5 w-1" />
           <InputField
             type="text"
             placeholder="location"
+            value={locationInput}
+            onChange={(e) => {
+              setUseCurrent(false);
+              setLocationInput(e.nativeEvent.text);
+            }}
             className="bg-transparent placeholder:text-md"
             onFocus={handleSecondFocus}
-            onBlur={handleBlur}
+            onBlur={handleSecondBlur}
           />
-          <Button className="h-full bg-blue-600 w-14 ">
+          <Button onPress={handleSearch} className="h-full bg-blue-600 w-14">
             <ButtonIcon as={SearchIcon} className="w-8 h-8" />
           </Button>
         </Input>
       </FormControl>
-      {isFirstDropdownVisible && (
-        <VStack className="absolute top-14 left-0 w-[45%] bg-white border border-gray-300 shadow-lg z-10">
-          <div className="p-2 hover:bg-gray-100 cursor-pointer">New York</div>
-          <div className="p-2 hover:bg-gray-100 cursor-pointer">
-            Los Angeles
-          </div>
-          <div className="p-2 hover:bg-gray-100 cursor-pointer">Chicago</div>
-          <div className="p-2 hover:bg-gray-100 cursor-pointer">Houston</div>
-        </VStack>
+      {(isFirstDropdownVisible || searchInput) && (
+        <div className="absolute z-10 w-[45%] top-12 max-h-52 overflow-y-auto">
+          {isFirstDropdownVisible && (
+            <ul className="">
+              {results.map((company) => (
+                <li
+                  key={company._id}
+                  onMouseDown={(e) => e.preventDefault()}
+                  className="bg-white p-4 rounded shadow cursor-pointer"
+                  onClick={handleSearch}
+                >
+                  <h3 className="font-bold">{company.companyName}</h3>
+                  <p className="text-sm text-gray-600">
+                    {company.location?.primary?.address?.address ||
+                      "No address"}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
       {isSecondDropdownVisible && (
-        <VStack className="absolute top-14 right-14 w-[45%] bg-white border border-gray-300 shadow-lg z-10">
-          <button
-            className="p-2 hover:bg-gray-100 cursor-pointer"
-            onClick={() => {
-              if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                    const { latitude, longitude } = position.coords;
-                    console.log("User's Location:", { latitude, longitude });
-                    // You can now use latitude and longitude in your app
-                  },
-                  (error) => {
-                    console.error("Error getting location:", error.message);
-                    alert(
-                      "Unable to retrieve your location. Please try again."
-                    );
-                  }
-                );
-              } else {
-                alert("Geolocation is not supported by your browser.");
-              }
-            }}
-          >
-            Use Current Location
-          </button>{" "}
-          <div className="p-2 hover:bg-gray-100 cursor-pointer">
-            Los Angeles
+        <VStack className="absolute top-14 right-14 w-[45%] z-10">
+          <div className="absolute z-10 bg-white w-full -mt-1 max-h-52 rounded overflow-y-auto">
+            <div
+              className="p-2 text-blue-600 hover:bg-gray-100 cursor-pointer font-semibold"
+              onClick={selectCurrentLocation}
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              📍 Use my current location
+            </div>
+
+            {locationSuggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className="p-2 hover:bg-gray-100 cursor-pointer text-gray-700 text-sm"
+                onClick={() => {
+                  setLocationInput(suggestion);
+                  setLocationSuggestions([]);
+                  setIsSecondDropdownVisible(false);
+                }}
+                onMouseDown={(e) => e.preventDefault()}
+              >
+                {suggestion}
+              </div>
+            ))}
           </div>
-          <div className="p-2 hover:bg-gray-100 cursor-pointer">Chicago</div>
-          <div className="p-2 hover:bg-gray-100 cursor-pointer">Houston</div>
         </VStack>
       )}
     </VStack>
@@ -119,78 +206,5 @@ export const MSearchEngine = () => {
         </InputSlot>
       </Input>
     </FormControl>
-  );
-};
-
-export const SearchBarWithMap = () => {
-  const [searchInput, setSearchInput] = useState("");
-  const [locationInput, setLocationInput] = useState("");
-  const [lat, setLat] = useState<string | undefined>(undefined);
-  const [long, setLong] = useState<string | undefined>(undefined);
-  const [useCurrent, setUseCurrent] = useState(false);
-
-  useEffect(() => {
-    if (!useCurrent) return;
-
-    (async () => {
-      const coords = await getCurrentLocation();
-      if (coords) {
-        setLat(coords.lat);
-        setLong(coords.long);
-
-        const address = await getAddressFromCoords(coords.lat, coords.long);
-        setLocationInput(address);
-      }
-    })();
-  }, [useCurrent]);
-
-  const { results, loading, error } = useCompanySearch({
-    searchInput,
-    lat: useCurrent ? lat : undefined,
-    long: useCurrent ? long : undefined,
-    address: !useCurrent ? locationInput : undefined,
-  });
-
-  return (
-    <div className="w-full max-w-xl mx-auto space-y-4">
-      <input
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        placeholder="Search by company name or service..."
-      />
-
-      <div className="relative">
-        <input
-          value={locationInput}
-          onChange={(e) => {
-            setUseCurrent(false);
-            setLocationInput(e.target.value);
-          }}
-          placeholder="Enter address or select current location"
-        />
-        <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-          <button
-            onClick={() => setUseCurrent(true)}
-            className="text-sm text-blue-600 underline"
-          >
-            Use current location
-          </button>
-        </div>
-      </div>
-
-      {loading && <p className="text-gray-500">Searching...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
-      <ul className="mt-4 space-y-3">
-        {results.map((company: any) => (
-          <li key={company._id} className="bg-white p-4 rounded shadow">
-            <h3 className="font-bold">{company.companyName}</h3>
-            <p className="text-sm text-gray-600">
-              {company.location?.primary?.address?.address || "No address"}
-            </p>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 };

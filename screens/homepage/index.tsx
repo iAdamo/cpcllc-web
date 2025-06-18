@@ -1,7 +1,6 @@
 "use client";
 
 import HomeHeader from "@/screens/homepage/HomeHeader";
-import FeaturedCompanies from "@/screens/homepage/FeaturedCompanies";
 import BrowseCompanies from "@/screens/homepage/BrowseCompanies";
 import ForClient from "./ForClient";
 import ForCompany from "./ForCompany";
@@ -14,7 +13,6 @@ const HomePage = () => {
     <header>
       <HomeHeader />
       <Categories />
-      <FeaturedCompanies />
       <BrowseCompanies />
       <ForClient />
       <WhyChooseUs />
