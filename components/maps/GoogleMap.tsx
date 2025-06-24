@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+// import { useState } from "react";
 import {
   GoogleMap,
   Marker,
@@ -7,8 +7,6 @@ import {
 } from "@react-google-maps/api";
 import { useMapContext } from "@/context/MapContext";
 import { CompanyData } from "@/types";
-// import { electrical } from "@/public/assets/icons";
-import { Modal } from "@/components/ui/modal"; // Assuming you have a Modal component
 
 const containerStyle = {
   width: "100%",
@@ -16,22 +14,21 @@ const containerStyle = {
 };
 
 const defaultCenter = {
-  lat: 0,
-  lng: 0,
+  lat: 7.8731, // Default latitude
+  lng: 80.7718, // Default longitude
 };
 
 const GoogleMapComponent: React.FC<{
   apiKey: string;
   companies: CompanyData[];
-}> = ({ apiKey, companies }) => {
+  selectedCompany?: CompanyData;
+}> = ({ apiKey, companies, selectedCompany }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: apiKey,
     libraries: ["places"],
   });
 
-  const [selectedCompany, setSelectedCompany] = useState<CompanyData | null>(
-    null
-  );
+  // const [showCompany, setShowCompany] = useState<CompanyData | null>(null);
   const { userLocation } = useMapContext();
 
   if (loadError) return <div>Error loading maps</div>;
@@ -58,13 +55,14 @@ const GoogleMapComponent: React.FC<{
       }
     : defaultCenter;
 
-  const handleMarkerClick = (company: CompanyData) => {
-    setSelectedCompany(company);
-  };
+  //const handleMarkerClick = (company: CompanyData) => {
+  //  setShowCompany(company);
+  // };
 
-  const handleModalClose = () => {
-    setSelectedCompany(null);
-  };
+  // const handleModalClose = () => {
+    // setShowCompany(null);
+  // };
+
   return (
     <>
       <GoogleMap
@@ -77,16 +75,25 @@ const GoogleMapComponent: React.FC<{
           fullscreenControl: false,
         }}
       >
+        <Marker position={center} title="You" />
         {/* Company markers */}
         {companies.map((company) => (
-          <>
+          <div key={company._id}>
             <Marker
-              key={company.id}
+              icon={{
+                url:
+                  selectedCompany?._id === company._id
+                    ? "http://maps.google.com/mapfiles/kml/pushpin/grn-pushpin.png"
+                    : "http://maps.google.com/mapfiles/kml/pushpin/blue-pushpin.png",
+                scaledSize: new window.google.maps.Size(50, 50), // Set the size of the icon
+                origin: new window.google.maps.Point(0, 0), // Origin point
+                anchor: new window.google.maps.Point(15, 50), // Anchor point
+              }}
               position={{
                 lat: company.location.primary.coordinates.lat,
                 lng: company.location.primary.coordinates.long,
               }}
-              onClick={() => handleMarkerClick(company)} // Handle marker click
+              // onClick={() => handleMarkerClick(company)} // Handle marker click
               title={company.companyName}
             />
             <Circle
@@ -99,35 +106,33 @@ const GoogleMapComponent: React.FC<{
                 strokeWeight: 1,
               }}
             />
-          </>
+          </div>
         ))}
       </GoogleMap>
       {/* Modal for company details */}
-      {selectedCompany && (
-        <Modal isOpen={!!selectedCompany} onClose={handleModalClose}>
-          <div className="p-4">
-            <h2 className="text-xl font-bold">{selectedCompany.companyName}</h2>
-            <p className="text-gray-600">
+      {/* showCompany && (
+        <Modal isOpen={!!showCompany} onClose={handleModalClose}>
+          <ModalBackdrop />
+          <ModalContent className="">
+            <ModalHeader>
+              <Heading>{showCompany.companyName}</Heading>
+            </ModalHeader>
+            <ModalBody className="">
               Address:{" "}
-              {typeof selectedCompany.location.primary.address === "string"
-                ? selectedCompany.location.primary.address
-                : Object.entries(selectedCompany.location.primary.address)
+              {typeof showCompany.location.primary.address === "string"
+                ? showCompany.location.primary.address
+                : Object.entries(showCompany.location.primary.address)
                     .map(([key, value]) => `${key}: ${value}`)
                     .join(", ")}
-            </p>
-            <p className="text-gray-600">
-              Coordinates: {selectedCompany.location.primary.coordinates.lat},{" "}
-              {selectedCompany.location.primary.coordinates.long}
-            </p>
-            <button
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-              onClick={handleModalClose}
-            >
-              Close
-            </button>
-          </div>
+            </ModalBody>
+            <ModalFooter className="">
+              <Button variant="outline" className="" onPress={handleModalClose}>
+                <ButtonText>Cancel</ButtonText>
+              </Button>
+            </ModalFooter>
+          </ModalContent>
         </Modal>
-      )}
+      ) */}
     </>
   );
 };

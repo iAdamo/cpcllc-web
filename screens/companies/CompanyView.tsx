@@ -36,14 +36,18 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pressable } from "@/components/ui/pressable";
 import { ReviewModal } from "@/components/Overlays/ReviewModal";
+import { usePathname } from "next/navigation";
 
-const ServiceView = (companyData: CompanyData) => {
+const CompanyView = (companyData: CompanyData) => {
   const [isFavourite, setIsFavourite] = useState(false);
   const [reviews, setReviews] = useState<ReviewData[]>([]);
   const [showWriteReview, setWriteReview] = useState(false);
 
   const { userData } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isCompanyPage = /^\/companies\/[^/]+$/.test(pathname);
 
   useEffect(() => {
     const hasFavourited = companyData?.favoritedBy.includes(userData?.id ?? "");
@@ -52,7 +56,6 @@ const ServiceView = (companyData: CompanyData) => {
     const handleReview = async () => {
       try {
         const reviews = await getReviews(companyData?._id);
-        console.log("Reviews", reviews);
         setReviews(reviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -70,18 +73,11 @@ const ServiceView = (companyData: CompanyData) => {
       const hasFavourited = updatedCompany?.favoritedBy.includes(
         userData?.id ?? ""
       );
-      console.log(hasFavourited);
       setIsFavourite(hasFavourited ?? false);
     } catch (error) {
       console.error("Error toggling favorite:", error);
     }
   };
-
-  const portfolio = [
-    { name: "Portfolio 1", image: "/assets/header10.jpg" },
-    { name: "Portfolio 2", image: "/assets/header10.jpg" },
-    { name: "Portfolio 3", image: "/assets/header10.jpg" },
-  ];
 
   const serviceUpdates = [
     {
@@ -131,14 +127,14 @@ const ServiceView = (companyData: CompanyData) => {
   ];
 
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const maxLength = 70;
+  const maxLength = 38;
 
   const toggleExpanded = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
 
   return (
-    <VStack className="w-full gap-4 p-4">
+    <VStack className={`w-full gap-4 ${isCompanyPage ? "p-10" : "p-4"}`}>
       {ReviewModal({
         companyId: companyData?._id,
         companyName: companyData?.companyName,
@@ -171,13 +167,14 @@ const ServiceView = (companyData: CompanyData) => {
           </VStack>
         </Card>
         <HStack space="xl" className="gap-4 bg-[#F6F6F6]">
-          {/* LEFT SIDE */}
-          <VStack className="w-2/3 gap-4 bg-white p-4">
-            {/* Company Header */}
-
+          <VStack className="w-2/3 gap-4 rounded-md bg-white p-4">
             <VStack space="xs" className="gap-4">
               <VStack>
-                <Heading size="2xl" className="font-extrablack break-words">
+                <Heading
+                  className={`font-extrablack ${
+                    isCompanyPage ? "text-5xl" : "text-4xl"
+                  } break-words`}
+                >
                   {companyData?.companyName}
                 </Heading>
                 <Heading className="text-text-tertiary">
@@ -187,7 +184,10 @@ const ServiceView = (companyData: CompanyData) => {
                   {companyData?.clients}
                 </Heading>
               </VStack>
-              <VStack className="flex-row w-2/3 justify-between items-start">
+              <VStack
+                className="flex-row w-3/5 justify-between
+                items-start"
+              >
                 {buttons.map((button, index) => (
                   <Button
                     key={index}
@@ -195,16 +195,20 @@ const ServiceView = (companyData: CompanyData) => {
                     onPress={button.action}
                     className={`${
                       isFavourite && " companyData-[hover=true]:bg-[#FFFFF70]"
-                    }`}
+                    } justify-between `}
                   >
                     <ButtonIcon
                       className={`${
                         isFavourite &&
-                        "fill-red-500 border-red-500 text-white font-extrabold"
+                        "fill-red-500 border-red-500 text-red-500 font-extrabold"
                       }`}
                       as={button.icon}
                     />
-                    <ButtonText className="companyData-[hover=true]:no-underline companyData-[active=true]:no-underline">
+                    <ButtonText
+                      className={`${
+                        !isCompanyPage && "hidden"
+                      } data-[hover=true]:no-underline data-[active=true]:no-underline`}
+                    >
                       {button.name}
                     </ButtonText>
                   </Button>
@@ -216,7 +220,9 @@ const ServiceView = (companyData: CompanyData) => {
             <VStack space="4xl" className="py-6">
               {/* Service Updates */}
               <VStack space="2xl">
-                <Heading>Update from this service provider</Heading>
+                <Heading size={isCompanyPage ? "lg" : "sm"}>
+                  Update from this service provider
+                </Heading>
 
                 <div className="relative w-full">
                   {/* Left button */}
@@ -232,7 +238,7 @@ const ServiceView = (companyData: CompanyData) => {
                     modules={[Navigation, Pagination]}
                     className="w-full"
                     spaceBetween={10}
-                    slidesPerView={1.3}
+                    slidesPerView={isCompanyPage ? 2.3 : 1.3}
                     navigation={{
                       nextEl: ".swiper-button-next",
                       prevEl: ".swiper-button-prev",
@@ -246,17 +252,26 @@ const ServiceView = (companyData: CompanyData) => {
 
                       return (
                         <SwiperSlide key={index}>
-                          <Card variant="outline" className="flex-row gap-2">
+                          <Card
+                            variant="outline"
+                            className={`${isExpanded ? "" : "flex-row"} gap-2`}
+                          >
                             <Image
-                              className="object-cover h-32 w-32"
+                              className={`object-cover ${
+                                isCompanyPage ? "h-32 w-32 " : "h-24 w-24"
+                              } ${isExpanded ? "w-full" : ""}`}
                               src={item.image}
                               alt="portfolio-image"
                               width={1200}
                               height={1200}
                             />
-                            <VStack className="gap-2 h-20">
-                              <Heading size="md">{item.name}</Heading>
-                              <Text size="md">
+                            <VStack
+                              className="h-auto gap-2"
+                            >
+                              <Heading size={isCompanyPage ? "sm" : "xs"}>
+                                {item.name}
+                              </Heading>
+                              <Text size={isCompanyPage ? "sm" : "xs"}>
                                 {isExpanded || !isLong
                                   ? item.description
                                   : shortText}
@@ -266,6 +281,7 @@ const ServiceView = (companyData: CompanyData) => {
                                   size="xs"
                                   variant="link"
                                   onPress={() => toggleExpanded(index)}
+                                  className="ml-auto p-0 h-0"
                                 >
                                   <ButtonText>
                                     {isExpanded ? "Show Less" : "Read More"}
@@ -289,14 +305,16 @@ const ServiceView = (companyData: CompanyData) => {
                 </div>
               </VStack>
 
-              {/* Portfolio */}
+              {/* Portfolio
               <VStack>
                 <Heading className="text-text-tertiary">Portfolio</Heading>
-                <HStack className="flex-wrap justify-between">
+                <VStack className="grid grid-cols-3">
                   {portfolio.map((item, index) => (
-                    <Card key={index}>
+                    <Card key={index} className="p-2 aspect-square">
                       <Image
-                        className="object-cover h-52 w-52"
+                        className={`object-cover ${
+                        isCompanyPage ? "h-40" : "h-24"
+                      }`}
                         src={item.image}
                         alt="portfolio-image"
                         width={1200}
@@ -305,8 +323,9 @@ const ServiceView = (companyData: CompanyData) => {
                       <Text>{item.name}</Text>
                     </Card>
                   ))}
-                </HStack>
+                </VStack>
               </VStack>
+              */}
 
               {/* Placeholder sections */}
               <VStack>
@@ -336,7 +355,7 @@ const ServiceView = (companyData: CompanyData) => {
                           />
                         </Avatar>
                         <Heading size="xs" className="font-bold">
-                          {(review.user?.firstName && review.user?.lastName)
+                          {review.user?.firstName && review.user?.lastName
                             ? `${review.user?.firstName} ${review.user?.lastName}`
                             : "Anonymous User"}
                         </Heading>
@@ -398,7 +417,9 @@ const ServiceView = (companyData: CompanyData) => {
               <div className="flex flex-row justify-between">
                 <Link
                   href={`mailto:${companyData?.companyEmail}`}
-                  className="font-extrablack text-md text-cyan-700 w-11/12 break-words"
+                  className={`font-extrablack ${
+                    isCompanyPage ? "text-md" : "text-sm"
+                  } text-cyan-700 w-11/12 break-words`}
                 >
                   {companyData?.companyEmail || "No email provided"}
                 </Link>
@@ -409,7 +430,9 @@ const ServiceView = (companyData: CompanyData) => {
               <div className="flex flex-row justify-between">
                 <Link
                   href={`https://${companyData?.website || "google.com"}`}
-                  className="font-extrablack text-md text-cyan-700 w-11/12 break-words"
+                  className={`font-extrablack ${
+                    isCompanyPage ? "text-md" : "text-sm"
+                  } text-cyan-700 w-11/12 break-words`}
                 >
                   {companyData?.website || "google.com"}
                 </Link>
@@ -419,15 +442,23 @@ const ServiceView = (companyData: CompanyData) => {
               <Divider />
 
               <div className="flex flex-row justify-between">
-                <Text className="font-extrablack text-md text-cyan-700 w-11/12 break-words">
+                <Text
+                  className={`font-extrablack ${
+                    isCompanyPage ? "text-md" : "text-sm"
+                  } text-cyan-700 w-11/12 break-words`}
+                >
                   {companyData?.companyPhoneNumber ||
                     "No phone number provided"}
                 </Text>
                 <Icon as={PhoneIcon} />
               </div>
-              <Divider />
+              <Divider className={`${isCompanyPage ? "flex" : "hidden"}`} />
 
-              <div className="flex flex-row justify-between">
+              <div
+                className={`${
+                  isCompanyPage ? "flex" : "hidden"
+                } flex-row justify-between`}
+              >
                 <div className="w-11/12">
                   <Link
                     href="#"
@@ -449,4 +480,4 @@ const ServiceView = (companyData: CompanyData) => {
   );
 };
 
-export default ServiceView;
+export default CompanyView;

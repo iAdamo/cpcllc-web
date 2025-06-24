@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HStack } from "@/components/ui/hstack";
+import { Pressable } from "@/components/ui/pressable";
 import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
@@ -18,6 +19,9 @@ import {
   solar,
 } from "@/public/assets/icons";
 import { useRouter } from "next/navigation";
+// import { searchCompanies } from "@/axios/users";
+// import CompaniesSection from "../companies/CompaniesSection";
+
 
 const Categories = () => {
   const mcategories = [
@@ -135,6 +139,13 @@ const Categories = () => {
     },
   ];
   const router = useRouter();
+
+   const handleCategoryClick = (categoryTitle: string) => {
+     // Redirect to the CompaniesSection page with the category title as a query parameter
+     router.push(`/companies?category=${encodeURIComponent(categoryTitle)}`);
+   };
+
+
   return (
     <VStack className="md:px-12 px-4 gap-4 mt-40 md:mt-0 ">
       <Heading size="md" className="md:text-2xl">
@@ -142,10 +153,11 @@ const Categories = () => {
       </Heading>
       <HStack className="hidden md:grid grid-cols-8 gap-4 rounded-lg">
         {categories.map((category, index) => (
-          <Link
+          <Pressable
             key={index}
-            href={category.title.toLowerCase().replace("&", "")}
+            // href={category.title.toLowerCase().replace("&", "")}
             className="aspect-square text-center rounded-lg transform transition-transform duration-300 hover:scale-105"
+            onPress={() => handleCategoryClick(category.title)}
           >
             <Card className="pt-4 p-1 w-36 h-36 justify-between rounded-lg shadow-hard-5">
               <HStack className="justify-center items-center">
@@ -161,11 +173,13 @@ const Categories = () => {
                 {category.title}
               </Text>
             </Card>
-          </Link>
+          </Pressable>
         ))}
         <Button
           variant="outline"
-          onPress={() => {router.push("companies/home-services")}}
+          onPress={() => {
+            router.push("companies/home-services");
+          }}
           className="flex-col justify-center items-center h-full border-none"
         >
           <ButtonText className="text-typography-600">More...</ButtonText>

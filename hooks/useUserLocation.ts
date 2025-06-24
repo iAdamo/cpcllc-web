@@ -1,11 +1,9 @@
-// hooks/useUserLocation.ts
-import { useEffect } from "react";
 import { useMapContext } from "@/context/MapContext";
 
 export const useUserLocation = () => {
   const { setUserLocation, setLoading, setError } = useMapContext();
 
-  useEffect(() => {
+  const getCurrentLocation = () => {
     if (!navigator.geolocation) {
       if (setError) {
         setError("Geolocation is not supported by your browser");
@@ -15,7 +13,8 @@ export const useUserLocation = () => {
     }
 
     setLoading(true);
-    const watchId = navigator.geolocation.watchPosition(
+
+    navigator.geolocation.getCurrentPosition(
       (position) => {
         setUserLocation({
           lat: position.coords.latitude,
@@ -33,12 +32,10 @@ export const useUserLocation = () => {
       {
         enableHighAccuracy: true,
         maximumAge: 30000,
-        timeout: 27000,
+        timeout: 67000,
       }
     );
+  };
 
-    return () => {
-      navigator.geolocation.clearWatch(watchId);
-    };
-  }, [setUserLocation, setLoading, setError]);
+  return { getCurrentLocation };
 };
