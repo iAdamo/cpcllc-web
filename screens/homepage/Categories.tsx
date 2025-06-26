@@ -147,7 +147,7 @@ const Categories = () => {
 
 
   return (
-    <VStack className="md:px-12 px-4 gap-4 mt-40 md:mt-0 ">
+    <VStack className="md:px-12 px-4 gap-4 pt-24 md:pt-0 ">
       <Heading size="md" className="md:text-2xl">
         Home Services
       </Heading>

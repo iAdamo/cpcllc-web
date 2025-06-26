@@ -12,27 +12,27 @@ const ForClient = () => {
   return (
     <VStack className="md:px-20 px-2 w-full relative rounded-lg">
       <Image
-        className="object-cover w-full md:h-[36rem] h-auto top-0 left-0 rounded-lg"
+        className="object-cover w-full md:h-[36rem] h-full top-0 left-0 rounded-lg"
         src={HomeClient}
         alt="home_client"
         width={3264}
         height={2448}
       />
-      <HStack className="md:flex-col absolute inset-0 md:pt-4 md:p-0 p-4 md:px-28 w-full md:gap-10 gap-2">
+      <HStack className="md:flex-col absolute inset-0 md:pt-4 md:p-0 p-4 md:px-28 w-full h-full md:gap-10 gap-2">
         <VStack className="md:flex-col w-2/5 md:gap-6 gap-2">
           <Heading size="xs" className="md:text-xl text-white md:pb-16">
             For Clients
           </Heading>
-          <Heading size="lg" className="md:text-5xl text-white">
+          <Heading size="md" className="md:text-5xl text-white">
             Find companies your way
           </Heading>
-          <Text size="sm" className="md:text-xl text-white md:font-bold font-semibold">
+          <Text size="sm" className="md:text-xl text-white md:font-bold">
             Work with the largest network of service providers and get things
             done from quick turnarounds to big transformations.
           </Text>
         </VStack>
 
-        <VStack className="md:flex-row md:w-auto w-3/5 justify-between md:gap-8 gap-2">
+        <VStack className="md:flex-row md:w-auto md:h-auto h-full w-3/5 justify-between md:gap-8 gap-2">
           {[
             {
               title: "Search a service with our filters enabled engine",

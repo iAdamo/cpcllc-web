@@ -34,13 +34,13 @@ const ForCompany = () => {
           </VStack>
           <VStack className="md:gap-10 gap-4 m-4">
             <HStack className="gap-4 border-t py-2">
-              <Text className="md:text-base text-sm text-white font-semibold">
+              <Text className="md:text-base text-xs text-white font-semibold">
                 Discover opportunities for every phase of your business growth
               </Text>
-              <Text className="md:text-base text-sm text-white font-semibold">
+              <Text className="md:text-base text-xs text-white font-semibold">
                 Maintain control over budgets and timelines
               </Text>
-              <Text className="md:text-base text-sm text-white font-semibold">
+              <Text className="md:text-base text-xs text-white font-semibold">
                 Explore different engagement models to suit your needs
               </Text>
             </HStack>

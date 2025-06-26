@@ -41,7 +41,7 @@ const WhyChooseUs = () => {
         {whyChooseUsData.map((item, index) => (
           <Card
             key={index}
-            className="md:w-60 h-24 md:h-auto flex-row md:flex-col gap-4"
+            className="md:w-60 h-28 md:h-auto flex-row md:flex-col gap-4"
           >
             <Image src={item.icon} alt={item.title} width={60} height={60} />
             <Heading size="sm" className="md:text-lg">
