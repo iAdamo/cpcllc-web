@@ -3,43 +3,63 @@ import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-import { categories, matching, quickly } from "@/public/assets/icons";
-import Link from "next/link";
+import { Button, ButtonText } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { categories, matching, quickly } from "@/public/assets/icons";
+
+const whyChooseUsData = [
+  {
+    icon: categories,
+    title: "Extensive Network",
+    description:
+      "Connect with top companies and professionals in various industries.",
+  },
+  {
+    icon: matching,
+    title: "Job Opportunities",
+    description:
+      "Find the best job opportunities that match your skills and interests.",
+  },
+  {
+    icon: quickly,
+    title: "Trust and Reviews",
+    description:
+      "Read reviews and ratings from other users to make informed decisions.",
+  },
+];
 
 const WhyChooseUs = () => {
+  const router = useRouter();
+
   return (
-    <VStack className="hidden md:flex mx-20 my-10 rounded-xl bg-text-primary">
-        <Heading size="2xl" className="py-8 text-center">Why businesses turn to CompaniesCenterLLC</Heading>
-      <HStack className="px-10 flex-wrap justify-between">
-        <Card className="w-60 flex-row md:flex-col gap-4">
-          <Image src={categories} alt="first" width={60} height={60} />
-          <Heading>Extensive Network</Heading>
-          <Text>
-            Connect with top companies and professionals in various industries.
-          </Text>
-        </Card>
-        <Card className="w-60 flex-row md:flex-col gap-4">
-          <Image src={matching} alt="first" width={60} height={60} />
-          <Heading>Job Opportunities</Heading>
-          <Text>
-            Find the best job opportunities that match your skills and
-            interests.
-          </Text>
-        </Card>
-        <Card className="w-60 flex-row md:flex-col gap-4">
-          <Image src={quickly} alt="first" width={60} height={60} />
-          <Heading>Trust and Reviews</Heading>
-          <Text>
-            Read reviews and ratings from other users to make informed
-            decisions.
-          </Text>
-        </Card>
-      </HStack>
+    <VStack className="md:flex md:mx-20 px-4 my-10 md:rounded-xl bg-text-primary">
+      <Heading size="md" className="md:text-2xl pr-20 py-8 md:text-center">
+        Why businesses turn to CompaniesCenterLLC
+      </Heading>
+      <VStack className="md:flex-row md:px-10 flex-wrap justify-between gap-2">
+        {whyChooseUsData.map((item, index) => (
+          <Card
+            key={index}
+            className="md:w-60 h-24 md:h-auto flex-row md:flex-col gap-4"
+          >
+            <Image src={item.icon} alt={item.title} width={60} height={60} />
+            <Heading size="sm" className="md:text-lg">
+              {item.title}
+            </Heading>
+            <Text size="sm" className="md:text-md">
+              {item.description}
+            </Text>
+          </Card>
+        ))}
+      </VStack>
       <HStack className="md:justify-center my-10">
-        <Link href="#" className="py-3 px-6 rounded-3xl font-bold text-white bg-brand-secondary hover:bg-btn-primary active:bg-brand-secondary ">
-          Join Now
-        </Link>
+        <Button
+          onPress={() => router.push("/onboarding")}
+          className="bg-brand-secondary hover:bg-btn-primary active:bg-brand-secondary rounded-3xl"
+        >
+          <ButtonText> Join Now</ButtonText>
+        </Button>
       </HStack>
     </VStack>
   );

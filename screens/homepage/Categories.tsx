@@ -151,7 +151,7 @@ const Categories = () => {
       <Heading size="md" className="md:text-2xl">
         Home Services
       </Heading>
-      <HStack className="hidden md:grid grid-cols-8 gap-4 rounded-lg">
+      <HStack className="hidden md:grid grid-cols-7 rounded-lg">
         {categories.map((category, index) => (
           <Pressable
             key={index}
@@ -165,8 +165,8 @@ const Categories = () => {
                   className="w-20 h-20"
                   src={category.image}
                   alt={category.title}
-                  width={100}
-                  height={100}
+                  width={200}
+                  height={200}
                 />
               </HStack>
               <Text className="text-center text-sm font-bold">

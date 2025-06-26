@@ -8,45 +8,45 @@ import Image from "next/image";
 
 const ForCompany = () => {
   return (
-    <VStack className="hidden md:flex px-20">
+    <VStack className="md:flex md:px-20 px-2">
       <HStack className="rounded-xl">
-        <VStack className="w-1/2">
+        <VStack className="hidden md:flex w-1/2">
           <Image
-            className="object-cover h-[37rem] rounded-l-xl"
+            className="object-cover md:h-[37rem] rounded-l-xl"
             src={HomeCompany}
             alt="home_company"
             width={3644}
             height={5466}
           />
         </VStack>
-        <VStack className="w-1/2 gap-32 bg-btn-primary rounded-r-xl">
-          <VStack className="p-4 gap-10">
-            <Heading size="xl" className="text-white">
+        <VStack className="md:w-1/2 md:gap-32 gap-4 bg-btn-primary rounded-xl md:rounded-r-xl">
+          <VStack className="p-4 md:gap-10 gap-4">
+            <Heading size="xs" className="md:text-xl text-white">
               For Companies
             </Heading>
-            <Heading size="4xl" className="text-white">
+            <Heading size="lg" className="md:text-4xl text-white">
               Find great jobs
             </Heading>
-            <Text size="xl" className="text-white">
+            <Text size="md" className="md:text-xl text-white">
               Meet clients you&apos;re excited to work with and take your career
               or business to new heights.
             </Text>
           </VStack>
-          <VStack className="gap-10 m-4">
+          <VStack className="md:gap-10 gap-4 m-4">
             <HStack className="gap-4 border-t py-2">
-              <Text className="text-white font-semibold">
+              <Text className="md:text-base text-sm text-white font-semibold">
                 Discover opportunities for every phase of your business growth
               </Text>
-              <Text className="text-white font-semibold">
+              <Text className="md:text-base text-sm text-white font-semibold">
                 Maintain control over budgets and timelines
               </Text>
-              <Text className="text-white font-semibold">
+              <Text className="md:text-base text-sm text-white font-semibold">
                 Explore different engagement models to suit your needs
               </Text>
             </HStack>
             <Link
               href="#"
-              className="text-center w-60 font-bold rounded-lg bg-white hover:bg-text-primary text-btn-primary py-3 px-6"
+              className="text-center md:text-base text-xs md:w-60 w-40 font-bold rounded-lg bg-white hover:bg-text-primary text-btn-primary py-3 px-6"
             >
               Find opportunities
             </Link>

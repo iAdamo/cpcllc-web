@@ -13,12 +13,11 @@ import {
   carousel4,
 } from "@/public/assets/homepage";
 
-
 const carouselImages = [carousel0, carousel1, carousel2, carousel3, carousel4];
 
 const HomeHeader = () => {
   return (
-    <VStack className="hidden md:flex -mt-20 mb-20 relative">
+    <header className="hidden md:flex -mt-20 relative">
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 4000 }}
@@ -39,10 +38,10 @@ const HomeHeader = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <VStack className="absolute inset-0 z-50 h-full bg-gradient-to-b from-brand-secondary via-transparent to-brand-transparent opacity-50"></VStack>
-      <VStack className="absolute z-50 inset-0 h-full">
+      <VStack className="absolute inset-0 z-10 h-full bg-gradient-to-b from-brand-secondary via-transparent to-brand-transparent opacity-50"></VStack>
+      <VStack className="absolute z-50 inset-0 mt-24">
         <VStack className="mt-44 w-1/2 pl-24 gap-10">
-          <p
+          <h1
             className="text-white text-6xl font-extrablack"
             style={{
               textShadow:
@@ -50,16 +49,16 @@ const HomeHeader = () => {
             }}
           >
             CompanyCenterLLC
-          </p>
-          <p className="text-white text-xl font-extrabold pr-14">
+          </h1>
+          <h2 className="text-white text-xl font-semibold pr-14">
             Your Trusted Platform for Connecting with Leading Companies. Whether
             you&apos;re looking to hire or get hired, we provide a comprehensive
             marketplace for businesses and job seekers.
-          </p>
+          </h2>
           <SearchEngine />
         </VStack>
       </VStack>
-    </VStack>
+    </header>
   );
 };
 

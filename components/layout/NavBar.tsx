@@ -58,7 +58,7 @@ const NavBar = () => {
       <VStack
         className={`hidden md:flex justify-center items-center ${
           currentPath !== "/" ? "fixed top-0 h-28" : "h-20"
-        } z-10 w-full ${styles.navBarClass}`}
+        } z-50 w-full ${styles.navBarClass}`}
       >
         <HStack className="py-10 w-full items-center gap-10 pr-5">
           <HStack className="items-center">

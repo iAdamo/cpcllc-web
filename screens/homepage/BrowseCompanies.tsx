@@ -25,12 +25,12 @@ const BrowseCompanies = () => {
   }, []);
 
   return (
-    <VStack className="md:p-20 p-4 gap-4">
+    <VStack className="md:px-20 px-4 gap-4">
       <VStack className="gap-2">
-        <Heading size="xl" className="md:text-4xl">
+        <Heading size="md" className="md:text-4xl">
           Connect With Top Companies
         </Heading>
-        <Text size="md" className="md:text-lg">
+        <Text size="sm" className="md:text-lg">
           Join companiescenterllc.com and connect with leading companies
           offering a wide range of services.
         </Text>
@@ -46,7 +46,7 @@ const BrowseCompanies = () => {
           <Link key={index} href={`companies/${user?.activeRoleId?._id || ""}`}>
             <Card
               variant="outline"
-              className="flex-row h-32 w-96 p-0 gap-4 bg-white"
+              className="flex-row h-32 md:w-96 p-0 gap-4 bg-white"
             >
                 <Image
                   className="h-32 w-32 rounded-l-md object-cover"
@@ -70,7 +70,7 @@ const BrowseCompanies = () => {
       <Button
         variant="outline"
         onPress={() => router.push("/companies")}
-        className="md:hidden"
+        className="md:hidden "
       >
         <ButtonText> Browse companies</ButtonText>
       </Button>

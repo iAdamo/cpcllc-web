@@ -10,7 +10,7 @@ import AiChat from "@/components/AiChatFab";
 
 const HomePage = () => {
   return (
-    <header>
+    <main className="md:space-y-20 space-y-10">
       <HomeHeader />
       <Categories />
       <BrowseCompanies />
@@ -18,7 +18,7 @@ const HomePage = () => {
       <WhyChooseUs />
       <ForCompany />
       <AiChat />
-    </header>
+    </main>
   );
 };
 

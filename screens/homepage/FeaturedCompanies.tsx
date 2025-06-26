@@ -38,7 +38,7 @@ const FeaturedCompanies = () => {
   };
 
   return (
-    <VStack className="md:mx-12 mx-4 mb-14 md:mt-10 mt-8 gap-4">
+    <VStack className="md:mx-12 mx-4 md:mt-0 mt-8 gap-4">
       <Heading className="md:text-4xl text-lg">Featured Companies</Heading>
       <HStack className="items-center justify-between gap-8">
         <Button
