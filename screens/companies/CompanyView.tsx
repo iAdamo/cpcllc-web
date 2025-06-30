@@ -5,11 +5,6 @@ import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
-import {
-  Avatar,
-  AvatarFallbackText,
-  AvatarImage,
-} from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { Text } from "@/components/ui/text";
@@ -25,22 +20,19 @@ import {
   FavouriteIcon,
 } from "@/components/ui/icon";
 import { setUserFavourites } from "@/axios/users";
-import { getReviews } from "@/axios/reviews";
-import { CompanyData, ReviewData } from "@/types";
-import { getInitial } from "@/utils/GetInitials";
+import { CompanyData } from "@/types";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/context/AuthContext";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pressable } from "@/components/ui/pressable";
 import { ReviewModal } from "@/components/Overlays/ReviewModal";
 import { usePathname } from "next/navigation";
+import ReviewSection from "../profile/ReviewSection";
 
 const CompanyView = (companyData: CompanyData) => {
   const [isFavourite, setIsFavourite] = useState(false);
-  const [reviews, setReviews] = useState<ReviewData[]>([]);
   const [showWriteReview, setWriteReview] = useState(false);
 
   const { userData } = useSession();
@@ -53,17 +45,7 @@ const CompanyView = (companyData: CompanyData) => {
     const hasFavourited = companyData?.favoritedBy.includes(userData?.id ?? "");
     setIsFavourite(hasFavourited ?? false);
 
-    const handleReview = async () => {
-      try {
-        const reviews = await getReviews(companyData?._id);
-        setReviews(reviews);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      }
-    };
-
-    handleReview();
-  }, [companyData?.favoritedBy, userData?.id, companyData?._id]);
+  }, [companyData?.favoritedBy, userData?.id]);
 
   const handleFavourite = async () => {
     try {
@@ -136,7 +118,7 @@ const CompanyView = (companyData: CompanyData) => {
   return (
     <VStack className={`w-full gap-4 ${isCompanyPage ? "p-10" : "p-4"}`}>
       {ReviewModal({
-        companyId: companyData?._id,
+        companyId: companyData?.id,
         companyName: companyData?.companyName,
         isOpen: showWriteReview,
         onClose: () => setWriteReview(false),
@@ -338,41 +320,8 @@ const CompanyView = (companyData: CompanyData) => {
                   Photos and Videos
                 </Heading>
               </VStack>
-              <VStack className="gap-2">
-                <Heading className="text-text-tertiary">Reviews</Heading>
-                {reviews.map((review, index) => (
-                  <Pressable key={index}>
-                    <Card className="gap-2">
-                      <HStack className="gap-4 items-center">
-                        <Avatar className="w-10 h-10">
-                          <AvatarFallbackText>
-                            {getInitial(
-                              review.user?.firstName || review.user?.email
-                            )}
-                          </AvatarFallbackText>
-                          <AvatarImage
-                            source={{ uri: review.user?.profilePicture || "" }}
-                          />
-                        </Avatar>
-                        <Heading size="xs" className="font-bold">
-                          {review.user?.firstName && review.user?.lastName
-                            ? `${review.user?.firstName} ${review.user?.lastName}`
-                            : "Anonymous User"}
-                        </Heading>
-                      </HStack>
-                      <Text className="text-sm text-text-secondary">
-                        {review.description.length > 80
-                          ? `${review.description.substring(0, 80)}...`
-                          : review.description}
-                      </Text>
-                      <HStack className="justify-between mt-2">
-                        <Text className="text-yellow-500">
-                          Rating: {review.rating} ⭐
-                        </Text>
-                      </HStack>
-                    </Card>
-                  </Pressable>
-                ))}
+              <VStack className="">
+                <ReviewSection companyId={companyData?._id} />
               </VStack>
             </VStack>
           </VStack>

@@ -1,5 +1,5 @@
 import { ApiClientSingleton } from "./conf";
-import { ServiceData } from "@/types";
+import { ServiceData, ServiceCategory } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -13,11 +13,12 @@ export const createService = async (data: FormData) => {
   return response.data;
 };
 
-export const getCategories = async (): Promise<any> => {
-  const response = await axiosInstance.get("services/categories");
+export const getAllCategoriesWithSubcategories =
+  async (): Promise<ServiceCategory[]> => {
+    const response = await axiosInstance.get("services/categories");
 
-  return response.data;
-};
+    return response.data;
+  };
 
 export const getServiceById = async (id: string): Promise<ServiceData> => {
   const response = await axiosInstance.get(`services/${id}`);
@@ -44,7 +45,6 @@ export const getServices = async (
   );
   return response.data;
 };
-
 
 export const getUserServices = async (id: string): Promise<ServiceData[]> => {
   const response = await axiosInstance.get(`services/user/${id}`);

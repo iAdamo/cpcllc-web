@@ -1,5 +1,7 @@
 import { ServiceData } from "@/types";
 import { ServiceData } from "@/types";
+import { ServiceCategory } from "@/types";
+
 export interface UserData {
   id: string;
   _id: string;
@@ -128,7 +130,10 @@ export interface AuthContextProps {
   fetchUserProfile: () => Promise<void>;
   companyData: CompanyData | null;
 }
-
+export interface Subcategory {
+  id: string;
+  name: string;
+}
 export interface OnboardingData {
   role: string;
   firstName: string;
@@ -147,7 +152,11 @@ export interface OnboardingData {
   state: string;
   country: string;
   addresses?: string[];
-  selectedServices?: { category: string }[];
+  selectedServices?: {
+    category: string;
+    subcategories?: string[];
+  };
+  subcategories?: Subcategory[];
 }
 
 export interface OnboardingContextType {
@@ -157,4 +166,5 @@ export interface OnboardingContextType {
   nextStep: () => void;
   prevStep: () => void;
   submitData: () => void;
+  categories: ServiceCategory[];
 }

@@ -1,7 +1,12 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { OnboardingData, OnboardingContextType } from "@/types";
+import {
+  OnboardingData,
+  OnboardingContextType,
+  ServiceCategory,
+} from "@/types";
+import { getAllCategoriesWithSubcategories } from "@/axios/services";
 
 const OnboardingContext = createContext<OnboardingContextType | undefined>(
   undefined
@@ -15,10 +20,26 @@ export const OnboardingProvider = ({
   const [data, setDataState] = useState<OnboardingData>(() => {
     return JSON.parse(localStorage.getItem("onboardingData") || "{}");
   });
+  const [categories, setCategories] = useState<ServiceCategory[]>(
+    []
+  );
 
   const [step, setStep] = useState(() => {
     return Number(localStorage.getItem("onboardingStep")) || 1;
   });
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const services = await getAllCategoriesWithSubcategories();
+        setCategories(services);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+
+    fetchServices();
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -52,7 +73,7 @@ export const OnboardingProvider = ({
 
   return (
     <OnboardingContext.Provider
-      value={{ step, data, setData, nextStep, prevStep, submitData }}
+      value={{ step, data, setData, nextStep, prevStep, submitData, categories }}
     >
       {children}
     </OnboardingContext.Provider>

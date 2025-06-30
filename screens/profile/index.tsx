@@ -13,6 +13,8 @@ import { useSession } from "@/context/AuthContext";
 import Image from "next/image";
 import { userProfile } from "@/axios/users";
 import { UserData } from "@/types";
+import ReviewSection from "./ReviewSection";
+import ServiceSection from "./ServiceSection";
 
 const ProfilePage = () => {
   const { userData: sessionUserData } = useSession();
@@ -44,11 +46,11 @@ const ProfilePage = () => {
 
   const date = new Date(data.createdAt);
   const companyDate = new Date(data.activeRoleId?.createdAt || 0);
-   const formattedCompanyDate = companyDate.toLocaleDateString(undefined, {
-     month: "long",
-     day: "numeric",
-     year: "numeric",
-   });
+  const formattedCompanyDate = companyDate.toLocaleDateString(undefined, {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
   const formattedDate = date.toLocaleDateString(undefined, {
     month: "long",
     day: "numeric",
@@ -61,7 +63,7 @@ const ProfilePage = () => {
         src="/assets/header10.jpg"
         alt="cover-image"
         width={1200}
-        height={200}
+        height={600}
         className="w-full"
       />
       <VStack className="h-full px-20 gap-8 -mt-4">
@@ -112,7 +114,9 @@ const ProfilePage = () => {
                     <Text size="sm">
                       {data?.activeRoleId?.location?.primary?.address?.country}
                     </Text>
-                    <Text size="sm">Registered on the {formattedCompanyDate}</Text>
+                    <Text size="sm">
+                      Registered on the {formattedCompanyDate}
+                    </Text>
                     <Text size="sm">Online</Text>
                   </VStack>
                   <Button
@@ -187,7 +191,6 @@ const ProfilePage = () => {
               </>
             )}
           </VStack>
-
           <VStack className="w-1/4 items-center p-4 bg-[#F6F6F6]">
             <Button className="bg-brand-primary">
               <ButtonIcon as={SettingsIcon} />
@@ -195,20 +198,12 @@ const ProfilePage = () => {
             </Button>
           </VStack>
         </Card>
-        <Card variant="filled">
-          <Heading>Your Reviews</Heading>
-          <HStack>
-            {data?.services?.map((service) => (
-              <Card key={service._id} className="w-1/4">
-                <VStack>
-                  <Text>{service.title}</Text>
-                  <Text>{service.description}</Text>
-                  <Text>{service.price}</Text>
-                </VStack>
-              </Card>
-            ))}
-          </HStack>
-        </Card>
+        {data?.activeRoleId?._id && showCompanyProfile && (
+          <VStack className="w-full gap-4">
+            <ServiceSection companyId={data.activeRoleId._id} />
+            <ReviewSection companyId={data.activeRoleId._id} />
+          </VStack>
+        )}
       </VStack>
     </VStack>
   );

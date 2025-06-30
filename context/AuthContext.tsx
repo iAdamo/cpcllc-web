@@ -68,7 +68,12 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
         if (!session) throw new Error("Session is not available.");
         const response = await registerCompany(data, session);
         if (response) {
-          setCompanyData(response);
+          console.log(response);
+          const companyData: CompanyData = {
+            ...response,
+            id: response._id,
+          };
+          setCompanyData(companyData);
         }
       } catch (err) {
         console.error("Error updating profile:", err);
@@ -92,7 +97,6 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     }
   }, [userData, session, setUserData]);
 
-
   if (isLoading || loading || loadingCompany)
     return (
       <Spinner size="large" className="h-full items-center justify-center" />
@@ -106,14 +110,14 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
         <Spinner size="large" className="h-full items-center justify-center" />
       );
     } else if (userData?.activeRole === "Company") {
-      router.replace("/dashboard");
+      router.replace(`/cpc/${userData.id}`);
       return (
         <Spinner size="large" className="h-full items-center justify-center" />
       );
     }
   } else if (session && userData?.activeRole === "Company") {
     if (pathname.startsWith("/companies")) {
-      router.replace("/dashboard");
+      router.replace(`/cpc/${userData.id}`);
       return (
         <Spinner size="large" className="h-full items-center justify-center" />
       );
@@ -124,7 +128,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       );
     }
   } else if (session && userData?.activeRole === "Client") {
-    if (pathname === "/dashboard") {
+    if (pathname === `/cpc/${userData.id}`) {
       router.replace("/companies");
       return (
         <Spinner size="large" className="h-full items-center justify-center" />

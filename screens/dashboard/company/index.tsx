@@ -1,6 +1,5 @@
 "use client";
 
-import { HStack } from "@/components/ui/hstack";
 import Dashboard from "./Dashboard";
 
 const CompanyDashboard = () => {

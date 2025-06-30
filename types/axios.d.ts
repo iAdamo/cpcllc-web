@@ -23,13 +23,3 @@ export interface AuthResponse {
     createdAt: string;
   }
 
-
-
-export interface ServiceCategory {
-  title: string;
-  description: string;
-  price: number;
-  category: string;
-  company: string;
-  clients: [];
-}

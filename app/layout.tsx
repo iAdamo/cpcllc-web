@@ -21,7 +21,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="h-screen m-0 p-0">
+      <body className="h-screen min-h-screen m-0 p-0">
         <StyledJsxRegistry>
           <GluestackUIProvider mode="light">
             <MapProvider>
@@ -31,7 +31,7 @@ export default function RootLayout({
                 {!shouldHideLayout && <PreFooter />}
                 {!shouldHideLayout && <Footer />}
             </SessionProvider>
-            </MapProvider>s
+            </MapProvider>
           </GluestackUIProvider>
         </StyledJsxRegistry>
       </body>

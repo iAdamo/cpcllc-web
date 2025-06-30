@@ -46,8 +46,8 @@ const Onboarding = () => {
               </Button>
             </VStack>
             {currentStep === 3 && <BasicInfo />}
-            {currentStep === 2 && <LocationBoard />}
-            {currentStep === 4 && <ServicesInfo />}
+            {currentStep === 4 && <LocationBoard />}
+            {currentStep === 2 && <ServicesInfo />}
             {currentStep === 5 && <FinalStep />}
           </HStack>
         </VStack>
