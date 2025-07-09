@@ -7,58 +7,29 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { useOnboarding } from "@/context/OnboardingContext";
-
-interface Subcategory {
-  id: string;
-  name: string;
-}
+import { ServiceCategory, Subcategory } from "@/types";
 
 interface SelectedSubcategory extends Subcategory {
   categoryName: string;
 }
 
-interface Category {
-  name: string;
-  subcategories: Subcategory[];
-}
-
 const ServicesInfo = () => {
-  const { prevStep, nextStep, setData, data, categories } = useOnboarding();
-
-  const [availableCategories, setAvailableCategories] = useState<Category[]>([
-    {
-      name: "Home Service",
-      subcategories: [
-        { id: "abc5123", name: "Plumbing" },
-        { id: "def4656", name: "Electrical" },
-        { id: "ghi7889", name: "Cleaning" },
-        { id: "jkl0128", name: "Landscaping" },
-        { id: "mno3495", name: "HVAC" },
-        { id: "pqr6978", name: "Painting" },
-        { id: "stu9001", name: "Pest Control" },
-        { id: "vwx2734", name: "Roofing" },
-        { id: "yz06123", name: "Moving" },
-      ],
-    },
-    {
-      name: "Automotive Service",
-      subcategories: [
-        { id: "abc1423", name: "Oil Change" },
-        { id: "def4756", name: "Tire Rotation" },
-        { id: "ghi6789", name: "Brake Repair" },
-        { id: "jk6l012", name: "Transmission Service" },
-        { id: "mno5345", name: "Engine Diagnostics" },
-        { id: "pqr7678", name: "Battery Replacement" },
-        { id: "stu9901", name: "Alignment Services" },
-        { id: "vw4x234", name: "Cooling System Service" },
-        { id: "yz04123", name: "Exhaust System Repair" },
-      ],
-    },
-  ]);
-
+  const { prevStep, nextStep, data, setData, categories } = useOnboarding();
   const [selectedServices, setSelectedSubcategory] = useState<
     SelectedSubcategory[]
   >((data.subcategories as SelectedSubcategory[]) || []);
+  const [availableCategories, setAvailableCategories] = useState<
+    ServiceCategory[]
+  >([
+    ...(categories || []).map((category) => ({
+      id: category.id,
+      name: category.name,
+      subcategories: category.subcategories.map((subcategory) => ({
+        id: subcategory.id,
+        name: subcategory.name,
+      })),
+    })),
+  ]);
 
   const handleSelectSubcategory = (
     subcategory: Subcategory,
@@ -67,19 +38,19 @@ const ServicesInfo = () => {
     const subcategoryId = subcategory.id;
 
     // Remove from available
-    setAvailableCategories((prev: Category[]) =>
+    setAvailableCategories((prev: ServiceCategory[]) =>
       prev.map((category) => ({
         ...category,
-        subcategories: category.subcategories.filter(
-          (item) => item.id !== subcategoryId
-        ),
+        subcategories: category.subcategories.filter((item) => item.id !== subcategoryId),
       }))
     );
 
     // Add to selected with categoryName
     setSelectedSubcategory((prev: SelectedSubcategory[]) => {
       const updated = [...prev, { ...subcategory, categoryName }];
-      setData({ subcategories: updated });
+      setData({
+        subcategories: updated,
+      });
       return updated;
     });
   };
@@ -95,7 +66,7 @@ const ServicesInfo = () => {
     });
 
     // Restore to original category
-    setAvailableCategories((prev: Category[]) =>
+    setAvailableCategories((prev: ServiceCategory[]) =>
       prev.map((category) =>
         category.name === subcategory.categoryName
           ? {
@@ -131,15 +102,15 @@ const ServicesInfo = () => {
             <Heading size="lg" className="mb-4">
               Available Services
             </Heading>
-            <Card variant="outline" className="p-4">
-              {availableCategories.map((category, categoryIndex) => (
-                <VStack key={categoryIndex} className="mb-6">
+            {availableCategories.map((category, categoryIndex) => (
+              <VStack key={categoryIndex} className="mb-6">
+                <Card variant="outline" className="p-4">
                   <Heading size="md" className="mb-2">
                     {category.name}
                   </Heading>
-                  <HStack className="flex-wrap gap-x-4 gap-y-2">
-                    {category.subcategories.map(
-                      (subcategory, subcategoryIndex) => (
+                  {category.subcategories.length > 0 ? (
+                    <HStack className="flex-wrap gap-x-4 gap-y-2">
+                      {category.subcategories.map((subcategory, subcategoryIndex) => (
                         <Button
                           key={subcategoryIndex}
                           variant="outline"
@@ -152,12 +123,16 @@ const ServicesInfo = () => {
                           <ButtonIcon as={CheckIcon} />
                           <ButtonText>{subcategory.name}</ButtonText>
                         </Button>
-                      )
-                    )}
-                  </HStack>
-                </VStack>
-              ))}
-            </Card>
+                      ))}
+                    </HStack>
+                  ) : (
+                    <Text className="text-sm text-gray-400">
+                      No subcategories available
+                    </Text>
+                  )}
+                </Card>
+              </VStack>
+            ))}
           </VStack>
           {/* Selected Services */}
           {selectedServices.length > 0 && (

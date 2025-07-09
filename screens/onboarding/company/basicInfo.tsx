@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
@@ -55,13 +55,13 @@ const BasicInfo = () => {
     },
   });
 
-  useEffect(() => {
-    setValue("firstName", data.firstName);
-    setValue("lastName", data.lastName);
-    setSelectedProfileImage(data.profilePicture);
-    setSelectedImages(data.companyImages || []);
+ // useEffect(() => {
+   // setValue("firstName", data.firstName);
+    //setValue("lastName", data.lastName);
+    //setSelectedProfileImage(data.profilePicture);
+    //setSelectedImages(data.companyImages || []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //}, []);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;

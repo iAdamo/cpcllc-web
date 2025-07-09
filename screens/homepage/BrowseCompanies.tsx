@@ -48,18 +48,21 @@ const BrowseCompanies = () => {
               variant="outline"
               className="flex-row h-32 md:w-96 p-0 gap-4 bg-white"
             >
-                <Image
-                  className="h-32 w-32 rounded-l-md object-cover"
-                  src={
-                    user?.activeRoleId?.companyImages[0] || "/assets/placeholder.jpg"
-                  }
-                  alt={user?.activeRoleId?.companyName || "Company Logo"}
-                  width={1400}
-                  height={600}
-                />
+              <Image
+                className="h-32 w-32 rounded-l-md object-cover"
+                src={
+                  user?.activeRoleId?.companyImages[0] ||
+                  "/assets/placeholder.jpg"
+                }
+                alt={user?.activeRoleId?.companyName || "Company Logo"}
+                width={1400}
+                height={600}
+              />
               <VStack className="justify-between p-2">
-                <Heading>{user?.activeRoleId?.companyName}</Heading>
-                <Text size="sm" className="md:text-md font-semibold">
+                <Heading size="sm" className="md:text-lg">
+                  {user?.activeRoleId?.companyName}
+                </Heading>
+                <Text size="sm" className="md:text-md md:font-semibold">
                   {user?.activeRoleId?.location?.primary?.address?.address}
                 </Text>
               </VStack>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { searchCompanies } from "@/axios/users";
 import { debounce } from "lodash";
-import { Company, CompanyData } from "@/types";
+import { CompanyData } from "@/types";
 
 export function useCompanySearch({
   searchInput,

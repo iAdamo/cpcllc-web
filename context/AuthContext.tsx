@@ -68,7 +68,6 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
         if (!session) throw new Error("Session is not available.");
         const response = await registerCompany(data, session);
         if (response) {
-          console.log(response);
           const companyData: CompanyData = {
             ...response,
             id: response._id,
@@ -123,13 +122,6 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       );
     } else if (pathname === "/cpc") {
       router.push("/cpc");
-      return (
-        <Spinner size="large" className="h-full items-center justify-center" />
-      );
-    }
-  } else if (session && userData?.activeRole === "Client") {
-    if (pathname === `/cpc/${userData.id}`) {
-      router.replace("/companies");
       return (
         <Spinner size="large" className="h-full items-center justify-center" />
       );

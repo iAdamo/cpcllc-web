@@ -12,7 +12,7 @@ const ForClient = () => {
   return (
     <VStack className="md:px-20 px-2 w-full relative rounded-lg">
       <Image
-        className="object-cover w-full md:h-[36rem] h-96 top-0 left-0 rounded-lg"
+        className="md:object-cover object-fill w-full md:h-[36rem] h-[26rem] top-0 left-0 rounded-lg"
         src={HomeClient}
         alt="home_client"
         width={3264}

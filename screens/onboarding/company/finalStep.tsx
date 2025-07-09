@@ -9,28 +9,32 @@ import { useRouter } from "next/navigation";
 import { useSession } from "@/context/AuthContext";
 
 const FinalStep = () => {
-  const [loading, setLoading] = useState(true); // Spinner initially visible
+  const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
   const { data, submitData } = useOnboarding();
   const router = useRouter();
-  const { registerCompany, fetchUserProfile } = useSession();
+  const { userData, registerCompany, fetchUserProfile } = useSession();
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
       const formData = new FormData();
+      console.log(data);
 
       Object.entries(data).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-          value.forEach((file) => {
-            if (file instanceof File) {
-              formData.append(key, file);
-            } else {
-              formData.append(key, file);
-            }
-          });
+          if (key === "subcategories") {
+            const ids = value.map((item: { id: string }) => item.id);
+            formData.append(key, JSON.stringify(ids));
+          } else {
+            value.forEach((file) => {
+              if (file instanceof File) {
+                formData.append(key, file);
+              }
+            });
+          }
         } else if (value instanceof File) {
           formData.append(key, value);
         } else {
@@ -42,12 +46,13 @@ const FinalStep = () => {
       await fetchUserProfile();
       setSuccess(true);
       submitData();
-      router.replace("/dashboard");
+      router.replace(`/cpc/${userData?.activeRoleId?._id}`);
     } catch (err) {
       console.error("Error updating profile:", err);
       setError(true);
     } finally {
       setLoading(false);
+      // router.replace(`/cpc/${userData?.activeRoleId?._id}`);
     }
   };
 

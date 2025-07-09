@@ -105,7 +105,7 @@ const CompaniesSection = () => {
   const selectedCompany = companies[selectedCompanyIndex];
 
   return (
-    <VStack className="mt-28 bg-[#F6F6F6]">
+    <VStack className="hidden md:flex mt-28 bg-[#F6F6F6]">
       <div className="rounded m-2 p-4">
         <h1 className="text-3xl font-bold text-brand-primary">{`${category} Service Providers Near You`}</h1>
       </div>

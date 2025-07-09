@@ -1,18 +1,17 @@
 "use client";
 
-import { SafeAreaView } from "@/components/ui/safe-area-view";
+import { HStack } from "@/components/ui/hstack";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useEffect, useState } from "react";
 import PageOne from "@/screens/onboarding/pageOne";
 import BasicInfo from "@/screens/onboarding/company/basicInfo";
 import ServicesInfo from "./company/serviceInfo";
-// import InfoOne from "@/screens/onboarding/company/infoOne";
 import LocationBoard from "./company/locationBoard";
 import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
 import FinalStep from "@/screens/onboarding/company/finalStep";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import OpenInApp from "@/components/OpenInApp";
 
 const Onboarding = () => {
   const { step } = useOnboarding();
@@ -25,12 +24,12 @@ const Onboarding = () => {
   }, [step]);
 
   return (
-    <SafeAreaView>
+    <section>
       {currentStep === 1 ? (
         <PageOne />
       ) : (
         <VStack className="w-full h-screen">
-          <HStack className="w-full h-full bg-white">
+          <HStack className="hidden md:flex w-full h-full bg-white">
             <VStack className="bg-brand-primary h-full w-1/5">
               <Button
                 variant="link"
@@ -45,14 +44,15 @@ const Onboarding = () => {
                 </ButtonText>
               </Button>
             </VStack>
-            {currentStep === 3 && <BasicInfo />}
+            {currentStep === 2 && <BasicInfo />}
+            {currentStep === 3 && <ServicesInfo />}
             {currentStep === 4 && <LocationBoard />}
-            {currentStep === 2 && <ServicesInfo />}
             {currentStep === 5 && <FinalStep />}
           </HStack>
+          <OpenInApp />
         </VStack>
       )}
-    </SafeAreaView>
+    </section>
   );
 };
 

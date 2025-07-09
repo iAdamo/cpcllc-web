@@ -96,7 +96,7 @@ const AiChat = () => {
   }, [conversation, scrollToBottom]);
 
   return (
-    <>
+    <VStack className="hidden md:flex">
       <Fab
         size="lg"
         placement="bottom right"
@@ -199,7 +199,7 @@ const AiChat = () => {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-    </>
+    </VStack>
   );
 };
 
