@@ -13,12 +13,12 @@ export const createService = async (data: FormData) => {
   return response.data;
 };
 
-export const getAllCategoriesWithSubcategories =
-  async (): Promise<ServiceCategory[]> => {
-    const response = await axiosInstance.get("services/categories");
-
-    return response.data;
-  };
+export const getAllCategoriesWithSubcategories = async (): Promise<
+  ServiceCategory[]
+> => {
+  const response = await axiosInstance.get("services/categories");
+  return response.data;
+};
 
 export const getServiceById = async (id: string): Promise<ServiceData> => {
   const response = await axiosInstance.get(`services/${id}`);

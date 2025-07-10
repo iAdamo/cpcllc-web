@@ -8,6 +8,11 @@ import { Card } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
+import {
+  Avatar,
+  AvatarFallbackText,
+  AvatarImage,
+} from "@/components/ui/avatar";
 import { SettingsIcon, FavouriteIcon } from "@/components/ui/icon";
 import { useSession } from "@/context/AuthContext";
 import Image from "next/image";
@@ -15,6 +20,11 @@ import { userProfile } from "@/axios/users";
 import { UserData } from "@/types";
 import ReviewSection from "./ReviewSection";
 import ServiceSection from "./ServiceSection";
+import { getInitial } from "@/utils/GetInitials";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
 const ProfilePage = () => {
   const { userData: sessionUserData } = useSession();
@@ -58,25 +68,47 @@ const ProfilePage = () => {
   });
 
   return (
-    <VStack className="">
+    <VStack className="mt-40">
       <Image
         src="/assets/header10.jpg"
         alt="cover-image"
         width={1200}
         height={600}
-        className="w-full"
+        className="hidden md:flex w-full"
       />
-      <VStack className="h-full px-20 gap-8 -mt-4">
+      <VStack className="mb-40 md:mb-0 h-full md:px-20 gap-8 md:-mt-4">
         <Card variant="outline" className="flex flex-row p-0 bg-white">
-          <VStack className="w-3/4 border-r">
+          <VStack className="md:w-3/4 border-r">
             {data?.activeRoleId?._id && showCompanyProfile ? (
               <>
                 <VStack>
-                  <HStack className="h-full justify-between p-4">
-                    <HStack className="gap-10">
-                      <Card variant="outline" className="-mt-8 bg-white">
+                  <VStack className="md:flex-row h-full justify-between md:p-4">
+                    <VStack className="md:flex-row md:gap-10">
+                      <Card className="md:border md:p-4 p-0 md:-mt-8 bg-white">
+                        <Swiper
+                          modules={[Autoplay, Pagination]}
+                          autoplay={{ delay: 4000 }}
+                          loop
+                          pagination={{ clickable: true }}
+                          className="md:hidden w-full h-full"
+                        >
+                          {data?.activeRoleId?.companyImages.map(
+                            (src, index) => (
+                              <SwiperSlide key={index}>
+                                <Image
+                                  className="object-cover w-full h-full rounded-lg"
+                                  src={src}
+                                  alt={`slide-${index}`}
+                                  width={1920}
+                                  height={1080}
+                                  priority
+                                />
+                              </SwiperSlide>
+                            )
+                          )}
+                        </Swiper>
                         <Image
-                          className="object-cover h-56 w-56"
+                          className="hidden md:flex object-cover h-56 w-56"
                           src={
                             data?.activeRoleId?.companyImages[0] ||
                             "/assets/default-profile.jpg"
@@ -86,15 +118,43 @@ const ProfilePage = () => {
                           height={1200}
                         />
                       </Card>
-                      <VStack>
+                      <VStack className="hidden md:flex">
                         <Text>No user information to display.</Text>
                       </VStack>
-                    </HStack>
+                      {/**Mobile */}
+                      <HStack className="md:hidden p-4 justify-between w-full">
+                        <VStack className="gap-1 w-3/4">
+                          <Heading className="mb-2" size="md">
+                            {data?.activeRoleId?.companyName}
+                          </Heading>
+                          <Text size="sm">
+                            {
+                              data?.activeRoleId?.location?.primary?.address
+                                ?.country
+                            }
+                          </Text>
+                          <Text size="sm">
+                            Registered on the {formattedCompanyDate}
+                          </Text>
+                          <Text size="sm">Online</Text>
+                        </VStack>
+                        <Button
+                          size="xs"
+                          variant="link"
+                          onPress={() => setShowCompanyProfile(false)}
+                        >
+                          <ButtonText className="text-xs text-btn-primary data-[hover=true]:no-underline data-[active=true]:no-underline">
+                            View User Profile
+                          </ButtonText>
+                        </Button>
+                      </HStack>
+                    </VStack>
                     <Button
                       variant="link"
                       size="xl"
                       // Change color based on state
                       onPress={() => setIsFavourite((prev) => !prev)}
+                      className="hidden md:flex"
                     >
                       <ButtonIcon
                         className={`w-8 h-8 ${
@@ -103,10 +163,10 @@ const ProfilePage = () => {
                         as={FavouriteIcon}
                       />
                     </Button>
-                  </HStack>
+                  </VStack>
                 </VStack>
 
-                <HStack className="justify-between px-4 items-end">
+                <HStack className="hidden md:flex justify-between px-4 items-end">
                   <VStack className="gap-1">
                     <Heading className="mb-2" size="sm">
                       {data?.activeRoleId?.companyName}
@@ -131,13 +191,13 @@ const ProfilePage = () => {
                 </HStack>
               </>
             ) : (
-              <>
+              <VStack className="border">
                 <VStack>
                   <HStack className="h-full justify-between p-4">
                     <HStack className="gap-10">
-                      <Card variant="outline" className="-mt-8 bg-white">
+                      <Card className="md:p-4 p-0 -mt-8 bg-white">
                         <Image
-                          className="object-cover h-56 w-56"
+                          className="hidden md:flex object-cover h-56 w-56"
                           src={
                             data.profilePicture || "/assets/default-profile.jpg"
                           }
@@ -145,6 +205,12 @@ const ProfilePage = () => {
                           width={4000}
                           height={4000}
                         />
+                        <Avatar size="2xl" className="md:hidden">
+                          <AvatarFallbackText>
+                            {getInitial(data?.email || data?.firstName || "")}
+                          </AvatarFallbackText>
+                          <AvatarImage source={{ uri: data?.profilePicture }} />
+                        </Avatar>
                       </Card>
                       <VStack>
                         <Text>No user information to display.</Text>
@@ -188,10 +254,10 @@ const ProfilePage = () => {
                     </Button>
                   )}
                 </HStack>
-              </>
+              </VStack>
             )}
           </VStack>
-          <VStack className="w-1/4 items-center p-4 bg-[#F6F6F6]">
+          <VStack className="hidden w-1/4 items-center p-4 bg-[#F6F6F6]">
             <Button className="bg-brand-primary">
               <ButtonIcon as={SettingsIcon} />
               <ButtonText>Account Settings</ButtonText>

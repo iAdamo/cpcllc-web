@@ -1,28 +1,27 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import MobileSideBar from "../../components/Overlays/MobileSideBar";
 import { useRouter, usePathname } from "next/navigation";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Pressable } from "@/components/ui/pressable";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useSession } from "@/context/AuthContext";
 import { SearchEngine, MSearchEngine } from "@/components/SearchEngine";
 import { MenuIcon, CloseIcon } from "@/components/ui/icon";
 import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionIcon,
-  AccordionContent,
-} from "@/components/ui/accordion";
+  Drawer,
+  DrawerBackdrop,
+  DrawerContent,
+  DrawerBody,
+} from "@/components/ui/drawer";
 import { Divider } from "@/components/ui/divider";
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
 
   const { session, userData } = useSession();
   const router = useRouter();
@@ -116,8 +115,8 @@ const NavBar = () => {
 
                   <Button
                     onPress={() => router.push("/onboarding")}
-                    className="bg-btn-primary data-[hover=true]:bg-brand-primary">
-
+                    className="bg-btn-primary data-[hover=true]:bg-brand-primary"
+                  >
                     <ButtonText className="text-white ">Get Started</ButtonText>
                   </Button>
                 </HStack>
@@ -176,42 +175,41 @@ const NavBar = () => {
           >
             <ButtonText>CPCLLC</ButtonText>
           </Button>
-
-          <Accordion className="w-1/5 shadow-none">
-            <AccordionItem value="a">
-              <AccordionTrigger className="bg-brand-primary">
-                {({ isExpanded }) => {
-                  return (
-                    <>
-                      {isExpanded ? (
-                        <AccordionIcon
-                          as={CloseIcon}
-                          size="lg"
-                          className="ml-3 text-white"
-                        />
-                      ) : (
-                        <AccordionIcon
-                          as={MenuIcon}
-                          size="lg"
-                          className="ml-3 text-white"
-                        />
-                      )}
-                    </>
-                  );
-                }}
-              </AccordionTrigger>
-              <AccordionContent className="w-full h-full items-start z-50 top-14 left-0 fixed px-4 gap-2 bg-white">
+          <Button
+            variant="link"
+            size="xl"
+            onPress={() => setShowDrawer((prev) => !prev)}
+            className=""
+          >
+            <ButtonIcon
+              className="text-white"
+              as={showDrawer ? CloseIcon : MenuIcon}
+            />
+          </Button>
+          <Drawer
+            isOpen={showDrawer}
+            onClose={() => setShowDrawer(false)}
+            size="sm"
+            anchor="top"
+            className="fixed z-50"
+          >
+            <DrawerBackdrop className="bg-transparent" />
+            <DrawerContent className="h-screen mt-16 p-2">
+              <DrawerBody className="w-full m-0 justify-start">
                 <Button
                   variant="link"
                   onPress={() => router.push("/onboarding")}
+                  className="justify-start"
                 >
-                  <ButtonText className="font-normal">Sign Up</ButtonText>
+                  <ButtonText className="font-normal text-start">
+                    Sign Up
+                  </ButtonText>
                 </Button>
                 <Divider orientation="horizontal" className="w-full" />
                 <Button
                   variant="link"
                   onPress={() => setIsAuthodalOpen(true)}
-                  className=""
+                  className="justify-start"
                 >
                   <ButtonText className="font-normal">Log In</ButtonText>
                 </Button>
@@ -219,14 +217,14 @@ const NavBar = () => {
                 <Button
                   variant="link"
                   onPress={() => router.push("/companies")}
-                  className=""
+                  className="justify-start"
                 >
                   <ButtonText className="font-normal">Companies</ButtonText>
                 </Button>
                 <Divider orientation="horizontal" className="w-full" />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
         </HStack>
         <VStack className="-z-50">
           <MSearchEngine />

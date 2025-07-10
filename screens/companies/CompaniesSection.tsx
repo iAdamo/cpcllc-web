@@ -1,10 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-// import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
-import { getCompanies } from "@/axios/users";
+import { getCompanies, searchCompanies } from "@/axios/users";
 import { CompanyData } from "@/types";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -14,55 +13,51 @@ import GoogleMapComponent from "@/components/maps/GoogleMap";
 import { useMapContext } from "@/context/MapContext";
 import { useUserLocation } from "@/hooks/useUserLocation";
 import Loader from "@/components/Loader";
-// import { useParams } from "next/navigation";
-// import { usePathname } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { searchCompanies } from "@/axios/users";
+import { Button, ButtonText } from "@/components/ui/button";
 
 const CompaniesSection = () => {
-  // const [showInfo, setShowInfo] = useState(true);
   const [companies, setCompanies] = useState<CompanyData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedCompanyIndex, setSelectedCompanyIndex] = useState<number>(0);
-  const { loading, error } = useMapContext();
+  const [paginationLoading, setPaginationLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
 
+  const { loading, error } = useMapContext();
   useUserLocation();
+
   const limit = 20;
-
+  const loadMoreRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
-  const category = searchParams.get("category") || "";
+  const category = searchParams.get("category") || "all";
 
-  // Load from localStorage on initial mount
-  //useEffect(() => {
-  //const savedIndex = localStorage.getItem("selectedCompanyIndex");
-  //if (savedIndex !== null) {
-  //setSelectedCompanyIndex(parseInt(savedIndex));
-  //}
-  //}, []);
-
+  // ✅ Fetch companies (with pagination append)
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
+        setPaginationLoading(true);
         const { companies: response, totalPages } = await getCompanies(
           currentPage,
           limit
         );
-        setCompanies(response);
+
         setTotalPages(totalPages);
+        setCompanies((prev) =>
+          currentPage === 1 ? response : [...prev, ...response]
+        );
       } catch (error) {
         console.error("Error fetching companies:", error);
-        setCompanies([]); // Ensure companies is set to an empty array
+        if (currentPage === 1) setCompanies([]);
+      } finally {
+        setPaginationLoading(false);
       }
     };
 
     const fetchCompaniesBySearch = async () => {
       setSearchLoading(true);
-
       try {
         const response = await searchCompanies(category);
-
         setCompanies(response);
       } catch (error) {
         console.error("Error fetching companies:", error);
@@ -71,22 +66,60 @@ const CompaniesSection = () => {
         setSearchLoading(false);
       }
     };
+
     if (category === "all") {
       fetchCompanies();
     } else {
+      // If searching, always reset page to 1
+      setCurrentPage(1);
       fetchCompaniesBySearch();
     }
   }, [currentPage, limit, category]);
 
-  // Uncomment if you want to implement pagination
+  // ✅ Intersection Observer for infinite scroll
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+      if (
+        target.isIntersecting &&
+        !paginationLoading &&
+        currentPage < totalPages &&
+        category === "all"
+      ) {
+        setCurrentPage((prev) => prev + 1);
+      }
+    },
+    [paginationLoading, currentPage, totalPages, category]
+  );
 
-  // const changePage = (page: number) => {
-  //  if (page >= 1 && page <= totalPages) {
-  //    setCurrentPage(page);
-  //  }
+  useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: "100px",
+      threshold: 0,
+    };
+    const observer = new IntersectionObserver(handleObserver, option);
+    const currentRef = loadMoreRef.current;
+    if (currentRef) observer.observe(currentRef);
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [handleObserver]);
+  //const observer = new IntersectionObserver(handleObserver, option);
+  //if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+  //return () => {
+  // if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
   //};
+  //}, [handleObserver]);
 
-  if (loading && searchLoading && companies.length === 0) {
+  const handleCompanySelect = (index: number) => {
+    setSelectedCompanyIndex(index);
+    localStorage.setItem("selectedCompanyIndex", index.toString());
+  };
+
+  const selectedCompany = companies[selectedCompanyIndex];
+
+  if ((loading || searchLoading) && companies.length === 0) {
     return <Loader />;
   }
 
@@ -95,33 +128,25 @@ const CompaniesSection = () => {
     return <div className="error">{error}</div>;
   }
 
-  const handleCompanySelect = (index: number) => {
-    setSelectedCompanyIndex(index);
-    // setShowInfo(true);
-    localStorage.setItem("selectedCompanyIndex", index.toString());
-  };
-
-  // Removed duplicate declaration of selectedCoords
-  const selectedCompany = companies[selectedCompanyIndex];
-
   return (
     <VStack className="hidden md:flex mt-28 bg-[#F6F6F6]">
       <div className="rounded m-2 p-4">
         <h1 className="text-3xl font-bold text-brand-primary">{`${category} Service Providers Near You`}</h1>
       </div>
       <VStack className="md:flex-row bg-[#F6F6F6]">
+        {/* Sidebar List */}
         <VStack className="w-1/3 sticky top-32 mt-4 self-start h-fit gap-4">
           <Card
             variant="filled"
-            className="overflow-y-auto bg-white min-h-0 max-h-[1500px]"
+            className="overflow-y-auto bg-white min-h-0 max-h-[1500px] p-2"
           >
             {companies.map((company, index) => (
               <Pressable
                 key={index}
                 onPress={() => handleCompanySelect(index)}
-                className={`mb-4 hover:drop-shadow-md transition-shadow duration-300 focus:drop-shadow-blue-300 focus:shadow-lg rounded-lg ${
+                className={`mb-4 hover:drop-shadow-md transition-shadow duration-300 rounded-lg ${
                   index === selectedCompanyIndex
-                    ? "focus:shadow-blue-200 focus:shadow-lg"
+                    ? "ring-2 ring-brand-primary"
                     : ""
                 }`}
               >
@@ -150,9 +175,34 @@ const CompaniesSection = () => {
                 </Card>
               </Pressable>
             ))}
+
+            {/* Infinite Scroll Sentinel */}
+            {category === "all" && (
+              <div
+                ref={loadMoreRef}
+                className="w-full flex justify-center items-center h-16"
+              >
+                {paginationLoading && <Loader />}
+                {!paginationLoading && currentPage < totalPages && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onPress={() => setCurrentPage((prev) => prev + 1)}
+                  >
+                    <ButtonText>Load More</ButtonText>
+                  </Button>
+                )}
+                {!paginationLoading && currentPage >= totalPages && (
+                  <Text className="text-gray-400 text-sm">
+                    No more companies to load.
+                  </Text>
+                )}
+              </div>
+            )}
           </Card>
         </VStack>
 
+        {/* Main Company View */}
         {selectedCompany ? (
           <VStack className="w-2/3 rounded-none bg-[#F6F6F6]">
             <CompanyView {...selectedCompany} />
@@ -163,6 +213,7 @@ const CompaniesSection = () => {
           </VStack>
         )}
 
+        {/* Map */}
         <VStack className="w-1/3 rounded-none pt-4 bg-[#F6F6F6] sticky top-24 h-[80vh] overflow-hidden">
           <div className="relative w-full h-full rounded-lg">
             <GoogleMapComponent

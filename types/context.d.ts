@@ -1,6 +1,4 @@
-import { ServiceData } from "@/types";
-import { ServiceData } from "@/types";
-import { ServiceCategory } from "@/types";
+import { ServiceData, ServiceData, Subcategory } from "@/types";
 
 export interface UserData {
   id: string;
@@ -130,10 +128,7 @@ export interface AuthContextProps {
   fetchUserProfile: () => Promise<void>;
   companyData: CompanyData | null;
 }
-export interface Subcategory {
-  id: string;
-  name: string;
-}
+
 export interface OnboardingData {
   role: string;
   firstName: string;
