@@ -23,5 +23,3 @@ export { default as roofing } from "./roofing.svg";
 export { default as poolservice } from "./poolservice.svg";
 export { default as solar } from "./solar.svg";
 
-
-

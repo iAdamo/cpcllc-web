@@ -34,7 +34,7 @@ const Onboarding = () => {
               <Button
                 variant="link"
                 className="mt-4 justify-start"
-                onPress={() => router.push("/")}
+                onPress={() => router.replace("/")}
               >
                 <ButtonText
                   size="lg"

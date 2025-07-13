@@ -101,8 +101,14 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       <Spinner size="large" className="h-full items-center justify-center" />
     );
 
-  // Route redirects
-  if (session && pathname === "/") {
+  if (
+    !session &&
+    pathname !== "/" &&
+    !pathname.startsWith("/companies") &&
+    pathname !== "/onboarding"
+  ) {
+    router.replace("/");
+  } else if (session && pathname === "/") {
     if (userData?.activeRole === "Client") {
       router.replace("/companies");
       return (
@@ -127,6 +133,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       );
     }
   }
+
   return (
     <AuthContext.Provider
       value={{

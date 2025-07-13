@@ -106,7 +106,7 @@ const FormModal: React.FC<FormModalProps> = ({
               />
               {errors[name] && (
                 <FormControlError>
-                  <FormControlErrorText>
+                  <FormControlErrorText className="md:text-sm text-xs">
                     {errors[name]?.message?.toString()}
                   </FormControlErrorText>
                 </FormControlError>
@@ -117,8 +117,8 @@ const FormModal: React.FC<FormModalProps> = ({
         <ModalFooter className="flex-col items-start">
           <Button
             variant="solid"
-            className="w-full"
             onPress={handleSubmit(onSubmit)}
+            className="w-full bg-blue-500 data-[hover=true]:bg-blue-600"
           >
             <ButtonText>Submit</ButtonText>
           </Button>
@@ -139,6 +139,7 @@ const FormModal: React.FC<FormModalProps> = ({
                   size="md"
                   onPress={onSubmit_2}
                   className="bg-green-200 ml-auto data-[hover=true]:bg-green-300"
+                  isDisabled={onSubmit_2 === undefined}
                 >
                   <ButtonText size="xs" className="text-typography-700">
                     Click to resend

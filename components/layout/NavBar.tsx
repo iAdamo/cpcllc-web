@@ -56,16 +56,16 @@ const NavBar = () => {
   return (
     <>
       {/** Verify Code Modal */}
-      {userData && !userData?.verified && (
-        <VerifyCodeModal
-          isOpen={true}
-          onClose={() => {}}
-          email={userData?.email || ""}
-          onVerified={() => {
-            router.replace("/profile");
-          }}
-        />
-      )}
+      <VerifyCodeModal
+        isOpen={userData! && !userData?.verified}
+        onClose={() => userData?.verified}
+        email={userData?.email || ""}
+        onVerified={() => {
+          router.replace("/cpc/" + userData?.id);
+        }}
+        isVerified={!userData?.verified}
+      />
+
       {/** Desktop */}
       <VStack
         className={`hidden md:flex justify-center items-center ${

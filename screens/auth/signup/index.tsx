@@ -228,7 +228,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorText className="md:text-lg text-sm">
+                      <FormControlErrorText className="md:text-sm text-xs">
                         {errors?.email?.message || !validated.emailValid}
                       </FormControlErrorText>
                     </FormControlError>
@@ -270,7 +270,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorText className="md:text-lg text-sm">
+                      <FormControlErrorText className="md:text-sm text-xs">
                         {errors?.password?.message || !validated.passwordValid}
                       </FormControlErrorText>
                     </FormControlError>
@@ -314,7 +314,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                       )}
                     />
                     <FormControlError>
-                      <FormControlErrorText className="md:text-lg text-sm">
+                      <FormControlErrorText className="md:text-sm text-xs">
                         {errors?.confirmPassword?.message}
                       </FormControlErrorText>
                     </FormControlError>
@@ -380,6 +380,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
             });
             router.push("/companies");
           }}
+          isVerified={true}
         />
       )}
     </>

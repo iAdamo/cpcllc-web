@@ -33,7 +33,7 @@ const PageOne = () => {
 
   const handleSubmit = () => {
     if (values === "Client" && session) {
-      router.push("/service");
+      router.replace("/companies");
     } else if (values === "Client" && !session) {
       setIsAuthModalOpen(true);
     } else if (values === "Company") {
@@ -46,7 +46,7 @@ const PageOne = () => {
       <Button
         variant="link"
         className="hidden md:flex m-4 w-52 bg-transparent"
-        onPress={() => router.push("/")}
+        onPress={() => router.replace("/")}
       >
         <ButtonText
           size="lg"
@@ -129,7 +129,7 @@ const PageOne = () => {
           }`}</ButtonText>
         </Button>
       </VStack>
-      <HStack className="w-full justify-center mt-8">
+      <HStack className={`${session && "hidden"} w-full justify-center mt-8`}>
         <Text size="xs" className="md:text-lg text-black font-semibold">
           Already have an account?
         </Text>

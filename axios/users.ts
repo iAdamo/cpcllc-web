@@ -3,8 +3,8 @@ import { CompanyData, UserData } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
-export const updateProfile = async (id: string, data: FormData) => {
-  const response = await axiosInstance.patch(`users/${id}`, data, {
+export const updateProfile = async (data: FormData) => {
+  const response = await axiosInstance.patch("users", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

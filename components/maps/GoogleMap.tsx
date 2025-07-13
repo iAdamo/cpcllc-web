@@ -73,11 +73,11 @@ const GoogleMapComponent: React.FC<{
         <Marker position={center} title="You" />
         <Circle
           center={center}
-          radius={5000} // Radius in meters (e.g., 5000 meters = 5 km)
+          radius={2000} // Radius in meters (e.g., 5000 meters = 5 km)
           options={{
             strokeColor: "#0000FF", // Blue border
             strokeOpacity: 0.8,
-            strokeWeight: 2,
+            strokeWeight: 1,
             fillColor: "#0000FF", // Blue fill
             fillOpacity: 0.35,
           }}
@@ -110,7 +110,7 @@ const GoogleMapComponent: React.FC<{
                   lat: company.location.primary.coordinates.lat,
                   lng: company.location.primary.coordinates.long,
                 }}
-                radius={2000} // Smaller radius (e.g., 2 km)
+                radius={500} // Smaller radius (e.g., 2 km)
                 options={{
                   fillColor: "#FFD700", // Yellow fill
                   fillOpacity: 0.4, // Semi-transparent fill
