@@ -55,12 +55,12 @@ const BasicInfo = () => {
     },
   });
 
- // useEffect(() => {
-   // setValue("firstName", data.firstName);
-    //setValue("lastName", data.lastName);
-    //setSelectedProfileImage(data.profilePicture);
-    //setSelectedImages(data.companyImages || []);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  // setValue("firstName", data.firstName);
+  //setValue("lastName", data.lastName);
+  //setSelectedProfileImage(data.profilePicture);
+  //setSelectedImages(data.companyImages || []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   //}, []);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -431,13 +431,17 @@ const BasicInfo = () => {
           {/**Company Images */}
           <FormControl
             isInvalid={selectedImages.length === 0 || !!errors.companyImages}
-            className="border border-gray-300 rounded-xl p-4 gap-2"
+            className="border border-gray-300 rounded-xl p-4"
           >
             <Heading size="md">Professional Company Images</Heading>
             <FormControlLabel className="flex-col flex items-start">
-              <FormControlLabelText className="text-md">
-                Upload up to 6 professional companyImages (.jpg or .png) that
-                showcase your company. Ensure each image is under 10MB.
+              <FormControlLabelText className="text-md font-medium bg-green-200 p-1 rounded-lg">
+                Upload up to 6 professional company images (.jpg or .png) that
+                showcase your company. Ensure each image is under 10MB.{" "}
+                <span className="text-red-500">
+                  The first image should be the company&apos;s logo or the most
+                  preferred image.
+                </span>
               </FormControlLabelText>
             </FormControlLabel>
             <HStack className="gap-4 grid grid-cols-3">

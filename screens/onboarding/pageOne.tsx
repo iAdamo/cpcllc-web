@@ -142,7 +142,7 @@ const PageOne = () => {
             setIsAuthModalOpen(true);
           }}
         >
-          <ButtonText size="xs" className="md:text-lg text-blue-600 m-0 data-[hover=true]:no-underline">
+          <ButtonText size="sm" className="md:text-lg text-blue-600 m-0 data-[hover=true]:no-underline">
             Sign In
           </ButtonText>
         </Button>

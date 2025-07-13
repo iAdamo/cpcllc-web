@@ -20,9 +20,7 @@ export const OnboardingProvider = ({
   const [data, setDataState] = useState<OnboardingData>(() => {
     return JSON.parse(localStorage.getItem("onboardingData") || "{}");
   });
-  const [categories, setCategories] = useState<ServiceCategory[]>(
-    []
-  );
+  const [categories, setCategories] = useState<ServiceCategory[]>([]);
 
   const [step, setStep] = useState(() => {
     return Number(localStorage.getItem("onboardingStep")) || 1;
@@ -73,7 +71,15 @@ export const OnboardingProvider = ({
 
   return (
     <OnboardingContext.Provider
-      value={{ step, data, setData, nextStep, prevStep, submitData, categories }}
+      value={{
+        step,
+        data,
+        setData,
+        nextStep,
+        prevStep,
+        submitData,
+        categories,
+      }}
     >
       {children}
     </OnboardingContext.Provider>

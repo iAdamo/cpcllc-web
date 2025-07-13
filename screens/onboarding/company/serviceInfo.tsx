@@ -21,14 +21,14 @@ const ServicesInfo = () => {
   const [availableCategories, setAvailableCategories] = useState<
     ServiceCategory[]
   >([
-    ...(categories || []).map((category) => ({
-      id: category.id,
-      name: category.name,
-      subcategories: category.subcategories.map((subcategory) => ({
-        id: subcategory.id,
-        name: subcategory.name,
-      })),
-    })),
+    ...((data.availableCategories as ServiceCategory[]) ||
+      categories.map((category) => ({
+        ...category,
+        subcategories: category.subcategories.filter(
+          (subcategory) =>
+            !selectedServices.some((selected) => selected.id === subcategory.id)
+        ),
+      }))),
   ]);
 
   const handleSelectSubcategory = (
@@ -38,12 +38,16 @@ const ServicesInfo = () => {
     const subcategoryId = subcategory.id;
 
     // Remove from available
-    setAvailableCategories((prev: ServiceCategory[]) =>
-      prev.map((category) => ({
+    setAvailableCategories((prev: ServiceCategory[]) => {
+      const updatedCategories = prev.map((category) => ({
         ...category,
-        subcategories: category.subcategories.filter((item) => item.id !== subcategoryId),
-      }))
-    );
+        subcategories: category.subcategories.filter(
+          (item) => item.id !== subcategoryId
+        ),
+      }));
+      setData({ availableCategories: updatedCategories });
+      return updatedCategories;
+    });
 
     // Add to selected with categoryName
     setSelectedSubcategory((prev: SelectedSubcategory[]) => {
@@ -60,14 +64,14 @@ const ServicesInfo = () => {
 
     // Remove from selected
     setSelectedSubcategory((prev: SelectedSubcategory[]) => {
-      const updated = prev.filter((item) => item.id !== subcategoryId);
-      setData({ subcategories: updated });
-      return updated;
+      const updatedSelected = prev.filter((item) => item.id !== subcategoryId);
+      setData({ subcategories: updatedSelected });
+      return updatedSelected;
     });
 
     // Restore to original category
-    setAvailableCategories((prev: ServiceCategory[]) =>
-      prev.map((category) =>
+    setAvailableCategories((prev: ServiceCategory[]) => {
+      const updatedCategories = prev.map((category) =>
         category.name === subcategory.categoryName
           ? {
               ...category,
@@ -77,8 +81,11 @@ const ServicesInfo = () => {
               ],
             }
           : category
-      )
-    );
+      );
+
+      setData({ availableCategories: updatedCategories });
+      return updatedCategories;
+    });
   };
 
   return (
@@ -110,20 +117,25 @@ const ServicesInfo = () => {
                   </Heading>
                   {category.subcategories.length > 0 ? (
                     <HStack className="flex-wrap gap-x-4 gap-y-2">
-                      {category.subcategories.map((subcategory, subcategoryIndex) => (
-                        <Button
-                          key={subcategoryIndex}
-                          variant="outline"
-                          size="xs"
-                          className="data-[hover=true]:bg-[#F6F6F6] rounded-3xl"
-                          onPress={() =>
-                            handleSelectSubcategory(subcategory, category.name)
-                          }
-                        >
-                          <ButtonIcon as={CheckIcon} />
-                          <ButtonText>{subcategory.name}</ButtonText>
-                        </Button>
-                      ))}
+                      {category.subcategories.map(
+                        (subcategory, subcategoryIndex) => (
+                          <Button
+                            key={subcategoryIndex}
+                            variant="outline"
+                            size="xs"
+                            className="data-[hover=true]:bg-[#F6F6F6] rounded-3xl"
+                            onPress={() =>
+                              handleSelectSubcategory(
+                                subcategory,
+                                category.name
+                              )
+                            }
+                          >
+                            <ButtonIcon as={CheckIcon} />
+                            <ButtonText>{subcategory.name}</ButtonText>
+                          </Button>
+                        )
+                      )}
                     </HStack>
                   ) : (
                     <Text className="text-sm text-gray-400">

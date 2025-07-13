@@ -378,7 +378,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
               email: getValues("email"),
               password: getValues("password"),
             });
-            router.push("/service");
+            router.push("/companies");
           }}
         />
       )}

@@ -89,7 +89,7 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
         onClose();
 
         if (pathname === "/") {
-          router.replace("/service");
+          router.replace("/companies");
         }
       }
     } catch (error: any) {

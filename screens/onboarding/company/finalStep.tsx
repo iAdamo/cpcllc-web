@@ -21,7 +21,10 @@ const FinalStep = () => {
     try {
       setLoading(true);
       const formData = new FormData();
-      console.log(data);
+      // console.log(data);
+      // get me the local stroge space
+      const localStorageData = localStorage.getItem("onboardingData");
+      console.log("Local Storage Data:", localStorageData);
 
       Object.entries(data).forEach(([key, value]) => {
         if (Array.isArray(value)) {

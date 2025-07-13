@@ -14,6 +14,7 @@ export interface UserData {
   admins: any[];
   createdAt: string;
   activeRoleId?: CompanyData;
+  verified: boolean;
   clients: {
     _id: string;
     firstName: string;
@@ -142,8 +143,9 @@ export interface OnboardingData {
   companyImages: File[] | null;
   zip: string;
   city: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
+  locationAccuracy?: "exact" | "approximate" | "manual";
   state: string;
   country: string;
   addresses?: string[];
@@ -152,6 +154,7 @@ export interface OnboardingData {
     subcategories?: string[];
   };
   subcategories?: Subcategory[];
+  availableCategories?: ServiceCategory[];
 }
 
 export interface OnboardingContextType {

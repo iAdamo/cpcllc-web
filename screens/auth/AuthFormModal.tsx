@@ -24,8 +24,6 @@ import { Heading } from "@/components/ui/heading";
 import { ArrowLeftIcon } from "@/components/ui/icon";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 
-import { Link, LinkText } from "@/components/ui/link";
-
 interface FormModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -124,20 +122,7 @@ const FormModal: React.FC<FormModalProps> = ({
           >
             <ButtonText>Submit</ButtonText>
           </Button>
-          {extraText && (
-            <Text size="sm" className="">
-              {extraText}
-              <Link onPress={onSubmit_2} className="">
-                <LinkText
-                  size="xs"
-                  className="text-typography-700 font-semibold"
-                >
-                  Click to resend
-                </LinkText>
-              </Link>
-            </Text>
-          )}
-          <HStack space="xs" className="items-center">
+          <HStack className="justify-between w-full">
             <Button
               className="gap-1"
               variant="link"
@@ -147,6 +132,20 @@ const FormModal: React.FC<FormModalProps> = ({
               <ButtonIcon as={ArrowLeftIcon} />
               <ButtonText>Back</ButtonText>
             </Button>
+            {extraText && (
+              <Text size="sm" className="font-bold text-red-400">
+                {extraText}
+                <Button
+                  size="md"
+                  onPress={onSubmit_2}
+                  className="bg-green-200 ml-auto data-[hover=true]:bg-green-300"
+                >
+                  <ButtonText size="xs" className="text-typography-700">
+                    Click to resend
+                  </ButtonText>
+                </Button>
+              </Text>
+            )}
           </HStack>
         </ModalFooter>
       </ModalContent>

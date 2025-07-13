@@ -14,8 +14,8 @@ const containerStyle = {
 };
 
 const defaultCenter = {
-  lat: 7.8731, // Default latitude
-  lng: 80.7718, // Default longitude
+  lat: 37.7749,
+  lng: -122.4194,
 };
 
 const GoogleMapComponent: React.FC<{
@@ -48,11 +48,6 @@ const GoogleMapComponent: React.FC<{
 
   const center = userLocation
     ? { lat: userLocation.lat, lng: userLocation.lng }
-    : companies.length > 0
-    ? {
-        lat: companies[0].location.primary.coordinates.lat,
-        lng: companies[0].location.primary.coordinates.long,
-      }
     : defaultCenter;
 
   //const handleMarkerClick = (company: CompanyData) => {
@@ -60,7 +55,7 @@ const GoogleMapComponent: React.FC<{
   // };
 
   // const handleModalClose = () => {
-    // setShowCompany(null);
+  // setShowCompany(null);
   // };
 
   return (
@@ -76,6 +71,17 @@ const GoogleMapComponent: React.FC<{
         }}
       >
         <Marker position={center} title="You" />
+        <Circle
+          center={center}
+          radius={5000} // Radius in meters (e.g., 5000 meters = 5 km)
+          options={{
+            strokeColor: "#0000FF", // Blue border
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#0000FF", // Blue fill
+            fillOpacity: 0.35,
+          }}
+        />
         {/* Company markers */}
         {companies.map((company) => (
           <div key={company._id}>
@@ -96,16 +102,24 @@ const GoogleMapComponent: React.FC<{
               // onClick={() => handleMarkerClick(company)} // Handle marker click
               title={company.companyName}
             />
-            <Circle
-              radius={10000}
-              options={{
-                fillColor: "#4285F4",
-                fillOpacity: 0.2,
-                strokeColor: "#4285F4",
-                strokeOpacity: 0.8,
-                strokeWeight: 1,
-              }}
-            />
+
+            {/* Smaller Yellow Circle for Selected Company */}
+            {selectedCompany?._id === company._id && (
+              <Circle
+                center={{
+                  lat: company.location.primary.coordinates.lat,
+                  lng: company.location.primary.coordinates.long,
+                }}
+                radius={2000} // Smaller radius (e.g., 2 km)
+                options={{
+                  fillColor: "#FFD700", // Yellow fill
+                  fillOpacity: 0.4, // Semi-transparent fill
+                  strokeColor: "#FFD700", // Yellow border
+                  strokeOpacity: 0.8,
+                  strokeWeight: 2,
+                }}
+              />
+            )}
           </div>
         ))}
       </GoogleMap>

@@ -18,6 +18,7 @@ import {
   DrawerBody,
 } from "@/components/ui/drawer";
 import { Divider } from "@/components/ui/divider";
+import VerifyCodeModal from "@/screens/auth/VerifyCodeModal";
 
 const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
@@ -54,6 +55,18 @@ const NavBar = () => {
 
   return (
     <>
+      {/** Verify Code Modal */}
+      {userData && !userData?.verified && (
+        <VerifyCodeModal
+          isOpen={true}
+          onClose={() => {}}
+          email={userData?.email || ""}
+          onVerified={() => {
+            router.replace("/profile");
+          }}
+        />
+      )}
+      {/** Desktop */}
       <VStack
         className={`hidden md:flex justify-center items-center ${
           currentPath !== "/" ? "fixed top-0 h-28" : "h-20"

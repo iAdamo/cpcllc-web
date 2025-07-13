@@ -90,7 +90,7 @@ const ProfilePage = () => {
                           autoplay={{ delay: 4000 }}
                           loop
                           pagination={{ clickable: true }}
-                          className="md:hidden w-full h-full"
+                          className="md:hidden h-56 w-full rounded-lg"
                         >
                           {data?.activeRoleId?.companyImages.map(
                             (src, index) => (
@@ -195,22 +195,51 @@ const ProfilePage = () => {
                 <VStack>
                   <HStack className="h-full justify-between p-4">
                     <HStack className="gap-10">
-                      <Card className="md:p-4 p-0 -mt-8 bg-white">
-                        <Image
-                          className="hidden md:flex object-cover h-56 w-56"
-                          src={
-                            data.profilePicture || "/assets/default-profile.jpg"
-                          }
-                          alt="cover-image"
-                          width={4000}
-                          height={4000}
-                        />
-                        <Avatar size="2xl" className="md:hidden">
-                          <AvatarFallbackText>
-                            {getInitial(data?.email || data?.firstName || "")}
-                          </AvatarFallbackText>
-                          <AvatarImage source={{ uri: data?.profilePicture }} />
-                        </Avatar>
+                                            <Card className="md:p-4 p-0 -mt-8 bg-white">
+                        {/* Profile Picture */}
+                        <div className="relative">
+                          <Image
+                            className="hidden md:flex object-cover h-56 w-56"
+                            src={data.profilePicture || "/assets/default-profile.jpg"}
+                            alt="cover-image"
+                            width={4000}
+                            height={4000}
+                          />
+                          <Avatar size="2xl" className="md:hidden">
+                            <AvatarFallbackText>
+                              {getInitial(data?.email || data?.firstName || "")}
+                            </AvatarFallbackText>
+                            <AvatarImage source={{ uri: data?.profilePicture }} />
+                          </Avatar>
+
+                          {/* Upload Button */}
+                          <label
+                            htmlFor="profile-picture-upload"
+                            className="absolute bottom-2 right-2 bg-gray-200 p-2 rounded-full cursor-pointer hover:bg-gray-300"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6 text-gray-700"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M16.5 10.5L12 15m0 0l-4.5-4.5M12 15V3m9 9a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
+                          </label>
+                          <input
+                            id="profile-picture-upload"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            // onChange={handleFileChange}
+                          />
+                        </div>
                       </Card>
                       <VStack>
                         <Text>No user information to display.</Text>
