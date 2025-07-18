@@ -1,7 +1,8 @@
+import { CompanyData } from '@/types';
 import { UserData } from "./context";
 
 export interface ReviewData {
-  title: string;
+  _id: string;
   description: string;
   rating: number; // Must be between 1 and 5
   images: string[]; // Array of image URLs
@@ -11,6 +12,7 @@ export interface ReviewData {
   tags: string[];
   isDeleted: boolean;
   user: UserData;
-  company: string;
+  company: CompanyData;
   service: string;
+  createdAt: string;
 }

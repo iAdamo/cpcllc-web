@@ -9,16 +9,16 @@ import { Text } from "@/components/ui/text";
 import Link from "next/link";
 // import { star } from "@/public/assets/icons";
 import Image from "next/image";
-import { getUsers } from "@/axios/users";
-import { UserData } from "@/types";
+import { getCompanies } from "@/axios/users";
+import { CompanyData } from "@/types";
 
 const BrowseCompanies = () => {
-  const [users, setUsers] = useState<UserData[]>([]);
+  const [companies, setUsers] = useState<CompanyData[]>([]);
   const router = useRouter();
 
   useEffect(() => {
     const fetchCompanies = async () => {
-      const { users: response } = await getUsers(1, 10);
+      const { companies: response } = await getCompanies(1, 10);
       setUsers(response);
     };
     fetchCompanies();
@@ -42,28 +42,28 @@ const BrowseCompanies = () => {
         </Link>
       </VStack>
       <VStack className="md:flex-row w-full flex flex-wrap gap-x-4 gap-y-8">
-        {users.map((user, index) => (
-          <Link key={index} href={`companies/${user?.activeRoleId?._id || ""}`}>
+        {companies.map((company, index) => (
+          <Link key={index} href={`companies/${company?._id || ""}`}>
             <Card
               variant="outline"
-              className="flex-row h-32 md:w-96 p-0 gap-4 bg-white"
+              className="flex-row h-32 md:w-[22rem] p-0 gap-4 bg-white"
             >
               <Image
                 className="h-32 w-32 rounded-l-md object-cover"
                 src={
-                  user?.activeRoleId?.companyImages[0] ||
+                  company?.companyImages[0] ||
                   "/assets/placeholder.jpg"
                 }
-                alt={user?.activeRoleId?.companyName || "Company Logo"}
+                alt={company?.companyName || "Company Logo"}
                 width={1400}
                 height={600}
               />
               <VStack className="justify-between p-2">
                 <Heading size="sm" className="md:text-lg">
-                  {user?.activeRoleId?.companyName}
+                  {company?.companyName}
                 </Heading>
                 <Text size="sm" className="md:text-md md:font-semibold">
-                  {user?.activeRoleId?.location?.primary?.address?.address}
+                  {company?.location?.primary?.address?.address}
                 </Text>
               </VStack>
             </Card>

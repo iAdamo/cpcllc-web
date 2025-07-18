@@ -132,6 +132,13 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
         <Spinner size="large" className="h-full items-center justify-center" />
       );
     }
+  } else if (session && userData?.activeRole === "Client") {
+    if (pathname === "/cpc") {
+      router.push("/companies");
+      return (
+        <Spinner size="large" className="h-full items-center justifyCenter" />
+      );
+    }
   }
 
   return (

@@ -49,7 +49,7 @@ const FinalStep = () => {
       await fetchUserProfile();
       setSuccess(true);
       submitData();
-      router.replace(`/cpc/${userData?.activeRoleId?._id}`);
+      router.replace(`/cpc/${userData?.id}`);
     } catch (err) {
       console.error("Error updating profile:", err);
       setError(true);

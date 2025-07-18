@@ -204,21 +204,11 @@ const NavBar = () => {
             onClose={() => setShowDrawer(false)}
             size="sm"
             anchor="top"
-            className="fixed z-50"
+            className="md:hidden fixed z-50"
           >
             <DrawerBackdrop className="bg-transparent" />
             <DrawerContent className="h-screen mt-16 p-2">
-              <DrawerBody className="w-full m-0 justify-start">
-                <Button
-                  variant="link"
-                  onPress={() => router.push("/onboarding")}
-                  className="justify-start"
-                >
-                  <ButtonText className="font-normal text-start">
-                    Sign Up
-                  </ButtonText>
-                </Button>
-                <Divider orientation="horizontal" className="w-full" />
+              <DrawerBody className="w-full h-full m-0 justify-start">
                 <Button
                   variant="link"
                   onPress={() => setIsAuthodalOpen(true)}
@@ -235,6 +225,22 @@ const NavBar = () => {
                   <ButtonText className="font-normal">Companies</ButtonText>
                 </Button>
                 <Divider orientation="horizontal" className="w-full" />
+                <Button
+                  variant="link"
+                  onPress={() => router.push("/companies")}
+                  className="justify-start"
+                >
+                  <ButtonText className="font-normal">Logout</ButtonText>
+                </Button>
+                <Divider orientation="horizontal" className="w-full" />
+                <Button
+                  onPress={() => router.push("/onboarding")}
+                  className="justify-start bottom-0 mt-96 mx-auto"
+                >
+                  <ButtonText className="font-normal text-start">
+                    Sign Up
+                  </ButtonText>
+                </Button>
               </DrawerBody>
             </DrawerContent>
           </Drawer>

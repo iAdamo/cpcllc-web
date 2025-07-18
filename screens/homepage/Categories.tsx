@@ -17,11 +17,16 @@ import {
   roofing,
   poolservice,
   solar,
+  moving,
+  security,
+  appliance_repair,
+  capentry,
+  flooring,
+  handyman,
 } from "@/public/assets/icons";
 import { useRouter } from "next/navigation";
 // import { searchCompanies } from "@/axios/users";
 // import CompaniesSection from "../companies/CompaniesSection";
-
 
 const Categories = () => {
   const mcategories = [
@@ -108,43 +113,42 @@ const Categories = () => {
       url: "",
     },
     {
-      title: "Analytics & Strategy",
-      image: electrical,
+      title: "Moving",
+      image: moving,
       url: "",
     },
     {
-      title: "Operations & Business Consulting",
-      image: electrical,
+      title: "Home Security",
+      image: security,
       url: "",
     },
     {
-      title: "Sales & Customer Care",
-      image: electrical,
+      title: "Appliance Repair",
+      image: appliance_repair,
       url: "",
     },
     {
-      title: "Tech & Marketing Consulting",
-      image: electrical,
+      title: "Capentry",
+      image: capentry,
       url: "",
     },
     {
-      title: "Plumbing",
-      image: plumbing,
+      title: "Flooring",
+      image: flooring,
       url: "",
     },
     {
-      title: "Electrical",
-      image: electrical,
+      title: "Handyman",
+      image: handyman,
       url: "",
     },
   ];
   const router = useRouter();
 
-   const handleCategoryClick = (categoryTitle: string) => {
-     // Redirect to the CompaniesSection page with the category title as a query parameter
-     router.push(`/companies?category=${encodeURIComponent(categoryTitle)}`);
-   };
-
+  const handleCategoryClick = (categoryTitle: string) => {
+    // Redirect to the CompaniesSection page with the category title as a query parameter
+    router.push(`/companies?category=${encodeURIComponent(categoryTitle)}`);
+  };
 
   return (
     <VStack className="md:px-12 px-4 gap-4 pt-24 md:pt-0 ">

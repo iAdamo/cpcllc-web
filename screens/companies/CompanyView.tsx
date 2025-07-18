@@ -8,19 +8,14 @@ import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { Text } from "@/components/ui/text";
-import { Divider } from "@/components/ui/divider";
-import Link from "next/link";
 import {
-  Icon,
-  ExternalLinkIcon,
-  PhoneIcon,
   ArrowRightIcon,
   ArrowLeftIcon,
-  GlobeIcon,
   FavouriteIcon,
+  ShareIcon,
 } from "@/components/ui/icon";
 import { setUserFavourites } from "@/axios/users";
-import { CompanyData } from "@/types";
+import { CompanyData, ReviewData } from "@/types";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/context/AuthContext";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -30,10 +25,20 @@ import "swiper/css/pagination";
 import { ReviewModal } from "@/components/Overlays/ReviewModal";
 import { usePathname } from "next/navigation";
 import ReviewSection from "../profile/ReviewSection";
+import { ReviewIcon } from "@/public/assets/icons/reviewIcon";
+import {
+  Avatar,
+  AvatarFallbackText,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import { getInitial } from "@/utils/GetInitials";
+import { Pressable } from "@/components/ui/pressable";
+import ContactInfo from "./ContactInfo";
 
 const CompanyView = (companyData: CompanyData) => {
   const [isFavourite, setIsFavourite] = useState(false);
   const [showWriteReview, setWriteReview] = useState(false);
+  const [newReviews, setNewReviews] = useState<ReviewData[]>([]);
 
   const { userData } = useSession();
   const router = useRouter();
@@ -44,7 +49,6 @@ const CompanyView = (companyData: CompanyData) => {
   useEffect(() => {
     const hasFavourited = companyData?.favoritedBy.includes(userData?.id ?? "");
     setIsFavourite(hasFavourited ?? false);
-
   }, [companyData?.favoritedBy, userData?.id]);
 
   const handleFavourite = async () => {
@@ -85,19 +89,14 @@ const CompanyView = (companyData: CompanyData) => {
   const buttons = [
     {
       name: "Write a Review",
-      icon: FavouriteIcon,
+      icon: ReviewIcon,
       action: () => {
         setWriteReview(true);
       },
     },
     {
       name: "Share",
-      icon: FavouriteIcon,
-      action: () => router.forward(),
-    },
-    {
-      name: "Save",
-      icon: FavouriteIcon,
+      icon: ShareIcon,
       action: () => router.forward(),
     },
     {
@@ -108,20 +107,16 @@ const CompanyView = (companyData: CompanyData) => {
     },
   ];
 
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const maxLength = 38;
-
-  const toggleExpanded = (index: number) => {
-    setExpandedIndex(expandedIndex === index ? null : index);
-  };
-
   return (
     <VStack className={`w-full gap-4 ${isCompanyPage ? "p-10" : "p-4"}`}>
       {ReviewModal({
-        companyId: companyData?.id,
+        companyId: companyData?._id,
         companyName: companyData?.companyName,
         isOpen: showWriteReview,
         onClose: () => setWriteReview(false),
+        setNewReviews(reviews: ReviewData[]) {
+          setNewReviews(reviews);
+        },
       })}
       <VStack className="bg-[#F6F6F6] gap-4">
         <Card className="h-96">
@@ -129,7 +124,7 @@ const CompanyView = (companyData: CompanyData) => {
             <Swiper
               modules={[Autoplay, Pagination]}
               autoplay={{ delay: 4000 }}
-              loop
+              loop={companyData?.companyImages.length > 1} // Enable loop only if there are more than 1 slide
               pagination={{ clickable: true }}
               className="w-full h-full"
             >
@@ -149,59 +144,94 @@ const CompanyView = (companyData: CompanyData) => {
           </VStack>
         </Card>
         <HStack space="xl" className="gap-4 bg-[#F6F6F6]">
-          <VStack className="w-2/3 gap-4 rounded-md bg-white p-4">
-            <VStack space="xs" className="gap-4">
-              <VStack>
-                <Heading
-                  className={`font-extrablack ${
-                    isCompanyPage ? "text-5xl" : "text-4xl"
-                  } break-words`}
+          <VStack
+            className={`${
+              isCompanyPage ? "w-2/3" : "w-full"
+            } gap-4 rounded-md bg-white p-4`}
+          >
+            <VStack className={`${!isCompanyPage && "flex-row"} gap-4`}>
+              <VStack
+                className={`${
+                  !isCompanyPage && "w-2/3"
+                } gap-2 hover:drop-shadow-xl transition-shadow duration-300`}
+              >
+                <Pressable
+                  onPress={() => {
+                    router.push("cpc/" + companyData?._id);
+                  }}
+                  className="flex flex-row items-end gap-2"
                 >
-                  {companyData?.companyName}
-                </Heading>
+                  <Avatar size="md" className="">
+                    <AvatarFallbackText>
+                      {getInitial(
+                        companyData?.companyEmail ||
+                          companyData?.companyName ||
+                          ""
+                      )}
+                    </AvatarFallbackText>
+                    <AvatarImage
+                      source={{ uri: companyData?.companyImages[0] }}
+                    />
+                  </Avatar>
+                  <Heading
+                    className={`font-extrablack ${
+                      isCompanyPage ? "text-5xl" : "text-3xl"
+                    } break-words`}
+                  >
+                    {companyData?.companyName}
+                  </Heading>
+                </Pressable>
+                <Text
+                  size="sm"
+                  className={`${
+                    isCompanyPage ? "md:text-md" : "md:text-sm"
+                  } font-semibold text-typography-600 break-words`}
+                >
+                  {companyData?.companyDescription}
+                </Text>
                 <Heading className="text-text-tertiary">
                   5.0 (226 reviews)
                 </Heading>
                 <Heading className="text-text-tertiary">
                   {companyData?.clients}
                 </Heading>
-              </VStack>
-              <VStack
-                className="flex-row w-3/5 justify-between
-                items-start"
-              >
-                {buttons.map((button, index) => (
-                  <Button
-                    key={index}
-                    variant="link"
-                    onPress={button.action}
-                    className={`${
-                      isFavourite && " companyData-[hover=true]:bg-[#FFFFF70]"
-                    } justify-between `}
-                  >
-                    <ButtonIcon
-                      className={`${
-                        isFavourite &&
-                        "fill-red-500 border-red-500 text-red-500 font-extrabold"
-                      }`}
-                      as={button.icon}
-                    />
-                    <ButtonText
-                      className={`${
-                        !isCompanyPage && "hidden"
-                      } data-[hover=true]:no-underline data-[active=true]:no-underline`}
+                <VStack className="flex-row mt-4 gap-4 w-full">
+                  {buttons.map((button, index) => (
+                    <Button
+                      key={index}
+                      onPress={button.action}
+                      className="justify-between"
                     >
-                      {button.name}
-                    </ButtonText>
-                  </Button>
-                ))}
+                      <ButtonIcon
+                        className={`${
+                          isFavourite &&
+                          "fill-red-500 border-red-500 text-red-500 font-extrabold"
+                        }`}
+                        as={button.icon}
+                      />
+                      <ButtonText
+                        className={`${
+                          !isCompanyPage && "text-xs"
+                        } data-[hover=true]:no-underline data-[active=true]:no-underline`}
+                      >
+                        {button.name}
+                      </ButtonText>
+                    </Button>
+                  ))}
+                </VStack>
               </VStack>
+              {!isCompanyPage && (
+                <ContactInfo
+                  companyData={companyData}
+                  isCompanyPage={isCompanyPage}
+                />
+              )}
             </VStack>
 
             {/* Content Sections */}
             <VStack space="4xl" className="py-6">
               {/* Service Updates */}
-              <VStack space="2xl">
+              <VStack space="2xl" className="mr-40">
                 <Heading size={isCompanyPage ? "lg" : "sm"}>
                   Update from this service provider
                 </Heading>
@@ -220,56 +250,37 @@ const CompanyView = (companyData: CompanyData) => {
                     modules={[Navigation, Pagination]}
                     className="w-full"
                     spaceBetween={10}
-                    slidesPerView={isCompanyPage ? 2.3 : 1.3}
+                    slidesPerView={isCompanyPage ? 1.3 : 1.3}
                     navigation={{
                       nextEl: ".swiper-button-next",
                       prevEl: ".swiper-button-prev",
                     }}
                   >
                     {serviceUpdates.map((item, index) => {
-                      const isLong = item.description.length > maxLength;
-                      const isExpanded = expandedIndex === index;
-                      const shortText =
-                        item.description.slice(0, maxLength) + "...";
-
                       return (
                         <SwiperSlide key={index}>
-                          <Card
-                            variant="outline"
-                            className={`${isExpanded ? "" : "flex-row"} gap-2`}
-                          >
+                          <Card variant="outline" className="flex-row gap-2">
                             <Image
                               className={`object-cover ${
-                                isCompanyPage ? "h-32 w-32 " : "h-24 w-24"
-                              } ${isExpanded ? "w-full" : ""}`}
+                                isCompanyPage ? "h-32 w-32" : "h-28 w-28"
+                              }`}
                               src={item.image}
                               alt="portfolio-image"
                               width={1200}
                               height={1200}
                             />
-                            <VStack
-                              className="h-auto gap-2"
-                            >
+                            <VStack className="h-auto gap-2">
                               <Heading size={isCompanyPage ? "sm" : "xs"}>
                                 {item.name}
                               </Heading>
-                              <Text size={isCompanyPage ? "sm" : "xs"}>
-                                {isExpanded || !isLong
-                                  ? item.description
-                                  : shortText}
+                              <Text
+                                size={isCompanyPage ? "sm" : "xs"}
+                                className={`${
+                                  item.description.length > 80 && "line-clamp-3"
+                                }`}
+                              >
+                                {item.description}
                               </Text>
-                              {isLong && (
-                                <Button
-                                  size="xs"
-                                  variant="link"
-                                  onPress={() => toggleExpanded(index)}
-                                  className="ml-auto p-0 h-0"
-                                >
-                                  <ButtonText>
-                                    {isExpanded ? "Show Less" : "Read More"}
-                                  </ButtonText>
-                                </Button>
-                              )}
                             </VStack>
                           </Card>
                         </SwiperSlide>
@@ -321,108 +332,20 @@ const CompanyView = (companyData: CompanyData) => {
                 </Heading>
               </VStack>
               <VStack className="">
-                <ReviewSection companyId={companyData?._id} />
+                <ReviewSection
+                  companyId={companyData?._id}
+                  newReviews={newReviews}
+                />
               </VStack>
             </VStack>
           </VStack>
-
-          {/* RIGHT SIDE */}
-          <VStack className="w-1/3 sticky top-32 self-start h-fit gap-4 bg-[#F6F6F6]">
-            <VStack className="hidden bg-white p-4 gap-4">
-              <Heading className="text-xl font-extrablack">
-                Request quote & availability
-              </Heading>
-              <div className="flex flex-row gap-10">
-                <VStack>
-                  <Heading className="text-xs text-text-secondary">
-                    Response time
-                  </Heading>
-                  <Heading className="text-sm text-green-700">
-                    10 minutes
-                  </Heading>
-                </VStack>
-                <VStack>
-                  <Heading className="text-xs text-text-secondary">
-                    Response rate
-                  </Heading>
-                  <Heading className="text-sm text-green-700">100%</Heading>
-                </VStack>
-              </div>
-              <Button
-                onPress={() => router.push("/service/request-quote")}
-                className="bg-blue-600 companyData-[hover=true]:bg-blue-500"
-              >
-                <ButtonText className="text-md">
-                  Request quote & availability
-                </ButtonText>
-              </Button>
-              <small className="text-center text-text-secondary">
-                107 locals recently requested a quote
-              </small>
-            </VStack>
-
-            {/* Contact Card */}
-            <Card className="bg-white p-4 gap-4">
-              <div className="flex flex-row justify-between">
-                <Link
-                  href={`mailto:${companyData?.companyEmail}`}
-                  className={`font-extrablack ${
-                    isCompanyPage ? "text-md" : "text-sm"
-                  } text-cyan-700 w-11/12 break-words`}
-                >
-                  {companyData?.companyEmail || "No email provided"}
-                </Link>
-                <Icon as={ExternalLinkIcon} />
-              </div>
-              <Divider />
-
-              <div className="flex flex-row justify-between">
-                <Link
-                  href={`https://${companyData?.website || "google.com"}`}
-                  className={`font-extrablack ${
-                    isCompanyPage ? "text-md" : "text-sm"
-                  } text-cyan-700 w-11/12 break-words`}
-                >
-                  {companyData?.website || "google.com"}
-                </Link>
-                <Icon as={GlobeIcon} />
-              </div>
-
-              <Divider />
-
-              <div className="flex flex-row justify-between">
-                <Text
-                  className={`font-extrablack ${
-                    isCompanyPage ? "text-md" : "text-sm"
-                  } text-cyan-700 w-11/12 break-words`}
-                >
-                  {companyData?.companyPhoneNumber ||
-                    "No phone number provided"}
-                </Text>
-                <Icon as={PhoneIcon} />
-              </div>
-              <Divider className={`${isCompanyPage ? "flex" : "hidden"}`} />
-
-              <div
-                className={`${
-                  isCompanyPage ? "flex" : "hidden"
-                } flex-row justify-between`}
-              >
-                <div className="w-11/12">
-                  <Link
-                    href="#"
-                    className="font-extrablack text-md text-cyan-700  break-words"
-                  >
-                    Get Directions
-                  </Link>
-                  <p className="font-semibold text- text-text-secondary break-words">
-                    {companyData?.location?.primary?.address?.address}
-                  </p>
-                </div>
-                <Icon as={GlobeIcon} className="" />
-              </div>
-            </Card>
-          </VStack>
+          {/** Contact Info */}
+          {isCompanyPage && (
+            <ContactInfo
+              companyData={companyData}
+              isCompanyPage={isCompanyPage}
+            />
+          )}
         </HStack>
       </VStack>
     </VStack>

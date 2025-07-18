@@ -22,4 +22,10 @@ export { default as pestcontrol } from "./pestcontrol.svg";
 export { default as roofing } from "./roofing.svg";
 export { default as poolservice } from "./poolservice.svg";
 export { default as solar } from "./solar.svg";
+export { default as moving } from "./moving.svg";
+export { default as security } from "./security.svg";
+export { default as appliance_repair } from "./appliance-repair.svg";
+export { default as capentry } from "./capentry.svg";
+export { default as flooring } from "./flooring.svg";
+export { default as handyman } from "./handyman.svg";
 

@@ -26,6 +26,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Toast, useToast, ToastTitle } from "@/components/ui/toast";
+import { format } from "date-fns";
 
 interface RenderProps {
   id: string;
@@ -162,21 +163,8 @@ const ProfilePage = () => {
       </div>
     );
 
-  const date = new Date(data.createdAt);
-  const companyDate = new Date(data.activeRoleId?.createdAt || 0);
-  const formattedCompanyDate = companyDate.toLocaleDateString(undefined, {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-  const formattedDate = date.toLocaleDateString(undefined, {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-
   return (
-    <VStack className="mt-40">
+    <VStack className="mt-28">
       <Image
         src="/assets/header10.jpg"
         alt="cover-image"
@@ -186,123 +174,128 @@ const ProfilePage = () => {
         priority
       />
       <VStack className="mb-40 md:mb-0 h-full md:px-20 gap-8 md:-mt-4">
-        <Card variant="outline" className="flex flex-row p-0 bg-white">
-          <VStack className="md:w-3/4 border-r">
-            {data?.activeRoleId?._id && showCompanyProfile ? (
-              <>
-                <VStack>
-                  <VStack className="md:flex-row h-full justify-between md:p-4">
-                    <VStack className="md:flex-row md:gap-10">
-                      <Card className="md:border md:p-4 p-0 md:-mt-8 bg-white">
-                        <Swiper
-                          modules={[Autoplay, Pagination]}
-                          autoplay={{ delay: 4000 }}
-                          loop
-                          pagination={{ clickable: true }}
-                          className="md:hidden h-56 w-full rounded-lg"
-                        >
-                          {data?.activeRoleId?.companyImages.map(
-                            (src, index) => (
-                              <SwiperSlide key={index}>
-                                <Image
-                                  className="object-cover w-full h-full rounded-lg"
-                                  src={src}
-                                  alt={`slide-${index}`}
-                                  width={1920}
-                                  height={1080}
-                                  priority
-                                />
-                              </SwiperSlide>
-                            )
-                          )}
-                        </Swiper>
-                        <Image
-                          className="hidden md:flex object-cover h-56 w-56"
-                          src={
-                            data?.activeRoleId?.companyImages[0] ||
-                            "/assets/default-profile.jpg"
-                          }
-                          alt={data?.activeRoleId?.companyName}
-                          width={1200}
-                          height={1200}
-                        />
-                      </Card>
-                      <VStack className="hidden md:flex">
-                        <Text>No user information to display.</Text>
-                      </VStack>
-                      {/**Mobile */}
-                      <HStack className="md:hidden p-4 justify-between w-full">
-                        <VStack className="gap-1 w-3/4">
-                          <Heading className="mb-2" size="md">
-                            {data?.activeRoleId?.companyName}
-                          </Heading>
-                          <Text size="sm">
-                            {
-                              data?.activeRoleId?.location?.primary?.address
-                                ?.country
+        <VStack className="md:flex-row w-full gap-8">
+          <VStack className="md:w-3/4 gap-8">
+            <Card variant="outline" className="flex-row p-0 bg-white">
+              {data?.activeRoleId?._id && showCompanyProfile ? (
+                <VStack className="w-full">
+                  <VStack>
+                    <VStack className="md:flex-row h-full justify-between md:p-4">
+                      <VStack className="md:flex-row md:gap-10">
+                        <Card className="md:border md:p-4 p-0 md:-mt-8 bg-white">
+                          <Swiper
+                            modules={[Autoplay, Pagination]}
+                            autoplay={{ delay: 4000 }}
+                            loop
+                            pagination={{ clickable: true }}
+                            className="md:hidden h-56 w-full rounded-lg"
+                          >
+                            {data?.activeRoleId?.companyImages.map(
+                              (src, index) => (
+                                <SwiperSlide key={index}>
+                                  <Image
+                                    className="object-cover w-full h-full rounded-lg"
+                                    src={src}
+                                    alt={`slide-${index}`}
+                                    width={1920}
+                                    height={1080}
+                                    priority
+                                  />
+                                </SwiperSlide>
+                              )
+                            )}
+                          </Swiper>
+                          <Image
+                            className="hidden md:flex object-cover h-56 w-56"
+                            src={
+                              data?.activeRoleId?.companyImages[0] ||
+                              "/assets/default-profile.jpg"
                             }
-                          </Text>
-                          <Text size="sm">
-                            Registered on the {formattedCompanyDate}
-                          </Text>
-                          <Text size="sm">Online</Text>
+                            alt={data?.activeRoleId?.companyName}
+                            width={1200}
+                            height={1200}
+                          />
+                        </Card>
+                        <VStack className="hidden md:flex">
+                          <Text>No user information to display.</Text>
                         </VStack>
-                        <Button
-                          size="xs"
-                          variant="link"
-                          onPress={() => setShowCompanyProfile(false)}
-                        >
-                          <ButtonText className="text-xs text-btn-primary data-[hover=true]:no-underline data-[active=true]:no-underline">
-                            View User Profile
-                          </ButtonText>
-                        </Button>
-                      </HStack>
+                        {/**Mobile */}
+                        <HStack className="md:hidden p-4 justify-between w-full">
+                          <VStack className="gap-1 w-3/4">
+                            <Heading className="mb-2" size="md">
+                              {data?.activeRoleId?.companyName}
+                            </Heading>
+                            <Text size="sm">
+                              {
+                                data?.activeRoleId?.location?.primary?.address
+                                  ?.country
+                              }
+                            </Text>
+                            <Text size="sm">
+                              Registered on the{" "}
+                              {format(new Date(data?.createdAt), "MMM d, yyyy")}
+                            </Text>
+                            <Text size="sm">Online</Text>
+                          </VStack>
+                          <Button
+                            size="xs"
+                            variant="link"
+                            onPress={() => setShowCompanyProfile(false)}
+                          >
+                            <ButtonText className="text-xs text-btn-primary data-[hover=true]:no-underline data-[active=true]:no-underline">
+                              View User Profile
+                            </ButtonText>
+                          </Button>
+                        </HStack>
+                      </VStack>
+                      <Button
+                        variant="link"
+                        size="xl"
+                        onPress={() => setIsFavourite((prev) => !prev)}
+                        className="hidden md:flex"
+                        isDisabled={isUploading}
+                      >
+                        <ButtonIcon
+                          className={`w-8 h-8 ${
+                            isFavourite && "text-red-500 fill-red-500"
+                          }`}
+                          as={FavouriteIcon}
+                        />
+                      </Button>
+                    </VStack>
+                  </VStack>
+
+                  <HStack className="hidden md:flex justify-between px-4 items-end">
+                    <VStack className="gap-1">
+                      <Heading className="mb-2" size="sm">
+                        {data?.activeRoleId?.companyName}
+                      </Heading>
+                      <Text size="sm">
+                        {
+                          data?.activeRoleId?.location?.primary?.address
+                            ?.country
+                        }
+                      </Text>
+                      <Text size="sm">
+                        Registered on the{" "}
+                        {format(new Date(data?.createdAt), "MMM d, yyyy")}
+                      </Text>
+                      <Text size="sm">Online</Text>
                     </VStack>
                     <Button
+                      size="xs"
                       variant="link"
-                      size="xl"
-                      onPress={() => setIsFavourite((prev) => !prev)}
-                      className="hidden md:flex"
+                      onPress={() => setShowCompanyProfile(false)}
                       isDisabled={isUploading}
                     >
-                      <ButtonIcon
-                        className={`w-8 h-8 ${
-                          isFavourite && "text-red-500 fill-red-500"
-                        }`}
-                        as={FavouriteIcon}
-                      />
+                      <ButtonText className="text-btn-primary data-[hover=true]:no-underline data-[active=true]:no-underline">
+                        VIEW USER PROFILE
+                      </ButtonText>
                     </Button>
-                  </VStack>
+                  </HStack>
                 </VStack>
-
-                <HStack className="hidden md:flex justify-between px-4 items-end">
-                  <VStack className="gap-1">
-                    <Heading className="mb-2" size="sm">
-                      {data?.activeRoleId?.companyName}
-                    </Heading>
-                    <Text size="sm">
-                      {data?.activeRoleId?.location?.primary?.address?.country}
-                    </Text>
-                    <Text size="sm">
-                      Registered on the {formattedCompanyDate}
-                    </Text>
-                    <Text size="sm">Online</Text>
-                  </VStack>
-                  <Button
-                    size="xs"
-                    variant="link"
-                    onPress={() => setShowCompanyProfile(false)}
-                    isDisabled={isUploading}
-                  >
-                    <ButtonText className="text-btn-primary data-[hover=true]:no-underline data-[active=true]:no-underline">
-                      VIEW USER PROFILE
-                    </ButtonText>
-                  </Button>
-                </HStack>
-              </>
-            ) : (
-              <VStack className="border">
-                <VStack>
+              ) : (
+                <VStack className="w-full">
                   <HStack className="h-full justify-between p-4">
                     <HStack className="gap-10">
                       <Card className="md:p-4 p-0 -mt-8 bg-white">
@@ -471,47 +464,60 @@ const ProfilePage = () => {
                       />
                     </Button>
                   </HStack>
+                  <HStack className="justify-between px-4 items-end">
+                    <VStack className="gap-1">
+                      <Heading className="mb-2" size="sm">
+                        {data?.firstName} {data?.lastName}
+                      </Heading>
+                      <Text size="sm">
+                        {
+                          data?.activeRoleId?.location?.primary?.address
+                            ?.country
+                        }
+                      </Text>
+                      <Text size="sm">
+                        Joined{" "}
+                        {format(new Date(data?.createdAt), "MMM d, yyyy")}
+                      </Text>
+                      <Text size="sm">Online</Text>
+                    </VStack>
+                    {data.activeRoleId && (
+                      <Button
+                        size="xs"
+                        variant="link"
+                        onPress={() => setShowCompanyProfile(true)}
+                        isDisabled={isUploading}
+                      >
+                        <ButtonText className="text-btn-primary data-[hover=true]:no-underline data-[active=true]:no-underline">
+                          VIEW COMPANY PROFILE
+                        </ButtonText>
+                      </Button>
+                    )}
+                  </HStack>
                 </VStack>
-                <HStack className="justify-between px-4 items-end">
-                  <VStack className="gap-1">
-                    <Heading className="mb-2" size="sm">
-                      {data?.firstName} {data?.lastName}
-                    </Heading>
-                    <Text size="sm">
-                      {data?.activeRoleId?.location?.primary?.address?.country}
-                    </Text>
-                    <Text size="sm">Joined {formattedDate}</Text>
-                    <Text size="sm">Online</Text>
-                  </VStack>
-                  {data.activeRoleId && (
-                    <Button
-                      size="xs"
-                      variant="link"
-                      onPress={() => setShowCompanyProfile(true)}
-                      isDisabled={isUploading}
-                    >
-                      <ButtonText className="text-btn-primary data-[hover=true]:no-underline data-[active=true]:no-underline">
-                        VIEW COMPANY PROFILE
-                      </ButtonText>
-                    </Button>
-                  )}
-                </HStack>
+              )}
+            </Card>
+            {data?.activeRoleId?._id && showCompanyProfile && (
+              <VStack className="w-full gap-4">
+                <ReviewSection companyId={data.activeRoleId._id} />
               </VStack>
             )}
           </VStack>
-          <VStack className="hidden w-1/4 items-center p-4 bg-[#F6F6F6]">
-            <Button className="bg-brand-primary" isDisabled={isUploading}>
+          <VStack className="hidden md:flex w-1/4 items-center p-4 bg-[#F6F6F6]">
+            <Button
+              className="hidden bg-brand-primary"
+              isDisabled={isUploading}
+            >
               <ButtonIcon as={SettingsIcon} />
               <ButtonText>Account Settings</ButtonText>
             </Button>
+            {data?.activeRoleId?._id && showCompanyProfile && (
+              <VStack className="w-full gap-4">
+                <ServiceSection companyId={data.activeRoleId._id} />
+              </VStack>
+            )}
           </VStack>
-        </Card>
-        {data?.activeRoleId?._id && showCompanyProfile && (
-          <VStack className="w-full gap-4">
-            <ServiceSection companyId={data.activeRoleId._id} />
-            <ReviewSection companyId={data.activeRoleId._id} />
-          </VStack>
-        )}
+        </VStack>
       </VStack>
     </VStack>
   );

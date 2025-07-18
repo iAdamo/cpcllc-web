@@ -123,7 +123,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
               );
             },
           });
-          setShowVerifyEmailModal(true);
         }
       } catch (error) {
         setValidated({ emailValid: false, passwordValid: false });
@@ -378,7 +377,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
               email: getValues("email"),
               password: getValues("password"),
             });
-            router.push("/companies");
           }}
           isVerified={true}
         />

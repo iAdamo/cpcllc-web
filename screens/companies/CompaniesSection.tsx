@@ -135,7 +135,7 @@ const CompaniesSection = () => {
       </div>
       <VStack className="md:flex-row bg-[#F6F6F6]">
         {/* Sidebar List */}
-        <VStack className="w-1/3 sticky top-32 mt-4 self-start h-fit gap-4">
+        <VStack className="w-1/3 sticky top-32 my-4 self-start h-fit gap-4">
           <Card
             variant="filled"
             className="overflow-y-auto bg-white min-h-0 max-h-[1500px] p-2"

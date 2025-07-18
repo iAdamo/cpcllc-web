@@ -3,25 +3,37 @@ import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
-import { Button, ButtonText } from "@/components/ui/button";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { HStack } from "@/components/ui/hstack";
+import { Button, ButtonText } from "@/components/ui/button";
 import {
   Avatar,
   AvatarFallbackText,
   AvatarImage,
 } from "@/components/ui/avatar";
 import { getReviews } from "@/axios/reviews";
-import { CompanyData, ReviewData } from "@/types";
+import { ReviewData } from "@/types";
 import { getInitial } from "@/utils/GetInitials";
 import { Pressable } from "@/components/ui/pressable";
-import { ReviewModal } from "@/components/Overlays/ReviewModal";
+import { Star, StarHalf } from "lucide-react";
+import { format } from "date-fns";
+import ReviewInfoModal from "@/components/Overlays/ReviewInfoModal";
 
-const ReviewSection = ({ companyId }: { companyId: string }) => {
+const ReviewSection = ({
+  companyId,
+  newReviews,
+}: {
+  companyId: string;
+  newReviews?: ReviewData[];
+}) => {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
-
-  const router = useRouter();
+  const [visibleReviews, setVisibleReviews] = useState<number>(3);
+  const [reviewInfoModal, setReviewInfoModal] = useState<{
+    isOpen: boolean;
+    review?: ReviewData;
+  }>({
+    isOpen: false,
+    review: undefined,
+  });
 
   useEffect(() => {
     const handleReview = async () => {
@@ -32,44 +44,140 @@ const ReviewSection = ({ companyId }: { companyId: string }) => {
         console.error("Error fetching reviews:", error);
       }
     };
+    if (newReviews && newReviews.length > 0) {
+      setReviews((prev) => [...newReviews, ...prev]);
+    } else {
+      handleReview();
+    }
+  }, [companyId, newReviews]);
 
-    handleReview();
-  }, [companyId]);
+  const renderStars = (rating: number) => {
+    const stars: JSX.Element[] = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
 
+    for (let i = 1; i <= 5; i++) {
+      if (i <= fullStars) {
+        stars.push(<Star key={i} size={16} fill="#FFD700" color="#FFD700" />);
+      } else if (i === fullStars + 1 && hasHalfStar) {
+        stars.push(
+          <StarHalf key={i} size={16} fill="#FFD700" color="#FFD700" />
+        );
+      } else {
+        stars.push(<Star key={i} size={16} fill="#D1D5DB" color="#D1D5DB" />);
+      }
+    }
+
+    return stars;
+  };
+
+  const loadMoreReviews = () => {
+    setVisibleReviews((prev) => prev + 3); // Show 3 more reviews
+  };
+
+  function showLessReviews(): void {
+    setVisibleReviews((prev) => Math.max(prev - 3, 3)); // Ensure at least 3 reviews are visible
+  }
   return (
-    <VStack className="gap-4">
-      <Heading className="text-text-tertiary">Reviews</Heading>
-      {reviews.map((review, index) => (
-        <Pressable key={index}>
-          <Card variant="outline" className="gap-2">
-            <HStack className="gap-4 items-center">
-              <Avatar className="w-10 h-10">
-                <AvatarFallbackText>
-                  {getInitial(review.user?.firstName || review.user?.email)}
-                </AvatarFallbackText>
-                <AvatarImage
-                  source={{ uri: review.user?.profilePicture || "" }}
-                />
-              </Avatar>
-              <Heading size="xs" className="font-bold">
-                {review.user?.firstName && review.user?.lastName
-                  ? `${review.user?.firstName} ${review.user?.lastName}`
-                  : "Anonymous User"}
-              </Heading>
-            </HStack>
-            <Text className="text-sm text-text-secondary">
-              {review.description.length > 80
-                ? `${review.description.substring(0, 80)}...`
-                : review.description}
-            </Text>
-            <HStack className="justify-between mt-2">
-              <Text className="text-yellow-500">
-                Rating: {review.rating} ⭐
-              </Text>
-            </HStack>
-          </Card>
-        </Pressable>
-      ))}
+    <VStack className="gap-6">
+      <Heading className="text-xl font-bold text-brand-primary">
+        Reviews
+      </Heading>
+
+      {reviews.length === 0 ? (
+        <Text className="text-gray-500">
+          No reviews yet. Be the first to review!
+        </Text>
+      ) : (
+        <VStack className="gap-4">
+          {reviewInfoModal.review && (
+            <ReviewInfoModal
+              isOpen={reviewInfoModal.isOpen}
+              onClose={() =>
+                setReviewInfoModal({ isOpen: false, review: undefined })
+              }
+              review={reviewInfoModal.review}
+            />
+          )}
+          {reviews.slice(0, visibleReviews).map((review) => (
+            <Pressable
+              key={review._id}
+              className="hover:bg-gray-50 transition-colors duration-200"
+              onPress={() => {
+                // open the id of the review in a modal
+                setReviewInfoModal({
+                  isOpen: true,
+                  review: review,
+                });
+              }}
+            >
+              <Card variant="outline" className="">
+                <HStack className="gap-3 items-start">
+                  <Avatar className="w-12 h-12">
+                    <AvatarFallbackText className="text-sm">
+                      {getInitial(review.user?.firstName || review.user?.email)}
+                    </AvatarFallbackText>
+                    <AvatarImage
+                      source={{ uri: review.user?.profilePicture || "" }}
+                    />
+                  </Avatar>
+
+                  <VStack className="flex-1 gap-1">
+                    <HStack className="justify-between items-start">
+                      <VStack>
+                        <Heading
+                          size="sm"
+                          className="font-semibold text-gray-800"
+                        >
+                          {review.user?.firstName && review.user?.lastName
+                            ? `${review.user.firstName} ${review.user.lastName}`
+                            : "Anonymous User"}
+                        </Heading>
+                        <HStack className="gap-1 items-center">
+                          {renderStars(review.rating)}
+                          <Text className="text-xs text-gray-500 ml-1">
+                            {review.rating?.toFixed(1)}
+                          </Text>
+                        </HStack>
+                      </VStack>
+                      <Text className="text-xs text-gray-400">
+                        {format(new Date(review.createdAt), "MMM d, yyyy")}
+                      </Text>
+                    </HStack>
+                    <Text
+                      className={`text-sm text-gray-600 ${
+                        review.description.length > 80 && "line-clamp-3"
+                      }`}
+                    >
+                      {review.description}
+                    </Text>
+                    {review.images && review.images.length > 0 && (
+                      <Text className="text-sm text-gray-500">
+                        {review.images.length} image
+                        {review.images.length > 1 ? "s" : ""}
+                      </Text>
+                    )}
+                  </VStack>
+                </HStack>
+              </Card>
+            </Pressable>
+          ))}
+
+          <HStack className="self-end gap-4">
+            {visibleReviews < reviews.length && (
+              <Button variant="outline" size="xs" onPress={loadMoreReviews}>
+                <ButtonText>More</ButtonText>
+              </Button>
+            )}
+
+            {visibleReviews > 3 && (
+              <Button variant="outline" size="xs" onPress={showLessReviews}>
+                <ButtonText>Less</ButtonText>
+              </Button>
+            )}
+          </HStack>
+        </VStack>
+      )}
     </VStack>
   );
 };
