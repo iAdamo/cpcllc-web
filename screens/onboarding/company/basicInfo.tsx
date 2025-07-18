@@ -150,7 +150,7 @@ const BasicInfo = () => {
   });
 
   return (
-    <VStack className="w-full mx-10 my-auto">
+    <VStack className="w-full h-full px-4 my-10">
       <HStack className="gap-4">
         <VStack className="w-1/2 gap-6">
           <HStack className="justify-between">
@@ -229,7 +229,7 @@ const BasicInfo = () => {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input className="">
                   <InputField
-                    placeholder="CompanyCenterLLC"
+                    placeholder="Your Company Name"
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -337,7 +337,7 @@ const BasicInfo = () => {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Textarea className="h-20">
                   <TextareaInput
-                    placeholder="Company Description"
+                    placeholder="Describe your company and its services"
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -431,11 +431,11 @@ const BasicInfo = () => {
           {/**Company Images */}
           <FormControl
             isInvalid={selectedImages.length === 0 || !!errors.companyImages}
-            className="border border-gray-300 rounded-xl p-4"
+            className="border border-gray-300 rounded-xl p-4 gap-4"
           >
             <Heading size="md">Professional Company Images</Heading>
             <FormControlLabel className="flex-col flex items-start">
-              <FormControlLabelText className="text-md font-medium bg-green-200 p-1 rounded-lg">
+              <FormControlLabelText className="text-md font-medium bg-green-200 p-2 rounded">
                 Upload up to 6 professional company images (.jpg or .png) that
                 showcase your company. Ensure each image is under 10MB.{" "}
                 <span className="text-red-500">

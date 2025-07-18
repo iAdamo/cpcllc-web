@@ -28,29 +28,30 @@ const Onboarding = () => {
       {currentStep === 1 ? (
         <PageOne />
       ) : (
-        <VStack className="w-full h-screen">
-          <HStack className="hidden md:flex w-full h-full bg-white">
-            <VStack className="bg-brand-primary h-full w-1/5">
-              <Button
-                variant="link"
-                className="mt-4 justify-start"
-                onPress={() => router.replace("/")}
-              >
-                <ButtonText
-                  size="lg"
-                  className="text-white data-[hover=true]:no-underline data-[hover=true]:text-white data-[activer=true]:no-underline"
-                >
-                  CompanyCenterLLC
-                </ButtonText>
-              </Button>
-            </VStack>
-            {currentStep === 2 && <BasicInfo />}
-            {currentStep === 3 && <ServicesInfo />}
-            {currentStep === 4 && <LocationBoard />}
-            {currentStep === 5 && <FinalStep />}
-          </HStack>
-          <OpenInApp />
-        </VStack>
+        <VStack className="w-full min-h-screen">
+  <HStack className="hidden md:flex w-full bg-white flex-1">
+    {/* Sidebar - Fixed width, independent height */}
+    <VStack className="bg-brand-primary w-1/6 min-h-full">
+      <Button
+        className="bg-brand-primary data-[hover=true]:bg-brand-primary data-[active=true]:bg-brand-primary mt-4"
+        onPress={() => router.replace("/")}
+      >
+        <ButtonText size="lg" className="text-white">
+          CompanyCenterLLC
+        </ButtonText>
+      </Button>
+    </VStack>
+
+    {/* Content Area - Flexible width, independent height */}
+    <VStack className="flex-1 overflow-auto">
+      {currentStep === 3 && <BasicInfo />}
+      {currentStep === 2 && <ServicesInfo />}
+      {currentStep === 4 && <LocationBoard />}
+      {currentStep === 5 && <FinalStep />}
+    </VStack>
+  </HStack>
+  <OpenInApp />
+</VStack>
       )}
     </section>
   );

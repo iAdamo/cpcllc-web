@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
@@ -13,6 +13,8 @@ interface SelectedSubcategory extends Subcategory {
   categoryName: string;
 }
 
+const MAX_SERVICES = 5;
+
 const ServicesInfo = () => {
   const { prevStep, nextStep, data, setData, categories } = useOnboarding();
   const [selectedServices, setSelectedSubcategory] = useState<
@@ -20,21 +22,28 @@ const ServicesInfo = () => {
   >((data.subcategories as SelectedSubcategory[]) || []);
   const [availableCategories, setAvailableCategories] = useState<
     ServiceCategory[]
-  >([
-    ...((data.availableCategories as ServiceCategory[]) ||
+  >(
+    (data.availableCategories as ServiceCategory[]) ||
       categories.map((category) => ({
         ...category,
         subcategories: category.subcategories.filter(
-          (subcategory) =>
+          (subcategory: Subcategory) =>
             !selectedServices.some((selected) => selected.id === subcategory.id)
         ),
-      }))),
-  ]);
+      }))
+  );
+  const [selectionLimitReached, setSelectionLimitReached] = useState(false);
+
+  useEffect(() => {
+    setSelectionLimitReached(selectedServices.length >= MAX_SERVICES);
+  }, [selectedServices]);
 
   const handleSelectSubcategory = (
     subcategory: Subcategory,
     categoryName: string
   ): void => {
+    if (selectedServices.length >= MAX_SERVICES) return;
+
     const subcategoryId = subcategory.id;
 
     // Remove from available
@@ -89,16 +98,30 @@ const ServicesInfo = () => {
   };
 
   return (
-    <VStack className="w-full h-screen bg-white p-8 gap-8">
+    <VStack className="w-full h-full bg-white p-8 gap-8">
       <VStack space="3xl">
-        <Heading size="2xl" className="text-center">
-          Choose Specialized Company Services
-        </Heading>
-        <Text className="text-gray-600 text-sm text-center">
-          Selecting specialized services helps us better understand your
-          company&apos;s expertise and ensures that customers can easily find
-          and connect with you for the services you offer.
-        </Text>
+        <VStack className="items-center gap-2">
+          <Heading size="2xl" className="text-center">
+            Choose Specialized Company Services
+          </Heading>
+          <Text className="text-gray-600 text-sm text-center max-w-2xl mx-auto">
+            Select up to {MAX_SERVICES} specialized services that best represent
+            your company&apos;s expertise.
+            {selectedServices.length > 0 && (
+              <Text className="text-primary-500 font-medium">
+                {" "}
+                ({selectedServices.length}/{MAX_SERVICES} selected)
+              </Text>
+            )}
+          </Text>
+          {selectionLimitReached && (
+            <Text className="text-sm text-red-500">
+              You&apos;ve reached the maximum selection limit. Remove some
+              services to add others.
+            </Text>
+          )}
+        </VStack>
+
         <VStack className="flex-row h-full gap-4">
           {/* Available Services */}
           <VStack
@@ -123,13 +146,19 @@ const ServicesInfo = () => {
                             key={subcategoryIndex}
                             variant="outline"
                             size="xs"
-                            className="data-[hover=true]:bg-[#F6F6F6] rounded-3xl"
+                            className={`rounded-3xl ${
+                              selectionLimitReached
+                                ? "opacity-50 cursor-not-allowed"
+                                : "data-[hover=true]:bg-[#F6F6F6]"
+                            }`}
                             onPress={() =>
+                              !selectionLimitReached &&
                               handleSelectSubcategory(
                                 subcategory,
                                 category.name
                               )
                             }
+                            disabled={selectionLimitReached}
                           >
                             <ButtonIcon as={CheckIcon} />
                             <ButtonText>{subcategory.name}</ButtonText>
@@ -146,6 +175,7 @@ const ServicesInfo = () => {
               </VStack>
             ))}
           </VStack>
+
           {/* Selected Services */}
           {selectedServices.length > 0 && (
             <VStack className="w-3/5 h-full">
@@ -170,6 +200,7 @@ const ServicesInfo = () => {
           )}
         </VStack>
       </VStack>
+
       <HStack className="ml-auto gap-8 mt-auto">
         <Button variant="outline" onPress={prevStep}>
           <ButtonText>Back</ButtonText>
@@ -178,7 +209,9 @@ const ServicesInfo = () => {
           onPress={nextStep}
           disabled={selectedServices.length === 0}
           className={`${
-            selectedServices.length === 0 && "bg-gray-300 cursor-not-allowed"
+            selectedServices.length === 0
+              ? "bg-gray-300 cursor-not-allowed"
+              : ""
           }`}
         >
           <ButtonText>Continue</ButtonText>
