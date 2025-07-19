@@ -30,10 +30,6 @@ export const userProfile = async (id: string): Promise<UserData> => {
   return response.data;
 };
 
-export const companyProfile = async (id: string): Promise<CompanyData> => {
-  const response = await axiosInstance.get(`users/${id}`);
-  return response.data;
-};
 
 export const getUsers = async (
   page: number,

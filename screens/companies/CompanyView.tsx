@@ -34,6 +34,7 @@ import {
 import { getInitial } from "@/utils/GetInitials";
 import { Pressable } from "@/components/ui/pressable";
 import ContactInfo from "./ContactInfo";
+import renderStars from "@/components/RenderStars";
 
 const CompanyView = (companyData: CompanyData) => {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -157,7 +158,7 @@ const CompanyView = (companyData: CompanyData) => {
               >
                 <Pressable
                   onPress={() => {
-                    router.push("cpc/" + companyData?._id);
+                    router.push(`/cpc/${companyData?._id}`);
                   }}
                   className="flex flex-row items-end gap-2"
                 >
@@ -189,9 +190,17 @@ const CompanyView = (companyData: CompanyData) => {
                 >
                   {companyData?.companyDescription}
                 </Text>
-                <Heading className="text-text-tertiary">
-                  5.0 (226 reviews)
-                </Heading>
+                <HStack className="gap-2 items-center">
+                  <HStack className="gap-1 items-center">
+                    {renderStars(companyData?.averageRating)}
+                    <Heading className="text-md text-gray-500">
+                      {companyData?.averageRating.toFixed(1)}
+                    </Heading>
+                  </HStack>
+                  <Heading className="text-md text-gray-500">
+                    ({companyData?.reviewCount} reviews)
+                  </Heading>
+                </HStack>
                 <Heading className="text-text-tertiary">
                   {companyData?.clients}
                 </Heading>

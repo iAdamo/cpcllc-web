@@ -24,7 +24,7 @@ const NavBar = () => {
   const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
 
-  const { session, userData } = useSession();
+  const { session, userData, logout, setUserData } = useSession();
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -209,13 +209,16 @@ const NavBar = () => {
             <DrawerBackdrop className="bg-transparent" />
             <DrawerContent className="h-screen mt-16 p-2">
               <DrawerBody className="w-full h-full m-0 justify-start">
-                <Button
-                  variant="link"
-                  onPress={() => setIsAuthodalOpen(true)}
-                  className="justify-start"
-                >
-                  <ButtonText className="font-normal">Log In</ButtonText>
-                </Button>
+                {!session && (
+                  <Button
+                    variant="link"
+                    onPress={() => setIsAuthodalOpen(true)}
+                    className="justify-start"
+                  >
+                    <ButtonText className="font-normal">Log In</ButtonText>
+                  </Button>
+                )}
+
                 <Divider orientation="horizontal" className="w-full" />
                 <Button
                   variant="link"
@@ -225,22 +228,50 @@ const NavBar = () => {
                   <ButtonText className="font-normal">Companies</ButtonText>
                 </Button>
                 <Divider orientation="horizontal" className="w-full" />
-                <Button
-                  variant="link"
-                  onPress={() => router.push("/companies")}
-                  className="justify-start"
-                >
-                  <ButtonText className="font-normal">Logout</ButtonText>
-                </Button>
+                {userData && (
+                  <>
+                    <Button
+                      isDisabled={!userData?.activeRoleId}
+                      variant="link"
+                      onPress={() => {
+                        setUserData({
+                          ...userData,
+                          activeRole:
+                            userData?.activeRole === "Client"
+                              ? "Company"
+                              : "Client",
+                        });
+                      }}
+                      className="justify-start"
+                    >
+                      <ButtonText className="font-normal">{`Switch to ${
+                        userData?.activeRole === "Client" ? "Company" : "Client"
+                      }`}</ButtonText>
+                    </Button>
+                    <Divider orientation="horizontal" className="w-full" />
+
+                    <Button
+                      variant="link"
+                      onPress={() => logout()}
+                      className="justify-start"
+                    >
+                      <ButtonText className="font-normal">Logout</ButtonText>
+                    </Button>
+                  </>
+                )}
+
                 <Divider orientation="horizontal" className="w-full" />
-                <Button
-                  onPress={() => router.push("/onboarding")}
-                  className="justify-start bottom-0 mt-96 mx-auto"
-                >
-                  <ButtonText className="font-normal text-start">
-                    Sign Up
-                  </ButtonText>
-                </Button>
+
+                {!session && (
+                  <Button
+                    onPress={() => router.push("/onboarding")}
+                    className="justify-start bottom-0 mt-96 mx-auto"
+                  >
+                    <ButtonText className="font-normal text-start">
+                      Sign Up
+                    </ButtonText>
+                  </Button>
+                )}
               </DrawerBody>
             </DrawerContent>
           </Drawer>

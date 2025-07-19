@@ -15,7 +15,7 @@ import {
   AvatarFallbackText,
   AvatarImage,
 } from "@/components/ui/avatar";
-import { Star, StarHalf } from "lucide-react";
+import renderStars from "@/components/RenderStars";
 import Image from "next/image";
 import { ReviewData } from "@/types";
 import { getInitial } from "@/utils/GetInitials";
@@ -29,25 +29,6 @@ interface ReviewInfoModalProps {
 
 const ReviewInfoModal: React.FC<ReviewInfoModalProps> = (props) => {
   const { isOpen, onClose, review } = props;
-  const renderStars = (rating: number) => {
-    const stars: JSX.Element[] = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-
-    for (let i = 1; i <= 5; i++) {
-      if (i <= fullStars) {
-        stars.push(<Star key={i} size={16} fill="#FFD700" color="#FFD700" />);
-      } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(
-          <StarHalf key={i} size={16} fill="#FFD700" color="#FFD700" />
-        );
-      } else {
-        stars.push(<Star key={i} size={16} fill="#D1D5DB" color="#D1D5DB" />);
-      }
-    }
-
-    return stars;
-  };
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="fixed">
       <ModalBackdrop />

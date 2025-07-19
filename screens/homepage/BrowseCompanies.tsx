@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { VStack } from "@/components/ui/vstack";
-// import { HStack } from "@/components/ui/hstack";
+import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import Link from "next/link";
-// import { star } from "@/public/assets/icons";
 import Image from "next/image";
 import { getCompanies } from "@/axios/users";
 import { CompanyData } from "@/types";
+import renderStars from "@/components/RenderStars";
 
 const BrowseCompanies = () => {
   const [companies, setUsers] = useState<CompanyData[]>([]);
@@ -50,10 +50,7 @@ const BrowseCompanies = () => {
             >
               <Image
                 className="h-32 w-32 rounded-l-md object-cover"
-                src={
-                  company?.companyImages[0] ||
-                  "/assets/placeholder.jpg"
-                }
+                src={company?.companyImages[0] || "/assets/placeholder.jpg"}
                 alt={company?.companyName || "Company Logo"}
                 width={1400}
                 height={600}
@@ -62,6 +59,17 @@ const BrowseCompanies = () => {
                 <Heading size="sm" className="md:text-lg">
                   {company?.companyName}
                 </Heading>
+                <HStack className="gap-2 items-center">
+                  <HStack className="gap-1 items-center">
+                    {renderStars(company?.averageRating)}
+                    <Text className="text-xs text-gray-500">
+                      {company?.averageRating.toFixed(1)}
+                    </Text>
+                  </HStack>
+                  <Text className="text-xs text-gray-500">
+                    ({company?.reviewCount} reviews)
+                  </Text>
+                </HStack>
                 <Text size="sm" className="md:text-md md:font-semibold">
                   {company?.location?.primary?.address?.address}
                 </Text>

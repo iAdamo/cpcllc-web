@@ -36,6 +36,8 @@ export interface CompanyData {
   companyEmail: string;
   companyPhoneNumber: string;
   website: string;
+  reviewCount: number;
+  averageRating: number;
   companyImages: string[];
   services: any[];
   clients: any[];

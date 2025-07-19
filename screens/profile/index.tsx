@@ -164,7 +164,7 @@ const ProfilePage = () => {
     );
 
   return (
-    <VStack className="mt-28">
+    <VStack className="md:mt-28 mt-40">
       <Image
         src="/assets/header10.jpg"
         alt="cover-image"

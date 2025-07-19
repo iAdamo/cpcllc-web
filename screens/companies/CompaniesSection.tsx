@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { VStack } from "@/components/ui/vstack";
+import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { getCompanies, searchCompanies } from "@/axios/users";
@@ -15,6 +16,7 @@ import { useUserLocation } from "@/hooks/useUserLocation";
 import Loader from "@/components/Loader";
 import { useSearchParams } from "next/navigation";
 import { Button, ButtonText } from "@/components/ui/button";
+import renderStars from "@/components/RenderStars";
 
 const CompaniesSection = () => {
   const [companies, setCompanies] = useState<CompanyData[]>([]);
@@ -152,7 +154,7 @@ const CompaniesSection = () => {
               >
                 <Card
                   variant="outline"
-                  className="flex-row w-full p-0 gap-4 bg-white"
+                  className="flex-row w-full p-0 gap-2 bg-white"
                 >
                   <Image
                     className="h-24 w-24 rounded-l-md object-cover"
@@ -163,14 +165,25 @@ const CompaniesSection = () => {
                   />
                   <VStack className="justify-between p-2">
                     <Heading className="text-md">{company.companyName}</Heading>
-                    <Text className="text-xs text-gray-500">
-                      {company.location?.primary?.address?.address.length > 42
-                        ? `${company.location?.primary?.address?.address.substring(
-                            0,
-                            42
-                          )}...`
-                        : company.location?.primary?.address?.address}
+                    <Text
+                      className={`${
+                        company.location?.primary?.address?.address.length >
+                          32 && "line-clamp-2"
+                      } text-xs text-gray-500`}
+                    >
+                      {company.location?.primary?.address?.address}
                     </Text>
+                    <HStack className="gap-2 items-center">
+                      <HStack className="gap-1 items-center">
+                        {renderStars(company?.averageRating)}
+                        <Text className="text-xs text-gray-500">
+                          {company?.averageRating.toFixed(1)}
+                        </Text>
+                      </HStack>
+                      <Text className="text-xs text-gray-500">
+                        ({company?.reviewCount} reviews)
+                      </Text>
+                    </HStack>
                   </VStack>
                 </Card>
               </Pressable>
