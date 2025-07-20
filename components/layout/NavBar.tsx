@@ -222,7 +222,10 @@ const NavBar = () => {
                 <Divider orientation="horizontal" className="w-full" />
                 <Button
                   variant="link"
-                  onPress={() => router.push("/companies")}
+                  onPress={() => {
+                    setShowDrawer(false);
+                    router.push("/companies");
+                  }}
                   className="justify-start"
                 >
                   <ButtonText className="font-normal">Companies</ButtonText>
@@ -241,6 +244,7 @@ const NavBar = () => {
                               ? "Company"
                               : "Client",
                         });
+                        setShowDrawer(false);
                       }}
                       className="justify-start"
                     >
@@ -252,7 +256,10 @@ const NavBar = () => {
 
                     <Button
                       variant="link"
-                      onPress={() => logout()}
+                      onPress={() => {
+                        setShowDrawer(false);
+                        logout();
+                      }}
                       className="justify-start"
                     >
                       <ButtonText className="font-normal">Logout</ButtonText>
@@ -264,7 +271,10 @@ const NavBar = () => {
 
                 {!session && (
                   <Button
-                    onPress={() => router.push("/onboarding")}
+                    onPress={() => {
+                      setShowDrawer(false);
+                      router.push("/onboarding");
+                    }}
                     className="justify-start bottom-0 mt-96 mx-auto"
                   >
                     <ButtonText className="font-normal text-start">

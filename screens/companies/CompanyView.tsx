@@ -25,7 +25,7 @@ import "swiper/css/pagination";
 import { ReviewModal } from "@/components/Overlays/ReviewModal";
 import { usePathname } from "next/navigation";
 import ReviewSection from "../profile/ReviewSection";
-import { ReviewIcon } from "@/public/assets/icons/reviewIcon";
+import { ReviewIcon } from "@/public/assets/icons/customIcons";
 import {
   Avatar,
   AvatarFallbackText,

@@ -63,7 +63,7 @@ const BrowseCompanies = () => {
                   <HStack className="gap-1 items-center">
                     {renderStars(company?.averageRating)}
                     <Text className="text-xs text-gray-500">
-                      {company?.averageRating.toFixed(1)}
+                      {company?.averageRating?.toFixed(1)}
                     </Text>
                   </HStack>
                   <Text className="text-xs text-gray-500">

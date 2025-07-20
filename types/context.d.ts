@@ -1,4 +1,8 @@
-import { ServiceData, ServiceData, Subcategory } from "@/types";
+import {
+  ServiceData,
+  Subcategory,
+  SubcategoryData,
+} from "@/types";
 
 export interface UserData {
   id: string;
@@ -35,7 +39,15 @@ export interface CompanyData {
   companyDescription: string;
   companyEmail: string;
   companyPhoneNumber: string;
+  subcategories: SubcategoryData[];
   website: string;
+  companySocialMedia: {
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    linkedin?: string;
+    other?: string;
+  };
   reviewCount: number;
   averageRating: number;
   companyImages: string[];
