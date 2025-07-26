@@ -49,7 +49,7 @@ const LocationBoard = () => {
   const { prevStep, nextStep, setData, data } = useOnboarding();
   const [isLoadingGeolocation, setIsLoadingGeolocation] = useState(false);
   const [autocompleteInput, setAutocompleteInput] = useState(
-    data.companyAddress || ""
+    data.address || ""
   );
   const [manualAddress, setManualAddress] = useState<string>("");
   const [useManualAddress, setUseManualAddress] = useState(false);
@@ -104,7 +104,7 @@ const LocationBoard = () => {
           setAutocompleteInput(formattedAddress);
           setManualAddress(formattedAddress);
           setData({
-            companyAddress: formattedAddress,
+            address: formattedAddress,
             latitude,
             longitude,
             ...parsedAddress,
@@ -166,7 +166,7 @@ const LocationBoard = () => {
           setAutocompleteInput(address);
           setManualAddress(address);
           setData({
-            companyAddress: address,
+            address: address,
             latitude: lat,
             longitude: lng,
           });
@@ -187,7 +187,7 @@ const LocationBoard = () => {
   const handleManualAddressSubmit = () => {
     if (manualAddress.trim()) {
       setData({
-        companyAddress: manualAddress,
+        address: manualAddress,
         // These can be null as we don't have coordinates for manual entry
         latitude: null,
         longitude: null,
@@ -346,7 +346,7 @@ const LocationBoard = () => {
             </Button>
             <Button
               onPress={nextStep}
-              disabled={!data.companyAddress}
+              disabled={!data.address}
               className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200"
             >
               <ButtonText>Continue</ButtonText>

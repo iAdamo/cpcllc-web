@@ -162,7 +162,7 @@ export interface OnboardingData {
   locationAccuracy?: "exact" | "approximate" | "manual";
   state: string;
   country: string;
-  addresses?: string[];
+  address?: string;
   selectedServices?: {
     category: string;
     subcategories?: string[];

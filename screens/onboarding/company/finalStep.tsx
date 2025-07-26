@@ -21,11 +21,6 @@ const FinalStep = () => {
     try {
       setLoading(true);
       const formData = new FormData();
-      // console.log(data);
-      // get me the local stroge space
-      const localStorageData = localStorage.getItem("onboardingData");
-      console.log("Local Storage Data:", localStorageData);
-
       Object.entries(data).forEach(([key, value]) => {
         if (Array.isArray(value)) {
           if (key === "subcategories") {
@@ -40,11 +35,31 @@ const FinalStep = () => {
           }
         } else if (value instanceof File) {
           formData.append(key, value);
+        } else if (
+          [
+            "latitude",
+            "longitude",
+            "zip",
+            "city",
+            "state",
+            "country",
+            "address",
+          ].includes(key)
+        ) {
+          const locationKeyMap: Record<string, string> = {
+            latitude: "location[primary][coordinates][lat]",
+            longitude: "location[primary][coordinates][long]",
+            zip: "location[primary][address][zip]",
+            city: "location[primary][address][city]",
+            state: "location[primary][address][state]",
+            country: "location[primary][address][country]",
+            address: "location[primary][address][address]",
+          };
+          formData.append(locationKeyMap[key], value as string);
         } else {
-          formData.append(key, value);
+          formData.append(key, value as string);
         }
       });
-
       await registerCompany(formData);
       await fetchUserProfile();
       setSuccess(true);
