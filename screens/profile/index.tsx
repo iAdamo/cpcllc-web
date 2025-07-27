@@ -7,14 +7,12 @@ import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import { Button, ButtonIcon } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import {
   Avatar,
   AvatarFallbackText,
   AvatarImage,
 } from "@/components/ui/avatar";
-import { FavouriteIcon } from "@/components/ui/icon";
 import { useSession } from "@/context/AuthContext";
 import { userProfile, updateCompanyProfile } from "@/axios/users";
 import { UserData, ReviewData } from "@/types";
@@ -39,7 +37,6 @@ const ProfilePage = () => {
   const { userData, fetchUserProfile } = useSession();
   const { id } = useParams();
   const [data, setData] = useState<UserData | null>(null);
-  const [isFavourite, setIsFavourite] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);

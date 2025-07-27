@@ -48,16 +48,30 @@ const ContactInfo = ({
   const isEditingPhone = editingFields.hasOwnProperty("companyPhoneNumber");
   const isEditingEmail = editingFields.hasOwnProperty("companyEmail");
 
+  // Email validation only
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  // Get current values with fallbacks
+  const currentPhone =
+    editingFields.companyPhoneNumber || activeRoleId?.companyPhoneNumber || "";
+  const currentEmail =
+    editingFields.companyEmail || activeRoleId?.companyEmail || "";
+
+  // Only validate email
+  const canSave = !isEditingEmail || isValidEmail(currentEmail);
+
   return (
     <Card variant="filled" className="h-fit flex-row gap-4 p-2 items-start">
       {isEditingPhone || isEditingEmail ? (
-        <VStack className="gap-2">
+        <VStack className="gap-2 w-full">
           {isEditingPhone && (
-            <FormControl className="flex-row items-center gap-2 w-fit z-50">
+            <FormControl className="flex-row items-center gap-2 w-full">
               <Icon as={PhoneIcon} className="text-green-500" />
               <PhoneInput
                 country={"us"}
-                value={editingFields.companyPhoneNumber || ""}
+                value={currentPhone}
                 onChange={(phone) =>
                   handleEditStart({ companyPhoneNumber: phone })
                 }
@@ -68,33 +82,33 @@ const ContactInfo = ({
                 inputStyle={{
                   width: "100%",
                   height: "1.5rem",
-                  zIndex: 1,
-                }}
-                containerStyle={{
-                  position: "relative",
-                  zIndex: 1,
-                }}
-                buttonStyle={{
-                  zIndex: 1,
-                }}
-                dropdownStyle={{
-                  zIndex: 1,
                 }}
               />
             </FormControl>
           )}
           {isEditingEmail && (
-            <FormControl className="flex-row items-center gap-2 w-fit">
+            <FormControl className="flex-row items-center gap-2 w-full">
               <Icon as={MailIcon} className="text-blue-500" />
-              <Input className="h-6">
-                <InputField
-                  value={editingFields.companyEmail || ""}
-                  onChangeText={(text) =>
-                    handleEditStart({ companyEmail: text })
-                  }
-                  autoFocus
-                />
-              </Input>
+              <VStack className="flex-1">
+                <Input className="h-6">
+                  <InputField
+                    value={currentEmail}
+                    onChangeText={(text) =>
+                      handleEditStart({ companyEmail: text })
+                    }
+                    autoFocus={!isEditingPhone}
+                    className={
+                      !isValidEmail(currentEmail) ? "border-red-500" : ""
+                    }
+                    placeholder="example@company.com"
+                  />
+                </Input>
+                {!isValidEmail(currentEmail) && currentEmail && (
+                  <Text size="xs" className="text-red-500">
+                    Please enter a valid email address
+                  </Text>
+                )}
+              </VStack>
             </FormControl>
           )}
           <HStack className="gap-2 self-end">
@@ -102,7 +116,7 @@ const ContactInfo = ({
               variant="link"
               size="md"
               onPress={handleSave}
-              disabled={isSaving}
+              disabled={isSaving || !canSave}
               className="p-0 h-4"
             >
               <ButtonIcon as={CheckIcon} />
@@ -119,19 +133,43 @@ const ContactInfo = ({
         </VStack>
       ) : (
         <>
-          <VStack className="gap-2">
-            <Link className="flex-row gap-2 w-fit">
-              <Icon as={PhoneIcon} className="text-green-500" />
-              <LinkText size="xs" className="font-semibold">
-                {activeRoleId?.companyPhoneNumber}
-              </LinkText>
-            </Link>
-            <Link className="flex-row gap-2">
-              <Icon as={MailIcon} className="text-blue-500" />
-              <LinkText size="xs" className="font-semibold">
-                {activeRoleId?.companyEmail}
-              </LinkText>
-            </Link>
+          <VStack className="gap-2 flex-1">
+            {activeRoleId?.companyPhoneNumber ? (
+              <Link
+                href={`tel:${activeRoleId.companyPhoneNumber}`}
+                className="flex-row gap-2 w-fit"
+              >
+                <Icon as={PhoneIcon} className="text-green-500" />
+                <LinkText size="xs" className="font-semibold">
+                  {activeRoleId.companyPhoneNumber}
+                </LinkText>
+              </Link>
+            ) : (
+              <HStack className="flex-row gap-2 w-fit">
+                <Icon as={PhoneIcon} className="text-green-500" />
+                <Text size="xs" className="text-gray-500 italic">
+                  No phone number
+                </Text>
+              </HStack>
+            )}
+            {activeRoleId?.companyEmail ? (
+              <Link
+                href={`mailto:${activeRoleId.companyEmail}`}
+                className="flex-row gap-2"
+              >
+                <Icon as={MailIcon} className="text-blue-500" />
+                <LinkText size="xs" className="font-semibold">
+                  {activeRoleId.companyEmail}
+                </LinkText>
+              </Link>
+            ) : (
+              <HStack className="flex-row gap-2">
+                <Icon as={MailIcon} className="text-blue-500" />
+                <Text size="xs" className="text-gray-500 italic">
+                  No email address
+                </Text>
+              </HStack>
+            )}
           </VStack>
           {isEditable && (
             <Button

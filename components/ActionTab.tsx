@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { FavouriteIcon, ShareIcon } from "@/components/ui/icon";
 import { setUserFavourites } from "@/axios/users";
 import { UserData, CompanyData, ReviewData } from "@/types";
-import { useRouter } from "next/navigation";
 import { ReviewModal } from "@/components/Overlays/ReviewModal";
 import { ReviewIcon } from "@/public/assets/icons/customIcons";
+import { useSession } from "@/context/AuthContext";
+import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
 
 interface ActionButtonsProps {
   companyData: CompanyData;
@@ -23,8 +24,10 @@ export default function ActionButtons({
 }: ActionButtonsProps) {
   const [isFavourite, setIsFavourite] = useState(false);
   const [showWriteReview, setWriteReview] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const router = useRouter();
+  const { fetchUserProfile } = useSession();
+  const toast = useToast();
 
   useEffect(() => {
     const hasFavourited = companyData?.favoritedBy.includes(userData?.id ?? "");
@@ -32,73 +35,146 @@ export default function ActionButtons({
   }, [companyData?.favoritedBy, userData?.id]);
 
   const handleFavourite = async () => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+
     try {
-      if (!companyData?._id) return;
+      if (companyData?.owner === userData?.id) {
+        showToast("You can't favorite your own company", "error");
+        return;
+      }
 
       const updatedCompany = await setUserFavourites(companyData?._id);
+      await fetchUserProfile();
+
       const hasFavourited = updatedCompany?.favoritedBy.includes(
         userData?.id ?? ""
       );
       setIsFavourite(hasFavourited ?? false);
+
+      showToast(
+        hasFavourited ? "Added to favorites" : "Removed from favorites",
+        "success"
+      );
     } catch (error) {
       console.error("Error toggling favorite:", error);
+      showToast("Failed to update favorites", "error");
+    } finally {
+      setIsProcessing(false);
     }
   };
+
+  const showToast = useCallback(
+    (message: string, type: "error" | "success") => {
+      toast.show({
+        placement: "top",
+        duration: 3000,
+        render: ({ id }) => (
+          <Toast nativeID={id} variant="outline" action={type}>
+            <ToastTitle>{message}</ToastTitle>
+          </Toast>
+        ),
+      });
+    },
+    [toast]
+  );
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: companyData?.companyName,
+          url: window.location.href,
+        })
+        .catch(() => {
+          // Fallback if share fails
+          navigator.clipboard.writeText(window.location.href);
+          showToast("Link copied to clipboard", "success");
+        });
+    } else {
+      // Fallback for browsers without Web Share API
+      navigator.clipboard.writeText(window.location.href);
+      showToast("Link copied to clipboard", "success");
+    }
+  };
+
+  const handleWriteReview = () => {
+    if (!userData) {
+      showToast("Please sign in to write a review", "error");
+      return;
+    }
+    if (companyData?.owner === userData?.id) {
+      showToast("You can't review your own company", "error");
+      return;
+    }
+    setWriteReview(true);
+  };
+
   const buttons = [
     {
       name: "Write a Review",
       icon: ReviewIcon,
-      action: () => {
-        if (companyData?.owner !== userData?.id) {
-          setWriteReview(true);
-        }
-      },
+      action: handleWriteReview,
+      disabled: companyData?.owner === userData?.id,
     },
     {
       name: "Share",
       icon: ShareIcon,
-      action: () => router.forward(),
+      action: handleShare,
+      disabled: false,
     },
     {
-      name: "Favorite",
+      name: isFavourite ? "Favorited" : "Favorite",
       icon: FavouriteIcon,
-      action: () => {
-        if (companyData?.owner !== userData?.id) {
-          handleFavourite();
-        }
-      },
+      action: handleFavourite,
+      disabled: companyData?.owner === userData?.id || isProcessing,
     },
   ];
 
   return (
-    <VStack className="flex-row gap-4 w-fit">
-      {ReviewModal({
-        companyId: companyData?._id,
-        companyName: companyData?.companyName,
-        isOpen: showWriteReview,
-        onClose: () => setWriteReview(false),
-        setNewReviews(reviews: ReviewData[]) {
-          setNewReviews?.(reviews);
-        },
-      })}
-      {buttons.map((button, index) => (
-        <Button key={index} onPress={button.action} className="justify-between">
-          <ButtonIcon
-            className={`${
-              isFavourite &&
-              "fill-red-500 border-red-500 text-red-500 font-extrabold"
-            }`}
-            as={button.icon}
-          />
-          <ButtonText
-            className={`${
-              !isCompanyPage && "text-xs"
-            } data-[hover=true]:no-underline data-[active=true]:no-underline`}
+    <>
+      <VStack className="flex-row gap-4 w-fit">
+        {buttons.map((button, index) => (
+          <Button
+            key={index}
+            onPress={button.action}
+            disabled={button.disabled}
+            className="justify-between"
           >
-            {button.name}
-          </ButtonText>
-        </Button>
-      ))}
-    </VStack>
+            <ButtonIcon
+              className={`
+                ${
+                  isFavourite && button.name.includes("Favorite")
+                    ? "fill-red-500 text-red-500"
+                    : ""
+                }
+                ${button.disabled ? "opacity-50" : ""}
+              `}
+              as={button.icon}
+            />
+            <ButtonText
+              className={`
+                ${!isCompanyPage && "text-xs"}
+                data-[hover=true]:no-underline
+                data-[active=true]:no-underline
+                ${button.disabled ? "opacity-50" : ""}
+              `}
+            >
+              {button.name}
+            </ButtonText>
+          </Button>
+        ))}
+      </VStack>
+
+      <ReviewModal
+        companyId={companyData?._id}
+        companyName={companyData?.companyName}
+        isOpen={showWriteReview}
+        onClose={() => setWriteReview(false)}
+        setNewReviews={(reviews: ReviewData[]) => {
+          setNewReviews?.(reviews);
+        }}
+      />
+    </>
   );
 }

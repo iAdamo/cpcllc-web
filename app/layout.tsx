@@ -25,12 +25,12 @@ export default function RootLayout({
         <StyledJsxRegistry>
           <GluestackUIProvider mode="light">
             <MapProvider>
-            <SessionProvider>
+              <SessionProvider>
                 {!shouldHideLayout && <NavBar />}
                 {children}
                 {!shouldHideLayout && <PreFooter />}
                 {!shouldHideLayout && <Footer />}
-            </SessionProvider>
+              </SessionProvider>
             </MapProvider>
           </GluestackUIProvider>
         </StyledJsxRegistry>
