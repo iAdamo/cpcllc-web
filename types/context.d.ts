@@ -55,7 +55,7 @@ export interface CompanyData {
   clients: any[];
   latitude: number;
   longitude: number;
-  owner?: UserData;
+  owner?: string;
   favoritedBy: string[];
   favoriteCount: number;
   ratings: number;

@@ -1,20 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
-import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
+import { Button, ButtonIcon } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { Text } from "@/components/ui/text";
-import {
-  ArrowRightIcon,
-  ArrowLeftIcon,
-  FavouriteIcon,
-  ShareIcon,
-} from "@/components/ui/icon";
-import { setUserFavourites } from "@/axios/users";
+import { ArrowRightIcon, ArrowLeftIcon } from "@/components/ui/icon";
 import { CompanyData, ReviewData } from "@/types";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/context/AuthContext";
@@ -22,10 +16,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { ReviewModal } from "@/components/Overlays/ReviewModal";
 import { usePathname } from "next/navigation";
 import ReviewSection from "../profile/ReviewSection";
-import { ReviewIcon } from "@/public/assets/icons/customIcons";
 import {
   Avatar,
   AvatarFallbackText,
@@ -35,10 +27,9 @@ import { getInitial } from "@/utils/GetInitials";
 import { Pressable } from "@/components/ui/pressable";
 import ContactInfo from "./ContactInfo";
 import renderStars from "@/components/RenderStars";
+import ActionButtons from "@/components/ActionTab";
 
 const CompanyView = (companyData: CompanyData) => {
-  const [isFavourite, setIsFavourite] = useState(false);
-  const [showWriteReview, setWriteReview] = useState(false);
   const [newReviews, setNewReviews] = useState<ReviewData[]>([]);
 
   const { userData } = useSession();
@@ -46,25 +37,6 @@ const CompanyView = (companyData: CompanyData) => {
   const pathname = usePathname();
 
   const isCompanyPage = /^\/companies\/[^/]+$/.test(pathname);
-
-  useEffect(() => {
-    const hasFavourited = companyData?.favoritedBy.includes(userData?.id ?? "");
-    setIsFavourite(hasFavourited ?? false);
-  }, [companyData?.favoritedBy, userData?.id]);
-
-  const handleFavourite = async () => {
-    try {
-      if (!companyData?._id) return console.error("Company ID is undefined");
-
-      const updatedCompany = await setUserFavourites(companyData?._id);
-      const hasFavourited = updatedCompany?.favoritedBy.includes(
-        userData?.id ?? ""
-      );
-      setIsFavourite(hasFavourited ?? false);
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-    }
-  };
 
   const serviceUpdates = [
     {
@@ -87,38 +59,8 @@ const CompanyView = (companyData: CompanyData) => {
     },
   ];
 
-  const buttons = [
-    {
-      name: "Write a Review",
-      icon: ReviewIcon,
-      action: () => {
-        setWriteReview(true);
-      },
-    },
-    {
-      name: "Share",
-      icon: ShareIcon,
-      action: () => router.forward(),
-    },
-    {
-      name: "Favorite",
-
-      icon: FavouriteIcon,
-      action: handleFavourite,
-    },
-  ];
-
   return (
     <VStack className={`w-full gap-4 ${isCompanyPage ? "p-10" : "p-4"}`}>
-      {ReviewModal({
-        companyId: companyData?._id,
-        companyName: companyData?.companyName,
-        isOpen: showWriteReview,
-        onClose: () => setWriteReview(false),
-        setNewReviews(reviews: ReviewData[]) {
-          setNewReviews(reviews);
-        },
-      })}
       <VStack className="bg-[#F6F6F6] gap-4">
         <Card className="h-96">
           <VStack className="">
@@ -158,7 +100,7 @@ const CompanyView = (companyData: CompanyData) => {
               >
                 <Pressable
                   onPress={() => {
-                    router.push(`/cpc/${companyData?._id}`);
+                    router.push(`/cpc/${userData?.id}`);
                   }}
                   className="flex flex-row items-end gap-2"
                 >
@@ -186,7 +128,7 @@ const CompanyView = (companyData: CompanyData) => {
                   size="sm"
                   className={`${
                     isCompanyPage ? "md:text-md" : "md:text-sm"
-                  } font-semibold text-typography-600 break-words`}
+                  } font-medium text-typography-600 break-words`}
                 >
                   {companyData?.companyDescription}
                 </Text>
@@ -204,29 +146,16 @@ const CompanyView = (companyData: CompanyData) => {
                 <Heading className="text-text-tertiary">
                   {companyData?.clients}
                 </Heading>
-                <VStack className="flex-row mt-4 gap-4 w-full">
-                  {buttons.map((button, index) => (
-                    <Button
-                      key={index}
-                      onPress={button.action}
-                      className="justify-between"
-                    >
-                      <ButtonIcon
-                        className={`${
-                          isFavourite &&
-                          "fill-red-500 border-red-500 text-red-500 font-extrabold"
-                        }`}
-                        as={button.icon}
-                      />
-                      <ButtonText
-                        className={`${
-                          !isCompanyPage && "text-xs"
-                        } data-[hover=true]:no-underline data-[active=true]:no-underline`}
-                      >
-                        {button.name}
-                      </ButtonText>
-                    </Button>
-                  ))}
+                <VStack className="mt-4">
+                  <ActionButtons
+                    companyData={companyData}
+                    userData={userData}
+                    isCompanyPage={isCompanyPage}
+                    // setWriteReview={setWriteReview}
+                    setNewReviews={setNewReviews}
+                    // isFavourite={isFavourite}
+                    //  setIsFavourite={setIsFavourite}
+                  />
                 </VStack>
               </VStack>
               {!isCompanyPage && (

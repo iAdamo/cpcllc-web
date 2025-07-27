@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
@@ -15,21 +16,21 @@ import {
 } from "@/components/ui/avatar";
 import { FavouriteIcon } from "@/components/ui/icon";
 import { useSession } from "@/context/AuthContext";
-import Image from "next/image";
 import { userProfile, updateCompanyProfile } from "@/axios/users";
-import { UserData } from "@/types";
+import { UserData, ReviewData } from "@/types";
 import ReviewSection from "./ReviewSection";
 import ServiceSection from "./ServiceSection";
 import { getInitial } from "@/utils/GetInitials";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
+//import { Swiper, SwiperSlide } from "swiper/react";
+//import { Autoplay, Pagination } from "swiper/modules";
+//import "swiper/css";
+//import "swiper/css/pagination";
 import { Toast, useToast, ToastTitle } from "@/components/ui/toast";
 import { format } from "date-fns";
 import ProfileDetails from "@/components/profile/ProfileDetails";
 import { ProfileUploadButton } from "@/components/profile/ProfileUpload";
 import RatingSection from "@/components/profile/RatingSection";
+import ActionButtons from "@/components/ActionTab";
 
 const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -43,6 +44,7 @@ const ProfilePage = () => {
   const [isEditable, setIsEditable] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const toast = useToast();
+  const [newReviews, setNewReviews] = useState<ReviewData[]>([]);
 
   const fetchUserData = useCallback(async () => {
     if (typeof id !== "string") return;
@@ -137,67 +139,38 @@ const ProfilePage = () => {
 
   return (
     <VStack className="md:mt-28 mt-32">
-      {(activeRoleId?.companyImages ?? []).length > 0 && (
-        <Swiper
-          modules={[Autoplay, Pagination]}
-          autoplay={{ delay: 4000 }}
-          loop
-          pagination={{ clickable: true }}
-          className="h-72 -z-50 w-full"
-        >
-          {activeRoleId?.companyImages?.map((src, index) => (
-            <SwiperSlide key={index}>
-              <Image
-                className="object-cover w-full h-full"
-                src={src}
-                alt={`slide-${index}`}
-                width={1920}
-                height={1080}
-                priority
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+      {activeRoleId?.companyImages && (
+        <Image
+          className="w-full h-64 object-cover"
+          src={activeRoleId?.companyImages[0]}
+          alt="Company Banner"
+          width={1920}
+          height={400}
+          priority
+        />
       )}
 
       <VStack className="mb-40 md:mb-0 h-full md:px-20 gap-8 md:-mt-4">
         <VStack className="md:flex-row w-full gap-8">
           <VStack className="md:w-3/4 gap-8">
             {activeRoleId?._id && (
-              <Card variant="outline" className="p-0 bg-white">
-                <HStack className="justify-between p-4">
-                  <HStack className="gap-10">
-                    <Card className="md:p-4 p-0 -mt-8 gap-4 md:bg-white bg-transparent">
-                      <div className="relative bg-blue-700">
-                        <div className="hidden md:block relative h-56 w-56">
-                          <Image
-                            className="object-cover h-full w-full"
-                            src={
-                              data.profilePicture ||
-                              "/assets/default-profile.jpg"
-                            }
-                            alt="profile-image"
-                            width={400}
-                            height={400}
-                            priority
-                          />
-                          {isCurrentUser && (
-                            <ProfileUploadButton
-                              isUploading={isUploading}
-                              triggerFileInput={triggerFileInput}
-                              fileInputRef={fileInputRef}
-                              handleFileChange={handleFileChange}
-                            />
-                          )}
-                        </div>
-
-                        <div className="md:hidden">
-                          <Avatar size="2xl" className="relative">
-                            <AvatarFallbackText>
-                              {getInitial(data.email || data.firstName || "")}
-                            </AvatarFallbackText>
-                            <AvatarImage
-                              source={{ uri: data.profilePicture }}
+              <VStack className="w-full gap-4">
+                <Card variant="outline" className="p-0 gap-4 bg-white">
+                  <HStack className="justify-between p-4">
+                    <HStack className="gap-10">
+                      <Card className="md:p-4 p-0 -mt-8 gap-4 md:bg-white bg-transparent">
+                        <div className="relative bg-blue-700">
+                          <div className="hidden md:block relative h-56 w-56">
+                            <Image
+                              className="object-cover h-full w-full"
+                              src={
+                                data.profilePicture ||
+                                "/assets/default-profile.jpg"
+                              }
+                              alt="profile-image"
+                              width={400}
+                              height={400}
+                              priority
                             />
                             {isCurrentUser && (
                               <ProfileUploadButton
@@ -205,60 +178,94 @@ const ProfilePage = () => {
                                 triggerFileInput={triggerFileInput}
                                 fileInputRef={fileInputRef}
                                 handleFileChange={handleFileChange}
-                                isMobile
                               />
                             )}
-                          </Avatar>
+                          </div>
+
+                          <div className="md:hidden">
+                            <Avatar size="2xl" className="relative">
+                              <AvatarFallbackText>
+                                {getInitial(data.email || data.firstName || "")}
+                              </AvatarFallbackText>
+                              <AvatarImage
+                                source={{ uri: data.profilePicture }}
+                              />
+                              {isCurrentUser && (
+                                <ProfileUploadButton
+                                  isUploading={isUploading}
+                                  triggerFileInput={triggerFileInput}
+                                  fileInputRef={fileInputRef}
+                                  handleFileChange={handleFileChange}
+                                  isMobile
+                                />
+                              )}
+                            </Avatar>
+                          </div>
                         </div>
-                      </div>
-                      <VStack className="gap-4">
-                        <VStack className="gap-1">
-                          <Heading size="md">
-                            {activeRoleId.companyName}
-                          </Heading>
-                          <RatingSection
-                            rating={activeRoleId.averageRating}
-                            reviewCount={activeRoleId.reviewCount}
-                          />
-                          <Text size="sm">
-                            {activeRoleId.location?.primary?.address?.country}
-                          </Text>
-                          <Text size="sm">
-                            Registered on the{" "}
-                            {format(new Date(data.createdAt), "MMM d, yyyy")}
-                          </Text>
-                          <Text size="sm">Online</Text>
+                        <VStack className="gap-4">
+                          <VStack className="gap-1">
+                            <Heading size="md">
+                              {activeRoleId.companyName}
+                            </Heading>
+                            <RatingSection
+                              rating={activeRoleId.averageRating}
+                              reviewCount={activeRoleId.reviewCount}
+                            />
+                            <Text size="sm">
+                              {activeRoleId.location?.primary?.address?.country}
+                            </Text>
+                            <Text size="sm">
+                              Registered on the{" "}
+                              {format(new Date(data.createdAt), "MMM d, yyyy")}
+                            </Text>
+                            <Text size="sm">Online</Text>
+                          </VStack>
                         </VStack>
-                      </VStack>
-                    </Card>
+                      </Card>
 
-                    <ProfileDetails
-                      activeRoleId={activeRoleId}
-                      isEditable={isEditable}
-                      fetchUserProfile={fetchUserProfile}
-                    />
+                      <ProfileDetails
+                        activeRoleId={activeRoleId}
+                        isEditable={isEditable}
+                        fetchUserProfile={fetchUserProfile}
+                      />
+                    </HStack>
                   </HStack>
-
-                  <Button
-                    variant="link"
-                    size="xl"
-                    onPress={() => setIsFavourite((prev) => !prev)}
-                    isDisabled={isUploading}
-                  >
-                    <ButtonIcon
-                      className={`hidden w-8 h-8 ${
-                        isFavourite && "text-red-500 fill-red-500"
-                      }`}
-                      as={FavouriteIcon}
+                  <VStack className="ml-4">
+                    <ActionButtons
+                      companyData={activeRoleId}
+                      userData={userData}
+                      setNewReviews={setNewReviews}
                     />
-                  </Button>
-                </HStack>
-              </Card>
+                  </VStack>
+
+                  <Card className="gap-2 text-typography-700">
+                    <Heading size="sm">Brand Showcase</Heading>
+                    <VStack className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {activeRoleId?.companyImages.map((src, index) => (
+                        <Card key={index} variant="outline" className="">
+                          <Image
+                            className="object-cover w-full h-56 "
+                            src={src}
+                            alt={`company-image-${index}`}
+                            width={1920}
+                            height={1080}
+                            priority
+                          />
+                        </Card>
+                      ))}
+                    </VStack>
+                  </Card>
+                </Card>
+                <Card></Card>
+              </VStack>
             )}
 
             {activeRoleId?._id && (
               <VStack className="w-full gap-4">
-                <ReviewSection companyId={activeRoleId._id} />
+                <ReviewSection
+                  companyId={activeRoleId._id}
+                  newReviews={newReviews}
+                />
               </VStack>
             )}
           </VStack>

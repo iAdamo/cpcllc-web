@@ -140,7 +140,7 @@ const SocialMediaDetails = ({
                   )}
                   <HStack className="gap-2 mb-2">
                     <Button
-                      size="xs"
+                      size="sm"
                       variant="link"
                       onPress={handleSave}
                       disabled={isSaving || !isValid}
@@ -149,7 +149,7 @@ const SocialMediaDetails = ({
                       <ButtonIcon as={CheckIcon} />
                     </Button>
                     <Button
-                      size="xs"
+                      size="sm"
                       variant="link"
                       onPress={handleCancelEdit}
                       className="p-0 h-4"

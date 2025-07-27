@@ -46,7 +46,6 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
 
   const handleSubmit = async () => {
     if (!description.trim() || rating === 0) {
-      alert("Please add a rating and write your review before submitting.");
       return;
     }
 
@@ -60,8 +59,6 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
       images.forEach((image, index) => {
         formData.append(`images`, image, `image_${index}.jpg`);
       });
-
-      console.log("Submitting review with data:", formData);
 
       const newReviews = await createReview(companyId, formData);
       setNewReviews([newReviews]);
