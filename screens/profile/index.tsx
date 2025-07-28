@@ -156,7 +156,7 @@ const ProfilePage = () => {
                   <HStack className="justify-between p-4">
                     <HStack className="gap-10">
                       <Card className="md:p-4 p-0 -mt-8 gap-4 md:bg-white bg-transparent">
-                        <div className="relative bg-blue-700">
+                        <div className="relative">
                           <div className="hidden md:block relative h-56 w-56">
                             <Image
                               className="object-cover h-full w-full"

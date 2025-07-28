@@ -9,12 +9,7 @@ import { Button, ButtonIcon } from "../ui/button";
 import { FormControl } from "../ui/form-control";
 import { Input, InputField } from "../ui/input";
 import { useToast, Toast, ToastTitle } from "../ui/toast";
-import {
-  Icon,
-  EditIcon,
-  CheckIcon,
-  CloseIcon,
-} from "@/components/ui/icon";
+import { Icon, EditIcon, CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { MapIcon, MapPinIcon } from "lucide-react";
 import { UserData, CompanyData } from "@/types";
 
@@ -292,7 +287,7 @@ const LocationDetails = ({
         <Heading size="xs" className="capitalize mb-2">
           {locationType} Location
         </Heading>
-        <Card key={locationType} variant="filled" className="">
+        <Card key={locationType} variant="filled" className="mb-2">
           {isEditing ? (
             <>
               <FormControl className="mb-4">
@@ -351,7 +346,7 @@ const LocationDetails = ({
             </>
           ) : (
             <>
-              {isEditable && !isEditing && (
+              {isEditable && !isEditing ? (
                 <HStack className="justify-between gap-4">
                   {location ? (
                     <Text size="sm" className="mb-2">
@@ -386,6 +381,10 @@ const LocationDetails = ({
                     )}
                   </VStack>
                 </HStack>
+              ) : (
+                <Text size="xs" className="text-gray-500 italic">
+                  No {locationType} location set
+                </Text>
               )}
             </>
           )}
@@ -395,14 +394,7 @@ const LocationDetails = ({
   };
 
   return (
-    <VStack className="mt-4">
-      <Heading size="md" className="mb-4">
-        Company Locations
-      </Heading>
-
-      {locationTypes.map(renderLocationCard)}
-
-    </VStack>
+    <VStack className="mt-4">{locationTypes.map(renderLocationCard)}</VStack>
   );
 };
 

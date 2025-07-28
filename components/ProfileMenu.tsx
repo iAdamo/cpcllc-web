@@ -16,6 +16,7 @@ import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import Link from "next/link";
 import { getInitial } from "@/utils/GetInitials";
+import { useRouter } from "next/navigation";
 
 interface ProfileMenuProps {
   options: {
@@ -28,6 +29,7 @@ interface ProfileMenuProps {
 
 const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
   const { userData, logout, setUserData } = useSession();
+  const router = useRouter();
 
   return userData ? (
     <Menu
@@ -64,6 +66,12 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
                 activeRole:
                   userData?.activeRole === "Client" ? "Company" : "Client",
               });
+              router.refresh();
+              router.push(
+                userData?.activeRole === "Client"
+                  ? "/companies"
+                  : `/cpc/${userData?.id}`
+              );
             }}
             className="w-52"
           >

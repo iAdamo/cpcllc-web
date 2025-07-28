@@ -100,7 +100,7 @@ const CompanyView = (companyData: CompanyData) => {
               >
                 <Pressable
                   onPress={() => {
-                    router.push(`/cpc/${userData?.id}`);
+                    router.push(`/cpc/${companyData.owner}`);
                   }}
                   className="flex flex-row items-end gap-2"
                 >

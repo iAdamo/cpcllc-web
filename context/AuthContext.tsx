@@ -133,7 +133,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       );
     }
   } else if (session && userData?.activeRole === "Client") {
-    if (pathname === "/cpc") {
+    if (pathname === `/cpc/${userData?.id}`) {
       router.push("/companies");
       return (
         <Spinner size="large" className="h-full items-center justifyCenter" />
