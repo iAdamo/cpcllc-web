@@ -24,6 +24,7 @@ import {
 import { UserData, CompanyData } from "@/types";
 
 type EditableFields = keyof UserData | keyof CompanyData;
+
 interface ProfileEditProps {
   activeRoleId: UserData["activeRoleId"];
   isEditable: boolean;

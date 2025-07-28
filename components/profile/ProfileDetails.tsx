@@ -10,6 +10,7 @@ import { Button, ButtonIcon } from "../ui/button";
 import { FormControl } from "../ui/form-control";
 import { Input, InputField } from "../ui/input";
 import { useToast, Toast, ToastTitle } from "../ui/toast";
+import LocationDetails from "./LocationDetails";
 
 import {
   Icon,
@@ -355,6 +356,13 @@ const ProfileDetails = ({
           handleCancelEdit={handleCancelEdit}
         />
       </VStack>
+      <LocationDetails
+        activeRoleId={activeRoleId}
+        isEditable={isEditable}
+        isSaving={isSaving}
+        handleSave={handleSave}
+        handleCancelEdit={handleCancelEdit}
+      />
     </VStack>
   );
 };

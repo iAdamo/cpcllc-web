@@ -61,8 +61,8 @@ export interface CompanyData {
   ratings: number;
   createdAt: string;
   updatedAt: string;
-  location: {
-    primary: {
+  location?: {
+    primary?: {
       coordinates: {
         lat: number;
         long: number;
