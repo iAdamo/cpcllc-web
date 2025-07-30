@@ -158,8 +158,8 @@ const CompaniesSection = () => {
                 >
                   <Image
                     className="h-24 w-24 rounded-l-md object-cover"
-                    src={company.companyImages[0] || "/assets/placeholder.jpg"}
-                    alt={company.companyName || "Company Logo"}
+                    src={company?.companyImages?.[0] || "/assets/placeholder.jpg"}
+                    alt={company?.companyName || "Company Logo"}
                     width={1400}
                     height={600}
                   />
@@ -177,7 +177,7 @@ const CompaniesSection = () => {
                       <HStack className="gap-1 items-center">
                         {renderStars(company?.averageRating)}
                         <Text className="text-xs text-gray-500">
-                          {company?.averageRating.toFixed(1)}
+                          {company?.averageRating?.toFixed(1)}
                         </Text>
                       </HStack>
                       <Text className="text-xs text-gray-500">

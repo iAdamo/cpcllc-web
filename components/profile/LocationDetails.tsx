@@ -1,4 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+"use client";
+
+import { useState, useRef, useEffect, useCallback } from "react";
 import { VStack } from "../ui/vstack";
 import { HStack } from "../ui/hstack";
 import { Link } from "../ui/link";
@@ -10,8 +12,9 @@ import { FormControl } from "../ui/form-control";
 import { Input, InputField } from "../ui/input";
 import { useToast, Toast, ToastTitle } from "../ui/toast";
 import { Icon, EditIcon, CheckIcon, CloseIcon } from "@/components/ui/icon";
-import { MapIcon, MapPinIcon } from "lucide-react";
+import { MapIcon, MapPinIcon, Loader2 } from "lucide-react";
 import { UserData, CompanyData } from "@/types";
+import { updateCompanyProfile } from "@/axios/users";
 
 declare global {
   interface Window {
@@ -37,21 +40,22 @@ interface LocationDetailsProps {
   isSaving: boolean;
   handleSave: () => void;
   handleCancelEdit: () => void;
+  fetchUserProfile: () => Promise<void>;
 }
 
 const LocationDetails = ({
   activeRoleId,
   isEditable,
-  isSaving,
-  handleSave,
-  handleCancelEdit,
+  fetchUserProfile,
 }: LocationDetailsProps) => {
   const [editingFields, setEditingFields] = useState<
     Partial<Record<EditableFields, string>>
   >({});
   const [editingLocation, setEditingLocation] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const [addressInput, setAddressInput] = useState("");
   const [isGeolocating, setIsGeolocating] = useState(false);
+  const [isMapsLoaded, setIsMapsLoaded] = useState(false);
   const autocompleteRef = useRef<any>(null);
   const addressInputRef = useRef<any>(null);
   const toast = useToast();
@@ -60,19 +64,149 @@ const LocationDetails = ({
 
   // Load Google Maps script
   useEffect(() => {
-    if (!window.google) {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env
-        .NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}&libraries=places`;
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
+    if (window.google) {
+      setIsMapsLoaded(true);
+      return;
     }
+
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env
+      .NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}&libraries=places`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => setIsMapsLoaded(true);
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
   }, []);
+
+  const handleEditStart = useCallback((fields: Record<string, any>) => {
+    setEditingFields((prev) => ({
+      ...prev,
+      ...fields,
+    }));
+  }, []);
+
+  const handleCancelEdit = () => {
+    setEditingFields({});
+  };
+
+  const handleSave = async () => {
+    if (Object.keys(editingFields).length === 0) return;
+
+    setIsSaving(true);
+
+    try {
+      const formData = new FormData();
+      const locationKey = Object.keys(editingFields)[0].split(".")[1];
+      console.log(editingFields[`location.${locationKey}`].address.address);
+      if (editingFields[`location.${locationKey}`].address) {
+        formData.append(
+          `location.${locationKey}.address.address`,
+          editingFields[`location.${locationKey}`].address.address || ""
+        );
+        formData.append(
+          `location.${locationKey}.address.city`,
+          editingFields[`location.${locationKey}`].address.city || ""
+        );
+        formData.append(
+          `location.${locationKey}.address.state`,
+          editingFields[`location.${locationKey}`].address.state || ""
+        );
+        formData.append(
+          `location.${locationKey}.address.zip`,
+          editingFields[`location.${locationKey}`].address.zip || ""
+        );
+        formData.append(
+          `location.${locationKey}.address.country`,
+          editingFields[`location.${locationKey}`].address.country || ""
+        );
+      }
+      if (editingFields[`location.${locationKey}`].coordinates) {
+        formData.append(
+          `location.${locationKey}.coordinates.lat`,
+          editingFields[`location.${locationKey}`].coordinates.lat || ""
+        );
+        formData.append(
+          `location.${locationKey}.coordinates.long`,
+          editingFields[`location.${locationKey}`].coordinates.long || ""
+        );
+      }
+      await updateCompanyProfile(formData);
+      await fetchUserProfile();
+
+      setEditingFields({});
+
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <Toast nativeID={id} variant="solid" action="success">
+            <ToastTitle>Location updated successfully</ToastTitle>
+          </Toast>
+        ),
+      });
+    } catch (error) {
+      console.error("Error updating location:", error);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <Toast nativeID={id} variant="outline" action="error">
+            <ToastTitle>Error updating location</ToastTitle>
+          </Toast>
+        ),
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const processPlaceResult = useCallback(
+    (place: any) => {
+      const address = place.formatted_address;
+      setAddressInput(address);
+
+      // Extract address components
+      const addressComponents: Record<string, string> = {};
+      place.address_components.forEach((component: any) => {
+        component.types.forEach((type: string) => {
+          addressComponents[type] = component.long_name;
+        });
+      });
+
+      // Update the form fields with complete address data
+      handleEditStart({
+        [`location.${editingLocation}`]: {
+          coordinates: {
+            lat: place.geometry.location.lat(),
+            long: place.geometry.location.lng(),
+          },
+          address: {
+            address: address,
+            city:
+              addressComponents.locality ||
+              addressComponents.postal_town ||
+              addressComponents.neighborhood ||
+              "",
+            state: addressComponents.administrative_area_level_1 || "",
+            zip: addressComponents.postal_code || "",
+            country: addressComponents.country || "",
+          },
+        },
+      });
+    },
+    [editingLocation, handleEditStart]
+  );
 
   // Initialize autocomplete when editing starts
   useEffect(() => {
-    if (editingLocation && window.google && addressInputRef.current) {
+    if (
+      editingLocation &&
+      isMapsLoaded &&
+      window.google &&
+      addressInputRef.current
+    ) {
       autocompleteRef.current = new window.google.maps.places.Autocomplete(
         addressInputRef.current,
         {
@@ -101,62 +235,17 @@ const LocationDetails = ({
     }
 
     return () => {
-      if (autocompleteRef.current) {
+      if (autocompleteRef.current && window.google) {
         window.google.maps.event.clearInstanceListeners(
           autocompleteRef.current
         );
       }
     };
-  }, [editingLocation]);
-
-  const handleEditStart = (fields: Record<string, any>) => {
-    setEditingFields((prev) => ({
-      ...prev,
-      ...fields,
-    }));
-  };
-
-  const processPlaceResult = (place: any) => {
-    const address = place.formatted_address;
-    setAddressInput(address);
-
-    // Extract address components into a more usable format
-    const addressComponents: Record<string, string> = {};
-    place.address_components.forEach((component: any) => {
-      component.types.forEach((type: string) => {
-        addressComponents[type] = component.long_name;
-      });
-    });
-
-    // Construct the full address object
-    const addressObj = {
-      address: address,
-      city:
-        addressComponents.locality ||
-        addressComponents.postal_town ||
-        addressComponents.neighborhood ||
-        "",
-      state: addressComponents.administrative_area_level_1 || "",
-      zip: addressComponents.postal_code || "",
-      country: addressComponents.country || "",
-    };
-
-    // Update the form fields
-    handleEditStart({
-      [`location.${editingLocation}`]: {
-        coordinates: {
-          lat: place.geometry.location.lat(),
-          long: place.geometry.location.lng(),
-        },
-        address: addressObj,
-      },
-    });
-  };
+  }, [editingLocation, isMapsLoaded, processPlaceResult, toast]);
 
   const handleLocationEditStart = (locationType: string) => {
     setEditingLocation(locationType);
     const currentLocation = activeRoleId?.location?.[locationType];
-    // alert(`[location.${locationType}]:` + currentLocation);
     setAddressInput(currentLocation?.address?.address || "");
 
     // Initialize with current location or empty structure
@@ -204,7 +293,7 @@ const LocationDetails = ({
 
       const { latitude, longitude } = position.coords;
 
-      if (!window.google) {
+      if (!isMapsLoaded || !window.google) {
         throw new Error("Google Maps API not loaded");
       }
 
@@ -248,46 +337,16 @@ const LocationDetails = ({
     }
   };
 
-  const renderLocationField = (
-    locationType: string,
-    field: string,
-    label: string
-  ) => {
-    const valuePath = `location.${locationType}.address.${field}`;
-    const isEditing = editingLocation === locationType;
-
-    return isEditing ? (
-      <FormControl className="mb-2">
-        <Text size="xs" className="mb-1">
-          {label}
-        </Text>
-        <Input className="h-8">
-          <InputField
-            value={editingFields[valuePath] || ""}
-            onChangeText={(text) => handleEditStart({ [valuePath]: text })}
-            placeholder={`Enter ${label.toLowerCase()}`}
-          />
-        </Input>
-      </FormControl>
-    ) : (
-      <Text size="xs" className="mb-2">
-        <Text className="font-semibold">{label}:</Text>{" "}
-        {activeRoleId?.location?.[locationType]?.address?.[field] ||
-          "Not specified"}
-      </Text>
-    );
-  };
-
   const renderLocationCard = (locationType: string) => {
     const location = activeRoleId?.location?.[locationType];
     const isEditing = editingLocation === locationType;
 
     return (
-      <VStack>
+      <VStack key={locationType}>
         <Heading size="xs" className="capitalize mb-2">
           {locationType} Location
         </Heading>
-        <Card key={locationType} variant="filled" className="mb-2">
+        <Card variant="filled" className="mb-2">
           {isEditing ? (
             <>
               <FormControl className="mb-4">
@@ -301,25 +360,24 @@ const LocationDetails = ({
                       value={addressInput}
                       onChangeText={setAddressInput}
                       placeholder="Search for an address or use current location"
+                      className=""
                     />
                     <Button
                       size="sm"
-                      variant="link"
+                      variant="outline"
                       onPress={getCurrentLocation}
-                      className=""
+                      className="border-none"
                       disabled={isGeolocating}
                     >
-                      <ButtonIcon as={MapPinIcon} />
+                      {isGeolocating ? (
+                        <Loader2 className="h-4 w-4 text-red-500 animate-spin" />
+                      ) : (
+                        <MapPinIcon className="h-4 w-4 text-red-500" />
+                      )}
                     </Button>
                   </Input>
                 </VStack>
               </FormControl>
-
-              {renderLocationField(locationType, "city", "City")}
-              {renderLocationField(locationType, "state", "State")}
-              {renderLocationField(locationType, "zip", "ZIP Code")}
-              {renderLocationField(locationType, "country", "Country")}
-
               <HStack className="gap-2 self-end mt-2">
                 <Button
                   size="sm"
@@ -394,7 +452,15 @@ const LocationDetails = ({
   };
 
   return (
-    <VStack className="mt-4">{locationTypes.map(renderLocationCard)}</VStack>
+    <VStack className="mt-4">
+      {!isMapsLoaded && (
+        <div className="flex items-center justify-center text-gray-500">
+          <Loader2 className="animate-spin w-4 h-4 mr-2" />
+          Loading map services...
+        </div>
+      )}
+      {locationTypes.map(renderLocationCard)}
+    </VStack>
   );
 };
 

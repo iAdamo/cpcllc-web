@@ -205,8 +205,8 @@ const ProfilePage = () => {
                               {activeRoleId.companyName}
                             </Heading>
                             <RatingSection
-                              rating={activeRoleId.averageRating}
-                              reviewCount={activeRoleId.reviewCount}
+                              rating={activeRoleId?.averageRating}
+                              reviewCount={activeRoleId?.reviewCount}
                             />
                             <Text size="sm">
                               {activeRoleId.location?.primary?.address?.country}
@@ -216,6 +216,13 @@ const ProfilePage = () => {
                               {format(new Date(data.createdAt), "MMM d, yyyy")}
                             </Text>
                             <Text size="sm">Online</Text>
+                          </VStack>
+                          <VStack className="w-full">
+                            <ActionButtons
+                              companyData={activeRoleId}
+                              userData={userData}
+                              setNewReviews={setNewReviews}
+                            />
                           </VStack>
                         </VStack>
                       </Card>
@@ -227,18 +234,10 @@ const ProfilePage = () => {
                       />
                     </HStack>
                   </HStack>
-                  <VStack className="ml-4">
-                    <ActionButtons
-                      companyData={activeRoleId}
-                      userData={userData}
-                      setNewReviews={setNewReviews}
-                    />
-                  </VStack>
-
                   <Card className="gap-2 text-typography-700">
                     <Heading size="sm">Brand Showcase</Heading>
                     <VStack className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {activeRoleId?.companyImages.map((src, index) => (
+                      {activeRoleId?.companyImages?.map((src, index) => (
                         <Card key={index} variant="outline" className="">
                           <Image
                             className="object-cover w-full h-56 "

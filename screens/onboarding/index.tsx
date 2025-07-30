@@ -44,9 +44,9 @@ const Onboarding = () => {
 
     {/* Content Area - Flexible width, independent height */}
     <VStack className="flex-1 overflow-auto">
-      {currentStep === 3 && <BasicInfo />}
-      {currentStep === 2 && <ServicesInfo />}
-      {currentStep === 4 && <LocationBoard />}
+      {currentStep === 4 && <BasicInfo />}
+      {currentStep === 3 && <ServicesInfo />}
+      {currentStep === 2 && <LocationBoard />}
       {currentStep === 5 && <FinalStep />}
     </VStack>
   </HStack>

@@ -230,7 +230,6 @@ const ProfileDetails = ({
           formData.append(key, value || "");
         }
       });
-      console.log(formData);
       await updateCompanyProfile(formData);
       await fetchUserProfile();
 
@@ -261,7 +260,7 @@ const ProfileDetails = ({
   };
 
   return (
-    <VStack className="gap-4">
+    <VStack className="gap-8">
       {(activeRoleId?.subcategories ?? []).length > 0 && (
         <VStack>
           <Heading size="xs" className="md:text-md mb-2">
@@ -362,6 +361,7 @@ const ProfileDetails = ({
         isSaving={isSaving}
         handleSave={handleSave}
         handleCancelEdit={handleCancelEdit}
+        fetchUserProfile={fetchUserProfile}
       />
     </VStack>
   );

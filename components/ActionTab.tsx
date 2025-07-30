@@ -8,6 +8,7 @@ import { ReviewModal } from "@/components/Overlays/ReviewModal";
 import { ReviewIcon } from "@/public/assets/icons/customIcons";
 import { useSession } from "@/context/AuthContext";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
+import { usePathname } from "next/navigation";
 
 interface ActionButtonsProps {
   companyData: CompanyData;
@@ -28,11 +29,14 @@ export default function ActionButtons({
 
   const { fetchUserProfile } = useSession();
   const toast = useToast();
+  const pathname = usePathname();
 
   useEffect(() => {
     const hasFavourited = companyData?.favoritedBy.includes(userData?.id ?? "");
     setIsFavourite(hasFavourited ?? false);
   }, [companyData?.favoritedBy, userData?.id]);
+
+  const isProfilePage = pathname.startsWith("/cpc");
 
   const handleFavourite = async () => {
     if (isProcessing) return;
@@ -133,13 +137,14 @@ export default function ActionButtons({
 
   return (
     <>
-      <VStack className="flex-row gap-4 w-fit">
+      <VStack className="flex-row gap-4">
         {buttons.map((button, index) => (
           <Button
             key={index}
+            variant={isProfilePage ? "outline" : "solid"}
             onPress={button.action}
             disabled={button.disabled}
-            className="justify-between"
+            className="border-0 justify-between"
           >
             <ButtonIcon
               className={`
@@ -152,16 +157,18 @@ export default function ActionButtons({
               `}
               as={button.icon}
             />
-            <ButtonText
-              className={`
+            {!isProfilePage && (
+              <ButtonText
+                className={`
                 ${!isCompanyPage && "text-xs"}
                 data-[hover=true]:no-underline
                 data-[active=true]:no-underline
                 ${button.disabled ? "opacity-50" : ""}
               `}
-            >
-              {button.name}
-            </ButtonText>
+              >
+                {button.name}
+              </ButtonText>
+            )}
           </Button>
         ))}
       </VStack>

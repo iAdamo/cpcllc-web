@@ -66,7 +66,6 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
                 activeRole:
                   userData?.activeRole === "Client" ? "Company" : "Client",
               });
-              router.refresh();
               router.push(
                 userData?.activeRole === "Client"
                   ? "/companies"

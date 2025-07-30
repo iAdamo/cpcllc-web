@@ -1,4 +1,3 @@
-"use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { VStack } from "@/components/ui/vstack";
@@ -188,7 +187,6 @@ const LocationBoard = () => {
     if (manualAddress.trim()) {
       setData({
         address: manualAddress,
-        // These can be null as we don't have coordinates for manual entry
         latitude: null,
         longitude: null,
       });

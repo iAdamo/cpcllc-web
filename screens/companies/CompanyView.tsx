@@ -67,11 +67,11 @@ const CompanyView = (companyData: CompanyData) => {
             <Swiper
               modules={[Autoplay, Pagination]}
               autoplay={{ delay: 4000 }}
-              loop={companyData?.companyImages.length > 1} // Enable loop only if there are more than 1 slide
+              loop={companyData?.companyImages?.length > 1} // Enable loop only if there are more than 1 slide
               pagination={{ clickable: true }}
               className="w-full h-full"
             >
-              {companyData?.companyImages.map((src, index) => (
+              {companyData?.companyImages?.map((src, index) => (
                 <SwiperSlide key={index}>
                   <Image
                     className="object-cover w-full h-full rounded-lg"
@@ -113,7 +113,7 @@ const CompanyView = (companyData: CompanyData) => {
                       )}
                     </AvatarFallbackText>
                     <AvatarImage
-                      source={{ uri: companyData?.companyImages[0] }}
+                      source={{ uri: companyData?.companyImages?.[0] }}
                     />
                   </Avatar>
                   <Heading
@@ -136,7 +136,7 @@ const CompanyView = (companyData: CompanyData) => {
                   <HStack className="gap-1 items-center">
                     {renderStars(companyData?.averageRating)}
                     <Heading className="text-md text-gray-500">
-                      {companyData?.averageRating.toFixed(1)}
+                      {companyData?.averageRating?.toFixed(1)}
                     </Heading>
                   </HStack>
                   <Heading className="text-md text-gray-500">
