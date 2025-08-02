@@ -269,7 +269,10 @@ const ProfilePage = () => {
           <VStack className="hidden md:flex w-1/4 items-center p-4 bg-[#F6F6F6]">
             {activeRoleId?._id && (
               <VStack className="w-full gap-4">
-                <ServiceSection companyId={activeRoleId._id} />
+                <ServiceSection
+                  companyId={activeRoleId._id}
+                  isCurrentUser={isCurrentUser}
+                />
               </VStack>
             )}
           </VStack>

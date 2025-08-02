@@ -10,9 +10,17 @@ import { useRouter } from "next/navigation";
 import { AddIcon } from "@/components/ui/icon";
 import { getServicesByCompany } from "@/axios/services";
 import { ServiceData } from "@/types";
+import ServiceInfoModal from "@/components/Overlays/ServiceInfoModal";
 
-const ServiceSection = ({ companyId }: { companyId: string }) => {
+const ServiceSection = ({
+  companyId,
+  isCurrentUser,
+}: {
+  companyId: string;
+  isCurrentUser: boolean;
+}) => {
   const [services, setServices] = useState<ServiceData[] | []>([]);
+  const [serviceData, setServiceData] = useState<ServiceData | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -30,17 +38,26 @@ const ServiceSection = ({ companyId }: { companyId: string }) => {
 
   return (
     <VStack>
-      <Button
-        onPress={() => router.push("/service/init")}
-        className="mb-4 h-16 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary"
-      >
-        <ButtonIcon as={AddIcon} />
-        <ButtonText size="sm" className="">
-          What&apos;s New In Your Service
-        </ButtonText>
-      </Button>
-      {services.length === 0 ? (
-        <Text className="text-text-secondary text-center mt-8">
+      {serviceData && (
+        <ServiceInfoModal
+          serviceData={serviceData}
+          isOpen={!!serviceData}
+          onClose={() => setServiceData(null)}
+        />
+      )}
+      {isCurrentUser && (
+        <Button
+          onPress={() => router.push("/service/init")}
+          className="mb-4 h-16 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary"
+        >
+          <ButtonIcon as={AddIcon} />
+          <ButtonText size="sm" className="">
+            What&apos;s New In Your Service
+          </ButtonText>
+        </Button>
+      )}
+      {isCurrentUser && services.length === 0 ? (
+        <Text size="sm" className="text-text-secondary text-center mt-8">
           No updates available for this service yet. Click the button above to
           add new updates.
         </Text>
@@ -49,6 +66,10 @@ const ServiceSection = ({ companyId }: { companyId: string }) => {
           {services.map((update: ServiceData) => (
             <Pressable
               key={update._id}
+              onPress={() => {
+                setServiceData(update);
+                // Implement logic to open modal
+              }}
               className="gap-4 drop-shadow-2xl transform transition-transform duration-300 hover:scale-95"
             >
               <Card className="p-4 gap-2">
@@ -74,9 +95,15 @@ const ServiceSection = ({ companyId }: { companyId: string }) => {
               </Card>
             </Pressable>
           ))}
-          <Button className="mt-4">
-            <ButtonText>View All Updates</ButtonText>
-          </Button>
+          {isCurrentUser && services.length !== 0 ? (
+            <Button className="mt-4">
+              <ButtonText>View All Updates</ButtonText>
+            </Button>
+          ) : (
+            <Text size="sm" className="text-text-secondary text-center mt-8">
+              No updates available for this service.
+            </Text>
+          )}
         </VStack>
       )}
     </VStack>
