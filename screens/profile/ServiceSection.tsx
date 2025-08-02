@@ -1,78 +1,84 @@
+import { useState, useEffect } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
+import { Pressable } from "@/components/ui/pressable";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { AddIcon } from "@/components/ui/icon";
+import { getServicesByCompany } from "@/axios/services";
+import { ServiceData } from "@/types";
 
 const ServiceSection = ({ companyId }: { companyId: string }) => {
-  const newUpdates = [
-    {
-      id: "1",
-      title: "New Electrical Service Available",
-      description:
-        "We are now offering comprehensive electrical services including installation, repair, and maintenance.",
-      category: "Electrical",
-      image: "/assets/header10.jpg",
-      date: "2024-01-15",
-    },
-    {
-      id: "2",
-      title: "Plumbing Service Expansion",
-      description:
-        "Our plumbing services have expanded to include emergency repairs and routine maintenance.",
-      category: "Plumbing",
-      image: "/assets/header10.jpg",
-      date: "2024-01-20",
-    },
-    {
-      id: "3",
-      title: "New HVAC Solutions",
-      description:
-        "Introducing new HVAC solutions for both residential and commercial properties.",
-      category: "HVAC",
-      image: "/assets/header10.jpg",
-      date: "2024-01-25",
-    },
-  ];
+  const [services, setServices] = useState<ServiceData[] | []>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        const response = await getServicesByCompany(companyId);
+        setServices(response);
+      } catch (error) {
+        console.error("Error fetching service data:", error);
+      }
+    };
+
+    fetchService();
+  }, [companyId]);
+
   return (
     <VStack>
-      <Button className="mb-4 h-16 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary">
+      <Button
+        onPress={() => router.push("/service/init")}
+        className="mb-4 h-16 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary"
+      >
         <ButtonIcon as={AddIcon} />
-        <ButtonText size="sm" className="">What&apos;s New In Your Service</ButtonText>
+        <ButtonText size="sm" className="">
+          What&apos;s New In Your Service
+        </ButtonText>
       </Button>
-      <VStack className="gap-4 drop-shadow-2xl">
-        {newUpdates.map((update) => (
-          <Card key={update.id} className="p-4 gap-2">
-            <Heading size="md" className="text-typography-600">
-              {update.title}
-            </Heading>
-            <Text size="sm" className="text-text-secondary line-clamp-3 ">
-              {update.description}
-            </Text>
-            <Heading
-              size="xs"
-              className="w-fit py-2 px-4 rounded-full bg-gray-200 text-text-tertiary"
+      {services.length === 0 ? (
+        <Text className="text-text-secondary text-center mt-8">
+          No updates available for this service yet. Click the button above to
+          add new updates.
+        </Text>
+      ) : (
+        <VStack>
+          {services.map((update: ServiceData) => (
+            <Pressable
+              key={update._id}
+              className="gap-4 drop-shadow-2xl transform transition-transform duration-300 hover:scale-95"
             >
-              {update.category}
-            </Heading>
-            <Image
-              src={update.image}
-              alt={update.title}
-              width={1300}
-              height={1000}
-              className="object-cover h-40 rounded-md"
-            />
-            <Text className="text-text-tertiary mt-2">
-              {new Date(update.date).toLocaleDateString()}
-            </Text>
-          </Card>
-        ))}
-        <Button className="mt-4">
-          <ButtonText>View All Updates</ButtonText>
-        </Button>
-      </VStack>
+              <Card className="p-4 gap-2">
+                <Heading size="sm" className="text-typography-600">
+                  {update.title}
+                </Heading>
+                <Text size="sm" className="text-text-secondary line-clamp-3 ">
+                  {update.description}
+                </Text>
+                <Heading
+                  size="xs"
+                  className="w-fit px-2 py-1 rounded-xl bg-gray-200 font-medium text-teal-800 shadow-sm"
+                >
+                  {update.category}
+                </Heading>
+                <Image
+                  src={update.images[0] || "/assets/header10.jpg"}
+                  alt={update.title}
+                  width={1300}
+                  height={1000}
+                  className="object-cover h-40 rounded-md"
+                />
+              </Card>
+            </Pressable>
+          ))}
+          <Button className="mt-4">
+            <ButtonText>View All Updates</ButtonText>
+          </Button>
+        </VStack>
+      )}
     </VStack>
   );
 };

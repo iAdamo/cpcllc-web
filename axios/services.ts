@@ -3,7 +3,7 @@ import { ServiceData, ServiceCategory } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
-export const createService = async (data: FormData) => {
+export const createService = async (data: FormData): Promise<ServiceData> => {
   const response = await axiosInstance.post("services", data, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -22,6 +22,14 @@ export const getAllCategoriesWithSubcategories = async (): Promise<
 
 export const getServiceById = async (id: string): Promise<ServiceData> => {
   const response = await axiosInstance.get(`services/${id}`);
+
+  return response.data;
+};
+
+export const getServicesByCompany = async (
+  id: string
+): Promise<ServiceData[]> => {
+  const response = await axiosInstance.get(`services/company/${id}`);
 
   return response.data;
 };

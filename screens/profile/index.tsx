@@ -25,9 +25,9 @@ import { getInitial } from "@/utils/GetInitials";
 //import "swiper/css/pagination";
 import { Toast, useToast, ToastTitle } from "@/components/ui/toast";
 import { format } from "date-fns";
-import ProfileDetails from "@/components/profile/ProfileDetails";
-import { ProfileUploadButton } from "@/components/profile/ProfileUpload";
-import RatingSection from "@/components/profile/RatingSection";
+import ProfileDetails from "@/screens/profile/ProfileDetails";
+import { ProfileUploadButton } from "@/screens/profile/ProfileUpload";
+import RatingSection from "@/screens/profile/RatingSection";
 import ActionButtons from "@/components/ActionTab";
 
 const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];

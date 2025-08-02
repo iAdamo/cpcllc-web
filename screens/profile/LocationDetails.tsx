@@ -1,16 +1,16 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { VStack } from "../ui/vstack";
-import { HStack } from "../ui/hstack";
-import { Link } from "../ui/link";
-import { Card } from "../ui/card";
-import { Heading } from "../ui/heading";
-import { Text } from "../ui/text";
-import { Button, ButtonIcon } from "../ui/button";
-import { FormControl } from "../ui/form-control";
-import { Input, InputField } from "../ui/input";
-import { useToast, Toast, ToastTitle } from "../ui/toast";
+import { VStack } from "../../components/ui/vstack";
+import { HStack } from "../../components/ui/hstack";
+import { Link } from "../../components/ui/link";
+import { Card } from "../../components/ui/card";
+import { Heading } from "../../components/ui/heading";
+import { Text } from "../../components/ui/text";
+import { Button, ButtonIcon } from "../../components/ui/button";
+import { FormControl } from "../../components/ui/form-control";
+import { Input, InputField } from "../../components/ui/input";
+import { useToast, Toast, ToastTitle } from "../../components/ui/toast";
 import { Icon, EditIcon, CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { MapIcon, MapPinIcon, Loader2 } from "lucide-react";
 import { UserData, CompanyData } from "@/types";
@@ -64,7 +64,7 @@ const LocationDetails = ({
 
   // Load Google Maps script
   useEffect(() => {
-    if (window.google) {
+    if (!isEditable || window.google) {
       setIsMapsLoaded(true);
       return;
     }
@@ -80,7 +80,7 @@ const LocationDetails = ({
     return () => {
       document.head.removeChild(script);
     };
-  }, []);
+  }, [isEditable]);
 
   const handleEditStart = useCallback((fields: Record<string, any>) => {
     setEditingFields((prev) => ({
@@ -434,11 +434,18 @@ const LocationDetails = ({
                         className="flex-row mt-2 w-4 h-4"
                         isExternal
                       >
-                        <Icon as={MapIcon} className="w-6 h-6" />
+                        <Icon as={MapIcon}  />
                       </Link>
                     )}
                   </VStack>
                 </HStack>
+              ) : location ? (
+                <Text size="sm" className="mb-2">
+                  <Text size="sm" className="font-semibold">
+                    Address:{" "}
+                  </Text>
+                  {location.address.address || "Not specified"}
+                </Text>
               ) : (
                 <Text size="xs" className="text-gray-500 italic">
                   No {locationType} location set

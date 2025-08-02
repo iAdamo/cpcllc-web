@@ -1,6 +1,6 @@
-import { HStack } from "../ui/hstack";
-import { Heading } from "../ui/heading";
-import renderStars from "../RenderStars";
+import { HStack } from "../../components/ui/hstack";
+import { Heading } from "../../components/ui/heading";
+import renderStars from "../../components/RenderStars";
 
 const RatingSection = ({
   rating,

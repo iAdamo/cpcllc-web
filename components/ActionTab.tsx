@@ -6,7 +6,6 @@ import { setUserFavourites } from "@/axios/users";
 import { UserData, CompanyData, ReviewData } from "@/types";
 import { ReviewModal } from "@/components/Overlays/ReviewModal";
 import { ReviewIcon } from "@/public/assets/icons/customIcons";
-import { useSession } from "@/context/AuthContext";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
 import { usePathname } from "next/navigation";
 
@@ -27,7 +26,6 @@ export default function ActionButtons({
   const [showWriteReview, setWriteReview] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const { fetchUserProfile } = useSession();
   const toast = useToast();
   const pathname = usePathname();
 
@@ -49,7 +47,6 @@ export default function ActionButtons({
       }
 
       const updatedCompany = await setUserFavourites(companyData?._id);
-      await fetchUserProfile();
 
       const hasFavourited = updatedCompany?.favoritedBy.includes(
         userData?.id ?? ""

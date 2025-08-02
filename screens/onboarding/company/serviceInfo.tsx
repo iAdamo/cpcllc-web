@@ -13,7 +13,7 @@ interface SelectedSubcategory extends Subcategory {
   categoryName: string;
 }
 
-const MAX_SERVICES = 5;
+const MAX_SERVICES = 3;
 
 const ServicesInfo = () => {
   const { prevStep, nextStep, data, setData, categories } = useOnboarding();

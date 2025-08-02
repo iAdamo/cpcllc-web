@@ -1,5 +1,4 @@
 import {
-  ServiceData,
   Subcategory,
   SubcategoryData,
 } from "@/types";
@@ -26,8 +25,6 @@ export interface UserData {
     email: string;
     profilePicture: string;
   }[];
-  services: ServiceData[];
-  purchasedServices: ServiceData[];
   hiredCompanies: CompanyData[];
   owner: string;
 }
@@ -104,33 +101,6 @@ export interface CompanyData {
   };
 }
 
-export interface ServiceData {
-  _id: string;
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  category: string;
-  ratings: number;
-  location: string;
-  company: CompanyData;
-  favoritedBy: string[];
-  favoriteCount: number;
-  media: {
-    image: {
-      primary: string;
-      secondary: string;
-      tertiary: string;
-    };
-    video: {
-      primary: string;
-      secondary: string;
-      tertiary: string;
-    };
-  };
-  link: string;
-  clients: [];
-}
 export interface AuthContextProps {
   userData: UserData | null;
   setUserData: (data: UserData) => void;

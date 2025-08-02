@@ -1,12 +1,12 @@
-import { VStack } from "../ui/vstack";
-import { HStack } from "../ui/hstack";
-import { Card } from "../ui/card";
-import { Text } from "../ui/text";
-import { Link, LinkText } from "../ui/link";
-import { Button, ButtonIcon } from "../ui/button";
+import { VStack } from "../../components/ui/vstack";
+import { HStack } from "../../components/ui/hstack";
+import { Card } from "../../components/ui/card";
+import { Text } from "../../components/ui/text";
+import { Link, LinkText } from "../../components/ui/link";
+import { Button, ButtonIcon } from "../../components/ui/button";
 // import { Pressable } from "../ui/pressable";
-import { FormControl } from "../ui/form-control";
-import { Input, InputField } from "../ui/input";
+import { FormControl } from "../../components/ui/form-control";
+import { Input, InputField } from "../../components/ui/input";
 import {
   FacebookIcon,
   InstagramIcon,
@@ -164,8 +164,8 @@ const SocialMediaDetails = ({
                   {link ? (
                     <Link href={link}>
                       <LinkText
-                        size="sm"
-                        className="font-semibold text-blue-500"
+                        size="xs"
+                        className="font-semibold"
                       >
                         {platform.charAt(0).toUpperCase() + platform.slice(1)}
                       </LinkText>

@@ -23,3 +23,22 @@ export interface ServiceCategory {
   description?: string;
   subcategories: Subcategory[];
 }
+
+export interface ServiceData {
+  _id: string;
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  ratings: number;
+  location: string;
+  company: CompanyData;
+  favoritedBy: string[];
+  favoriteCount: number;
+  images: string[];
+  videos: string[];
+  tags: string[];
+  link: string;
+  clients: [];
+}
