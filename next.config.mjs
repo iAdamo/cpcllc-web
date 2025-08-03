@@ -1,3 +1,4 @@
+import { withNextVideo } from "next-video/process";
 import { withGluestackUI } from "@gluestack/ui-next-adapter";
 /** @type {import('next').NextConfig} */
 const remotePatterns =
@@ -25,4 +26,4 @@ const nextConfig = {
   },
 };
 
-export default withGluestackUI(nextConfig);
+export default withNextVideo(withGluestackUI(nextConfig));

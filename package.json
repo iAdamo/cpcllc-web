@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev & npx next-video sync -w",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -47,6 +47,7 @@
     "lucide-react": "^0.511.0",
     "nativewind": "^4.1.23",
     "next": "14.2.22",
+    "next-video": "^2.2.1",
     "react": "^18",
     "react-dom": "^18",
     "react-google-autocomplete": "^2.7.4",
@@ -58,7 +59,6 @@
     "react-native-svg": "^15.2.0",
     "react-native-web": "^0.19.13",
     "react-phone-input-2": "^2.15.1",
-    "react-player": "^3.3.1",
     "sharp": "^0.33.5",
     "swiper": "^11.2.6",
     "tailwind-variants": "^0.3.1",

@@ -48,7 +48,7 @@ const ServiceSection = ({
       {isCurrentUser && (
         <Button
           onPress={() => router.push("/service/init")}
-          className="mb-4 h-16 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary"
+          className="mb-4 h-14 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary"
         >
           <ButtonIcon as={AddIcon} />
           <ButtonText size="sm" className="">
