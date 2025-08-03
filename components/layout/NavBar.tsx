@@ -147,24 +147,39 @@ const NavBar = () => {
                     {option.name}
                   </Link>
                 ))}
-                {}
-                <ProfileMenu
-                  options={[
-                    {
-                      name: "Profile",
-                      onPress: () => router.replace(`/cpc/${userData?.id}`),
-                    },
-                    {
-                      name: "Membership",
-                      onPress: () => router.replace("/profile"),
-                    },
-                    {
-                      name: "Settings",
-                      onPress: () => router.replace("/settings"),
-                    },
-                  ]}
-                  offset={20}
-                />
+                {/** User Profile Menu */}
+                {userData && (
+                  <ProfileMenu
+                    options={[
+                      ...(userData?.activeRoleId
+                        ? [
+                            {
+                              name: "Profile",
+                              onPress: () => {
+                                setUserData({
+                                  ...userData,
+                                  activeRole:
+                                    userData?.activeRole === "Client"
+                                      ? "Company"
+                                      : "Company",
+                                });
+                              },
+                            },
+                            {
+                              name: "Membership",
+                              onPress: () => router.replace("/profile"),
+                            },
+                          ]
+                        : []),
+
+                      {
+                        name: "Settings",
+                        onPress: () => router.replace("/settings"),
+                      },
+                    ]}
+                    offset={30}
+                  />
+                )}
               </HStack>
             )}
           </HStack>
