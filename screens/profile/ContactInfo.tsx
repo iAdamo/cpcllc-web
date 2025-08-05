@@ -57,7 +57,7 @@ const ContactInfo = ({
   const canSave = !isEditingEmail || isValidEmail(currentEmail);
 
   return (
-    <Card variant="filled" className="h-fit flex-row gap-4 p-2 items-start">
+    <Card variant="filled" className="h-fit flex-row gap-4 p-2 items-start md:w-auto w-fit">
       {isEditingPhone || isEditingEmail ? (
         <VStack className="gap-2 w-full">
           {isEditingPhone && (

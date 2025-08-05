@@ -98,7 +98,10 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
 
   if (isLoading || loading || loadingCompany)
     return (
-      <Spinner size="large" className="h-full items-center justify-center" />
+      <Spinner
+        size="large"
+        className="h-full overflow-hidden p-10 items-end justify-end"
+      />
     );
 
   if (
@@ -112,31 +115,46 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     if (userData?.activeRole === "Client") {
       router.replace("/companies");
       return (
-        <Spinner size="large" className="h-full items-center justify-center" />
+        <Spinner
+          size="large"
+          className="h-full overflow-hidden p-10 items-end justify-end"
+        />
       );
     } else if (userData?.activeRole === "Company") {
       router.replace(`/cpc/${userData.id}`);
       return (
-        <Spinner size="large" className="h-full items-center justify-center" />
+        <Spinner
+          size="large"
+          className="h-full overflow-hidden p-10 items-end justify-end"
+        />
       );
     }
   } else if (session && userData?.activeRole === "Company") {
     if (pathname.startsWith("/companies")) {
       router.replace(`/cpc/${userData.id}`);
       return (
-        <Spinner size="large" className="h-full items-center justify-center" />
+        <Spinner
+          size="large"
+          className="h-full overflow-hidden p-10 items-end justify-end"
+        />
       );
     } else if (pathname === "/cpc") {
       router.push("/cpc");
       return (
-        <Spinner size="large" className="h-full items-center justify-center" />
+        <Spinner
+          size="large"
+          className="h-full overflow-hidden p-10 items-end justify-end"
+        />
       );
     }
   } else if (session && userData?.activeRole === "Client") {
     if (pathname === `/cpc/${userData?.id}`) {
       router.push("/companies");
       return (
-        <Spinner size="large" className="h-full items-center justifyCenter" />
+        <Spinner
+          size="large"
+          className="h-full overflow-hidden p-10 items-end justify-end"
+        />
       );
     }
   }

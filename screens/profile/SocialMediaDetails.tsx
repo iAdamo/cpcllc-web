@@ -83,7 +83,7 @@ const SocialMediaDetails = ({
   };
 
   return (
-    <Card variant="filled" className="h-fit gap-4 p-2 flex-row -z-50">
+    <Card variant="filled" className="h-fit gap-4 p-2 flex-row -z-50 md:w-auto w-fit">
       <VStack className="grid grid-cols-2 gap-x-4">
         {[
           "website",

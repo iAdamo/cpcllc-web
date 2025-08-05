@@ -93,7 +93,7 @@ const ReviewSection = ({
             >
               <Card variant="outline" className="">
                 <HStack className="gap-3 items-start">
-                  <Avatar className="w-12 h-12">
+                  <Avatar className="md:w-12 md:h-12 w-10 h-10">
                     <AvatarFallbackText className="text-sm">
                       {getInitial(review.user?.firstName || review.user?.email)}
                     </AvatarFallbackText>
@@ -102,12 +102,12 @@ const ReviewSection = ({
                     />
                   </Avatar>
 
-                  <VStack className="flex-1 gap-1">
+                  <VStack className="flex-1 gap-4">
                     <HStack className="justify-between items-start">
                       <VStack>
                         <Heading
-                          size="sm"
-                          className="font-semibold text-gray-800"
+                          size="xs"
+                          className="md:text-md font-semibold text-gray-800"
                         >
                           {review.user?.firstName && review.user?.lastName
                             ? `${review.user.firstName} ${review.user.lastName}`
@@ -120,12 +120,12 @@ const ReviewSection = ({
                           </Text>
                         </HStack>
                       </VStack>
-                      <Text className="text-xs text-gray-400">
+                      <Text size="xs" className="md:text-xs text-gray-400">
                         {format(new Date(review.createdAt), "MMM d, yyyy")}
                       </Text>
                     </HStack>
-                    <Text
-                      className={`text-sm text-gray-600 ${
+                    <Text size="xs"
+                      className={`md:text-sm text-gray-600 ${
                         review.description.length > 80 && "line-clamp-3"
                       }`}
                     >

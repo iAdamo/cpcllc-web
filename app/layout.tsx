@@ -1,4 +1,5 @@
 "use client";
+
 import StyledJsxRegistry from "./registry";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { SessionProvider } from "@/context/AuthContext";
@@ -7,6 +8,7 @@ import PreFooter from "@/components/layout/PreFooter";
 import Footer from "@/components/layout/Footer";
 import { usePathname } from "next/navigation";
 import { MapProvider } from "@/context/MapContext";
+import AiChat from "@/components/AiChatFab";
 
 export default function RootLayout({
   children,
@@ -30,6 +32,7 @@ export default function RootLayout({
                 {children}
                 {!shouldHideLayout && <PreFooter />}
                 {!shouldHideLayout && <Footer />}
+                <AiChat />
               </SessionProvider>
             </MapProvider>
           </GluestackUIProvider>

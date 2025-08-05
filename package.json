@@ -42,6 +42,7 @@
     "axios": "^1.7.9",
     "country-list": "^2.3.0",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.12",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "lucide-react": "^0.511.0",

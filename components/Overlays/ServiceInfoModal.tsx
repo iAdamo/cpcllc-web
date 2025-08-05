@@ -5,6 +5,7 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
+import { Button, ButtonText } from "@/components/ui/button";
 import {
   Modal,
   ModalCloseButton,
@@ -155,6 +156,9 @@ const ServiceInfoModal = ({
         <ModalFooter>
           <HStack className="justify-end w-full">
             {/* Add any footer actions if needed */}
+            <Button variant="outline" className="border-none">
+              <ButtonText>Edit</ButtonText>
+            </Button>
           </HStack>
         </ModalFooter>
         <ModalCloseButton>

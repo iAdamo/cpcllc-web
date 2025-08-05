@@ -151,8 +151,8 @@ const BasicInfo = () => {
 
   return (
     <VStack className="w-full h-full px-4 my-10">
-      <HStack className="gap-4">
-        <VStack className="w-1/2 gap-6">
+      <VStack className="md:flex-row gap-4">
+        <VStack className="md:w-1/2 w-full gap-6">
           <HStack className="justify-between">
             <FormControl isInvalid={!!errors.firstName} className="w-[48%]">
               <FormControlLabel>
@@ -249,7 +249,9 @@ const BasicInfo = () => {
           {/** Company Phone Number */}
           <FormControl isInvalid={!!errors.companyPhoneNumber} className="z-50">
             <FormControlLabel>
-              <FormControlLabelText>Company Phone Number</FormControlLabelText>
+              <FormControlLabelText className="font-semibold text-md">
+                Company Phone Number
+              </FormControlLabelText>
             </FormControlLabel>
             <Controller
               name="companyPhoneNumber"
@@ -354,7 +356,7 @@ const BasicInfo = () => {
             )}
           </FormControl>
 
-          <HStack className="justify-between mt-auto">
+          <HStack className="hidden md:flex justify-between mt-auto">
             <Button variant="outline" onPress={prevStep} className="">
               <ButtonText>Back</ButtonText>
             </Button>
@@ -363,18 +365,18 @@ const BasicInfo = () => {
             </Button>
           </HStack>
         </VStack>
-        <VStack className="w-1/2 gap-4">
+        <VStack className="md:w-1/2 w-full gap-4">
           <FormControl
             isInvalid={!!errors.profilePicture}
-            className="flex-row justify-between items-start border border-gray-300 rounded-xl p-4"
+            className="md:flex-row flex-col-reverse gap-4 justify-between items-start border border-gray-300 rounded-lg p-4"
           >
-            <VStack className="w-44 h-40">
+            <VStack className="md:w-44 md:h-40 w-48 h-44">
               <Controller
                 name="profilePicture"
                 control={control}
                 render={({ field: { onChange } }) => (
-                  <div className="text-center cursor-pointer h-40 border w-full flex items-center justify-center">
-                    <label className="w-full h-full cursor-pointer">
+                  <div className="text-center cursor-pointer md:h-40 h-44 border w-full flex items-center justify-center">
+                    <label className="w-full h-full cursor-pointer flex flex-col items-center justify-center">
                       <input
                         type="file"
                         accept="image/*"
@@ -395,14 +397,16 @@ const BasicInfo = () => {
                           />
                         </div>
                       ) : (
-                        <p className="text-gray-500 mt-16">Click to Upload</p>
+                        <p className="text-md text-gray-500 mt-16">
+                          Click to Upload
+                        </p>
                       )}
                     </label>
                   </div>
                 )}
               />
             </VStack>
-            <VStack className="w-1/2 ml-auto">
+            <VStack className="md:w-1/2 w-full ml-auto">
               <FormControlLabel>
                 <FormControlLabelText className="font-semibold text-md">
                   Profile Picture
@@ -415,11 +419,14 @@ const BasicInfo = () => {
                 }`}
               >
                 {errors.profilePicture ? (
-                  <Text className="text-red-950">
+                  <Text size="sm" className="md:text-md text-red-950">
                     {errors.profilePicture?.message}
                   </Text>
                 ) : (
-                  <Text size="sm" className="text-green-950 ">
+                  <Text
+                    size="xs"
+                    className="md:text-md font-medium text-green-950 "
+                  >
                     A profile picture helps build trust and credibility by
                     allowing clients to recognize and connect with you, creating
                     a more personalized and professional experience
@@ -433,17 +440,20 @@ const BasicInfo = () => {
             isInvalid={selectedImages.length === 0 || !!errors.companyImages}
             className="border border-gray-300 rounded-xl p-4 gap-4"
           >
-            <Heading size="md">Professional Company Images</Heading>
             <FormControlLabel className="flex-col flex items-start">
-              <FormControlLabelText className="text-md font-medium bg-green-200 p-2 rounded">
-                Upload up to 6 professional company images (.jpg or .png) that
-                showcase your company. Ensure each image is under 10MB.{" "}
-                <span className="text-red-500">
-                  The first image should be the company&apos;s logo or the most
-                  preferred image.
-                </span>
-              </FormControlLabelText>
+              <Heading size="md">Professional Company Images</Heading>
             </FormControlLabel>
+            <Card className=" bg-green-200 p-2 rounded">
+              <Text size="xs" className="md:text-md font-medium">
+                Upload up to 6 professional company images (.jpg or .png) that
+                showcase your company. Ensure each image is under 10MB.
+              </Text>
+              <Text size="xs" className="md:text-md font-medium text-red-400">
+                The first image should be the company&apos;s logo or the most
+                preferred image.
+              </Text>
+            </Card>
+
             <HStack className="gap-4 grid grid-cols-3">
               {selectedImages.map((image, index) => (
                 <Card
@@ -474,7 +484,7 @@ const BasicInfo = () => {
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDrop}
                   >
-                    <label className="cursor-pointer w-full h-full">
+                    <label className="cursor-pointer w-full h-full flex flex-col items-center justify-center">
                       <input
                         type="file"
                         multiple
@@ -482,11 +492,11 @@ const BasicInfo = () => {
                         onChange={handleImageChange}
                         className="hidden"
                       />
-                      <p className="text-gray-500 text-sm mt-4">
-                        Drag companyImages here or{" "}
-                        <span className="text-blue-500 mt-10">
-                          Click to Upload
-                        </span>
+                      <p className="text-gray-500 md:text-sm text-xs ">
+                        Drag companyImages here or
+                      </p>
+                      <p className=" md:text-sm text-xs text-blue-500 ">
+                        Click to Upload
                       </p>
                     </label>
                   </div>
@@ -502,6 +512,14 @@ const BasicInfo = () => {
             )}
           </FormControl>
         </VStack>
+      </VStack>
+      <HStack className="md:hidden mt-4 justify-between">
+        <Button variant="outline" onPress={prevStep} className="">
+          <ButtonText>Back</ButtonText>
+        </Button>
+        <Button onPress={handleFormSubmit} className="">
+          <ButtonText>Continue</ButtonText>
+        </Button>
       </HStack>
     </VStack>
   );

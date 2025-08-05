@@ -49,7 +49,7 @@ const BrowseCompanies = () => {
               className="flex-row h-32 md:w-[22rem] p-0 gap-4 bg-white"
             >
               <Image
-                className="h-32 w-32 rounded-l-md object-cover"
+                className="h-full w-32 rounded-l-md object-cover"
                 src={company?.companyImages[0] || "/assets/placeholder.jpg"}
                 alt={company?.companyName || "Company Logo"}
                 width={1400}

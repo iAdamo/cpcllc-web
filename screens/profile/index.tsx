@@ -152,10 +152,10 @@ const ProfilePage = () => {
           <VStack className="md:w-3/4 gap-8">
             {activeRoleId?._id && (
               <VStack className="w-full gap-4">
-                <Card variant="outline" className="p-0 gap-4 bg-white">
+                <VStack className="gap-4 md:border rounded-md bg-white">
                   <HStack className="justify-between p-4">
-                    <HStack className="gap-10">
-                      <Card className="md:p-4 p-0 -mt-8 gap-4 md:bg-white bg-transparent">
+                    <VStack className="md:flex-row gap-10">
+                      <Card className="md:p-4 p-0 -mt-8 gap-4 md:bg-white bg-transparent md:items-start items-center">
                         <div className="relative">
                           <div className="hidden md:block relative h-56 w-56">
                             <Image
@@ -200,13 +200,13 @@ const ProfilePage = () => {
                           </div>
                         </div>
                         <VStack className="gap-4">
-                          <VStack className="gap-1">
+                          <VStack className="gap-1 md:items-start items-center">
                             <Heading size="md">
                               {activeRoleId.companyName}
                             </Heading>
                             <RatingSection
                               rating={activeRoleId?.averageRating}
-                              reviewCount={activeRoleId?.reviewCount}
+                              reviewCount={activeRoleId?.reviewCount || 0}
                             />
                             <Text size="sm">
                               {activeRoleId.location?.primary?.address?.country}
@@ -232,15 +232,15 @@ const ProfilePage = () => {
                         isEditable={isEditable}
                         fetchUserProfile={fetchUserProfile}
                       />
-                    </HStack>
+                    </VStack>
                   </HStack>
                   <Card className="gap-2 text-typography-700">
-                    <Heading size="sm">Brand Showcase</Heading>
+                    <Heading size="xs" className="md:text-md">Brand Showcase</Heading>
                     <VStack className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {activeRoleId?.companyImages?.map((src, index) => (
                         <Card key={index} variant="outline" className="">
                           <Image
-                            className="object-cover w-full h-56 "
+                            className="object-cover w-full md:h-56 h-40"
                             src={src}
                             alt={`company-image-${index}`}
                             width={1920}
@@ -251,13 +251,13 @@ const ProfilePage = () => {
                       ))}
                     </VStack>
                   </Card>
-                </Card>
+                </VStack>
                 <Card></Card>
               </VStack>
             )}
 
             {activeRoleId?._id && (
-              <VStack className="w-full gap-4">
+              <VStack className="w-full md:px-0 px-4 gap-4">
                 <ReviewSection
                   companyId={activeRoleId._id}
                   newReviews={newReviews}
@@ -266,7 +266,7 @@ const ProfilePage = () => {
             )}
           </VStack>
 
-          <VStack className="hidden md:flex w-1/4 items-center p-4 bg-[#F6F6F6]">
+          <VStack className="md:w-1/4 items-center p-4 md:bg-[#F6F6F6]">
             {activeRoleId?._id && (
               <VStack className="w-full gap-4">
                 <ServiceSection

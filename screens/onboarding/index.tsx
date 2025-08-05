@@ -1,6 +1,5 @@
 "use client";
 
-import { HStack } from "@/components/ui/hstack";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useEffect, useState } from "react";
 import PageOne from "@/screens/onboarding/pageOne";
@@ -11,7 +10,6 @@ import { VStack } from "@/components/ui/vstack";
 import FinalStep from "@/screens/onboarding/company/finalStep";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import OpenInApp from "@/components/OpenInApp";
 
 const Onboarding = () => {
   const { step } = useOnboarding();
@@ -24,34 +22,34 @@ const Onboarding = () => {
   }, [step]);
 
   return (
-    <section>
+    <section id="onboarding">
       {currentStep === 1 ? (
         <PageOne />
       ) : (
         <VStack className="w-full min-h-screen">
-  <HStack className="hidden md:flex w-full bg-white flex-1">
-    {/* Sidebar - Fixed width, independent height */}
-    <VStack className="bg-brand-primary w-1/6 min-h-full">
-      <Button
-        className="bg-brand-primary data-[hover=true]:bg-brand-primary data-[active=true]:bg-brand-primary mt-4"
-        onPress={() => router.replace("/")}
-      >
-        <ButtonText size="lg" className="text-white">
-          CompanyCenterLLC
-        </ButtonText>
-      </Button>
-    </VStack>
+          <VStack className="md:flex-row w-full bg-white flex-1">
+            {/* Sidebar - Fixed width, independent height */}
+            <VStack className=" bg-brand-primary md:w-1/6 w-full md:min-h-full md:h-auto h-32">
+              <Button
+                variant="outline"
+                className="self-start border-none data-[hover=true]:bg-brand-primary data-[active=true]:bg-brand-primary mt-4"
+                onPress={() => router.replace("/")}
+              >
+                <ButtonText size="lg" className="text-white">
+                  CompanyCenter
+                </ButtonText>
+              </Button>
+            </VStack>
 
-    {/* Content Area - Flexible width, independent height */}
-    <VStack className="flex-1 overflow-auto">
-      {currentStep === 4 && <BasicInfo />}
-      {currentStep === 3 && <ServicesInfo />}
-      {currentStep === 2 && <LocationBoard />}
-      {currentStep === 5 && <FinalStep />}
-    </VStack>
-  </HStack>
-  <OpenInApp />
-</VStack>
+            {/* Content Area - Flexible width, independent height */}
+            <VStack className="flex-1 overflow-auto">
+              {currentStep === 2 && <BasicInfo />}
+              {currentStep === 3 && <ServicesInfo />}
+              {currentStep === 4 && <LocationBoard />}
+              {currentStep === 5 && <FinalStep />}
+            </VStack>
+          </VStack>
+        </VStack>
       )}
     </section>
   );

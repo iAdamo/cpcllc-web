@@ -1,3 +1,4 @@
+"use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { VStack } from "@/components/ui/vstack";
@@ -5,8 +6,6 @@ import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { Textarea, TextareaInput } from "@/components/ui/textarea";
-// import { Input, InputField } from "@/components/ui/input";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { Loader2, MapPin } from "lucide-react";
@@ -50,8 +49,6 @@ const LocationBoard = () => {
   const [autocompleteInput, setAutocompleteInput] = useState(
     data.address || ""
   );
-  const [manualAddress, setManualAddress] = useState<string>("");
-  const [useManualAddress, setUseManualAddress] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
 
   const autocompleteRef = useRef<HTMLInputElement>(null);
@@ -79,7 +76,7 @@ const LocationBoard = () => {
         (resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject, {
             enableHighAccuracy: true,
-            timeout: 10000,
+            timeout: 100000,
             maximumAge: 0,
           });
         }
@@ -101,7 +98,6 @@ const LocationBoard = () => {
           const formattedAddress = address.formatted_address || "";
 
           setAutocompleteInput(formattedAddress);
-          setManualAddress(formattedAddress);
           setData({
             address: formattedAddress,
             latitude,
@@ -113,17 +109,11 @@ const LocationBoard = () => {
           setAutocompleteInput(
             `Coordinates: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
           );
-          setManualAddress(
-            `Coordinates: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
-          );
           setMapError("Couldn't determine address from coordinates");
         }
       } else {
         setData({ latitude, longitude });
         setAutocompleteInput(
-          `Coordinates: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
-        );
-        setManualAddress(
           `Coordinates: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
         );
       }
@@ -151,7 +141,12 @@ const LocationBoard = () => {
         {
           types: ["address"],
           componentRestrictions: { country: "us" },
-          fields: ["geometry", "formatted_address", "name"],
+          fields: [
+            "address_components",
+            "geometry",
+            "formatted_address",
+            "name",
+          ],
         }
       );
 
@@ -161,15 +156,17 @@ const LocationBoard = () => {
           const lat = place.geometry.location.lat();
           const lng = place.geometry.location.lng();
           const address = place.formatted_address || place.name || "";
+          const parsedAddress = place.address_components
+            ? parseAddressComponents(place.address_components)
+            : {};
 
           setAutocompleteInput(address);
-          setManualAddress(address);
           setData({
             address: address,
             latitude: lat,
             longitude: lng,
+            ...parsedAddress,
           });
-          setUseManualAddress(false);
           setMapError(null);
         }
       });
@@ -178,22 +175,14 @@ const LocationBoard = () => {
     }
 
     return () => {
+      if (googleAutocompleteInstance.current) {
+        google.maps.event.clearInstanceListeners(
+          googleAutocompleteInstance.current
+        );
+      }
       googleAutocompleteInstance.current = null;
     };
   }, [isLoaded, setData]);
-
-  // Handle manual address submission
-  const handleManualAddressSubmit = () => {
-    if (manualAddress.trim()) {
-      setData({
-        address: manualAddress,
-        latitude: null,
-        longitude: null,
-      });
-      setUseManualAddress(true);
-      setMapError(null);
-    }
-  };
 
   // Helper function for geolocation errors
   const getGeolocationErrorMessage = (error: GeolocationPositionError) => {
@@ -227,13 +216,13 @@ const LocationBoard = () => {
   }
 
   return (
-    <VStack className="w-full p-4 sm:p-8 gap-6 sm:gap-8 min-h-screen justify-center">
+    <VStack className="w-full p-4 sm:p-8 gap-6 sm:gap-8 md:min-h-screen justify-center">
       <VStack className="w-full gap-6 justify-center items-center flex-grow">
         <Card
           variant="filled"
-          className="w-full max-w-xl p-4 sm:p-6 text-center shadow-md"
+          className="w-full max-w-xl md:p-4 p-6 text-center md:shadow-md"
         >
-          <Text className="text-gray-700 text-base leading-relaxed">
+          <Text size="sm" className="text-gray-700 md:text-base md:leading-relaxed">
             Providing your company location helps us ensure accurate service
             delivery and better communication with your clients.
           </Text>
@@ -241,90 +230,41 @@ const LocationBoard = () => {
 
         <Card
           variant="outline"
-          className="w-full max-w-xl p-4 sm:p-6 gap-4 shadow-lg"
+          className="w-full max-w-xl md:p-4 p-6 gap-4 md:shadow-lg"
         >
-          {/* Address Selection Tabs */}
-          <HStack className="border-b border-gray-200">
-            <button
-              className={`px-4 py-2 font-medium ${
-                !useManualAddress
-                  ? "border-b-2 border-blue-500 text-blue-600"
-                  : "text-gray-500"
-              }`}
-              onClick={() => setUseManualAddress(false)}
-            >
-              Search Address
-            </button>
-            <button
-              className={`px-4 py-2 font-medium ${
-                useManualAddress
-                  ? "border-b-2 border-blue-500 text-blue-600"
-                  : "text-gray-500"
-              }`}
-              onClick={() => setUseManualAddress(true)}
-            >
-              Enter Manually
-            </button>
-          </HStack>
+          <VStack className="gap-2">
+            <Text size="xs" className="text-gray-700 md:text-sm font-medium">
+              Search for your company address
+            </Text>
+            <input
+              className="md:h-12 h-10 pl-4 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200 w-full"
+              ref={autocompleteRef}
+              placeholder="E.g., 123 Main Street, New York, NY"
+              value={autocompleteInput}
+              onChange={(e) => setAutocompleteInput(e.target.value)}
+              disabled={isLoadingGeolocation}
+            />
+          </VStack>
 
-          {/* Address Input Section */}
-          {!useManualAddress ? (
-            <>
-              <VStack className="gap-2">
-                <Text className="text-gray-700 text-sm font-medium">
-                  Search for your company address
-                </Text>
-                <input
-                  className="h-12 pl-4 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200 w-full"
-                  ref={autocompleteRef}
-                  placeholder="E.g., 123 Main Street, New York, NY"
-                  value={autocompleteInput}
-                  onChange={(e) => setAutocompleteInput(e.target.value)}
-                  disabled={isLoadingGeolocation}
-                />
-              </VStack>
+          <Text size="xs" className="text-gray-500 md:text-sm text-center">- OR -</Text>
 
-              <Text className="text-gray-500 text-sm text-center">- OR -</Text>
-
-              <Button
-                onPress={handleGeolocation}
-                disabled={isLoadingGeolocation}
-                className="w-full bg-green-500 hover:bg-green-600 active:bg-green-700 transition-colors duration-200"
-              >
-                {isLoadingGeolocation ? (
-                  <HStack className="items-center gap-2">
-                    <Loader2 className="animate-spin h-5 w-5" />
-                    <ButtonText>Detecting Location...</ButtonText>
-                  </HStack>
-                ) : (
-                  <HStack className="items-center gap-2">
-                    <MapPin className="h-5 w-5" />
-                    <ButtonText>Use Current Location</ButtonText>
-                  </HStack>
-                )}
-              </Button>
-            </>
-          ) : (
-            <VStack className="gap-4">
-              <Text className="text-gray-700 text-sm font-medium">
-                Enter your full company address
-              </Text>
-              <Textarea>
-                <TextareaInput
-                  className="min-h-[100px]"
-                  value={manualAddress}
-                  onChangeText={(text: string) => setManualAddress(text)}
-                  placeholder="Full company address including street, city, state, and zip code"
-                />
-              </Textarea>
-              <Button
-                onPress={handleManualAddressSubmit}
-                className="w-full bg-blue-500 hover:bg-blue-600"
-              >
-                <ButtonText>Save Manual Address</ButtonText>
-              </Button>
-            </VStack>
-          )}
+          <Button
+            onPress={handleGeolocation}
+            disabled={isLoadingGeolocation}
+            className="md:w-full w-fit self-center bg-green-500 hover:bg-green-600 active:bg-green-700 transition-colors duration-200"
+          >
+            {isLoadingGeolocation ? (
+              <HStack className="items-center gap-2">
+                <Loader2 className="animate-spin h-5 w-5" />
+                <ButtonText>Detecting Location...</ButtonText>
+              </HStack>
+            ) : (
+              <HStack className="items-center gap-2">
+                <MapPin className="h-5 w-5" />
+                <ButtonText>Use Current Location</ButtonText>
+              </HStack>
+            )}
+          </Button>
 
           {/* Error Display */}
           {mapError && (

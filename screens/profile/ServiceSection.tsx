@@ -48,7 +48,7 @@ const ServiceSection = ({
       {isCurrentUser && (
         <Button
           onPress={() => router.push("/service/init")}
-          className="mb-4 h-14 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary"
+          className="mb-4 md:h-14 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary"
         >
           <ButtonIcon as={AddIcon} />
           <ButtonText size="sm" className="">
@@ -57,7 +57,7 @@ const ServiceSection = ({
         </Button>
       )}
       {isCurrentUser && services.length === 0 ? (
-        <Text size="sm" className="text-text-secondary text-center mt-8">
+        <Text size="xs" className="md:text-md text-text-secondary text-center mt-8">
           No updates available for this service yet. Click the button above to
           add new updates.
         </Text>
@@ -68,11 +68,10 @@ const ServiceSection = ({
               key={update._id}
               onPress={() => {
                 setServiceData(update);
-                // Implement logic to open modal
               }}
-              className="gap-4 drop-shadow-2xl transform transition-transform duration-300 hover:scale-95"
+              className="gap-4 md:drop-shadow-2xl transform transition-transform duration-300 hover:scale-95"
             >
-              <Card className="p-4 gap-2">
+              <Card className="p-4 border gap-2">
                 <Heading size="sm" className="text-typography-600">
                   {update.title}
                 </Heading>
@@ -100,7 +99,7 @@ const ServiceSection = ({
               <ButtonText>View All Updates</ButtonText>
             </Button>
           ) : (
-            <Text size="sm" className="text-text-secondary text-center mt-8">
+            <Text size="xs" className="md:text-md text-text-secondary text-center mt-8">
               No updates available for this service.
             </Text>
           )}

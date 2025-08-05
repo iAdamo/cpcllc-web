@@ -101,35 +101,41 @@ const ServicesInfo = () => {
     <VStack className="w-full h-full bg-white p-8 gap-8">
       <VStack space="3xl">
         <VStack className="items-center gap-2">
-          <Heading size="2xl" className="text-center">
+          <Heading size="2xl" className="hidden md:inline text-center">
             Choose Specialized Company Services
           </Heading>
-          <Text className="text-gray-600 text-sm text-center max-w-2xl mx-auto">
+          <Text
+            size="sm"
+            className="text-gray-600 text-center max-w-2xl mx-auto"
+          >
             Select up to {MAX_SERVICES} specialized services that best represent
             your company&apos;s expertise.
             {selectedServices.length > 0 && (
-              <Text className="text-primary-500 font-medium">
+              <Text size="sm" className="text-primary-500 font-medium">
                 {" "}
                 ({selectedServices.length}/{MAX_SERVICES} selected)
               </Text>
             )}
           </Text>
           {selectionLimitReached && (
-            <Text className="text-sm text-red-500">
+            <Text
+              size="sm"
+              className="md:bg-transparent bg-red-100 text-red-500 rounded p-2"
+            >
               You&apos;ve reached the maximum selection limit. Remove some
               services to add others.
             </Text>
           )}
         </VStack>
 
-        <VStack className="flex-row h-full gap-4">
+        <VStack className="md:flex-row flex-col-reverse h-full gap-4">
           {/* Available Services */}
           <VStack
             className={`${
-              selectedServices.length > 0 ? "w-3/5" : "w-full"
+              selectedServices.length > 0 ? "md:w-3/5 w-full" : "w-full"
             } h-full`}
           >
-            <Heading size="lg" className="mb-4">
+            <Heading size="sm" className="md:text-lg mb-4">
               Available Services
             </Heading>
             {availableCategories.map((category, categoryIndex) => (
@@ -178,8 +184,8 @@ const ServicesInfo = () => {
 
           {/* Selected Services */}
           {selectedServices.length > 0 && (
-            <VStack className="w-3/5 h-full">
-              <Heading size="lg" className="mb-4">
+            <VStack className="md:w-3/5 w-full h-full">
+              <Heading size="sm" className="md:text-lg mb-4">
                 Selected Services
               </Heading>
               <Card variant="outline" className="flex-row flex-wrap gap-2 p-4">

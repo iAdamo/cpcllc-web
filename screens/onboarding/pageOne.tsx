@@ -57,7 +57,7 @@ const PageOne = () => {
       </Button>
       <VStack className="h-full rounded-3xl justify-center items-center mt-14 py-1 gap-10">
         <Heading size="lg" className="md:text-2xl text-center font-medium">
-          Join as a Client or service provider
+          Join as a Client or Service Provider
         </Heading>
         <FormControl>
           <RadioGroup value={values} onChange={setValues}>

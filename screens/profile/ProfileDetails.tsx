@@ -99,7 +99,7 @@ const ProfileDetails = ({
           <Heading size="xs" className="md:text-md mb-2">
             Categories Provided
           </Heading>
-          <VStack className="w-fit grid grid-cols-4 md:grid-cols-5 gap-2">
+          <VStack className="w-fit grid grid-cols-3 gap-2">
             {activeRoleId?.subcategories?.map((subcategory) => (
               <Card variant="filled" key={subcategory._id} className="p-2">
                 <Text size="xs" className="text-gray-600 font-semibold">
@@ -146,7 +146,7 @@ const ProfileDetails = ({
             </VStack>
           ) : (
             <Card variant="filled" className="flex-row p-4">
-              <Text size="sm" className="md:text-md break-words">
+              <Text size="xs" className="md:text-md break-words">
                 {activeRoleId?.companyDescription}
               </Text>
               {isEditable && (
@@ -168,7 +168,7 @@ const ProfileDetails = ({
         </VStack>
       </FormControl>
 
-      <VStack className="md:flex-row justify-between w-full">
+      <VStack className="md:flex-row md:justify-between gap-4 w-full">
         <ContactInfo
           activeRoleId={activeRoleId}
           isEditable={isEditable}
@@ -191,9 +191,6 @@ const ProfileDetails = ({
       <LocationDetails
         activeRoleId={activeRoleId}
         isEditable={isEditable}
-        isSaving={isSaving}
-        handleSave={handleSave}
-        handleCancelEdit={handleCancelEdit}
         fetchUserProfile={fetchUserProfile}
       />
     </VStack>

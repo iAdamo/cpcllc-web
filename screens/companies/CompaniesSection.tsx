@@ -133,7 +133,9 @@ const CompaniesSection = () => {
   return (
     <VStack className="hidden md:flex mt-28 bg-[#F6F6F6]">
       <div className="rounded m-2 p-4">
-        <h1 className="text-3xl font-bold text-brand-primary">{`${category} Service Providers Near You`}</h1>
+        <h1 className="text-3xl font-bold text-brand-primary">{`${
+          category.charAt(0).toUpperCase() + category.slice(1)
+        } Service Providers Near You`}</h1>
       </div>
       <VStack className="md:flex-row bg-[#F6F6F6]">
         {/* Sidebar List */}
@@ -158,7 +160,9 @@ const CompaniesSection = () => {
                 >
                   <Image
                     className="h-24 w-24 rounded-l-md object-cover"
-                    src={company?.companyImages?.[0] || "/assets/placeholder.jpg"}
+                    src={
+                      company?.companyImages?.[0] || "/assets/placeholder.jpg"
+                    }
                     alt={company?.companyName || "Company Logo"}
                     width={1400}
                     height={600}
