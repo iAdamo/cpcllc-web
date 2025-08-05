@@ -138,7 +138,7 @@ const ProfilePage = () => {
     <VStack className="md:mt-28 mt-32">
       {activeRoleId?.companyImages && (
         <Image
-          className="w-full h-64 object-cover"
+          className="w-full md:h-64 h-32 object-cover"
           src={activeRoleId?.companyImages[0]}
           alt="Company Banner"
           width={1920}
@@ -154,8 +154,8 @@ const ProfilePage = () => {
               <VStack className="w-full gap-4">
                 <VStack className="gap-4 md:border rounded-md bg-white">
                   <HStack className="justify-between p-4">
-                    <VStack className="md:flex-row gap-10">
-                      <Card className="md:p-4 p-0 -mt-8 gap-4 md:bg-white bg-transparent md:items-start items-center">
+                    <VStack className="md:flex-row md:gap-10 gap-4">
+                      <Card className="md:p-4 p-0 -mt-8 md:gap-4 gap-2 md:bg-white bg-transparent md:items-start items-center">
                         <div className="relative">
                           <div className="hidden md:block relative h-56 w-56">
                             <Image
@@ -180,7 +180,7 @@ const ProfilePage = () => {
                           </div>
 
                           <div className="md:hidden">
-                            <Avatar size="2xl" className="relative">
+                            <Avatar size="2xl" className="relative w-52 h-52">
                               <AvatarFallbackText>
                                 {getInitial(data.email || data.firstName || "")}
                               </AvatarFallbackText>
@@ -199,7 +199,7 @@ const ProfilePage = () => {
                             </Avatar>
                           </div>
                         </div>
-                        <VStack className="gap-4">
+                        <VStack className="md:gap-4 gap-2">
                           <VStack className="gap-1 md:items-start items-center">
                             <Heading size="md">
                               {activeRoleId.companyName}
@@ -252,30 +252,27 @@ const ProfilePage = () => {
                     </VStack>
                   </Card>
                 </VStack>
-                <Card></Card>
               </VStack>
             )}
 
             {activeRoleId?._id && (
-              <VStack className="w-full md:px-0 px-4 gap-4">
                 <ReviewSection
                   companyId={activeRoleId._id}
                   newReviews={newReviews}
                 />
-              </VStack>
             )}
           </VStack>
 
-          <VStack className="md:w-1/4 items-center p-4 md:bg-[#F6F6F6]">
+          <Card className="md:w-1/4 items-center md:bg-[#F6F6F6] border md:border-none mx-4 md:mx-0">
             {activeRoleId?._id && (
-              <VStack className="w-full gap-4">
+              <VStack className="w-full">
                 <ServiceSection
                   companyId={activeRoleId._id}
                   isCurrentUser={isCurrentUser}
                 />
               </VStack>
             )}
-          </VStack>
+          </Card>
         </VStack>
       </VStack>
     </VStack>

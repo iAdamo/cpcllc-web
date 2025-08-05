@@ -12,14 +12,14 @@ export const ProfileUploadButton = ({
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isMobile?: boolean;
 }) => {
-  const iconSize = isMobile ? "w-4 h-4" : "w-6 h-6";
+  const iconSize = isMobile ? "w-5 h-5" : "w-6 h-6";
 
   return (
     <>
       <button
         type="button"
         className={`absolute ${
-          isMobile ? "bottom-0 right-0 p-1" : "bottom-2 right-2 p-2"
+          isMobile ? "bottom-4 right-5 p-1" : "bottom-2 right-2 p-2"
         } rounded-full ${
           isUploading
             ? "bg-gray-400 cursor-not-allowed"

@@ -35,7 +35,10 @@ const Onboarding = () => {
                 className="self-start border-none data-[hover=true]:bg-brand-primary data-[active=true]:bg-brand-primary mt-4"
                 onPress={() => router.replace("/")}
               >
-                <ButtonText size="lg" className="text-white">
+                <ButtonText
+                  size="lg"
+                  className="text-white data-[hover=true]:text-white "
+                >
                   CompanyCenter
                 </ButtonText>
               </Button>

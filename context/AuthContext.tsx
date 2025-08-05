@@ -100,7 +100,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     return (
       <Spinner
         size="large"
-        className="h-full overflow-hidden p-10 items-end justify-end"
+        className="h-screen overflow-hidden p-10 items-end justify-end"
       />
     );
 
@@ -117,7 +117,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-full overflow-hidden p-10 items-end justify-end"
+          className="h-screen overflow-hidden p-10 items-end justify-end"
         />
       );
     } else if (userData?.activeRole === "Company") {
@@ -125,7 +125,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-full overflow-hidden p-10 items-end justify-end"
+          className="h-screen overflow-hidden p-10 items-end justify-end"
         />
       );
     }
@@ -135,7 +135,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-full overflow-hidden p-10 items-end justify-end"
+          className="h-screen overflow-hidden p-10 items-end justify-end"
         />
       );
     } else if (pathname === "/cpc") {
@@ -143,7 +143,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-full overflow-hidden p-10 items-end justify-end"
+          className="h-screen overflow-hidden p-10 items-end justify-end"
         />
       );
     }
@@ -153,7 +153,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-full overflow-hidden p-10 items-end justify-end"
+          className="h-screen overflow-hidden p-10 items-end justify-end"
         />
       );
     }

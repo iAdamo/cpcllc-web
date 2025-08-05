@@ -59,13 +59,13 @@ const ReviewSection = ({
     setVisibleReviews((prev) => Math.max(prev - 3, 3)); // Ensure at least 3 reviews are visible
   }
   return (
-    <VStack className="gap-6">
-      <Heading className="text-xl font-bold text-brand-primary">
+    <Card variant="outline" className="md:mx-0 mx-4 md:gap-6 gap-3">
+      <Heading size="sm" className="font-bold text-brand-primary">
         Reviews
       </Heading>
 
       {reviews.length === 0 ? (
-        <Text className="text-gray-500">
+        <Text size="xs" className="md:text-md text-gray-500">
           No reviews yet. Be the first to review!
         </Text>
       ) : (
@@ -158,7 +158,7 @@ const ReviewSection = ({
           </HStack>
         </VStack>
       )}
-    </VStack>
+    </Card>
   );
 };
 

@@ -14,10 +14,10 @@ const RatingSection = ({
       <HStack className="gap-1 items-center">
         {renderStars(rating)}
 
-        <Heading className="text-md text-gray-500">{rating.toFixed(1)}</Heading>
+        <Heading size="xs" className="md:text-md text-gray-500">{rating.toFixed(1)}</Heading>
       </HStack>
     )}
-    <Heading className="text-md text-gray-500">
+    <Heading size="xs" className="md:text-md text-gray-500">
       {reviewCount === 0
         ? "No reviews"
         : `${reviewCount} ${reviewCount === 1 ? "review" : "reviews"}`}
