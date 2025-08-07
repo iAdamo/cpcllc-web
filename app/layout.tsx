@@ -7,7 +7,7 @@ import NavBar from "@/components/layout/NavBar";
 import PreFooter from "@/components/layout/PreFooter";
 import Footer from "@/components/layout/Footer";
 import { usePathname } from "next/navigation";
-import { MapProvider } from "@/context/MapContext";
+// import { MapProvider } from "@/context/MapContext";
 import AiChat from "@/components/AiChatFab";
 
 export default function RootLayout({
@@ -26,7 +26,6 @@ export default function RootLayout({
       <body className="h-screen min-h-screen m-0 p-0">
         <StyledJsxRegistry>
           <GluestackUIProvider mode="light">
-            <MapProvider>
               <SessionProvider>
                 {!shouldHideLayout && <NavBar />}
                 {children}
@@ -34,7 +33,6 @@ export default function RootLayout({
                 {!shouldHideLayout && <Footer />}
                 <AiChat />
               </SessionProvider>
-            </MapProvider>
           </GluestackUIProvider>
         </StyledJsxRegistry>
       </body>

@@ -2,7 +2,6 @@ import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Text } from "@/components/ui/text";
 import { Divider } from "@/components/ui/divider";
 import Link from "next/link";
 import {
@@ -23,7 +22,7 @@ const ContactInfo = ({
 }) => {
   const router = useRouter();
   return (
-    <VStack className="w-1/3 sticky top-32 self-start h-fit gap-4 bg-[#F6F6F6]">
+    <VStack className="md:w-1/3 w-full md:sticky md:top-32 self-start h-fit gap-4 bg-[#F6F6F6]">
       <VStack className="hidden bg-white p-4 gap-4">
         <Heading className="text-xl font-extrablack">
           Request quote & availability
@@ -61,8 +60,8 @@ const ContactInfo = ({
           <Link
             href={`mailto:${companyData?.companyEmail}`}
             className={`font-extrablack ${
-              isCompanyPage ? "text-md" : "text-sm"
-            } text-cyan-700 w-11/12 break-words`}
+              isCompanyPage ? "md:text-md text-xs" : "text-sm"
+            } text-cyan-700 md:w-11/12 w-full break-words`}
           >
             {companyData?.companyEmail || "No email provided"}
           </Link>
@@ -72,12 +71,14 @@ const ContactInfo = ({
 
         <div className="flex flex-row justify-between">
           <Link
-            href={`https://${companyData?.website || "google.com"}`}
+            href={`https://${
+              companyData?.companySocialMedia?.other || "google.com"
+            }`}
             className={`font-extrablack ${
-              isCompanyPage ? "text-md" : "text-sm"
-            } text-cyan-700 w-11/12 break-words`}
+              isCompanyPage ? "md:text-md text-xs" : "text-sm"
+            } text-cyan-700 md:w-11/12 w-full break-words`}
           >
-            {companyData?.website || "google.com"}
+            {companyData?.companySocialMedia?.other || "google.com"}
           </Link>
           <Icon as={GlobeIcon} />
         </div>
@@ -85,13 +86,14 @@ const ContactInfo = ({
         <Divider />
 
         <div className="flex flex-row justify-between">
-          <Text
+          <Link
+            href={`tel:${companyData?.companyPhoneNumber}` || "google.com"}
             className={`font-extrablack ${
-              isCompanyPage ? "text-md" : "text-sm"
-            } text-cyan-700 w-11/12 break-words`}
+              isCompanyPage ? "md:text-md text-xs" : "text-sm"
+            } text-cyan-700 md:w-11/12 w-full break-words`}
           >
-            {companyData?.companyPhoneNumber || "No phone number provided"}
-          </Text>
+            {companyData?.companyPhoneNumber || "google.com"}
+          </Link>
           <Icon as={PhoneIcon} />
         </div>
         <Divider className={`${isCompanyPage ? "flex" : "hidden"}`} />
@@ -104,11 +106,11 @@ const ContactInfo = ({
           <div className="w-11/12">
             <Link
               href="#"
-              className="font-extrablack text-md text-cyan-700  break-words"
+              className="font-extrablack md:text-md text-xs text-cyan-700  break-words"
             >
               Get Directions
             </Link>
-            <p className="font-semibold text- text-text-secondary break-words">
+            <p className="font-semibold md:text-md text-xs text-text-secondary break-words">
               {companyData?.location?.primary?.address?.address}
             </p>
           </div>

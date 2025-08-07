@@ -10,7 +10,7 @@ const RatingSection = ({
   reviewCount: number;
 }) => (
   <HStack className="gap-2 items-center">
-    {rating && (
+    {rating !== 0 && (
       <HStack className="gap-1 items-center">
         {renderStars(rating)}
 

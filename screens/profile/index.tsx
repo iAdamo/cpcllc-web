@@ -155,7 +155,7 @@ const ProfilePage = () => {
                 <VStack className="gap-4 md:border rounded-md bg-white">
                   <HStack className="justify-between p-4">
                     <VStack className="md:flex-row md:gap-10 gap-4">
-                      <Card className="md:p-4 p-0 -mt-8 md:gap-4 gap-2 md:bg-white bg-transparent md:items-start items-center">
+                      <Card className="md:p-4 p-0 md:-mt-8 -mt-16 md:gap-4 gap-2 md:bg-white bg-transparent md:items-start items-center">
                         <div className="relative">
                           <div className="hidden md:block relative h-56 w-56">
                             <Image
@@ -180,7 +180,7 @@ const ProfilePage = () => {
                           </div>
 
                           <div className="md:hidden">
-                            <Avatar size="2xl" className="relative w-52 h-52">
+                            <Avatar size="2xl" className="relative w-48 h-48">
                               <AvatarFallbackText>
                                 {getInitial(data.email || data.firstName || "")}
                               </AvatarFallbackText>

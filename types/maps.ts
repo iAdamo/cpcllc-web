@@ -17,5 +17,5 @@ export interface MapProps {
 export interface UserLocation {
   lat: number;
   lng: number;
-  accuracy: number;
+  accuracy?: number;
 }

@@ -11,12 +11,12 @@ import Image from "next/image";
 import { Pressable } from "@/components/ui/pressable";
 import CompanyView from "./CompanyView";
 import GoogleMapComponent from "@/components/maps/GoogleMap";
-import { useMapContext } from "@/context/MapContext";
-import { useUserLocation } from "@/hooks/useUserLocation";
 import Loader from "@/components/Loader";
 import { useSearchParams } from "next/navigation";
 import { Button, ButtonText } from "@/components/ui/button";
 import renderStars from "@/components/RenderStars";
+import { MapProvider } from "@/context/MapContext";
+import { useRouter } from "next/navigation";
 
 const CompaniesSection = () => {
   const [companies, setCompanies] = useState<CompanyData[]>([]);
@@ -26,13 +26,12 @@ const CompaniesSection = () => {
   const [paginationLoading, setPaginationLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
 
-  const { loading, error } = useMapContext();
-  useUserLocation();
-
   const limit = 20;
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const category = searchParams.get("category") || "all";
+  const router = useRouter();
 
   // ✅ Fetch companies (with pagination append)
   useEffect(() => {
@@ -121,33 +120,32 @@ const CompaniesSection = () => {
 
   const selectedCompany = companies[selectedCompanyIndex];
 
-  if ((loading || searchLoading) && companies.length === 0) {
+  if (searchLoading && companies.length === 0) {
     return <Loader />;
   }
 
-  if (error) {
-    console.log(error);
-    return <div className="error">{error}</div>;
-  }
-
   return (
-    <VStack className="hidden md:flex mt-28 bg-[#F6F6F6]">
+    <VStack className="md:mt-28 mt-32 bg-[#F6F6F6]">
       <div className="rounded m-2 p-4">
-        <h1 className="text-3xl font-bold text-brand-primary">{`${
+        <h1 className="md:text-3xl text-xl font-bold text-brand-primary">{`${
           category.charAt(0).toUpperCase() + category.slice(1)
         } Service Providers Near You`}</h1>
       </div>
       <VStack className="md:flex-row bg-[#F6F6F6]">
         {/* Sidebar List */}
-        <VStack className="w-1/3 sticky top-32 my-4 self-start h-fit gap-4">
+        <VStack className="md:w-1/3 w-full md:sticky md:top-32 my-4 self-start h-fit gap-4">
           <Card
             variant="filled"
-            className="overflow-y-auto bg-white min-h-0 max-h-[1500px] p-2"
+            className="overflow-auto md:flex grid grid-cols-2 gap-4 md:bg-white min-h-0 max-h-[1500px] md:p-2"
           >
             {companies.map((company, index) => (
               <Pressable
                 key={index}
-                onPress={() => handleCompanySelect(index)}
+                onPress={() =>
+                  isMobile
+                    ? router.push(`companies/${company?._id}`)
+                    : handleCompanySelect(index)
+                }
                 className={`mb-4 hover:drop-shadow-md transition-shadow duration-300 rounded-lg ${
                   index === selectedCompanyIndex
                     ? "ring-2 ring-brand-primary"
@@ -156,10 +154,10 @@ const CompaniesSection = () => {
               >
                 <Card
                   variant="outline"
-                  className="flex-row w-full p-0 gap-2 bg-white"
+                  className="md:flex-row w-full p-0 gap-2 bg-white"
                 >
                   <Image
-                    className="h-24 w-24 rounded-l-md object-cover"
+                    className="md:h-24 md:w-24 h-52 w-full md:rounded-l-md rounded-t-md object-cover"
                     src={
                       company?.companyImages?.[0] || "/assets/placeholder.jpg"
                     }
@@ -167,7 +165,7 @@ const CompaniesSection = () => {
                     width={1400}
                     height={600}
                   />
-                  <VStack className="justify-between p-2">
+                  <VStack className="justify-between p-2 md:h-auto h-28">
                     <Heading className="text-md">{company.companyName}</Heading>
                     <Text
                       className={`${
@@ -220,7 +218,7 @@ const CompaniesSection = () => {
         </VStack>
 
         {/* Main Company View */}
-        {selectedCompany ? (
+        {selectedCompany || !isMobile ? (
           <VStack className="w-2/3 rounded-none bg-[#F6F6F6]">
             <CompanyView {...selectedCompany} />
           </VStack>
@@ -231,15 +229,19 @@ const CompaniesSection = () => {
         )}
 
         {/* Map */}
-        <VStack className="w-1/3 rounded-none pt-4 bg-[#F6F6F6] sticky top-24 h-[80vh] overflow-hidden">
-          <div className="relative w-full h-full rounded-lg">
-            <GoogleMapComponent
-              apiKey={process.env.NEX_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-              companies={companies}
-              selectedCompany={selectedCompany}
-            />
-          </div>
-        </VStack>
+        {!isMobile && (
+          <VStack className="hidden md:flex w-1/3 rounded-none pt-4 bg-[#F6F6F6] sticky top-24 h-[80vh] overflow-hidden">
+            <div className="relative w-full h-full rounded-lg">
+              <MapProvider>
+                <GoogleMapComponent
+                  apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+                  companies={companies}
+                  selectedCompany={selectedCompany}
+                />
+              </MapProvider>
+            </div>
+          </VStack>
+        )}
       </VStack>
     </VStack>
   );

@@ -10,14 +10,12 @@ import { useParams } from "next/navigation";
 import { useStorageState } from "@/utils/StorageState";
 import { UserData } from "@/types";
 import { userProfile } from "@/axios/users";
-import OpenInApp from "@/components/OpenInApp";
 
 export const Companies = () => {
   return (
     <main className="flex-1 bg-[#F6F6F6] dark:bg-gray-900">
       <CompaniesSection />
       <AiChat />
-      <OpenInApp />
     </main>
   );
 };

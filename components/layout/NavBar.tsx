@@ -61,7 +61,17 @@ const NavBar = () => {
         onClose={() => userData?.verified}
         email={userData?.email || ""}
         onVerified={() => {
+          setIsAuthodalOpen(false);
+          if (userData?.id) {
+            setUserData({
+              ...userData,
+              verified: true,
+            });
+          } else {
+            console.error("User ID is undefined");
+          }
           router.replace("/cpc/" + userData?.id);
+
         }}
         isVerified={!userData?.verified}
       />

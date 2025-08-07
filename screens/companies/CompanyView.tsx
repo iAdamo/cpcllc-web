@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -26,8 +25,8 @@ import {
 import { getInitial } from "@/utils/GetInitials";
 import { Pressable } from "@/components/ui/pressable";
 import ContactInfo from "./ContactInfo";
-import renderStars from "@/components/RenderStars";
 import ActionButtons from "@/components/ActionTab";
+import RatingSection from "../profile/RatingSection";
 
 const CompanyView = (companyData: CompanyData) => {
   const [newReviews, setNewReviews] = useState<ReviewData[]>([]);
@@ -37,6 +36,7 @@ const CompanyView = (companyData: CompanyData) => {
   const pathname = usePathname();
 
   const isCompanyPage = /^\/companies\/[^/]+$/.test(pathname);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
   const serviceUpdates = [
     {
@@ -60,10 +60,13 @@ const CompanyView = (companyData: CompanyData) => {
   ];
 
   return (
-    <VStack className={`w-full gap-4 ${isCompanyPage ? "p-10" : "p-4"}`}>
-      <VStack className="bg-[#F6F6F6] gap-4">
-        <Card className="h-96">
-          <VStack className="">
+    <VStack
+      className={`w-full bg-[#F6F6F6] gap-4 ${
+        isCompanyPage ? "md:p-10 p-2" : "p-4"
+      }`}
+    >
+        {!isMobile && (
+          <Card className="h-96">
             <Swiper
               modules={[Autoplay, Pagination]}
               autoplay={{ delay: 4000 }}
@@ -84,12 +87,12 @@ const CompanyView = (companyData: CompanyData) => {
                 </SwiperSlide>
               ))}
             </Swiper>
-          </VStack>
-        </Card>
-        <HStack space="xl" className="gap-4 bg-[#F6F6F6]">
+          </Card>
+        )}
+        <VStack space="xl" className="md:flex-row gap-4 bg-[#F6F6F6]">
           <VStack
             className={`${
-              isCompanyPage ? "w-2/3" : "w-full"
+              isCompanyPage ? "md:w-2/3 w-full" : "w-full"
             } gap-4 rounded-md bg-white p-4`}
           >
             <VStack className={`${!isCompanyPage && "flex-row"} gap-4`}>
@@ -117,32 +120,26 @@ const CompanyView = (companyData: CompanyData) => {
                     />
                   </Avatar>
                   <Heading
+                    size="xl"
                     className={`font-extrablack ${
-                      isCompanyPage ? "text-5xl" : "text-3xl"
+                      isCompanyPage ? "md:text-4xl" : "md:text-3xl"
                     } break-words`}
                   >
                     {companyData?.companyName}
                   </Heading>
                 </Pressable>
                 <Text
-                  size="sm"
+                  size="xs"
                   className={`${
                     isCompanyPage ? "md:text-md" : "md:text-sm"
                   } font-medium text-typography-600 break-words`}
                 >
                   {companyData?.companyDescription}
                 </Text>
-                <HStack className="gap-2 items-center">
-                  <HStack className="gap-1 items-center">
-                    {renderStars(companyData?.averageRating)}
-                    <Heading className="text-md text-gray-500">
-                      {companyData?.averageRating?.toFixed(1)}
-                    </Heading>
-                  </HStack>
-                  <Heading className="text-md text-gray-500">
-                    ({companyData?.reviewCount} reviews)
-                  </Heading>
-                </HStack>
+                <RatingSection
+                  rating={companyData?.averageRating || 0}
+                  reviewCount={companyData?.reviewCount || 0}
+                />
                 <Heading className="text-text-tertiary">
                   {companyData?.clients}
                 </Heading>
@@ -158,12 +155,13 @@ const CompanyView = (companyData: CompanyData) => {
                   />
                 </VStack>
               </VStack>
-              {!isCompanyPage && (
-                <ContactInfo
-                  companyData={companyData}
-                  isCompanyPage={isCompanyPage}
-                />
-              )}
+              {!isCompanyPage ||
+                (isMobile && (
+                  <ContactInfo
+                    companyData={companyData}
+                    isCompanyPage={isCompanyPage}
+                  />
+                ))}
             </VStack>
 
             {/* Content Sections */}
@@ -235,40 +233,34 @@ const CompanyView = (companyData: CompanyData) => {
                   </Button>
                 </div>
               </VStack>
-
-              {/* Portfolio
-              <VStack>
-                <Heading className="text-text-tertiary">Portfolio</Heading>
-                <VStack className="grid grid-cols-3">
-                  {portfolio.map((item, index) => (
-                    <Card key={index} className="p-2 aspect-square">
-                      <Image
-                        className={`object-cover ${
-                        isCompanyPage ? "h-40" : "h-24"
-                      }`}
-                        src={item.image}
-                        alt="portfolio-image"
-                        width={1200}
-                        height={1200}
-                      />
-                      <Text>{item.name}</Text>
-                    </Card>
-                  ))}
-                </VStack>
-              </VStack>
-              */}
-
               {/* Placeholder sections */}
               <VStack>
                 <Heading className="text-text-tertiary">
                   Other companyData by this company
                 </Heading>
               </VStack>
-              <VStack>
-                <Heading className="text-text-tertiary">
+              <Card variant="outline" className="gap-3">
+                <Heading
+                  size="sm"
+                  className="md:text-lg font-bold text-brand-primary"
+                >
                   Photos and Videos
                 </Heading>
-              </VStack>
+                <VStack className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {companyData?.companyImages?.map((src, index) => (
+                    <Image
+                      key={index}
+                      className="object-cover w-full md:h-56 h-52"
+                      src={src}
+                      alt={`company-image-${index}`}
+                      width={1920}
+                      height={1080}
+                      priority
+                    />
+                  ))}
+                </VStack>
+              </Card>
+
               <VStack className="">
                 <ReviewSection
                   companyId={companyData?._id}
@@ -278,14 +270,13 @@ const CompanyView = (companyData: CompanyData) => {
             </VStack>
           </VStack>
           {/** Contact Info */}
-          {isCompanyPage && (
+          {isCompanyPage && !isMobile && (
             <ContactInfo
               companyData={companyData}
               isCompanyPage={isCompanyPage}
             />
           )}
-        </HStack>
-      </VStack>
+        </VStack>
     </VStack>
   );
 };

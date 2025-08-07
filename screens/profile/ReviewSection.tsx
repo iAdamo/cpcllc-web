@@ -59,8 +59,8 @@ const ReviewSection = ({
     setVisibleReviews((prev) => Math.max(prev - 3, 3)); // Ensure at least 3 reviews are visible
   }
   return (
-    <Card variant="outline" className="md:mx-0 mx-4 md:gap-6 gap-3">
-      <Heading size="sm" className="font-bold text-brand-primary">
+    <Card variant="outline" className="md:gap-6 gap-3">
+      <Heading size="sm" className="md:text-lg font-bold text-brand-primary">
         Reviews
       </Heading>
 

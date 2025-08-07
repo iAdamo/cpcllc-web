@@ -138,10 +138,11 @@ export default function ActionButtons({
         {buttons.map((button, index) => (
           <Button
             key={index}
+            size={isCompanyPage ? "xs" : "md"}
             variant={isProfilePage ? "outline" : "solid"}
             onPress={button.action}
             disabled={button.disabled}
-            className="border-0 justify-between"
+            className="p-2 border-0 justify-between"
           >
             <ButtonIcon
               className={`
@@ -157,7 +158,7 @@ export default function ActionButtons({
             {!isProfilePage && (
               <ButtonText
                 className={`
-                ${!isCompanyPage && "text-xs"}
+                ${isCompanyPage ? "text-xs" : "md:text-xs"}
                 data-[hover=true]:no-underline
                 data-[active=true]:no-underline
                 ${button.disabled ? "opacity-50" : ""}

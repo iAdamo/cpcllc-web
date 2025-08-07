@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -10,7 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getCompanies } from "@/axios/users";
 import { CompanyData } from "@/types";
-import renderStars from "@/components/RenderStars";
+import RatingSection from "../profile/RatingSection";
 
 const BrowseCompanies = () => {
   const [companies, setUsers] = useState<CompanyData[]>([]);
@@ -55,22 +54,15 @@ const BrowseCompanies = () => {
                 width={1400}
                 height={600}
               />
-              <VStack className="justify-between p-2">
+              <VStack className="gap-2 backdrop:p-2">
                 <Heading size="sm" className="md:text-lg">
                   {company?.companyName}
                 </Heading>
-                <HStack className="gap-2 items-center">
-                  <HStack className="gap-1 items-center">
-                    {renderStars(company?.averageRating)}
-                    <Text className="text-xs text-gray-500">
-                      {company?.averageRating?.toFixed(1)}
-                    </Text>
-                  </HStack>
-                  <Text className="text-xs text-gray-500">
-                    ({company?.reviewCount} reviews)
-                  </Text>
-                </HStack>
-                <Text size="sm" className="md:text-md md:font-semibold">
+                <RatingSection
+                  rating={company?.averageRating || 0}
+                  reviewCount={company?.reviewCount || 0}
+                />
+                <Text size="sm" className="md:text-md md:font-semibold line-clamp-3">
                   {company?.location?.primary?.address?.address}
                 </Text>
               </VStack>

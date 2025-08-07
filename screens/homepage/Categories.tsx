@@ -171,6 +171,7 @@ const Categories = () => {
                   alt={category.title}
                   width={200}
                   height={200}
+                  priority
                 />
               </HStack>
               <Text className="text-center text-sm font-bold">

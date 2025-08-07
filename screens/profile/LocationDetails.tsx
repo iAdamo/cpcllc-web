@@ -485,8 +485,8 @@ const LocationDetails = ({
 
   if (loadError) {
     return (
-      <div className="flex justify-center items-center text-red-600">
-        Error loading map services. Please check your internet connection.
+      <div className="flex justify-center items-center md:bg-transparent bg-red-100 p-2 text-red-600">
+        Please check your internet connection.
       </div>
     );
   }

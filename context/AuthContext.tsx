@@ -83,8 +83,9 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   );
 
   const fetchUserProfileHandler = useCallback(async () => {
-    if (!userData) return;
-    if (!session) throw new Error("Session is not available.");
+    if (!userData) await logoutHandler();
+    if (!session) return;
+
     try {
       const response = await userProfile(session);
       if (response) {
@@ -94,13 +95,13 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       console.error("Error fetching user profile:", err);
       throw err;
     }
-  }, [userData, session, setUserData]);
+  }, [userData, session, setUserData, logoutHandler]);
 
   if (isLoading || loading || loadingCompany)
     return (
       <Spinner
         size="large"
-        className="h-screen overflow-hidden p-10 items-end justify-end"
+        className="h-screen bottom-5 items-end right-5 justify-end"
       />
     );
 
@@ -117,7 +118,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen overflow-hidden p-10 items-end justify-end"
+          className="h-screen bg-red-500 bottom-15 items-end right-5 justify-end"
         />
       );
     } else if (userData?.activeRole === "Company") {
@@ -125,7 +126,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen overflow-hidden p-10 items-end justify-end"
+          className="h-screen bottom-5 items-end right-5 justify-end"
         />
       );
     }
@@ -135,7 +136,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen overflow-hidden p-10 items-end justify-end"
+          className="h-screen bottom-5 items-end right-5 justify-end"
         />
       );
     } else if (pathname === "/cpc") {
@@ -143,7 +144,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen overflow-hidden p-10 items-end justify-end"
+          className="h-screen bottom-5 items-end right-5 justify-end"
         />
       );
     }
@@ -153,7 +154,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen overflow-hidden p-10 items-end justify-end"
+          className="h-screen bottom-5 items-end right-5 justify-end"
         />
       );
     }

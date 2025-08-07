@@ -31,7 +31,7 @@ import Image from "next/image";
 import { register, sendCode } from "@/axios/auth";
 import VerifyCodeModal from "../VerifyCodeModal";
 import { useSession } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 
 type ControllerRenderType = {
@@ -64,8 +64,9 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   const [showVerifyEmailModal, setShowVerifyEmailModal] = useState(false);
   const { login } = useSession();
 
+  const { isOpen, onClose, switchToSignIn } = props;
+
   const toast = useToast();
-  const router = useRouter();
 
   // handle form submission
   const {
@@ -164,15 +165,14 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
     handleSubmit(onSubmit)();
   };
 
-  const { isOpen, onClose, switchToSignIn } = props;
   return (
     <>
       <Modal
         isOpen={isOpen}
         onClose={() => {
-          onClose();
           reset();
           setShowVerifyEmailModal(false);
+          onClose();
         }}
         className="fixed inset-0 backdrop-blur-sm overflow-hidden"
       >
@@ -373,6 +373,9 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
           onClose={() => setShowVerifyEmailModal(false)}
           email={getValues("email")}
           onVerified={async () => {
+            reset();
+            setShowVerifyEmailModal(false);
+            onClose();
             await login({
               email: getValues("email"),
               password: getValues("password"),
