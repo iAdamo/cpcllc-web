@@ -26,7 +26,7 @@ import { getInitial } from "@/utils/GetInitials";
 import { Pressable } from "@/components/ui/pressable";
 import ContactInfo from "./ContactInfo";
 import ActionButtons from "@/components/ActionTab";
-import RatingSection from "../profile/RatingSection";
+import RatingSection from "../../components/RatingSection";
 
 const CompanyView = (companyData: CompanyData) => {
   const [newReviews, setNewReviews] = useState<ReviewData[]>([]);
@@ -204,7 +204,7 @@ const CompanyView = (companyData: CompanyData) => {
                   modules={[Navigation, Pagination]}
                   className="w-full"
                   spaceBetween={10}
-                  slidesPerView={isMobile ? 1.3 : 2.3}
+                  slidesPerView={isMobile ? 1.3 : isCompanyPage ? 2.3 : 1.3}
                   navigation={{
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
@@ -213,10 +213,10 @@ const CompanyView = (companyData: CompanyData) => {
                   {serviceUpdates.map((item, index) => {
                     return (
                       <SwiperSlide key={index}>
-                        <Card variant="outline" className="flex-row gap-2">
+                        <Card variant="outline" className="md:flex-row gap-2">
                           <Image
                             className={`object-cover ${
-                              isCompanyPage ? "h-32 w-32" : "h-28 w-28"
+                              isCompanyPage ? "h-32 md:w-32" : "h-28 w-28"
                             }`}
                             src={item.image}
                             alt="portfolio-image"
@@ -224,14 +224,19 @@ const CompanyView = (companyData: CompanyData) => {
                             height={1200}
                           />
                           <VStack className="h-auto gap-2">
-                            <Heading size={isCompanyPage ? "sm" : "xs"}>
+                            <Heading
+                              size="xs"
+                              className={`${
+                                isCompanyPage ? "md:text-md" : "md:text-sm"
+                              }`}
+                            >
                               {item.name}
                             </Heading>
                             <Text
-                              size={isCompanyPage ? "sm" : "xs"}
+                              size="xs"
                               className={`${
                                 item.description.length > 80 && "line-clamp-3"
-                              }`}
+                              } ${isCompanyPage ? "md:text-md" : "md:text-sm"}`}
                             >
                               {item.description}
                             </Text>
@@ -252,7 +257,7 @@ const CompanyView = (companyData: CompanyData) => {
               </div>
             </VStack>
             {/* Placeholder sections */}
-            
+
             <Card variant="outline" className="gap-3">
               <Heading
                 size="sm"

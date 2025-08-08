@@ -68,7 +68,7 @@ const StepOne = ({
         focusedField={focusedField}
         errors={errors}
       >
-        <Input className="border-gray-300">
+        <Input className="md:h-12 border-gray-300">
           <InputField
             {...register("title", {
               required: "Service title is required",
@@ -86,6 +86,7 @@ const StepOne = ({
             onChangeText={(text) => setValue("title", text)}
             id="title"
             placeholder="Service Title"
+            className="md:text-[15px] text-xs"
           />
         </Input>
       </FieldWithInfo>
@@ -97,7 +98,7 @@ const StepOne = ({
         focusedField={focusedField}
         errors={errors}
       >
-        <Textarea className="border-gray-300">
+        <Textarea className="md:h-40 border-gray-300">
           <TextareaInput
             onFocus={() => setFocusedField("description")}
             {...register("description", {
@@ -115,6 +116,7 @@ const StepOne = ({
             onBlur={() => setFocusedField("")}
             id="description"
             placeholder="Service Description"
+            className="md:text-[15px] text-xs"
           />
         </Textarea>
       </FieldWithInfo>
@@ -133,8 +135,9 @@ const StepOne = ({
           onPointerEnter={() => setFocusedField("category")}
           onPointerLeave={() => setFocusedField("")}
         >
-          <SelectTrigger className="border-gray-300">
+          <SelectTrigger className="md:h-12 border-gray-300">
             <SelectInput
+              className="md:text-[15px] text-xs"
               placeholder="Select Category"
               {...register("category", {
                 required: "Category is required",
@@ -159,8 +162,9 @@ const StepOne = ({
       </FieldWithInfo>
 
       {/* Next Button */}
-      <VStack className="w-3/5 mt-12">
+      <VStack className="w-full md:w-3/5 mt-4 md:mt-12">
         <Button
+          size="md"
           onPress={() => handleSubmit(() => setStep(2))()}
           className="self-end"
         >

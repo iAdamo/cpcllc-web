@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { getCompanies, searchCompanies } from "@/axios/users";
@@ -14,9 +13,9 @@ import GoogleMapComponent from "@/components/maps/GoogleMap";
 import Loader from "@/components/Loader";
 import { useSearchParams } from "next/navigation";
 import { Button, ButtonText } from "@/components/ui/button";
-import renderStars from "@/components/RenderStars";
 import { MapProvider } from "@/context/MapContext";
 import { useRouter } from "next/navigation";
+import RatingSection from "@/components/RatingSection";
 
 const CompaniesSection = () => {
   const [companies, setCompanies] = useState<CompanyData[]>([]);
@@ -126,17 +125,17 @@ const CompaniesSection = () => {
 
   return (
     <VStack className="md:mt-28 mt-32 bg-[#F6F6F6]">
-      <div className="rounded m-2 p-4">
+      <div className="rounded md:m-2 p-4">
         <h1 className="md:text-3xl text-xl font-bold text-brand-primary">{`${
           category.charAt(0).toUpperCase() + category.slice(1)
         } Service Providers Near You`}</h1>
       </div>
       <VStack className="md:flex-row bg-[#F6F6F6]">
         {/* Sidebar List */}
-        <VStack className="md:w-1/3 w-full md:sticky md:top-32 my-4 self-start h-fit gap-4">
+        <VStack className="md:w-1/3 w-full md:sticky md:top-32 md:my-4 self-start h-fit gap-4">
           <Card
             variant="filled"
-            className="overflow-auto md:flex grid grid-cols-2 gap-4 md:bg-white min-h-0 max-h-[1500px] md:p-2"
+            className="overflow-auto md:flex grid grid-cols-2 gap-2 md:bg-white min-h-0 max-h-[1500px] p-2"
           >
             {companies.map((company, index) => (
               <Pressable
@@ -157,7 +156,7 @@ const CompaniesSection = () => {
                   className="md:flex-row w-full p-0 gap-2 bg-white"
                 >
                   <Image
-                    className="md:h-24 md:w-24 h-52 w-full md:rounded-l-md rounded-t-md object-cover"
+                    className="md:h-28 md:w-24 h-40 w-full md:rounded-l-md md:rounded-r-none rounded-t-md object-cover"
                     src={
                       company?.companyImages?.[0] || "/assets/placeholder.jpg"
                     }
@@ -165,7 +164,7 @@ const CompaniesSection = () => {
                     width={1400}
                     height={600}
                   />
-                  <VStack className="justify-between p-2 md:h-auto h-28">
+                  <VStack className="justify-between p-2 md:p-1 md:h-auto h-28">
                     <Heading className="text-md">{company.companyName}</Heading>
                     <Text
                       className={`${
@@ -175,17 +174,10 @@ const CompaniesSection = () => {
                     >
                       {company.location?.primary?.address?.address}
                     </Text>
-                    <HStack className="gap-2 items-center">
-                      <HStack className="gap-1 items-center">
-                        {renderStars(company?.averageRating)}
-                        <Text className="text-xs text-gray-500">
-                          {company?.averageRating?.toFixed(1)}
-                        </Text>
-                      </HStack>
-                      <Text className="text-xs text-gray-500">
-                        ({company?.reviewCount} reviews)
-                      </Text>
-                    </HStack>
+                    <RatingSection
+                      rating={company?.averageRating || 0}
+                      reviewCount={company?.reviewCount || 0}
+                    />
                   </VStack>
                 </Card>
               </Pressable>
@@ -195,12 +187,12 @@ const CompaniesSection = () => {
             {category === "all" && (
               <div
                 ref={loadMoreRef}
-                className="w-full flex justify-center items-center h-16"
+                className="w-full flex justify-center items-center h-fit"
               >
                 {paginationLoading && <Loader />}
                 {!paginationLoading && currentPage < totalPages && (
                   <Button
-                    size="sm"
+                    size="xs"
                     variant="outline"
                     onPress={() => setCurrentPage((prev) => prev + 1)}
                   >
@@ -208,7 +200,7 @@ const CompaniesSection = () => {
                   </Button>
                 )}
                 {!paginationLoading && currentPage >= totalPages && (
-                  <Text className="text-gray-400 text-sm">
+                  <Text className="text-gray-400 text-xs md:text-sm">
                     No more companies to load.
                   </Text>
                 )}
@@ -218,15 +210,16 @@ const CompaniesSection = () => {
         </VStack>
 
         {/* Main Company View */}
-        {selectedCompany || !isMobile ? (
-          <VStack className="w-2/3 rounded-none bg-[#F6F6F6]">
-            <CompanyView {...selectedCompany} />
-          </VStack>
-        ) : (
-          <VStack className="w-2/3 rounded-none p-6 bg-[#F6F6F6]">
-            <Text>No company selected.</Text>
-          </VStack>
-        )}
+        {!isMobile &&
+          (selectedCompany ? (
+            <VStack className="w-2/3 rounded-none bg-[#F6F6F6]">
+              <CompanyView {...selectedCompany} />
+            </VStack>
+          ) : (
+            <VStack className="w-2/3 rounded-none p-6 bg-[#F6F6F6]">
+              <Text>No company selected.</Text>
+            </VStack>
+          ))}
 
         {/* Map */}
         {!isMobile && (

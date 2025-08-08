@@ -9,7 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getCompanies } from "@/axios/users";
 import { CompanyData } from "@/types";
-import RatingSection from "../profile/RatingSection";
+import RatingSection from "../../components/RatingSection";
 
 const BrowseCompanies = () => {
   const [companies, setUsers] = useState<CompanyData[]>([]);
@@ -62,7 +62,10 @@ const BrowseCompanies = () => {
                   rating={company?.averageRating || 0}
                   reviewCount={company?.reviewCount || 0}
                 />
-                <Text size="sm" className="md:text-md md:font-semibold line-clamp-3">
+                <Text
+                  size="sm"
+                  className="md:text-md md:font-semibold line-clamp-3"
+                >
                   {company?.location?.primary?.address?.address}
                 </Text>
               </VStack>

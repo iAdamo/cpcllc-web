@@ -55,7 +55,7 @@ const ContactInfo = ({
       </VStack>
 
       {/* Contact Card */}
-      <Card className={`${!isCompanyPage && "p-1"} gap-4`}>
+      <Card className={`${!isCompanyPage && "p-2"} gap-4`}>
         <div className="flex flex-row justify-between gap-2">
           <Link
             href={`mailto:${companyData?.companyEmail}`}
@@ -87,12 +87,12 @@ const ContactInfo = ({
 
         <div className="flex flex-row justify-between gap-2">
           <Link
-            href={`tel:${companyData?.companyPhoneNumber}` || "google.com"}
+            href={`tel:+${companyData?.companyPhoneNumber}` || "google.com"}
             className={`font-extrablack ${
               isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
             } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
           >
-            {companyData?.companyPhoneNumber || "google.com"}
+            {`+${companyData?.companyPhoneNumber}` || "No phone number provided"}
           </Link>
           <Icon as={PhoneIcon} />
         </div>

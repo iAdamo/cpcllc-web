@@ -1,4 +1,4 @@
-import { HStack } from "@/components/ui/hstack";
+import { VStack } from "@/components/ui/vstack";
 import { Card } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import {
@@ -22,16 +22,12 @@ export const FieldWithInfo = ({
   errors?: FieldErrors<FormData>;
 }) => {
   return (
-    <HStack className="w-full h-full justify-between items-start">
+    <VStack className="md:flex-row w-full h-full justify-between items-start md:bg-transparent bg-white">
       {/* Field Section */}
-      <FormControl className="bg-white h-full p-4 w-3/5 drop-shadow-sm rounded-none ">
-        <FormControlLabel
-          className={`text-gray-700 font-medium ${
-            focusedField === id ? "text-blue-600" : ""
-          }`}
-        >
+      <FormControl className="bg-white h-full p-4 w-full md:w-3/5 md:drop-shadow-sm">
+        <FormControlLabel>
           <FormControlLabelText
-            className={`text-gray-700 font-medium ${
+            className={`text-gray-700 font-medium md:text-[15px] text-xs ${
               focusedField === id ? "text-blue-600" : ""
             }`}
           >
@@ -48,7 +44,7 @@ export const FieldWithInfo = ({
 
       {/* Info Card Section */}
       <Card
-        className={`w-1/3 bg-green-200 drop-shadow-lg transition-opacity duration-200 ${
+        className={`hidden md:flex md:w-1/3 w-full bg-green-200 drop-shadow-lg transition-opacity duration-200 ${
           focusedField === id ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
@@ -56,6 +52,6 @@ export const FieldWithInfo = ({
           {infoText}
         </Text>
       </Card>
-    </HStack>
+    </VStack>
   );
 };

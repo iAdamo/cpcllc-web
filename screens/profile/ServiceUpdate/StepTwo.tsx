@@ -90,7 +90,7 @@ const StepTwo = ({
         focusedField={focusedField}
         errors={errors}
       >
-        <Input className="border-gray-300">
+        <Input className="md:h-12 border-gray-300">
           <InputField
             onFocus={() => setFocusedField("price")}
             {...register("price", {
@@ -108,7 +108,7 @@ const StepTwo = ({
                 setValue("price", value);
               }
             }}
-            className="text-gray-700"
+            className="md:text-[16px] text-xs text-gray-700"
             id="price"
             placeholder="Service Price"
           />
@@ -121,7 +121,7 @@ const StepTwo = ({
         focusedField={focusedField}
         errors={errors}
       >
-        <Input className="border-gray-300">
+        <Input className="md:h-12 border-gray-300">
           <InputField
             onFocus={() => setFocusedField("deliveryTime")}
             {...register("deliveryTime", {
@@ -141,6 +141,7 @@ const StepTwo = ({
             onBlur={() => setFocusedField("")}
             id="deliveryTime"
             placeholder="Delivery Time (e.g., 3 days)"
+            className="md:text-[16px] text-xs"
           />
         </Input>
       </FieldWithInfo>
@@ -171,12 +172,16 @@ const StepTwo = ({
         </HStack>
 
         {/* Tags input */}
-        <Input isDisabled={watch("tags")?.length >= maxTags}>
+        <Input
+          isDisabled={watch("tags")?.length >= maxTags}
+          className="md:h-12 border-gray-300"
+        >
           <InputField
             onFocus={() => setFocusedField("tags")}
             onBlur={() => setFocusedField("")}
             id="tags-input"
             placeholder="Add tags (press Enter or comma)"
+            className="md:text-[15px] text-xs"
             value={tagInput}
             onChangeText={setTagInput}
             onKeyPress={(e) => {
@@ -192,7 +197,7 @@ const StepTwo = ({
         </Input>
         {/* Popular tags suggestions */}
         <VStack className="mt-2">
-          <Text className="text-sm text-gray-500">Popular Tags:</Text>
+          <Text className="text-xs md:text-sm text-gray-500">Popular Tags:</Text>
           <HStack className="flex-wrap gap-2 mt-1">
             {popularTags.map((tag, index) => (
               <Button
@@ -226,9 +231,10 @@ const StepTwo = ({
       </FieldWithInfo>
 
       {/* Next Button */}
-      <VStack className="w-3/5 mt-12">
+      <VStack className="w-full md:w-3/5 mt-4 md:mt-12">
         <Button
-          onPress={() => handleSubmit(() => setStep(3))()}
+          size="md"
+          onPress={() => handleSubmit(() => setStep(2))()}
           className="self-end"
         >
           <ButtonText>Next</ButtonText>

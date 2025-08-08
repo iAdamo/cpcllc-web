@@ -27,7 +27,7 @@ import { Toast, useToast, ToastTitle } from "@/components/ui/toast";
 import { format } from "date-fns";
 import ProfileDetails from "@/screens/profile/ProfileDetails";
 import { ProfileUploadButton } from "@/screens/profile/ProfileUpload";
-import RatingSection from "@/screens/profile/RatingSection";
+import RatingSection from "@/components/RatingSection";
 import ActionButtons from "@/components/ActionTab";
 
 const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
@@ -199,7 +199,7 @@ const ProfilePage = () => {
                             </Avatar>
                           </div>
                         </div>
-                        <VStack className="md:gap-4 gap-2">
+                        <VStack className="md:gap-4 gap-2 md:items-start items-center">
                           <VStack className="gap-1 md:items-start items-center">
                             <Heading size="md">
                               {activeRoleId.companyName}
@@ -217,13 +217,11 @@ const ProfilePage = () => {
                             </Text>
                             <Text size="sm">Online</Text>
                           </VStack>
-                          <VStack className="w-full">
-                            <ActionButtons
-                              companyData={activeRoleId}
-                              userData={userData}
-                              setNewReviews={setNewReviews}
-                            />
-                          </VStack>
+                          <ActionButtons
+                            companyData={activeRoleId}
+                            userData={userData}
+                            setNewReviews={setNewReviews}
+                          />
                         </VStack>
                       </Card>
 
@@ -235,7 +233,9 @@ const ProfilePage = () => {
                     </VStack>
                   </HStack>
                   <Card className="gap-2 text-typography-700">
-                    <Heading size="xs" className="md:text-md">Brand Showcase</Heading>
+                    <Heading size="xs" className="md:text-md">
+                      Brand Showcase
+                    </Heading>
                     <VStack className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {activeRoleId?.companyImages?.map((src, index) => (
                         <Card key={index} variant="outline" className="">
@@ -256,10 +256,10 @@ const ProfilePage = () => {
             )}
 
             {activeRoleId?._id && (
-                <ReviewSection
-                  companyId={activeRoleId._id}
-                  newReviews={newReviews}
-                />
+              <ReviewSection
+                companyId={activeRoleId._id}
+                newReviews={newReviews}
+              />
             )}
           </VStack>
 

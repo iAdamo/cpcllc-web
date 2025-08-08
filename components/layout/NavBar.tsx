@@ -71,7 +71,6 @@ const NavBar = () => {
             console.error("User ID is undefined");
           }
           router.replace("/cpc/" + userData?.id);
-
         }}
         isVerified={!userData?.verified}
       />
@@ -233,29 +232,30 @@ const NavBar = () => {
           >
             <DrawerBackdrop className="bg-transparent" />
             <DrawerContent className="h-screen mt-16 p-2">
-              <DrawerBody className="w-full h-full m-0 justify-start last:self-end">
+              <DrawerBody className="w-full h-full m-0 justify-start">
                 {!session && (
-                  <Button
-                    variant="link"
-                    onPress={() => setIsAuthodalOpen(true)}
-                    className="justify-start"
-                  >
-                    <ButtonText className="font-normal">Log In</ButtonText>
-                  </Button>
+                  <>
+                    <Button
+                      variant="link"
+                      onPress={() => setIsAuthodalOpen(true)}
+                      className="justify-start"
+                    >
+                      <ButtonText className="font-normal">Log In</ButtonText>
+                    </Button>
+                    <Divider orientation="horizontal" className="w-full" />
+                    <Button
+                      variant="link"
+                      onPress={() => {
+                        setShowDrawer(false);
+                        router.push("/companies");
+                      }}
+                      className="justify-start"
+                    >
+                      <ButtonText className="font-normal">Companies</ButtonText>
+                    </Button>
+                    <Divider orientation="horizontal" className="w-full" />
+                  </>
                 )}
-
-                <Divider orientation="horizontal" className="w-full" />
-                <Button
-                  variant="link"
-                  onPress={() => {
-                    setShowDrawer(false);
-                    router.push("/companies");
-                  }}
-                  className="justify-start"
-                >
-                  <ButtonText className="font-normal">Companies</ButtonText>
-                </Button>
-                <Divider orientation="horizontal" className="w-full" />
                 {userData && (
                   <>
                     <Button
@@ -292,19 +292,16 @@ const NavBar = () => {
                   </>
                 )}
 
-                <Divider orientation="horizontal" className="w-full" />
-
                 {!session && (
                   <Button
+                    variant="link"
                     onPress={() => {
                       setShowDrawer(false);
                       router.push("/onboarding");
                     }}
-                    className="flex flex-col self-end justify-start items-end mx-auto"
+                    className="justify-start"
                   >
-                    <ButtonText className="font-normal text-start">
-                      Sign Up
-                    </ButtonText>
+                    <ButtonText className="">Sign Up</ButtonText>
                   </Button>
                 )}
               </DrawerBody>

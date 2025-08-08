@@ -101,7 +101,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     return (
       <Spinner
         size="large"
-        className="h-screen bottom-5 items-end right-5 justify-end"
+        className="h-fit p-4 justify-start items-start w-full"
       />
     );
 
@@ -118,7 +118,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen bg-red-500 bottom-15 items-end right-5 justify-end"
+          className="h-fit p-4 justify-start items-start w-full"
         />
       );
     } else if (userData?.activeRole === "Company") {
@@ -126,7 +126,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen bottom-5 items-end right-5 justify-end"
+          className="h-fit p-4 justify-start items-start w-full"
         />
       );
     }
@@ -136,7 +136,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen bottom-5 items-end right-5 justify-end"
+          className="h-fit p-4 justify-start items-start w-full"
         />
       );
     } else if (pathname === "/cpc") {
@@ -144,7 +144,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen bottom-5 items-end right-5 justify-end"
+          className="h-fit p-4 justify-start items-start w-full"
         />
       );
     }
@@ -154,7 +154,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       return (
         <Spinner
           size="large"
-          className="h-screen bottom-5 items-end right-5 justify-end"
+          className="h-fit p-4 justify-start items-start w-full"
         />
       );
     }

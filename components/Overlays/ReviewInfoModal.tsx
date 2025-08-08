@@ -15,7 +15,7 @@ import {
   AvatarFallbackText,
   AvatarImage,
 } from "@/components/ui/avatar";
-import renderStars from "@/components/RenderStars";
+import RatingSection from "../RatingSection";
 import Image from "next/image";
 import { ReviewData } from "@/types";
 import { getInitial } from "@/utils/GetInitials";
@@ -48,12 +48,7 @@ const ReviewInfoModal: React.FC<ReviewInfoModalProps> = (props) => {
                     ? `${review.user.firstName} ${review.user.lastName}`
                     : "Anonymous User"}
                 </Heading>
-                <HStack className="gap-1 items-center">
-                  {renderStars(review.rating)}
-                  <Text className="text-xs text-gray-500 ml-1">
-                    {review.rating?.toFixed(1)}
-                  </Text>
-                </HStack>
+                <RatingSection rating={review.rating || 0} />
               </VStack>
               <Text size="xs" className="md:text-sm text-gray-400">
                 {format(new Date(review.createdAt), "MMM d, yyyy")}

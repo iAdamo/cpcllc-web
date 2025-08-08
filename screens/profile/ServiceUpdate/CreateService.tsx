@@ -73,10 +73,10 @@ const CreateService = () => {
   });
 
   return (
-    <VStack className="mt-28 py-8 px-20 bg-[#F6F6F6] min-h-screen">
+    <VStack className="mt-28 py-8 md:px-20 px-4 w-full bg-[#F6F6F6] min-h-screen">
       <VStack>
         {/** Progress Steps */}{" "}
-        <div className="border-b border-gray-200 w-3/5">
+        <div className="border-b border-gray-200 w-full md:w-3/5">
           <nav className="flex -mb-px">
             {[1, 2, 3].map((i) => (
               <button

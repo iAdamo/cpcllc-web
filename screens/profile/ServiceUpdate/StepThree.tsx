@@ -141,7 +141,7 @@ const StepThree = ({
         errors={errors}
       >
         <VStack className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {images.map((file: File, index: number) => (
               <div key={index} className="relative group">
                 <Image
@@ -173,7 +173,9 @@ const StepThree = ({
                 className="border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center h-32 cursor-pointer hover:border-indigo-500 transition-colors"
               >
                 <Icon as={ArrowUpIcon} className="w-8 h-8 text-gray-400 mb-2" />
-                <Text className="text-sm text-gray-600">Add Image</Text>
+                <Text className="text-xs md:text-sm text-gray-600">
+                  Add Image
+                </Text>
                 <Text className="text-xs text-gray-400">
                   {images.length}/{MAX_IMAGES}
                 </Text>
@@ -227,7 +229,9 @@ const StepThree = ({
                 onPointerLeave={() => setFocusedField("")}
               >
                 <Icon as={ArrowUpIcon} className="w-8 h-8 text-gray-400 mb-2" />
-                <Text className="text-sm text-gray-600">Add Video</Text>
+                <Text className="text-xs md:text-sm text-gray-600">
+                  Add Video
+                </Text>
                 <Text className="text-xs text-gray-400">
                   {videos.length}/{MAX_VIDEOS}
                 </Text>
@@ -246,7 +250,26 @@ const StepThree = ({
       </FieldWithInfo>
 
       {/* Navigation Buttons */}
-      <HStack className="justify-between mt-8">
+      <HStack className="md:hidden justify-between mt-8">
+        <Button
+          size="xs"
+          variant="outline"
+          onPress={() => setStep(2)}
+          className="border-gray-300"
+        >
+          <ButtonText>Back</ButtonText>
+        </Button>
+        <Button
+          size="xs"
+          onPress={() => handleSubmit(onSubmit)()}
+          className="bg-indigo-600 disabled:opacity-50"
+        >
+          <ButtonText className="text-white">
+            {isSubmitting ? "Submitting..." : "Submit Service"}
+          </ButtonText>
+        </Button>
+      </HStack>
+      <HStack className="hidden md:flex w-3/5 justify-between mt-8">
         <Button
           variant="outline"
           onPress={() => setStep(2)}
@@ -254,23 +277,14 @@ const StepThree = ({
         >
           <ButtonText>Back</ButtonText>
         </Button>
-        <HStack className="space-x-4">
-          <Button
-            variant="outline"
-            onPress={() => {}}
-            className="border-indigo-500"
-          >
-            <ButtonText className="text-indigo-600">Preview</ButtonText>
-          </Button>
-          <Button
-            onPress={() => handleSubmit(onSubmit)()}
-            className="bg-indigo-600 disabled:opacity-50"
-          >
-            <ButtonText className="text-white">
-              {isSubmitting ? "Submitting..." : "Submit Service"}
-            </ButtonText>
-          </Button>
-        </HStack>
+        <Button
+          onPress={() => handleSubmit(onSubmit)()}
+          className="bg-indigo-600 disabled:opacity-50"
+        >
+          <ButtonText className="text-white">
+            {isSubmitting ? "Submitting..." : "Submit Service"}
+          </ButtonText>
+        </Button>
       </HStack>
     </VStack>
   );

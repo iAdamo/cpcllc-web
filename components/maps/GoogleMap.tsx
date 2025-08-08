@@ -32,8 +32,8 @@ const GoogleMapComponent: React.FC<{
 
   const { userLocation, error, loading } = useMapContext();
 
-  if (loadError || error) return <div>{error || loadError?.message}</div>;
-  if (!isLoaded || loading) return <div>Loading Maps...</div>;
+  if (loadError || error) return <div></div>;
+  if (!isLoaded || loading) return <div></div>;
 
   const center = userLocation || defaultCenter;
 

@@ -1,3 +1,5 @@
+import { HStack } from "./ui/hstack";
+import { Heading } from "./ui/heading";
 import { Star } from "lucide-react";
 
 const renderStars = (rating: number) => {
@@ -12,12 +14,7 @@ const renderStars = (rating: number) => {
     } else if (i === fullStars + 1 && decimalPart > 0) {
       // Partially filled star for the decimal part
       stars.push(
-        <Star
-          key={i}
-          size={16}
-          fill="url(#partialFill)"
-          color="#D1D5DB"
-        >
+        <Star key={i} size={16} fill="url(#partialFill)" color="#D1D5DB">
           <defs>
             <linearGradient id="partialFill" x1="0" x2="1" y1="0" y2="0">
               <stop offset={`${decimalPart * 100}%`} stopColor="#FFD700" />
@@ -35,4 +32,29 @@ const renderStars = (rating: number) => {
   return stars;
 };
 
-export default renderStars;
+
+const RatingSection = ({
+  rating,
+  reviewCount,
+}: {
+  rating: number;
+  reviewCount?: number;
+}) => (
+  <HStack className="gap-2 items-center">
+    {rating && (
+      <HStack className="gap-1 items-center">
+        {renderStars(rating)}
+        <Heading size="xs" className="md:text-md text-gray-500">
+          {rating.toFixed(1)}
+        </Heading>
+      </HStack>
+    )}
+    <Heading size="xs" className="md:text-md text-gray-500">
+      {reviewCount === 0
+        ? "No reviews"
+        : `${reviewCount} ${reviewCount === 1 ? "review" : "reviews"}`}
+    </Heading>
+  </HStack>
+);
+
+export default RatingSection;

@@ -485,7 +485,7 @@ const LocationDetails = ({
 
   if (loadError) {
     return (
-      <div className="flex justify-center items-center md:bg-transparent bg-red-100 p-2 text-red-600">
+      <div className="flex justify-center items-center md:bg-transparent bg-red-100 p-2 md:text-lg text-sm text-red-600">
         Please check your internet connection.
       </div>
     );
@@ -494,8 +494,7 @@ const LocationDetails = ({
   if (!isLoaded) {
     return (
       <div className="flex justify-center items-center text-gray-500">
-        <Loader2 className="animate-spin w-8 h-8 mr-2" /> Loading map
-        services...
+        <Loader2 className="animate-spin w-8 h-8 mr-2" /> 
       </div>
     );
   }

@@ -14,7 +14,7 @@ import { getReviews } from "@/axios/reviews";
 import { ReviewData } from "@/types";
 import { getInitial } from "@/utils/GetInitials";
 import { Pressable } from "@/components/ui/pressable";
-import renderStars from "@/components/RenderStars";
+import RatingSection from "@/components/RatingSection";
 import { format } from "date-fns";
 import ReviewInfoModal from "@/components/Overlays/ReviewInfoModal";
 
@@ -113,12 +113,9 @@ const ReviewSection = ({
                             ? `${review.user.firstName} ${review.user.lastName}`
                             : "Anonymous User"}
                         </Heading>
-                        <HStack className="gap-1 items-center">
-                          {renderStars(review.rating)}
-                          <Text className="text-xs text-gray-500 ml-1">
-                            {review.rating?.toFixed(1)}
-                          </Text>
-                        </HStack>
+
+                        <RatingSection rating={review.rating || 0} />
+                        
                       </VStack>
                       <Text size="xs" className="md:text-xs text-gray-400">
                         {format(new Date(review.createdAt), "MMM d, yyyy")}

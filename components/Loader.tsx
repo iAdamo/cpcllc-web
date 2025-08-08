@@ -5,7 +5,7 @@ const Loader: React.FC = () => {
   return (
     <div className="loader-container">
       <div className="loader"></div>
-      <p>Loading map...</p>
+      <p></p>
     </div>
   );
 };
