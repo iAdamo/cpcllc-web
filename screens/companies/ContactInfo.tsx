@@ -55,42 +55,42 @@ const ContactInfo = ({
       </VStack>
 
       {/* Contact Card */}
-      <Card className={`${!isCompanyPage && "p-0"} gap-4`}>
-        <div className="flex flex-row justify-between">
+      <Card className={`${!isCompanyPage && "p-1"} gap-4`}>
+        <div className="flex flex-row justify-between gap-2">
           <Link
             href={`mailto:${companyData?.companyEmail}`}
             className={`font-extrablack ${
-              isCompanyPage ? "md:text-md text-xs" : "text-sm"
-            } text-cyan-700 md:w-11/12 w-full break-words`}
+              isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
+            } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
           >
             {companyData?.companyEmail || "No email provided"}
           </Link>
-          <Icon as={ExternalLinkIcon} />
+          <Icon as={ExternalLinkIcon} className="" />
         </div>
         <Divider />
 
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between gap-2">
           <Link
             href={`https://${
               companyData?.companySocialMedia?.other || "google.com"
             }`}
             className={`font-extrablack ${
-              isCompanyPage ? "md:text-md text-xs" : "text-sm"
-            } text-cyan-700 md:w-11/12 w-full break-words`}
+              isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
+            } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
           >
-            {companyData?.companySocialMedia?.other || "google.com"}
+            Website
           </Link>
           <Icon as={GlobeIcon} />
         </div>
 
         <Divider />
 
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between gap-2">
           <Link
             href={`tel:${companyData?.companyPhoneNumber}` || "google.com"}
             className={`font-extrablack ${
-              isCompanyPage ? "md:text-md text-xs" : "text-sm"
-            } text-cyan-700 md:w-11/12 w-full break-words`}
+              isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
+            } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
           >
             {companyData?.companyPhoneNumber || "google.com"}
           </Link>
@@ -101,12 +101,12 @@ const ContactInfo = ({
         <div
           className={`${
             isCompanyPage ? "flex" : "hidden"
-          } flex-row justify-between`}
+          } flex-row justify-between gap-2`}
         >
-          <div className="w-11/12">
+          <div className="w-9/12">
             <Link
               href="#"
-              className="font-extrablack md:text-md text-xs text-cyan-700  break-words"
+              className="font-extrablack md:text-[16px] text-xs text-cyan-700  break-words"
             >
               Get Directions
             </Link>

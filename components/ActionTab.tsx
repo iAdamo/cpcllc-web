@@ -30,7 +30,7 @@ export default function ActionButtons({
   const pathname = usePathname();
 
   useEffect(() => {
-    const hasFavourited = companyData?.favoritedBy.includes(userData?.id ?? "");
+    const hasFavourited = companyData?.favoritedBy?.includes(userData?.id ?? "");
     setIsFavourite(hasFavourited ?? false);
   }, [companyData?.favoritedBy, userData?.id]);
 

@@ -180,7 +180,7 @@ const ProfilePage = () => {
                           </div>
 
                           <div className="md:hidden">
-                            <Avatar size="2xl" className="relative w-48 h-48">
+                            <Avatar size="2xl" className="relative w-40 h-40">
                               <AvatarFallbackText>
                                 {getInitial(data.email || data.firstName || "")}
                               </AvatarFallbackText>

@@ -19,7 +19,7 @@ export const ProfileUploadButton = ({
       <button
         type="button"
         className={`absolute ${
-          isMobile ? "bottom-4 right-5 p-1" : "bottom-2 right-2 p-2"
+          isMobile ? "bottom-3 right-4 p-1" : "bottom-2 right-2 p-2"
         } rounded-full ${
           isUploading
             ? "bg-gray-400 cursor-not-allowed"

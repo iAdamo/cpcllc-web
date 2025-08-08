@@ -233,7 +233,7 @@ const NavBar = () => {
           >
             <DrawerBackdrop className="bg-transparent" />
             <DrawerContent className="h-screen mt-16 p-2">
-              <DrawerBody className="w-full h-full m-0 justify-start">
+              <DrawerBody className="w-full h-full m-0 justify-start last:self-end">
                 {!session && (
                   <Button
                     variant="link"
@@ -300,7 +300,7 @@ const NavBar = () => {
                       setShowDrawer(false);
                       router.push("/onboarding");
                     }}
-                    className="justify-start bottom-0 mt-96 mx-auto"
+                    className="flex flex-col self-end justify-start items-end mx-auto"
                   >
                     <ButtonText className="font-normal text-start">
                       Sign Up
