@@ -146,7 +146,7 @@ const ProfileDetails = ({
             </VStack>
           ) : (
             <Card variant="filled" className="flex-row p-4">
-              <Text size="xs" className="md:text-md break-words">
+              <Text size="xs" className="md:text-sm">
                 {activeRoleId?.companyDescription}
               </Text>
               {isEditable && (

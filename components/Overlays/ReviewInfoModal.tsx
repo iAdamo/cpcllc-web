@@ -32,7 +32,7 @@ const ReviewInfoModal: React.FC<ReviewInfoModalProps> = (props) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="fixed">
       <ModalBackdrop />
-      <ModalContent className="h-auto max-h-[32rem] max-w-3xl">
+      <ModalContent className="h-auto max-h-[32rem] w-full md:max-w-3xl">
         <ModalHeader className="flex-row gap-3 items-start">
           <Avatar size="md" className="shrink-0">
             <AvatarFallbackText className="text-sm">

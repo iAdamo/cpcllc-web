@@ -262,6 +262,7 @@ const NavBar = () => {
                       isDisabled={!userData?.activeRoleId}
                       variant="link"
                       onPress={() => {
+                        setShowDrawer(false);
                         setUserData({
                           ...userData,
                           activeRole:
@@ -269,7 +270,6 @@ const NavBar = () => {
                               ? "Company"
                               : "Client",
                         });
-                        setShowDrawer(false);
                       }}
                       className="justify-start"
                     >

@@ -59,14 +59,14 @@ const ReviewSection = ({
     setVisibleReviews((prev) => Math.max(prev - 3, 3)); // Ensure at least 3 reviews are visible
   }
   return (
-    <Card variant="outline" className="md:gap-6 gap-3">
+    <Card className="md:gap-6 gap-3">
       <Heading size="sm" className="md:text-lg font-bold text-brand-primary">
         Reviews
       </Heading>
 
       {reviews.length === 0 ? (
         <Text size="xs" className="md:text-md text-gray-500">
-          No reviews yet. Be the first to review!
+          No reviews yet!
         </Text>
       ) : (
         <VStack className="gap-4">
@@ -91,7 +91,7 @@ const ReviewSection = ({
                 });
               }}
             >
-              <Card variant="outline" className="">
+              <VStack className="">
                 <HStack className="gap-3 items-start">
                   <Avatar className="md:w-12 md:h-12 w-10 h-10">
                     <AvatarFallbackText className="text-sm">
@@ -115,9 +115,9 @@ const ReviewSection = ({
                         </Heading>
 
                         <RatingSection rating={review.rating || 0} />
-                        
+
                       </VStack>
-                      <Text size="xs" className="md:text-xs text-gray-400">
+                      <Text size="xs" className="text-gray-400">
                         {format(new Date(review.createdAt), "MMM d, yyyy")}
                       </Text>
                     </HStack>
@@ -136,7 +136,7 @@ const ReviewSection = ({
                     )}
                   </VStack>
                 </HStack>
-              </Card>
+              </VStack>
             </Pressable>
           ))}
 

@@ -7,17 +7,27 @@ import { Pressable } from "@/components/ui/pressable";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { AddIcon } from "@/components/ui/icon";
+import { AddIcon, ArrowRightIcon, ArrowLeftIcon } from "@/components/ui/icon";
 import { getServicesByCompany } from "@/axios/services";
 import { ServiceData } from "@/types";
 import ServiceInfoModal from "@/components/Overlays/ServiceInfoModal";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
 const ServiceSection = ({
   companyId,
   isCurrentUser,
+  isProfilePage,
+  isCompanyPage,
+  isMobile,
 }: {
   companyId: string;
-  isCurrentUser: boolean;
+  isCurrentUser?: boolean;
+  isProfilePage?: boolean;
+  isCompanyPage?: boolean;
+  isMobile?: boolean;
 }) => {
   const [services, setServices] = useState<ServiceData[] | []>([]);
   const [serviceData, setServiceData] = useState<ServiceData | null>(null);
@@ -36,7 +46,7 @@ const ServiceSection = ({
     fetchService();
   }, [companyId]);
 
-  return (
+  return !isProfilePage ? (
     <VStack>
       {serviceData && (
         <ServiceInfoModal
@@ -57,7 +67,10 @@ const ServiceSection = ({
         </Button>
       )}
       {isCurrentUser && services.length === 0 ? (
-        <Text size="xs" className="md:text-md text-text-secondary text-center mt-8">
+        <Text
+          size="xs"
+          className="md:text-base text-text-secondary text-center mt-8"
+        >
           No updates available for this service yet. Click the button above to
           add new updates.
         </Text>
@@ -99,12 +112,91 @@ const ServiceSection = ({
               <ButtonText>View All Updates</ButtonText>
             </Button>
           ) : (
-            <Text size="xs" className="md:text-md text-text-secondary text-center mt-8">
+            <Text
+              size="xs"
+              className="md:text-base text-text-secondary text-center mt-8"
+            >
               No updates available for this service.
             </Text>
           )}
         </VStack>
       )}
+    </VStack>
+  ) : (
+    <VStack space="2xl" className="px-4">
+      <Heading
+        size="sm"
+        className={`${
+          isCompanyPage ? "md:text-lg" : "md:text-sm"
+        } font-bold text-brand-primary`}
+      >
+        Update from this service provider
+      </Heading>
+      <div className="relative w-full">
+        {/* Left button */}
+        <Button
+          size="sm"
+          className="swiper-button-prev absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+        >
+          <ButtonIcon as={ArrowLeftIcon} />
+        </Button>
+
+        {/* Swiper */}
+        <Swiper
+          modules={[Navigation, Pagination]}
+          className="w-full"
+          spaceBetween={10}
+          slidesPerView={isMobile ? 1.3 : isCompanyPage ? 2.3 : 1.3}
+          navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          }}
+        >
+          {services.map((service: ServiceData) => {
+            return (
+              <SwiperSlide key={service._id}>
+                <Card variant="outline" className="md:flex-row gap-2">
+                  <Image
+                    className={`object-cover ${
+                      isCompanyPage ? "h-32 md:w-32" : "h-28 w-28"
+                    }`}
+                    src={service.images[0]}
+                    alt="portfolio-image"
+                    width={1200}
+                    height={1200}
+                  />
+                  <VStack className="h-auto gap-2">
+                    <Heading
+                      size="xs"
+                      className={`${
+                        isCompanyPage ? "md:text-md" : "md:text-sm"
+                      }`}
+                    >
+                      {service.title}
+                    </Heading>
+                    <Text
+                      size="xs"
+                      className={`${
+                        service.description.length > 80 && "line-clamp-3"
+                      } ${isCompanyPage ? "md:text-md" : "md:text-sm"}`}
+                    >
+                      {service.description}
+                    </Text>
+                  </VStack>
+                </Card>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+
+        {/* Right button */}
+        <Button
+          size="sm"
+          className="swiper-button-next absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+        >
+          <ButtonIcon as={ArrowRightIcon} />
+        </Button>
+      </div>
     </VStack>
   );
 };

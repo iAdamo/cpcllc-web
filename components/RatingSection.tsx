@@ -32,28 +32,28 @@ const renderStars = (rating: number) => {
   return stars;
 };
 
-
 const RatingSection = ({
   rating,
   reviewCount,
 }: {
-  rating: number;
+  rating?: number; // Make rating optional
   reviewCount?: number;
 }) => (
-  <HStack className="gap-2 items-center">
-    {rating && (
-      <HStack className="gap-1 items-center">
+  <HStack className="gap-2">
+    {rating !== undefined && rating > 0 && (
+      <HStack className="gap-1">
         {renderStars(rating)}
         <Heading size="xs" className="md:text-md text-gray-500">
           {rating.toFixed(1)}
         </Heading>
       </HStack>
     )}
-    <Heading size="xs" className="md:text-md text-gray-500">
+    {reviewCount !== undefined && reviewCount >= 0 && ( <Heading size="xs" className="md:text-md text-gray-500">
       {reviewCount === 0
         ? "No reviews"
         : `${reviewCount} ${reviewCount === 1 ? "review" : "reviews"}`}
-    </Heading>
+    </Heading>)}
+
   </HStack>
 );
 

@@ -55,7 +55,7 @@ const ContactInfo = ({
       </VStack>
 
       {/* Contact Card */}
-      <Card className={`${!isCompanyPage && "p-2"} gap-4`}>
+      <Card className={`${!isCompanyPage && "p-2"} gap-4 md:rounded-md rounded-none`}>
         <div className="flex flex-row justify-between gap-2">
           <Link
             href={`mailto:${companyData?.companyEmail}`}

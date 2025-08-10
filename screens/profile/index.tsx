@@ -201,7 +201,7 @@ const ProfilePage = () => {
                         </div>
                         <VStack className="md:gap-4 gap-2 md:items-start items-center">
                           <VStack className="gap-1 md:items-start items-center">
-                            <Heading size="md">
+                            <Heading size="lg" className="md:text-2xl">
                               {activeRoleId.companyName}
                             </Heading>
                             <RatingSection
@@ -232,22 +232,21 @@ const ProfilePage = () => {
                       />
                     </VStack>
                   </HStack>
-                  <Card className="gap-2 text-typography-700">
+                  <Card className="gap-2">
                     <Heading size="xs" className="md:text-md">
                       Brand Showcase
                     </Heading>
                     <VStack className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {activeRoleId?.companyImages?.map((src, index) => (
-                        <Card key={index} variant="outline" className="">
-                          <Image
-                            className="object-cover w-full md:h-56 h-40"
-                            src={src}
-                            alt={`company-image-${index}`}
-                            width={1920}
-                            height={1080}
-                            priority
-                          />
-                        </Card>
+                        <Image
+                          key={index}
+                          className="object-cover w-full md:h-56 h-40"
+                          src={src}
+                          alt={`company-image-${index}`}
+                          width={1920}
+                          height={1080}
+                          priority
+                        />
                       ))}
                     </VStack>
                   </Card>

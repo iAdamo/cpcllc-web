@@ -93,9 +93,11 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
       className="fixed"
     >
       <ModalBackdrop />
-      <ModalContent className="w-full max-w-2xl">
+      <ModalContent className="w-full md:max-w-2xl">
         <ModalHeader>
-          <Heading>Review {companyName}</Heading>
+          <Heading size="sm" className="md:text-2xl">
+            Review {companyName}
+          </Heading>
         </ModalHeader>
         <ModalBody className="space-y-4">
           {/* Star Rating */}
@@ -104,12 +106,13 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
               <button
                 key={star}
                 type="button"
-                className="p-1 focus:outline-none"
+                className="p-1 focus:outline-none sm:p-2" // Adjust padding for larger screens
                 onClick={() => setRating(star)}
                 aria-label={`Rate ${star} out of 5`}
               >
                 <Star
-                  size={32}
+                  size={rating <= 2 ? 24 : 32} // Smaller size for mobile
+                  className="sm:w-8 sm:h-8 w-6 h-6" // Adjust size for different screen sizes
                   fill={star <= rating ? "#FFD700" : "transparent"}
                   color={star <= rating ? "#FFD700" : "#D1D5DB"}
                 />
@@ -118,11 +121,12 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
           </div>
 
           {/* Review Text */}
-          <Textarea className="w-full h-40">
+          <Textarea className="w-full h-28 md:h-40">
             <TextareaInput
               placeholder="Share your experience with this company..."
               value={description}
               onChangeText={(text) => setDesc(text)}
+              className="md:text-base text-xs"
             />
           </Textarea>
 
@@ -139,7 +143,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
             />
             <label
               htmlFor="review-images"
-              className="inline-block px-4 py-2 mb-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50"
+              className="inline-block px-4 py-2 mb-2 text-xs md:text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50"
             >
               Add Photos ({images.length}/5)
             </label>
@@ -171,6 +175,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
         </ModalBody>
         <ModalFooter className="justify-between">
           <Button
+            size="md"
             variant="outline"
             onPress={handleClose}
             disabled={isUploading}
@@ -178,6 +183,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
             <ButtonText>Cancel</ButtonText>
           </Button>
           <Button
+            size="md"
             className="bg-btn-primary"
             onPress={handleSubmit}
             disabled={isUploading}
