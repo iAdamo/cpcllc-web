@@ -16,6 +16,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { MapProvider } from "@/context/MapContext";
 import { useRouter } from "next/navigation";
 import RatingSection from "@/components/RatingSection";
+import { useMediaQuery } from "@/components/ui/utils/use-media-query";
 
 const CompaniesSection = () => {
   const [companies, setCompanies] = useState<CompanyData[]>([]);
@@ -26,7 +27,7 @@ const CompaniesSection = () => {
   const [searchLoading, setSearchLoading] = useState(false);
 
   const limit = 20;
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const [isMobile] = useMediaQuery([{ maxWidth: 768}]);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const category = searchParams.get("category") || "all";

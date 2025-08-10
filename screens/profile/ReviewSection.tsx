@@ -60,12 +60,12 @@ const ReviewSection = ({
   }
   return (
     <Card className="md:gap-6 gap-3">
-      <Heading size="sm" className="md:text-lg font-bold text-brand-primary">
+      <Heading size="sm" className="md:text-xl  text-brand-primary">
         Reviews
       </Heading>
 
       {reviews.length === 0 ? (
-        <Text size="xs" className="md:text-md text-gray-500">
+        <Text size="xs" className="md:text-base text-gray-500">
           No reviews yet!
         </Text>
       ) : (

@@ -26,13 +26,13 @@ export default function RootLayout({
       <body className="h-screen min-h-screen m-0 p-0">
         <StyledJsxRegistry>
           <GluestackUIProvider mode="light">
-              <SessionProvider>
-                {!shouldHideLayout && <NavBar />}
-                {children}
-                {!shouldHideLayout && <PreFooter />}
-                {!shouldHideLayout && <Footer />}
-                <AiChat />
-              </SessionProvider>
+            <SessionProvider>
+              {!shouldHideLayout && <NavBar />}
+              {children}
+              {!shouldHideLayout && <PreFooter />}
+              {!shouldHideLayout && <Footer />}
+              {!shouldHideLayout && <AiChat />}
+            </SessionProvider>
           </GluestackUIProvider>
         </StyledJsxRegistry>
       </body>

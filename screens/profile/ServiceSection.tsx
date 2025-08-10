@@ -46,7 +46,7 @@ const ServiceSection = ({
     fetchService();
   }, [companyId]);
 
-  return !isProfilePage ? (
+  return isProfilePage ? (
     <VStack>
       {serviceData && (
         <ServiceInfoModal
@@ -57,6 +57,7 @@ const ServiceSection = ({
       )}
       {isCurrentUser && (
         <Button
+          size="md"
           onPress={() => router.push("/service/init")}
           className="mb-4 md:h-14 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary"
         >
@@ -71,8 +72,8 @@ const ServiceSection = ({
           size="xs"
           className="md:text-base text-text-secondary text-center mt-8"
         >
-          No updates available for this service yet. Click the button above to
-          add new updates.
+          No updates available for this service yet. Click the button to add new
+          updates.
         </Text>
       ) : (
         <VStack>
@@ -108,7 +109,7 @@ const ServiceSection = ({
             </Pressable>
           ))}
           {isCurrentUser && services.length !== 0 ? (
-            <Button className="mt-4">
+            <Button size="md" className="mt-4">
               <ButtonText>View All Updates</ButtonText>
             </Button>
           ) : (
@@ -116,7 +117,7 @@ const ServiceSection = ({
               size="xs"
               className="md:text-base text-text-secondary text-center mt-8"
             >
-              No updates available for this service.
+              No updates available for this company.
             </Text>
           )}
         </VStack>
@@ -130,73 +131,79 @@ const ServiceSection = ({
           isCompanyPage ? "md:text-lg" : "md:text-sm"
         } font-bold text-brand-primary`}
       >
-        Update from this service provider
+        Updates from this service provider
       </Heading>
-      <div className="relative w-full">
-        {/* Left button */}
-        <Button
-          size="sm"
-          className="swiper-button-prev absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
-        >
-          <ButtonIcon as={ArrowLeftIcon} />
-        </Button>
+      {services.length > 0 ? (
+        <div className="relative w-full">
+          {/* Left button */}
+          <Button
+            size="sm"
+            className="swiper-button-prev absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+          >
+            <ButtonIcon as={ArrowLeftIcon} />
+          </Button>
 
-        {/* Swiper */}
-        <Swiper
-          modules={[Navigation, Pagination]}
-          className="w-full"
-          spaceBetween={10}
-          slidesPerView={isMobile ? 1.3 : isCompanyPage ? 2.3 : 1.3}
-          navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          }}
-        >
-          {services.map((service: ServiceData) => {
-            return (
-              <SwiperSlide key={service._id}>
-                <Card variant="outline" className="md:flex-row gap-2">
-                  <Image
-                    className={`object-cover ${
-                      isCompanyPage ? "h-32 md:w-32" : "h-28 w-28"
-                    }`}
-                    src={service.images[0]}
-                    alt="portfolio-image"
-                    width={1200}
-                    height={1200}
-                  />
-                  <VStack className="h-auto gap-2">
-                    <Heading
-                      size="xs"
-                      className={`${
-                        isCompanyPage ? "md:text-md" : "md:text-sm"
+          {/* Swiper */}
+          <Swiper
+            modules={[Navigation, Pagination]}
+            className="w-full"
+            spaceBetween={10}
+            slidesPerView={isMobile ? 1.3 : isCompanyPage ? 2.3 : 1.3}
+            navigation={{
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            }}
+          >
+            {services.map((service: ServiceData) => {
+              return (
+                <SwiperSlide key={service._id}>
+                  <Card variant="outline" className="md:flex-row gap-2">
+                    <Image
+                      className={`object-cover ${
+                        isCompanyPage ? "h-32 md:w-32" : "h-28 w-28"
                       }`}
-                    >
-                      {service.title}
-                    </Heading>
-                    <Text
-                      size="xs"
-                      className={`${
-                        service.description.length > 80 && "line-clamp-3"
-                      } ${isCompanyPage ? "md:text-md" : "md:text-sm"}`}
-                    >
-                      {service.description}
-                    </Text>
-                  </VStack>
-                </Card>
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
+                      src={service.images[0]}
+                      alt="portfolio-image"
+                      width={1200}
+                      height={1200}
+                    />
+                    <VStack className="h-auto gap-2">
+                      <Heading
+                        size="xs"
+                        className={`${
+                          isCompanyPage ? "md:text-md" : "md:text-sm"
+                        }`}
+                      >
+                        {service.title}
+                      </Heading>
+                      <Text
+                        size="xs"
+                        className={`${
+                          service.description.length > 80 && "line-clamp-3"
+                        } ${isCompanyPage ? "md:text-md" : "md:text-sm"}`}
+                      >
+                        {service.description}
+                      </Text>
+                    </VStack>
+                  </Card>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
 
-        {/* Right button */}
-        <Button
-          size="sm"
-          className="swiper-button-next absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
-        >
-          <ButtonIcon as={ArrowRightIcon} />
-        </Button>
-      </div>
+          {/* Right button */}
+          <Button
+            size="sm"
+            className="swiper-button-next absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+          >
+            <ButtonIcon as={ArrowRightIcon} />
+          </Button>
+        </div>
+      ) : (
+        <Text size="xs" className="md:text-sm">
+          No updates from this company
+        </Text>
+      )}
     </VStack>
   );
 };

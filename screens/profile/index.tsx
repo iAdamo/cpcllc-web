@@ -262,16 +262,17 @@ const ProfilePage = () => {
             )}
           </VStack>
 
-          <Card className="md:w-1/4 items-center md:bg-[#F6F6F6] border md:border-none mx-4 md:mx-0">
+          <VStack className="md:w-1/4 items-center md:bg-[#F6F6F6] mx-4 md:mx-0">
             {activeRoleId?._id && (
               <VStack className="w-full">
                 <ServiceSection
                   companyId={activeRoleId._id}
                   isCurrentUser={isCurrentUser}
+                  isProfilePage={true}
                 />
               </VStack>
             )}
-          </Card>
+          </VStack>
         </VStack>
       </VStack>
     </VStack>

@@ -43,17 +43,18 @@ const RatingSection = ({
     {rating !== undefined && rating > 0 && (
       <HStack className="gap-1">
         {renderStars(rating)}
-        <Heading size="xs" className="md:text-md text-gray-500">
+        <Heading className="text-xs md:text-md text-gray-500">
           {rating.toFixed(1)}
         </Heading>
       </HStack>
     )}
-    {reviewCount !== undefined && reviewCount >= 0 && ( <Heading size="xs" className="md:text-md text-gray-500">
-      {reviewCount === 0
-        ? "No reviews"
-        : `${reviewCount} ${reviewCount === 1 ? "review" : "reviews"}`}
-    </Heading>)}
-
+    {reviewCount !== undefined && reviewCount >= 0 && (
+      <Heading className="text-xs md:text-md text-gray-500">
+        {reviewCount === 0
+          ? "No reviews"
+          : `${reviewCount} ${reviewCount === 1 ? "review" : "reviews"}`}
+      </Heading>
+    )}
   </HStack>
 );
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Card } from "@/components/ui/card";
@@ -26,6 +26,7 @@ import ContactInfo from "./ContactInfo";
 import ActionButtons from "@/components/ActionTab";
 import RatingSection from "../../components/RatingSection";
 import ServiceSection from "../profile/ServiceSection";
+import { useMediaQuery } from "@/components/ui/utils/use-media-query";
 
 const CompanyView = (companyData: CompanyData) => {
   const [newReviews, setNewReviews] = useState<ReviewData[]>([]);
@@ -36,23 +37,7 @@ const CompanyView = (companyData: CompanyData) => {
 
   const isCompanyPage = /^\/companies\/[^/]+$/.test(pathname);
   const isProfilePage = /^\/cpc\/[^/]+$/.test(pathname);
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" && window.innerWidth < 768
-  );
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add event listener for window resize
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup the event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const [isMobile] = useMediaQuery([{ maxWidth: 768}]);
 
   return (
     <VStack
@@ -93,7 +78,7 @@ const CompanyView = (companyData: CompanyData) => {
           <VStack className={`${!isCompanyPage && "flex-row"} gap-4`}>
             <VStack
               className={`${
-                !isCompanyPage && "w-2/3"
+                !isCompanyPage && "w-full"
               } px-4 gap-2 hover:drop-shadow-xl transition-shadow duration-300`}
             >
               <Pressable
