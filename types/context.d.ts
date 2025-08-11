@@ -9,7 +9,7 @@ export interface UserData {
   username: string;
   firstName?: string;
   lastName?: string;
-  activeRole: "Client" | "Company";
+  activeRole: "Client" | "Company" | "Admin";
   email: string;
   profilePicture?: string;
   purchasedServices: any[];

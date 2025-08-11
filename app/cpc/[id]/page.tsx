@@ -17,8 +17,8 @@ export async function generateMetadata({
 
   const description =
     user?.activeRole === "Company"
-      ? `${user?.activeRoleId?.companyDescription?.slice(0, 60)}${
-          (user?.activeRoleId?.companyDescription?.length ?? 0) > 60
+      ? `${user?.activeRoleId?.companyDescription?.slice(0, 100)}${
+          (user?.activeRoleId?.companyDescription?.length ?? 0) > 100
             ? "..."
             : ""
         }`

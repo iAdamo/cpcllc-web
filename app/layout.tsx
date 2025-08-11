@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
 
-  const hideLayoutForRoutes = ["/onboarding", "/another-route"];
+  const hideLayoutForRoutes = ["/onboarding", "/admin"];
 
   const shouldHideLayout = hideLayoutForRoutes.includes(pathname);
 

@@ -1,11 +1,11 @@
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from "react-native";
 
 type QueryKeys =
-  | 'maxWidth'
-  | 'minWidth'
-  | 'maxHeight'
-  | 'minHeight'
-  | 'orientation';
+  | "maxWidth"
+  | "minWidth"
+  | "maxHeight"
+  | "minHeight"
+  | "orientation";
 
 type SubQuery = {
   [queryKey in QueryKeys]?: number | string;
@@ -34,7 +34,8 @@ function iterateQuery(
   height?: number,
   width?: number
 ) {
-  const queryResults = [];
+  // const queryResults = [];
+  const queryResults: boolean[] = [];
   if (Array.isArray(query)) {
     query.forEach((subQuery: SubQuery) => {
       queryResults.push(queryResolver(subQuery, width, height));
@@ -53,24 +54,24 @@ function calculateQuery(
 ) {
   let retval;
   switch (key) {
-    case 'maxWidth':
-      retval = typeof val === 'number' && width ? width <= val : undefined;
+    case "maxWidth":
+      retval = typeof val === "number" && width ? width <= val : undefined;
       break;
-    case 'minWidth':
-      retval = typeof val === 'number' && width ? width >= val : undefined;
+    case "minWidth":
+      retval = typeof val === "number" && width ? width >= val : undefined;
       break;
-    case 'maxHeight':
-      retval = typeof val === 'number' && height ? height <= val : undefined;
+    case "maxHeight":
+      retval = typeof val === "number" && height ? height <= val : undefined;
       break;
-    case 'minHeight':
-      retval = typeof val === 'number' && height ? height >= val : undefined;
+    case "minHeight":
+      retval = typeof val === "number" && height ? height >= val : undefined;
       break;
-    case 'orientation':
+    case "orientation":
       if (val) {
         if (width && height && width > height) {
-          retval = typeof val === 'string' && val === 'landscape';
+          retval = typeof val === "string" && val === "landscape";
         } else {
-          retval = typeof val === 'string' && val === 'portrait';
+          retval = typeof val === "string" && val === "portrait";
         }
       }
       break;

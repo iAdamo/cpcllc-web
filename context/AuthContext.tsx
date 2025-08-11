@@ -100,7 +100,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   if (isLoading || loading || loadingCompany)
     return (
       <Spinner
-        size="large"
+        size="small"
         className="h-fit p-4 justify-start items-start w-full"
       />
     );
@@ -117,7 +117,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       router.replace("/companies");
       return (
         <Spinner
-          size="large"
+          size="small"
           className="h-fit p-4 justify-start items-start w-full"
         />
       );
@@ -125,7 +125,15 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       router.replace(`/cpc/${userData.id}`);
       return (
         <Spinner
-          size="large"
+          size="small"
+          className="h-fit p-4 justify-start items-start w-full"
+        />
+      );
+    } else if (userData?.activeRole === "Admin") {
+      router.replace("/admin");
+      return (
+        <Spinner
+          size="small"
           className="h-fit p-4 justify-start items-start w-full"
         />
       );
@@ -135,7 +143,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       router.replace(`/cpc/${userData.id}`);
       return (
         <Spinner
-          size="large"
+          size="small"
           className="h-fit p-4 justify-start items-start w-full"
         />
       );
@@ -143,7 +151,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       router.push("/cpc");
       return (
         <Spinner
-          size="large"
+          size="small"
           className="h-fit p-4 justify-start items-start w-full"
         />
       );
@@ -153,7 +161,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       router.push("/companies");
       return (
         <Spinner
-          size="large"
+          size="small"
           className="h-fit p-4 justify-start items-start w-full"
         />
       );

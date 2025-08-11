@@ -39,7 +39,7 @@ const Onboarding = () => {
                   size="lg"
                   className="text-white data-[hover=true]:text-white "
                 >
-                  CompanyCenter
+                  CompaniesCenter
                 </ButtonText>
               </Button>
             </VStack>
