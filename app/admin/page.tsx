@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AdminDashboard from "@/screens/admin/dashboard";
+import AdminDashboard from "@/screens/admin";
 
 export const metadata: Metadata = {
   robots: {

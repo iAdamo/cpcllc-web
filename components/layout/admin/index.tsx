@@ -124,8 +124,8 @@ const NavBar = () => {
 
   return (
     <VStack className="w-full">
-      <HStack className="w-full h-fit justify-between items-center p-4 bg-white">
-        <HStack className="w-4/5 px-4 justify-between items-center">
+      <HStack className="w-full items-center p-4 bg-white">
+        <HStack className="w-full px-4 justify-between items-center">
           <Heading size="sm">
             {activeView.charAt(0).toUpperCase() + activeView.slice(1)}
           </Heading>
@@ -133,22 +133,20 @@ const NavBar = () => {
             <ButtonIcon as={BellIcon} className="text-blue-700" />
           </Button>
         </HStack>
-        <HStack className="w-1/5 px-2 justify-between gap-4 items-center">
-          <Button
-            size="xl"
-            variant="outline"
-            className="rounded-full w-fit h-fit p-0 bg-[#F6F6F6] border-0"
-          >
+        <VStack className="w-1/4 bg-blue-500 items-start">
+          <Button variant="link" className="w-auto gap-2 p-0 h-0 bg-red-500">
             <ButtonIcon
               as={ProfileIcon}
-              className="w-12 h-12 fill-blue-700 text-blue-700"
+              className="w-11 h-11 rounded-full bg-[#F6F6F6] fill-blue-700 text-blue-700"
             />
+            <VStack>
+              <ButtonText size="xs" className="">
+                De ArmasAlejandro
+              </ButtonText>
+              <Text size="sm">Admin</Text>
+            </VStack>
           </Button>
-          <VStack className="">
-            <Heading size="xs">De Armas Alejandro</Heading>
-            <Text size="sm">Admin</Text>
-          </VStack>
-        </HStack>
+        </VStack>
       </HStack>
     </VStack>
   );
@@ -164,7 +162,7 @@ export default function AdminDashboardLayout({
       <SideBar />
       <VStack className="flex-1 overflow-hidden">
         <NavBar />
-        <VStack className="flex-1 overflow-y-auto p-4">{children}</VStack>
+        <VStack className="flex-1 overflow-y-auto p-4 bg-[#F6F6F6] rounded-md">{children}</VStack>
       </VStack>
     </HStack>
   );
