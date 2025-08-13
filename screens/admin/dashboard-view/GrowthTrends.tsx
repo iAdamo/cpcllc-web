@@ -20,15 +20,12 @@ import {
 import { TimeRangeSelector } from "@/components/admin/TimeRangeSelector";
 
 export default function GrowthTrends() {
-  const { metrics, timeRange, isLoading, error, fetchMetrics, setTimeRange } =
-    useDashboardStore((state) => ({
-      metrics: state.metrics,
-      timeRange: state.timeRange,
-      isLoading: state.isLoading,
-      error: state.error,
-      fetchMetrics: state.fetchMetrics,
-      setTimeRange: state.setTimeRange,
-    }));
+  const metrics = useDashboardStore((s) => s.metrics);
+  const timeRange = useDashboardStore((s) => s.timeRange);
+  const isLoading = useDashboardStore((s) => s.isLoading);
+  const error = useDashboardStore((s) => s.error);
+  const fetchMetrics = useDashboardStore((s) => s.fetchMetrics);
+  const setTimeRange = useDashboardStore((s) => s.setTimeRange);
 
   useEffect(() => {
     fetchMetrics(timeRange);

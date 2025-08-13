@@ -13,79 +13,87 @@ export interface Metric {
 }
 
 export interface DashboardState {
-  // UI State
   activeView: DashboardView;
   sidebarOpen: boolean;
   timeRange: TimeRange;
-
-  // Data State
   users: UserData[];
   metrics: Metric[];
   isLoading: boolean;
   error: string | null;
 
-  // Actions
+  // UI Actions
   setActiveView: (view: DashboardView) => void;
   toggleSidebar: () => void;
   setTimeRange: (range: TimeRange) => void;
+
+  // Data Actions
   fetchUsers: () => Promise<void>;
   fetchMetrics: (range: TimeRange) => Promise<void>;
 }
 
 export const useDashboardStore = create<DashboardState>()(
   persist(
-    (set, get) => ({
-      activeView: "dashboard",
-      sidebarOpen: true,
-      setActiveView: (view) => set({ activeView: view }),
-      toggleSidebar: () =>
-        set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-      timeRange: "monthly",
-
-      setTimeRange: (range) => {
-        if (get().timeRange !== range) {
-          set({ timeRange: range });
-          get().fetchMetrics(range);
-        }
-      },
-      users: [],
-      metrics: [],
-      isLoading: false,
-      error: null,
-      fetchUsers: async () => {
+    (set, get) => {
+      // stable fetch functions
+      const fetchUsers = async () => {
         set({ isLoading: true, error: null });
         try {
           const response = await getUsers(1, 100);
           set({ users: response.users, isLoading: false });
-        } catch (error) {
+        } catch (err) {
           set({
             isLoading: false,
-            error: String(error) || "Failed to fetch users",
+            error: String(err) || "Failed to fetch users",
           });
         }
-      },
-      fetchMetrics: async (range: TimeRange) => {
+      };
+
+      const fetchMetrics = async (range: TimeRange) => {
         set({ isLoading: true, error: null });
         try {
           const response = await getMetrics(range);
           set({ metrics: response, isLoading: false });
-        } catch (error) {
+        } catch (err) {
           set({
             isLoading: false,
-            error: String(error) || "Failed to fetch metrics",
+            error: String(err) || "Failed to fetch metrics",
           });
         }
-      },
-    }),
+      };
+
+      return {
+        // Initial State
+        activeView: "dashboard",
+        sidebarOpen: true,
+        timeRange: "monthly",
+        users: [],
+        metrics: [],
+        isLoading: false,
+        error: null,
+
+        // UI Actions
+        setActiveView: (view) => set({ activeView: view }),
+        toggleSidebar: () =>
+          set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+        setTimeRange: (range) => {
+          if (get().timeRange !== range) {
+            set({ timeRange: range });
+          }
+        },
+
+        // Data Actions
+        fetchUsers,
+        fetchMetrics,
+      };
+    },
     {
       name: "dashboard-storage",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) =>
-        Object.fromEntries(
-          Object.entries(state).filter(
-            ([key]) => !["isLoading", "error", "users", "metrics"].includes(key)
-          )
-        ),
+      partialize: (state) => ({
+        activeView: state.activeView,
+        sidebarOpen: state.sidebarOpen,
+        timeRange: state.timeRange,
+      }),
     }
   )
 );

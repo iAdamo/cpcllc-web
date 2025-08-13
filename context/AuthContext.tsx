@@ -108,6 +108,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   if (
     !session &&
     pathname !== "/" &&
+    pathname !== "/admin" &&
     !pathname.startsWith("/companies") &&
     pathname !== "/onboarding"
   ) {
