@@ -3,7 +3,7 @@
 import { Box } from "@/components/ui/box";
 import AdminDashboardLayout from "@/components/layout/admin";
 import { useDashboardStore } from "@/stores/dashboard-store";
-import DashboardView from "@/screens/admin/dashboard/DashboardView";
+import DashboardView from "@/screens/admin/dashboard-view";
 
 const AdminDashboard = () => {
   const { activeView } = useDashboardStore();
