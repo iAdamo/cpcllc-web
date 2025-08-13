@@ -17,7 +17,7 @@ export function TimeRangeSelector({
   const ranges: TimeRange[] = ["daily", "weekly", "monthly", "yearly"];
 
   return (
-    <VStack>
+    <VStack className="self-end">
       <HStack className="space-x-2">
         {ranges.map((range) => (
           <Button

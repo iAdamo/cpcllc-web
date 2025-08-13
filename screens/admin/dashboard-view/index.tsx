@@ -10,9 +10,7 @@ export default function DashboardView() {
   return (
     <VStack className="w-full gap-4 overflow-hidden">
       <SummaryCards />
-      <VStack>
-        <Card className="bg-white w-full h-72"><GrowthTrends /></Card>
-      </VStack>
+      <GrowthTrends />
       <VStack>
         <Card className="bg-white w-full h-96 overflow-hidden"></Card>
       </VStack>

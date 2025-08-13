@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDashboardStore, Metric } from "@/stores/dashboard-store";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
@@ -24,6 +24,7 @@ export default function GrowthTrends() {
   const timeRange = useDashboardStore((s) => s.timeRange);
   const isLoading = useDashboardStore((s) => s.isLoading);
   const error = useDashboardStore((s) => s.error);
+
   const fetchMetrics = useDashboardStore((s) => s.fetchMetrics);
   const setTimeRange = useDashboardStore((s) => s.setTimeRange);
 
@@ -31,33 +32,20 @@ export default function GrowthTrends() {
     fetchMetrics(timeRange);
   }, [timeRange, fetchMetrics]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  // if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error}</div>;
 
   return (
-    <VStack className="space-y-6">
-      <HStack className="justify-between items-center">
-        <Heading size="lg">Growth Trends</Heading>
-        <TimeRangeSelector
-          currentRange={timeRange}
-          onRangeChange={setTimeRange}
-        />
-      </HStack>
-      <HStack className="grid grid-cols-2 gap-6">
-        <MetricCard
-          title="Total Users"
-          value={metrics.reduce((sum, m) => sum + m.value, 0)}
-          change={calculateChange(metrics)}
-        />
-
-        <Card className="col-span-2 h-96">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={metrics}>
+    <Card className="space-y-4">
+      <Heading size="lg">Growth Trends</Heading>
+      <VStack className="">
+        <VStack className="h-72">
+          <ResponsiveContainer width="100%" height="100%" className="w-full h-full">
+            <LineChart data={metrics} className="">
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
               <Tooltip />
-              <Legend />
               <Line
                 type="monotone"
                 dataKey="value"
@@ -66,30 +54,12 @@ export default function GrowthTrends() {
               />
             </LineChart>
           </ResponsiveContainer>
-        </Card>
-      </HStack>
-    </VStack>
-  );
-}
-
-function MetricCard({ title, value, change }) {
-  return (
-    <Card>
-      <Heading size="sm">{title}</Heading>
-      <Text size="sm">{value.toLocaleString()}</Text>
-      <Text
-        size="xs"
-        className={change >= 0 ? "text-green-500" : "text-red-500"}
-      >
-        {change >= 0 ? "↑" : "↓"} {Math.abs(change)}% vs previous period
-      </Text>
+        </VStack>
+        <TimeRangeSelector
+          currentRange={timeRange}
+          onRangeChange={setTimeRange}
+        />
+      </VStack>
     </Card>
   );
-}
-
-function calculateChange(metrics: Metric[]): number {
-  if (metrics.length < 2) return 0;
-  const current = metrics[metrics.length - 1].value;
-  const previous = metrics[metrics.length - 2].value;
-  return ((current - previous) / previous) * 100;
 }
