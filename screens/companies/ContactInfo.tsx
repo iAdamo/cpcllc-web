@@ -72,7 +72,7 @@ const ContactInfo = ({
         <div className="flex flex-row justify-between gap-2">
           <Link
             href={`https://${
-              companyData?.companySocialMedia?.other || "google.com"
+              companyData?.companySocialMedia?.other || ""
             }`}
             className={`font-extrablack ${
               isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"

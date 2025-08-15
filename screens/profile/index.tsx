@@ -202,7 +202,7 @@ const ProfilePage = () => {
                         <VStack className="md:gap-4 gap-2 md:items-start items-center">
                           <VStack className="gap-1 md:items-start items-center">
                             <Heading size="lg" className="md:text-2xl">
-                              {activeRoleId.companyName}
+                              {userData?.firstName} {userData?.lastName}
                             </Heading>
                             <RatingSection
                               rating={activeRoleId?.averageRating}

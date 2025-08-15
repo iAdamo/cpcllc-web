@@ -13,6 +13,19 @@ export const createService = async (data: FormData): Promise<ServiceData> => {
   return response.data;
 };
 
+export const updateService = async (
+  id: string,
+  data: FormData
+): Promise<ServiceData> => {
+  const response = await axiosInstance.put(`services/${id}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+};
+
 export const getAllCategoriesWithSubcategories = async (): Promise<
   ServiceCategory[]
 > => {

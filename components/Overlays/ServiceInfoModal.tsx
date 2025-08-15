@@ -6,6 +6,8 @@ import { Text } from "@/components/ui/text";
 import { HStack } from "@/components/ui/hstack";
 import { Card } from "@/components/ui/card";
 // import { Button, ButtonText } from "@/components/ui/button";
+import { FormControl } from "@/components/ui/form-control";
+import { Input, InputField } from "@/components/ui/input";
 import {
   Modal,
   ModalCloseButton,
@@ -24,16 +26,29 @@ import Image from "next/image";
 import ReactPlayer from "react-player";
 import { getInitial } from "@/utils/GetInitials";
 import { ServiceData } from "@/types";
+import { updateService } from "@/axios/services";
 
 const ServiceInfoModal = ({
   serviceData,
   isOpen,
   onClose,
+  isEditable = false, // Default to false if not provided
 }: {
   serviceData: ServiceData;
   isOpen: boolean;
   onClose: () => void;
 }) => {
+
+  const handleUpdateService = async (updatedData: FormData) => {
+    try {
+      await updateService(serviceData.id, updatedData);
+      // Optionally, you can refresh the service data or close the modal
+      onClose();
+    } catch (error) {
+      console.error("Error updating service:", error);
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
