@@ -197,7 +197,9 @@ const StepTwo = ({
         </Input>
         {/* Popular tags suggestions */}
         <VStack className="mt-2">
-          <Text className="text-xs md:text-sm text-gray-500">Popular Tags:</Text>
+          <Text className="text-xs md:text-sm text-gray-500">
+            Popular Tags:
+          </Text>
           <HStack className="flex-wrap gap-2 mt-1">
             {popularTags.map((tag, index) => (
               <Button
@@ -234,7 +236,7 @@ const StepTwo = ({
       <VStack className="w-full md:w-3/5 mt-4 md:mt-12">
         <Button
           size="md"
-          onPress={() => handleSubmit(() => setStep(2))()}
+          onPress={() => handleSubmit(() => setStep(3))()}
           className="self-end"
         >
           <ButtonText>Next</ButtonText>

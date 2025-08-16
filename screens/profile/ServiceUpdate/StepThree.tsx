@@ -6,7 +6,7 @@ import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { FieldWithInfo } from "./FieldWithInfo";
 import { CloseIcon, ArrowUpIcon, Icon } from "@/components/ui/icon";
 import Image from "next/image";
-import { createService } from "@/axios/services";
+import { createService, updateService } from "@/axios/services";
 import { useRouter } from "next/navigation";
 import {
   UseFormWatch,
@@ -16,6 +16,7 @@ import {
   UseFormSetError,
   UseFormClearErrors,
 } from "react-hook-form";
+import { ServiceData } from "@/types";
 
 type FormData = {
   title: string;
@@ -28,6 +29,8 @@ type FormData = {
   revisions: number;
   images: File[];
   videos: File[];
+  // Optionally add id if you want to distinguish edit mode
+  _id?: string;
 };
 
 const MAX_IMAGE_SIZE_MB = 5; // 5MB
@@ -118,12 +121,15 @@ const StepThree = ({
         }
       });
       setIsSubmitting(true);
-      // console.log("Submitting service data:",Object.fromEntries(formData.entries()));
-      const serviceData = await createService(formData);
-      if (serviceData) {
-        router.replace("/companies");
+      let serviceData: ServiceData | null = null;
+      if (data._id) {
+        serviceData = await updateService(data._id, formData);
+      } else {
+        serviceData = await createService(formData);
+        if (serviceData) {
+          router.replace("/companies");
+        }
       }
-      console.log("Service created:", serviceData);
     } catch (error) {
       console.error("Error creating service:", error);
     } finally {

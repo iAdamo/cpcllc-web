@@ -92,10 +92,7 @@ const ServiceSection = ({
                     <Heading size="sm" className="text-typography-600">
                       {update.title}
                     </Heading>
-                    <Text
-                      size="sm"
-                      className="text-text-secondary line-clamp-3 "
-                    >
+                    <Text size="sm" className="break-words line-clamp-3 ">
                       {update.description}
                     </Text>
                     <Heading
@@ -144,9 +141,10 @@ const ServiceSection = ({
               {/* Left button */}
               <Button
                 size="sm"
-                className="swiper-button-prev absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+                variant="outline"
+                className="swiper-button-prev absolute top-1/2 -left-4 z-10 -translate-y-1/2"
               >
-                <ButtonIcon as={ArrowLeftIcon} />
+                <ButtonIcon as={ArrowLeftIcon} className="text-black" />
               </Button>
 
               {/* Swiper */}
@@ -188,7 +186,9 @@ const ServiceSection = ({
                               className={`${
                                 service.description.length > 80 &&
                                 "line-clamp-3"
-                              } ${isCompanyPage ? "md:text-md" : "md:text-sm"}`}
+                              } ${
+                                isCompanyPage ? "md:text-md" : "md:text-sm"
+                              } break-words`}
                             >
                               {service.description}
                             </Text>
@@ -203,7 +203,8 @@ const ServiceSection = ({
               {/* Right button */}
               <Button
                 size="sm"
-                className="swiper-button-next absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white/70 hover:bg-white"
+                variant="outline"
+                className="swiper-button-next absolute top-1/2 -right-4 z-10 -translate-y-1/2"
               >
                 <ButtonIcon as={ArrowRightIcon} />
               </Button>

@@ -74,8 +74,8 @@ const GoogleMapComponent: React.FC<{
               anchor: new window.google.maps.Point(15, 50), // Anchor point
             }}
             position={{
-              lat: company.location.primary.coordinates.lat,
-              lng: company.location.primary.coordinates.long,
+              lat: company.location?.primary.coordinates?.lat,
+              lng: company.location?.primary.coordinates?.long,
             }}
             // onClick={() => handleMarkerClick(company)} // Handle marker click
             title={company.companyName}
@@ -85,8 +85,8 @@ const GoogleMapComponent: React.FC<{
           {selectedCompany?._id === company._id && (
             <Circle
               center={{
-                lat: company.location.primary.coordinates.lat,
-                lng: company.location.primary.coordinates.long,
+                lat: company.location?.primary.coordinates.lat,
+                lng: company.location?.primary.coordinates.long,
               }}
               radius={500} // Smaller radius (e.g., 2 km)
               options={{

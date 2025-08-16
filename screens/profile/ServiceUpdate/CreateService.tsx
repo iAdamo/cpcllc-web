@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { useForm } from "react-hook-form";
+import { useParams } from "next/navigation";
 
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
@@ -19,9 +20,16 @@ type FormData = {
   revisions: number;
   images: File[];
   videos: File[];
+  // Optionally add id if you want to distinguish edit mode
+  _id?: string;
 };
 
-const CreateService = () => {
+// Accept initialData as a prop for edit mode
+const CreateService = ({ initialData }: { initialData?: Partial<FormData> }) => {
+
+  const { id } = useParams<{ id: string }>();
+  const isEditMode = !!id;
+  
   // Mock data - replace with API calls
   const categories = [
     {
@@ -61,6 +69,7 @@ const CreateService = () => {
     setError,
     clearErrors,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
     defaultValues: {
       tags: [],
@@ -69,13 +78,21 @@ const CreateService = () => {
       revisions: 1,
       images: [],
       videos: [],
+      ...initialData, // Use initialData if present
     },
   });
+
+  // If initialData changes (e.g., after fetch), reset the form
+  useEffect(() => {
+    if (initialData) {
+      reset({ ...initialData });
+    }
+  }, [initialData, reset]);
 
   return (
     <VStack className="mt-28 py-8 md:px-20 px-4 w-full bg-[#F6F6F6] min-h-screen">
       <VStack>
-        {/** Progress Steps */}{" "}
+        {/* Progress Steps */}
         <div className="border-b border-gray-200 w-full md:w-3/5">
           <nav className="flex -mb-px">
             {[1, 2, 3].map((i) => (
@@ -97,7 +114,7 @@ const CreateService = () => {
             ))}
           </nav>
         </div>
-        {/** Step Content */}
+        {/* Step Content */}
         {step === 1 && (
           <StepOne
             setStep={setStep}
