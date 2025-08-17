@@ -4,7 +4,7 @@ import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { FavouriteIcon, ShareIcon } from "@/components/ui/icon";
 import { setUserFavourites } from "@/axios/users";
 import { UserData, CompanyData, ReviewData } from "@/types";
-import { ReviewModal } from "@/components/Overlays/ReviewModal";
+import { ReviewModal } from "@/components/overlays/ReviewModal";
 import { ReviewIcon } from "@/public/assets/icons/customIcons";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
 import { usePathname } from "next/navigation";
@@ -30,7 +30,9 @@ export default function ActionButtons({
   const pathname = usePathname();
 
   useEffect(() => {
-    const hasFavourited = companyData?.favoritedBy?.includes(userData?.id ?? "");
+    const hasFavourited = companyData?.favoritedBy?.includes(
+      userData?.id ?? ""
+    );
     setIsFavourite(hasFavourited ?? false);
   }, [companyData?.favoritedBy, userData?.id]);
 

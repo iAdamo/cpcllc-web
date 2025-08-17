@@ -18,10 +18,9 @@ type FormData = {
   title: string;
   description: string;
   category: string;
-  subcategory?: string;
   tags: string[];
   price: number;
-  deliveryTime: number;
+  duration: number;
   revisions: number;
   images: File[];
   videos: File[];
@@ -116,15 +115,15 @@ const StepTwo = ({
       </FieldWithInfo>
       {/** delivery time */}
       <FieldWithInfo
-        id="deliveryTime"
+        id="duration"
         infoText="Specify the estimated delivery time for your service. This helps manage customer expectations."
         focusedField={focusedField}
         errors={errors}
       >
         <Input className="md:h-12 border-gray-300">
           <InputField
-            onFocus={() => setFocusedField("deliveryTime")}
-            {...register("deliveryTime", {
+            onFocus={() => setFocusedField("duration")}
+            {...register("duration", {
               required: "Delivery time is required",
               valueAsNumber: true,
               min: {
@@ -135,11 +134,11 @@ const StepTwo = ({
             onChangeText={(text) => {
               const value = Number(text);
               if (!isNaN(value)) {
-                setValue("deliveryTime", value);
+                setValue("duration", value);
               }
             }}
             onBlur={() => setFocusedField("")}
-            id="deliveryTime"
+            id="duration"
             placeholder="Delivery Time (e.g., 3 days)"
             className="md:text-[16px] text-xs"
           />

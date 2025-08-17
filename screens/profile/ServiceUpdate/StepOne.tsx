@@ -22,15 +22,15 @@ import {
   FieldErrors,
   UseFormHandleSubmit,
 } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
 
 type FormData = {
   title: string;
   description: string;
   category: string;
-  subcategory?: string;
   tags: string[];
   price: number;
-  deliveryTime: number;
+  duration: number;
   revisions: number;
   images: File[];
   videos: File[];
@@ -38,7 +38,6 @@ type FormData = {
 
 const StepOne = ({
   setStep,
-  categories,
   register,
   watch,
   setValue,
@@ -46,11 +45,6 @@ const StepOne = ({
   handleSubmit,
 }: {
   setStep: (step: number) => void;
-  categories: {
-    id: string;
-    name: string;
-    subcategories: { id: string; name: string }[];
-  }[];
   register: UseFormRegister<FormData>;
   watch: UseFormWatch<FormData>;
   setValue: UseFormSetValue<FormData>;
@@ -59,6 +53,17 @@ const StepOne = ({
 }) => {
   const [focusedField, setFocusedField] = useState<string | "">("");
 
+  const searchParams = useSearchParams();
+
+  const categories: string[] = [];
+  let i = 0;
+  while (true) {
+    const value = searchParams.get(`serviceprovided${i}`);
+    if (value === null) break;
+    categories.push(value);
+    i++;
+  }
+  
   return (
     <VStack>
       {/* Title Field */}
@@ -121,10 +126,10 @@ const StepOne = ({
         </Textarea>
       </FieldWithInfo>
 
-      {/* Category Field */}
+      {/* category Field */}
       <FieldWithInfo
         id="category"
-        infoText="Choose a category that best fits your service. This helps users find your service more easily."
+        infoText="Choose a category that best fits your service. This helps users find your category more easily."
         focusedField={focusedField}
         errors={errors}
       >
@@ -138,9 +143,9 @@ const StepOne = ({
           <SelectTrigger className="md:h-12 border-gray-300">
             <SelectInput
               className="md:text-[15px] text-xs"
-              placeholder="Select Category"
+              placeholder="Select category"
               {...register("category", {
-                required: "Category is required",
+                required: "category is required",
                 onBlur: () => setFocusedField(""),
               })}
             />
@@ -149,12 +154,8 @@ const StepOne = ({
           <SelectPortal>
             <SelectBackdrop />
             <SelectContent>
-              {categories.map((category) => (
-                <SelectItem
-                  key={category.id}
-                  label={category.name}
-                  value={category.name}
-                />
+              {categories.map((category, idx) => (
+                <SelectItem key={idx} label={category} value={category} />
               ))}
             </SelectContent>
           </SelectPortal>

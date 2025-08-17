@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { useForm } from "react-hook-form";
 import { useParams } from "next/navigation";
+import { getServiceById } from "@/axios/services";
+import urlToFile from "@/utils/UrlToFile";
 
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
@@ -16,7 +18,7 @@ type FormData = {
   subcategory?: string;
   tags: string[];
   price: number;
-  deliveryTime: number;
+  duration: number;
   revisions: number;
   images: File[];
   videos: File[];
@@ -25,31 +27,42 @@ type FormData = {
 };
 
 // Accept initialData as a prop for edit mode
-const CreateService = ({ initialData }: { initialData?: Partial<FormData> }) => {
-
+const CreateService = () => {
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  
-  // Mock data - replace with API calls
-  const categories = [
-    {
-      id: "home-services",
-      name: "Home Services",
-      subcategories: [
-        { id: "tree-service", name: "Tree Service" },
-        { id: "cleaning", name: "Cleaning" },
-        { id: "plumbing", name: "Plumbing" },
-      ],
-    },
-    {
-      id: "digital-services",
-      name: "Digital Services",
-      subcategories: [
-        { id: "web-development", name: "Web Development" },
-        { id: "graphic-design", name: "Graphic Design" },
-      ],
-    },
-  ];
+
+  const [initialData, setInitialData] = useState<Partial<FormData> | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (isEditMode) {
+      const fetchService = async () => {
+        try {
+          const serviceData = await getServiceById(id);
+          // console.log("Fetched category data:", serviceData);
+          const images = await Promise.all(
+            serviceData.images.map((url: string) =>
+              urlToFile(url, `image-${Date.now()}.jpg`, "image/jpeg")
+            )
+          );
+          const videos = await Promise.all(
+            serviceData.videos.map((url: string) =>
+              urlToFile(url, `video-${Date.now()}.mp4`, "video/mp4")
+            )
+          );
+          setInitialData({
+            ...serviceData,
+            images,
+            videos,
+          });
+        } catch (error) {
+          console.error("Error fetching category data:", error);
+        }
+      };
+      fetchService();
+    }
+  }, [id, isEditMode]);
 
   const popularTags = [
     "tree trimming",
@@ -74,7 +87,7 @@ const CreateService = ({ initialData }: { initialData?: Partial<FormData> }) => 
     defaultValues: {
       tags: [],
       price: 0,
-      deliveryTime: 3,
+      duration: 0,
       revisions: 1,
       images: [],
       videos: [],
@@ -85,7 +98,11 @@ const CreateService = ({ initialData }: { initialData?: Partial<FormData> }) => 
   // If initialData changes (e.g., after fetch), reset the form
   useEffect(() => {
     if (initialData) {
-      reset({ ...initialData });
+      reset({
+        ...initialData,
+        images: initialData.images || [],
+        videos: initialData.videos || [],
+      });
     }
   }, [initialData, reset]);
 
@@ -118,7 +135,6 @@ const CreateService = ({ initialData }: { initialData?: Partial<FormData> }) => 
         {step === 1 && (
           <StepOne
             setStep={setStep}
-            categories={categories}
             register={register}
             setValue={setValue}
             watch={watch}

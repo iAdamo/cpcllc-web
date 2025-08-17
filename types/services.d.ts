@@ -30,7 +30,7 @@ export interface ServiceData {
   title: string;
   description: string;
   price: number;
-  duration: string;
+  duration: number;
   category: string;
   ratings: number;
   location: string;

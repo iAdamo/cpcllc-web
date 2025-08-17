@@ -266,7 +266,7 @@ const ProfilePage = () => {
             {activeRoleId?._id && (
               <VStack className="w-full">
                 <ServiceSection
-                  companyId={activeRoleId._id}
+                  company={activeRoleId}
                   isCurrentUser={isCurrentUser}
                   isProfilePage={true}
                 />

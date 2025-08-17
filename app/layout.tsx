@@ -18,8 +18,26 @@ export default function RootLayout({
   const pathname = usePathname();
 
   const hideLayoutForRoutes = ["/onboarding", "/admin"];
+  const hideAiChatForRoutes = [
+    "/onboarding",
+    "/admin",
+    "/profile",
+    "/service",
+  ];
 
-  const shouldHideLayout = hideLayoutForRoutes.includes(pathname);
+  const hideAiChatForRoutesRegex = hideAiChatForRoutes.map(
+    (route) => new RegExp(`^${route}(?:/|$)`)
+  );
+  const shouldHideAiChat = hideAiChatForRoutesRegex.some((regex) =>
+    regex.test(pathname)
+  );
+
+  const hideLayoutForRoutesRegex = hideLayoutForRoutes.map(
+    (route) => new RegExp(`^${route}(?:/|$)`)
+  );
+  const shouldHideLayout = hideLayoutForRoutesRegex.some((regex) =>
+    regex.test(pathname)
+  );
 
   return (
     <html lang="en">
@@ -31,7 +49,7 @@ export default function RootLayout({
               {children}
               {!shouldHideLayout && <PreFooter />}
               {!shouldHideLayout && <Footer />}
-              {!shouldHideLayout && <AiChat />}
+              {!shouldHideAiChat && <AiChat />}
             </SessionProvider>
           </GluestackUIProvider>
         </StyledJsxRegistry>

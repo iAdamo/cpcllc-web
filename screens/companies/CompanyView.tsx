@@ -146,7 +146,7 @@ const CompanyView = (companyData: CompanyData) => {
           <VStack space="4xl" className="my-6">
             {/* Service Updates */}
             <ServiceSection
-              companyId={companyData._id}
+              company={companyData}
               isProfilePage={isProfilePage}
               isMobile={isMobile}
             />

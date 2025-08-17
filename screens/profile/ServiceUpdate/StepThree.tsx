@@ -8,6 +8,8 @@ import { CloseIcon, ArrowUpIcon, Icon } from "@/components/ui/icon";
 import Image from "next/image";
 import { createService, updateService } from "@/axios/services";
 import { useRouter } from "next/navigation";
+import { Toast, useToast, ToastTitle } from "@/components/ui/toast";
+
 import {
   UseFormWatch,
   UseFormSetValue,
@@ -22,10 +24,9 @@ type FormData = {
   title: string;
   description: string;
   category: string;
-  subcategory?: string;
   tags: string[];
   price: number;
-  deliveryTime: number;
+  duration: number;
   revisions: number;
   images: File[];
   videos: File[];
@@ -62,6 +63,22 @@ const StepThree = ({
   const videos = watch("videos") || [];
 
   const router = useRouter();
+  const toast = useToast();
+
+  const showToast = useCallback(
+    (message: string, type: "error" | "success") => {
+      toast.show({
+        placement: "top",
+        duration: 3000,
+        render: ({ id }) => (
+          <Toast nativeID={id} variant="outline" action={type}>
+            <ToastTitle>{message}</ToastTitle>
+          </Toast>
+        ),
+      });
+    },
+    [toast]
+  );
 
   const handleFileUpload = useCallback(
     (type: "images" | "videos", files: FileList | null) => {
@@ -124,14 +141,20 @@ const StepThree = ({
       let serviceData: ServiceData | null = null;
       if (data._id) {
         serviceData = await updateService(data._id, formData);
+        if (serviceData) {
+          showToast("Service data updated successfully", "success");
+          router.replace("/");
+        }
       } else {
         serviceData = await createService(formData);
         if (serviceData) {
-          router.replace("/companies");
+          showToast("Service data has been created successfully", "success");
+          router.replace("/");
         }
       }
     } catch (error) {
-      console.error("Error creating service:", error);
+      showToast(`${error}`, "error");
+      console.error("Error creating category:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -285,6 +308,7 @@ const StepThree = ({
         </Button>
         <Button
           onPress={() => handleSubmit(onSubmit)()}
+          isDisabled={isSubmitting}
           className="bg-indigo-600 disabled:opacity-50"
         >
           <ButtonText className="text-white">

@@ -9,21 +9,21 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AddIcon, ArrowRightIcon, ArrowLeftIcon } from "@/components/ui/icon";
 import { getServicesByCompany } from "@/axios/services";
-import { ServiceData } from "@/types";
-import ServiceInfoModal from "@/components/Overlays/ServiceInfoModal";
+import { CompanyData, ServiceData } from "@/types";
+import ServiceInfoModal from "@/components/overlays/ServiceInfoModal";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
 const ServiceSection = ({
-  companyId,
+  company,
   isCurrentUser,
   isProfilePage,
   isCompanyPage,
   isMobile,
 }: {
-  companyId: string;
+  company: CompanyData;
   isCurrentUser?: boolean;
   isProfilePage?: boolean;
   isCompanyPage?: boolean;
@@ -33,10 +33,21 @@ const ServiceSection = ({
   const [serviceData, setServiceData] = useState<ServiceData | null>(null);
   const router = useRouter();
 
+  // Example: If you want to build params from an array of services in company.servicesProvided
+  // (assuming company.servicesProvided is an array of strings or similar)
+  const params = new URLSearchParams(
+    (company.subcategories || []).map((service, idx) => [
+      `serviceprovided${idx}`,
+      typeof service === "string" ? service : service.name || String(service),
+    ])
+  );
+
+  // alert(company.services);
+
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const response = await getServicesByCompany(companyId);
+        const response = await getServicesByCompany(company._id);
         setServices(response);
       } catch (error) {
         console.error("Error fetching service data:", error);
@@ -44,7 +55,7 @@ const ServiceSection = ({
     };
 
     fetchService();
-  }, [companyId]);
+  }, [company._id]);
 
   return (
     <VStack>
@@ -61,7 +72,7 @@ const ServiceSection = ({
           {isCurrentUser && (
             <Button
               size="md"
-              onPress={() => router.push("/service/init")}
+              onPress={() => router.push(`/service/init?${params.toString()}`)}
               className="mb-4 md:h-14 px-2 bg-brand-secondary data-[hover=true]:bg-brand-primary"
             >
               <ButtonIcon as={AddIcon} />

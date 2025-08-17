@@ -16,7 +16,7 @@ import { getInitial } from "@/utils/GetInitials";
 import { Pressable } from "@/components/ui/pressable";
 import RatingSection from "@/components/RatingSection";
 import { format } from "date-fns";
-import ReviewInfoModal from "@/components/Overlays/ReviewInfoModal";
+import ReviewInfoModal from "@/components/overlays/ReviewInfoModal";
 
 const ReviewSection = ({
   companyId,
@@ -115,13 +115,13 @@ const ReviewSection = ({
                         </Heading>
 
                         <RatingSection rating={review.rating || 0} />
-
                       </VStack>
                       <Text size="xs" className="text-gray-400">
                         {format(new Date(review.createdAt), "MMM d, yyyy")}
                       </Text>
                     </HStack>
-                    <Text size="xs"
+                    <Text
+                      size="xs"
                       className={`md:text-sm text-gray-600 ${
                         review.description.length > 80 && "line-clamp-3"
                       }`}

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { useDashboardStore, Metric } from "@/stores/dashboard-store";
+import { useEffect, useState } from "react";
+import { useDashboardStore } from "@/stores/dashboard-store";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";

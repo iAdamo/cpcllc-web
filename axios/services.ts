@@ -17,12 +17,17 @@ export const updateService = async (
   id: string,
   data: FormData
 ): Promise<ServiceData> => {
-  const response = await axiosInstance.put(`services/${id}`, data, {
+  const response = await axiosInstance.patch(`services/${id}`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 
+  return response.data;
+};
+
+export const deleteService = async (id: string): Promise<ServiceData[]> => {
+  const response = await axiosInstance.delete(`services/${id}`);
   return response.data;
 };
 
