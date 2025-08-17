@@ -24,7 +24,7 @@ interface ReviewModalProps {
   setNewReviews: (newReview: ReviewData[]) => void;
 }
 
-export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
+const ReviewModal: React.FC<ReviewModalProps> = (props) => {
   const { isOpen, onClose, companyId, companyName, setNewReviews } = props;
   const [description, setDesc] = useState("");
   const [rating, setRating] = useState(0);
@@ -197,3 +197,5 @@ export const ReviewModal: React.FC<ReviewModalProps> = (props) => {
     </Modal>
   );
 };
+
+export default ReviewModal;

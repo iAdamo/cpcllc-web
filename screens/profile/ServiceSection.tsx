@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { AddIcon, ArrowRightIcon, ArrowLeftIcon } from "@/components/ui/icon";
 import { getServicesByCompany } from "@/axios/services";
 import { CompanyData, ServiceData } from "@/types";
-import ServiceInfoModal from "@/components/overlays/ServiceInfoModal";
+import ServiceInfoModal from "@/components/overlay/ServiceInfoModal";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";

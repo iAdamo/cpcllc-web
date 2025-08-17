@@ -16,7 +16,7 @@ import { getInitial } from "@/utils/GetInitials";
 import { Pressable } from "@/components/ui/pressable";
 import RatingSection from "@/components/RatingSection";
 import { format } from "date-fns";
-import ReviewInfoModal from "@/components/overlays/ReviewInfoModal";
+import ReviewInfoModal from "@/components/overlay/ReviewInfoModal";
 
 const ReviewSection = ({
   companyId,
