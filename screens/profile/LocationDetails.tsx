@@ -245,7 +245,7 @@ const LocationDetails = ({
       setMapError(
         error instanceof GeolocationPositionError
           ? getGeolocationErrorMessage(error)
-          : "Failed to get location"
+          : "Failed to get location, Try again!"
       );
     } finally {
       setIsGeolocating(false);
@@ -264,7 +264,7 @@ const LocationDetails = ({
         autocompleteRef.current,
         {
           types: ["address"],
-          componentRestrictions: { country: "us" },
+          // componentRestrictions: { country: "us" },
           fields: ["address_components", "geometry", "formatted_address"],
         }
       );
@@ -359,6 +359,11 @@ const LocationDetails = ({
         <Card variant="filled" className="mb-2">
           {isEditing ? (
             <>
+              <Text size="xs" className="mb-2 text-blue-600">
+                If the detected address looks inaccurate, you can use the
+                autocomplete search below to find and select the correct
+                address.
+              </Text>
               <div className="mb-4">
                 <Text size="xs" className="mb-1">
                   Search for your company address
@@ -494,7 +499,7 @@ const LocationDetails = ({
   if (!isLoaded) {
     return (
       <div className="flex justify-center items-center text-gray-500">
-        <Loader2 className="animate-spin w-8 h-8 mr-2" /> 
+        <Loader2 className="animate-spin w-8 h-8 mr-2" />
       </div>
     );
   }

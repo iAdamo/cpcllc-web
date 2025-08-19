@@ -1,5 +1,5 @@
 import { ApiClientSingleton } from "./conf";
-import { CompanyData, UserData } from "@/types";
+import { CompanyData, UserData, ServiceData } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -58,17 +58,26 @@ export const setUserFavourites = async (
 };
 
 export const searchCompanies = async (
+  page: number,
+  limit: number,
   searchInput?: string,
   lat?: string,
   long?: string,
   address?: string
-): Promise<CompanyData[]> => {
+): Promise<{
+  companies: CompanyData[];
+  services?: ServiceData[];
+  totalPages: number;
+}> => {
   const params: Record<string, any> = {};
   if (searchInput) params.searchInput = searchInput;
   if (lat) params.lat = lat;
   if (long) params.long = long;
   if (address) params.address = address;
 
-  const response = await axiosInstance.get("users/search", { params });
+  const response = await axiosInstance.get(
+    `users/search?page=${page}&limit=${limit}`,
+    { params }
+  );
   return response.data;
 };

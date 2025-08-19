@@ -4,7 +4,7 @@ import StyledJsxRegistry from "./registry";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { SessionProvider } from "@/context/AuthContext";
 import NavBar from "@/components/layout/NavBar";
-import PreFooter from "@/components/layout/PreFooter";
+// import PreFooter from "@/components/layout/PreFooter";
 import Footer from "@/components/layout/Footer";
 import { usePathname } from "next/navigation";
 // import { MapProvider } from "@/context/MapContext";
@@ -47,7 +47,7 @@ export default function RootLayout({
             <SessionProvider>
               {!shouldHideLayout && <NavBar />}
               {children}
-              {!shouldHideLayout && <PreFooter />}
+              {/* {!shouldHideLayout && <PreFooter />} */}
               {!shouldHideLayout && <Footer />}
               {!shouldHideAiChat && <AiChat />}
             </SessionProvider>

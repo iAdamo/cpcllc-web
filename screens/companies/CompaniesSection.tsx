@@ -17,6 +17,7 @@ import { MapProvider } from "@/context/MapContext";
 import { useRouter } from "next/navigation";
 import RatingSection from "@/components/RatingSection";
 import { useMediaQuery } from "@/components/ui/utils/use-media-query";
+import { getCurrentLocation } from "@/utils/GeoLocation";
 
 const CompaniesSection = () => {
   const [companies, setCompanies] = useState<CompanyData[]>([]);
@@ -27,55 +28,85 @@ const CompaniesSection = () => {
   const [searchLoading, setSearchLoading] = useState(false);
 
   const limit = 20;
-  const [isMobile] = useMediaQuery([{ maxWidth: 768}]);
+  const [isMobile] = useMediaQuery([{ maxWidth: 768 }]);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
-  const category = searchParams.get("category") || "all";
+  const category = searchParams.get("category") || "";
   const router = useRouter();
+
+  const fetchCompanies = async () => {
+    try {
+      setPaginationLoading(true);
+      const { companies: response, totalPages } = await getCompanies(
+        currentPage,
+        limit
+      );
+
+      setTotalPages(totalPages);
+      setCompanies((prev) =>
+        currentPage === 1 ? response : [...prev, ...response]
+      );
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+      if (currentPage === 1) setCompanies([]);
+    } finally {
+      setPaginationLoading(false);
+    }
+  };
 
   // ✅ Fetch companies (with pagination append)
   useEffect(() => {
-    const fetchCompanies = async () => {
-      try {
-        setPaginationLoading(true);
-        const { companies: response, totalPages } = await getCompanies(
-          currentPage,
-          limit
-        );
+    // const fetchCompanies = async () => {
+    //   try {
+    //     setPaginationLoading(true);
+    //     const { companies: response, totalPages } = await getCompanies(
+    //       currentPage,
+    //       limit
+    //     );
 
+    //     setTotalPages(totalPages);
+    //     setCompanies((prev) =>
+    //       currentPage === 1 ? response : [...prev, ...response]
+    //     );
+    //   } catch (error) {
+    //     console.error("Error fetching companies:", error);
+    //     if (currentPage === 1) setCompanies([]);
+    //   } finally {
+    //     setPaginationLoading(false);
+    //   }
+    // };
+
+    const fetchCompaniesBySearch = async () => {
+      setSearchLoading(true);
+      setPaginationLoading(true);
+      try {
+        const coords = await getCurrentLocation();
+        const lat = coords?.lat;
+        const long = coords?.long;
+
+        const { companies: response, totalPages } = await searchCompanies(
+          currentPage,
+          limit,
+          category,
+          lat,
+          long
+        );
         setTotalPages(totalPages);
         setCompanies((prev) =>
           currentPage === 1 ? response : [...prev, ...response]
         );
+        setCompanies(response);
       } catch (error) {
         console.error("Error fetching companies:", error);
         if (currentPage === 1) setCompanies([]);
       } finally {
+        setSearchLoading(false);
         setPaginationLoading(false);
       }
     };
 
-    const fetchCompaniesBySearch = async () => {
-      setSearchLoading(true);
-      try {
-        const response = await searchCompanies(category);
-        setCompanies(response);
-      } catch (error) {
-        console.error("Error fetching companies:", error);
-        setCompanies([]);
-      } finally {
-        setSearchLoading(false);
-      }
-    };
-
-    if (category === "all") {
-      fetchCompanies();
-    } else {
-      // If searching, always reset page to 1
-      setCurrentPage(1);
-      fetchCompaniesBySearch();
-    }
-  }, [currentPage, limit, category]);
+    fetchCompaniesBySearch();
+  }, [currentPage, limit, category, companies.length]);
 
   // ✅ Intersection Observer for infinite scroll
   const handleObserver = useCallback(
@@ -132,6 +163,24 @@ const CompaniesSection = () => {
         } Service Providers Near You`}</h1>
       </div>
       <VStack className="md:flex-row bg-[#F6F6F6]">
+        {!companies.length && !searchLoading && (
+          <VStack className="w-full h-96 justify-center items-center">
+            <Text className="text-gray-500 text-lg">
+              No companies found for this.
+            </Text>
+            <Button
+              size="xs"
+              className="mt-4 bg-blue-600 companyData-[hover=true]:bg-blue-500"
+              onPress={() => {
+                fetchCompanies();
+                router.refresh();
+              }}
+            >
+              <ButtonText>View All Companies</ButtonText>
+            </Button>
+          </VStack>
+        )}
+
         {/* Sidebar List */}
         <VStack className="md:w-1/3 w-full md:sticky md:top-32 md:my-4 self-start h-fit gap-4">
           <Card
@@ -228,7 +277,7 @@ const CompaniesSection = () => {
             <div className="relative w-full h-full rounded-lg">
               <MapProvider>
                 <GoogleMapComponent
-                  apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+                  apiKey={process.env.NEX_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
                   companies={companies}
                   selectedCompany={selectedCompany}
                 />

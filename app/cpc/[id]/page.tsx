@@ -10,10 +10,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const user = await userProfile(params.id);
 
-  const title =
-    user?.activeRole === "Company"
-      ? `${user?.activeRoleId?.companyName} | CompaniesCenterLLC`
-      : `${user?.firstName} ${user?.lastName} | CompaniesCenterLLC`;
+  const title = `${user?.firstName} ${user?.lastName} | ${user?.activeRoleId?.companyName}`;
 
   const description =
     user?.activeRole === "Company"

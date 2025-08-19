@@ -41,13 +41,7 @@ const HomeHeader = () => {
       <VStack className="absolute inset-0 z-10 h-full bg-gradient-to-b from-brand-secondary via-transparent to-brand-transparent opacity-50"></VStack>
       <VStack className="absolute z-50 inset-0 mt-24">
         <VStack className="mt-44 w-1/2 pl-24 gap-10">
-          <h1
-            className="text-white text-6xl font-extrablack"
-            style={{
-              textShadow:
-                "2px 2px 0 black, -2px 2px 0 black, 2px -2px 0 black, -2px -2px 0 black",
-            }}
-          >
+          <h1 className="text-white text-6xl font-extrablack homeheader-title-shadow">
             CompanyCenterLLC
           </h1>
           <h2 className="text-white text-xl font-semibold pr-14">

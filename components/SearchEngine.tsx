@@ -75,15 +75,15 @@ export const SearchEngine = () => {
     }, 150);
   };
 
-  const selectCurrentLocation = async () => {
-    // setUseCurrentLocation(true);
-    const coords = await getCurrentLocation();
-    if (coords) {
-      // console.log(coords);
-      setLat(coords.lat);
-      setLong(coords.long);
-    }
-  };
+  // const selectCurrentLocation = async () => {
+  //   // setUseCurrentLocation(true);
+  //   const coords = await getCurrentLocation();
+  //   setUseCurrent(true);
+  //   if (coords) {
+  //     setLat(coords.lat);
+  //     setLong(coords.long);
+  //   }
+  // };
   const handleSearch = () => {
     if (results.length === 1) {
       const company = results[0];
@@ -165,7 +165,10 @@ export const SearchEngine = () => {
           <div className="absolute z-10 bg-white w-full -mt-1 max-h-52 rounded overflow-y-auto">
             <div
               className="p-2 text-blue-600 hover:bg-gray-100 cursor-pointer font-semibold"
-              onClick={selectCurrentLocation}
+              onClick={() => {
+                router.push("/companies");
+                setIsSecondDropdownVisible(false);
+              }}
               onMouseDown={(e) => e.preventDefault()}
             >
               📍 Use my current location

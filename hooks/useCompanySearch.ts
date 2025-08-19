@@ -18,6 +18,7 @@ export function useCompanySearch({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
     debounce(async () => {
       if (!searchInput && !address && !lat && !long) return;
@@ -26,8 +27,15 @@ export function useCompanySearch({
       setError("");
 
       try {
-        const response = await searchCompanies(searchInput, lat, long, address);
-        setResults(response);
+        const response = await searchCompanies(
+          1,
+          30,
+          searchInput,
+          lat,
+          long,
+          address
+        );
+        setResults(response.companies);
       } catch (err: any) {
         setError(err.response?.data?.message || "Search failed");
       } finally {

@@ -13,7 +13,7 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="flex flex-col md:mx-10 mx-6 md:flex-row md:justify-between gap-2 border-t border-gray-300">
+    <footer className="flex flex-col md:mx-10 mx-6 mt-20 md:flex-row md:justify-between gap-2 border-t border-gray-300">
       <VStack className="md:flex-row justify-center items-center md:gap-6">
         <Text className="text-xl md:text-2xl font-extrabold">
           COMPANYCENTERLLC&trade;
