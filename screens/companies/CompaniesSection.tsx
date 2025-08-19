@@ -165,7 +165,7 @@ const CompaniesSection = () => {
       <VStack className="md:flex-row bg-[#F6F6F6]">
         {!companies.length && !searchLoading && (
           <VStack className="w-full h-96 justify-center items-center">
-            <Text className="text-gray-500 text-lg">
+            <Text className="text-gray-500 text-sm">
               No companies found for this.
             </Text>
             <Button
@@ -173,7 +173,6 @@ const CompaniesSection = () => {
               className="mt-4 bg-blue-600 companyData-[hover=true]:bg-blue-500"
               onPress={() => {
                 fetchCompanies();
-                router.refresh();
               }}
             >
               <ButtonText>View All Companies</ButtonText>
