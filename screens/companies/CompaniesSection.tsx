@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-import { getCompanies, searchCompanies } from "@/axios/users";
+import { searchCompanies } from "@/axios/users";
 import { CompanyData } from "@/types";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -34,48 +34,8 @@ const CompaniesSection = () => {
   const category = searchParams.get("category") || "";
   const router = useRouter();
 
-  const fetchCompanies = async () => {
-    try {
-      setPaginationLoading(true);
-      const { companies: response, totalPages } = await getCompanies(
-        currentPage,
-        limit
-      );
-
-      setTotalPages(totalPages);
-      setCompanies((prev) =>
-        currentPage === 1 ? response : [...prev, ...response]
-      );
-    } catch (error) {
-      console.error("Error fetching companies:", error);
-      if (currentPage === 1) setCompanies([]);
-    } finally {
-      setPaginationLoading(false);
-    }
-  };
-
   // ✅ Fetch companies (with pagination append)
   useEffect(() => {
-    // const fetchCompanies = async () => {
-    //   try {
-    //     setPaginationLoading(true);
-    //     const { companies: response, totalPages } = await getCompanies(
-    //       currentPage,
-    //       limit
-    //     );
-
-    //     setTotalPages(totalPages);
-    //     setCompanies((prev) =>
-    //       currentPage === 1 ? response : [...prev, ...response]
-    //     );
-    //   } catch (error) {
-    //     console.error("Error fetching companies:", error);
-    //     if (currentPage === 1) setCompanies([]);
-    //   } finally {
-    //     setPaginationLoading(false);
-    //   }
-    // };
-
     const fetchCompaniesBySearch = async () => {
       setSearchLoading(true);
       setPaginationLoading(true);
@@ -87,6 +47,7 @@ const CompaniesSection = () => {
         const { companies: response, totalPages } = await searchCompanies(
           currentPage,
           limit,
+          false,
           category,
           lat,
           long
@@ -163,23 +124,6 @@ const CompaniesSection = () => {
         } Service Providers Near You`}</h1>
       </div>
       <VStack className="md:flex-row bg-[#F6F6F6]">
-        {!companies.length && !searchLoading && (
-          <VStack className="w-full h-96 justify-center items-center">
-            <Text className="text-gray-500 text-sm">
-              No companies found for this.
-            </Text>
-            <Button
-              size="xs"
-              className="mt-4 bg-blue-600 companyData-[hover=true]:bg-blue-500"
-              onPress={() => {
-                fetchCompanies();
-              }}
-            >
-              <ButtonText>View All Companies</ButtonText>
-            </Button>
-          </VStack>
-        )}
-
         {/* Sidebar List */}
         <VStack className="md:w-1/3 w-full md:sticky md:top-32 md:my-4 self-start h-fit gap-4">
           <Card

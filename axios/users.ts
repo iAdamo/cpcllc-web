@@ -60,6 +60,7 @@ export const setUserFavourites = async (
 export const searchCompanies = async (
   page: number,
   limit: number,
+  engine: boolean,
   searchInput?: string,
   lat?: string,
   long?: string,
@@ -70,14 +71,14 @@ export const searchCompanies = async (
   totalPages: number;
 }> => {
   const params: Record<string, any> = {};
+  if (page) params.page = page;
+  if (limit) params.limit = limit;
+  if (engine) params.engine = engine;
   if (searchInput) params.searchInput = searchInput;
   if (lat) params.lat = lat;
   if (long) params.long = long;
   if (address) params.address = address;
 
-  const response = await axiosInstance.get(
-    `users/search?page=${page}&limit=${limit}`,
-    { params }
-  );
+  const response = await axiosInstance.get("users/search", { params });
   return response.data;
 };
