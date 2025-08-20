@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { searchCompanies } from "@/axios/users";
+import { globalSearch } from "@/axios/search";
 import { debounce } from "lodash";
 import { CompanyData } from "@/types";
 
@@ -27,9 +27,10 @@ export function useCompanySearch({
       setError("");
 
       try {
-        const response = await searchCompanies(
+        const response = await globalSearch(
           1,
           30,
+          true,
           searchInput,
           lat,
           long,

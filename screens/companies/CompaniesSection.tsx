@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-import { searchCompanies } from "@/axios/users";
+import { globalSearch } from "@/axios/search";
 import { CompanyData } from "@/types";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -44,7 +44,7 @@ const CompaniesSection = () => {
         const lat = coords?.lat;
         const long = coords?.long;
 
-        const { companies: response, totalPages } = await searchCompanies(
+        const { companies: response, totalPages } = await globalSearch(
           currentPage,
           limit,
           false,

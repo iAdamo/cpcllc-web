@@ -1,12 +1,12 @@
 import { ApiClientSingleton } from "./conf";
-import { CompanyData, UserData, ServiceData } from "@/types";
+import { CompanyData, UserData } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
 export const updateCompanyProfile = async (
   data: FormData
 ): Promise<CompanyData> => {
-  const response = await axiosInstance.patch("users/company", data, {
+  const response = await axiosInstance.patch("company", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -19,7 +19,7 @@ export const registerCompany = async (
   data: FormData,
   id: string
 ): Promise<CompanyData> => {
-  const response = await axiosInstance.post(`users/${id}`, data, {
+  const response = await axiosInstance.post(`company/${id}`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -45,7 +45,7 @@ export const getCompanies = async (
   limit: number
 ): Promise<{ companies: CompanyData[]; totalPages: number }> => {
   const response = await axiosInstance.get(
-    `users/company?page=${page}&limit=${limit}`
+    `company?page=${page}&limit=${limit}`
   );
   return response.data;
 };
@@ -53,32 +53,6 @@ export const getCompanies = async (
 export const setUserFavourites = async (
   companyId: string
 ): Promise<CompanyData> => {
-  const response = await axiosInstance.patch(`users/${companyId}/favorite`);
-  return response.data;
-};
-
-export const searchCompanies = async (
-  page: number,
-  limit: number,
-  engine: boolean,
-  searchInput?: string,
-  lat?: string,
-  long?: string,
-  address?: string
-): Promise<{
-  companies: CompanyData[];
-  services?: ServiceData[];
-  totalPages: number;
-}> => {
-  const params: Record<string, any> = {};
-  if (page) params.page = page;
-  if (limit) params.limit = limit;
-  if (engine) params.engine = engine;
-  if (searchInput) params.searchInput = searchInput;
-  if (lat) params.lat = lat;
-  if (long) params.long = long;
-  if (address) params.address = address;
-
-  const response = await axiosInstance.get("users/search", { params });
+  const response = await axiosInstance.patch(`company/${companyId}/favorite`);
   return response.data;
 };

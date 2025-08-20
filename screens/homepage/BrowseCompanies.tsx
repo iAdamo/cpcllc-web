@@ -7,9 +7,9 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import Link from "next/link";
 import Image from "next/image";
-import { getCompanies } from "@/axios/users";
+import { globalSearch } from "@/axios/search";
 import { CompanyData } from "@/types";
-import RatingSection from "../../components/RatingSection";
+import RatingSection from "@/components/RatingSection";
 
 const BrowseCompanies = () => {
   const [companies, setUsers] = useState<CompanyData[]>([]);
@@ -17,7 +17,15 @@ const BrowseCompanies = () => {
 
   useEffect(() => {
     const fetchCompanies = async () => {
-      const { companies: response } = await getCompanies(1, 10);
+      const { companies: response } = await globalSearch(
+        1,
+        10,
+        false,
+        undefined,
+        undefined,
+        undefined,
+        undefined
+      );
       setUsers(response);
     };
     fetchCompanies();
@@ -40,9 +48,13 @@ const BrowseCompanies = () => {
           Browse companies
         </Link>
       </VStack>
-      <VStack className="md:flex-row h-full w-full md:bg-transparent rounded-xl md:p-4 p-2 bg-[#F1F0FF] flex flex-wrap gap-x-4 gap-y-8">
+      <VStack className="md:flex-row md:grid grid-cols-3 h-full w-full md:bg-transparent rounded-xl p-2 bg-[#F1F0FF] gap-x-4 gap-y-8">
         {companies.map((company, index) => (
-          <Link key={index} href={`companies/${company?._id || ""}`}>
+          <Link
+            key={index}
+            href={`companies/${company?._id || ""}`}
+            className="aspect-square"
+          >
             <Card
               variant="ghost"
               className="md:flex-col flex-row md:h-80 h-fit w-full p-0 md:bg-[#F1F0FF] rounded-lg"
