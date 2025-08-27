@@ -16,7 +16,7 @@ const FinalStep = () => {
 
   const { data, submitData } = useOnboarding();
   const router = useRouter();
-  const { userData, registerCompany, fetchUserProfile } = useSession();
+  const { userData, updateCompanyProfile, fetchUserProfile } = useSession();
   const { t } = useTranslation(); // Add this hook
 
   const handleSubmit = async () => {
@@ -24,10 +24,12 @@ const FinalStep = () => {
       setLoading(true);
       const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
+        // Skip firstName, lastName, and profilePicture
+        if (["firstName", "lastName", "profilePicture"].includes(key)) return;
         if (Array.isArray(value)) {
           if (key === "subcategories") {
             const ids = value.map((item: { id: string }) => item.id);
-            formData.append(key, JSON.stringify(ids));
+            ids.forEach((id) => formData.append("subcategories[]", id));
           } else {
             value.forEach((file) => {
               if (file instanceof File) {
@@ -62,7 +64,7 @@ const FinalStep = () => {
           formData.append(key, value as string);
         }
       });
-      await registerCompany(formData);
+      await updateCompanyProfile(formData);
       await fetchUserProfile();
       setSuccess(true);
       submitData();

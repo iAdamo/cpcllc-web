@@ -11,7 +11,7 @@ interface VerifyCodeModalProps {
   onClose: () => void;
   email: string;
   onVerified: () => void;
-  isVerified?: boolean;
+  isEmailVerified?: boolean;
 }
 
 const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
@@ -19,7 +19,7 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
   onClose,
   email,
   onVerified,
-  isVerified,
+  isEmailVerified,
 }) => {
   const toast = useToast();
   const router = useRouter();
@@ -118,7 +118,7 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
       extraText={
         cooldown > 0
           ? `You can resend code in ${cooldown}s`
-          : !isVerified
+          : !isEmailVerified
           ? `You need to verify your email to continue using the app.\nClick the button below to request a new verification code.`
           : "Didn't receive the code?"
       }

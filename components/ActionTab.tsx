@@ -10,14 +10,14 @@ import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
 import { usePathname } from "next/navigation";
 
 interface ActionButtonsProps {
-  companyData: CompanyData;
+  providerData: CompanyData;
   userData: UserData | null;
   isCompanyPage?: boolean;
   setNewReviews?: (reviews: ReviewData[]) => void;
 }
 
 export default function ActionButtons({
-  companyData,
+  providerData,
   userData,
   isCompanyPage,
   setNewReviews,
@@ -30,11 +30,11 @@ export default function ActionButtons({
   const pathname = usePathname();
 
   useEffect(() => {
-    const hasFavourited = companyData?.favoritedBy?.includes(
+    const hasFavourited = providerData?.favoritedBy?.includes(
       userData?.id ?? ""
     );
     setIsFavourite(hasFavourited ?? false);
-  }, [companyData?.favoritedBy, userData?.id]);
+  }, [providerData?.favoritedBy, userData?.id]);
 
   const isProfilePage = pathname.startsWith("/cpc");
 
@@ -43,12 +43,12 @@ export default function ActionButtons({
     setIsProcessing(true);
 
     try {
-      if (companyData?.owner === userData?.id) {
+      if (providerData?.owner === userData?.id) {
         showToast("You can't favorite your own company", "error");
         return;
       }
 
-      const updatedCompany = await setUserFavourites(companyData?._id);
+      const updatedCompany = await setUserFavourites(providerData?._id);
 
       const hasFavourited = updatedCompany?.favoritedBy.includes(
         userData?.id ?? ""
@@ -86,7 +86,7 @@ export default function ActionButtons({
     if (navigator.share) {
       navigator
         .share({
-          title: companyData?.companyName,
+          title: providerData?.providerName,
           url: window.location.href,
         })
         .catch(() => {
@@ -106,7 +106,7 @@ export default function ActionButtons({
       showToast("Please sign in to write a review", "error");
       return;
     }
-    if (companyData?.owner === userData?.id) {
+    if (providerData?.owner === userData?.id) {
       showToast("You can't review your own company", "error");
       return;
     }
@@ -118,7 +118,7 @@ export default function ActionButtons({
       name: "Write a Review",
       icon: ReviewIcon,
       action: handleWriteReview,
-      disabled: companyData?.owner === userData?.id,
+      disabled: providerData?.owner === userData?.id,
     },
     {
       name: "Share",
@@ -130,7 +130,7 @@ export default function ActionButtons({
       name: isFavourite ? "Favorited" : "Favorite",
       icon: FavouriteIcon,
       action: handleFavourite,
-      disabled: companyData?.owner === userData?.id || isProcessing,
+      disabled: providerData?.owner === userData?.id || isProcessing,
     },
   ];
 
@@ -174,8 +174,8 @@ export default function ActionButtons({
       </VStack>
 
       <ReviewModal
-        companyId={companyData?._id}
-        companyName={companyData?.companyName}
+        providerId={providerData?._id}
+        providerName={providerData?.providerName}
         isOpen={showWriteReview}
         onClose={() => setWriteReview(false)}
         setNewReviews={(reviews: ReviewData[]) => {

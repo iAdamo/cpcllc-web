@@ -149,7 +149,7 @@ export const SearchEngine = () => {
                   className="bg-white p-4 rounded shadow cursor-pointer"
                   onClick={handleSearch}
                 >
-                  <h3 className="font-bold">{company.companyName}</h3>
+                  <h3 className="font-bold">{company.providerName}</h3>
                   <p className="text-sm text-gray-600">
                     {company.location?.primary?.address?.address ||
                       "No address"}

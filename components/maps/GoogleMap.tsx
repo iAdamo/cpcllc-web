@@ -4,6 +4,7 @@ import {
   Circle,
   useLoadScript,
 } from "@react-google-maps/api";
+import { useRef, useEffect } from "react";
 import { useMapContext } from "@/context/MapContext";
 import { CompanyData } from "@/types";
 
@@ -16,26 +17,44 @@ const defaultCenter = {
   lat: 37.7749,
   lng: -122.4194,
 };
+
 const libraries: ("places" | "drawing" | "geometry" | "visualization")[] = [
   "places",
 ];
 
-const GoogleMapComponent: React.FC<{
+interface GoogleMapComponentProps {
   apiKey: string;
   companies: CompanyData[];
   selectedCompany?: CompanyData;
-}> = ({ apiKey, companies, selectedCompany }) => {
+}
+
+const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
+  apiKey,
+  companies,
+  selectedCompany,
+}) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: apiKey,
     libraries,
   });
 
   const { userLocation, error, loading } = useMapContext();
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const center = userLocation || defaultCenter;
+
+  // Pan to selected company when it changes
+  useEffect(() => {
+    if (selectedCompany && mapRef.current) {
+      const lat = selectedCompany.location?.primary.coordinates?.lat;
+      const lng = selectedCompany.location?.primary.coordinates?.long;
+      if (typeof lat === "number" && typeof lng === "number") {
+        mapRef.current.panTo({ lat, lng });
+      }
+    }
+  }, [selectedCompany]);
 
   if (loadError || error) return <div></div>;
   if (!isLoaded || loading) return <div></div>;
-
-  const center = userLocation || defaultCenter;
 
   return (
     <GoogleMap
@@ -47,52 +66,53 @@ const GoogleMapComponent: React.FC<{
         mapTypeControl: false,
         fullscreenControl: false,
       }}
+      onLoad={(map) => {
+        mapRef.current = map;
+      }}
     >
-      <Marker position={center} title="You" />
+      {/* <Marker position={center} title="You" /> */}
       <Circle
         center={center}
-        radius={2000} // Radius in meters (e.g., 5000 meters = 5 km)
+        radius={200}
         options={{
-          strokeColor: "#0000FF", // Blue border
+          strokeColor: "#0000FF",
           strokeOpacity: 0.8,
           strokeWeight: 1,
-          fillColor: "#0000FF", // Blue fill
+          fillColor: "#0000FF",
           fillOpacity: 0.35,
         }}
       />
       {/* Company markers */}
-      {companies.map((company) => (
-        <div key={company._id}>
+      {companies.map((provider) => (
+        <div key={provider._id}>
           <Marker
             icon={{
               url:
-                selectedCompany?._id === company._id
+                selectedCompany?._id === provider._id
                   ? "http://maps.google.com/mapfiles/kml/pushpin/grn-pushpin.png"
                   : "http://maps.google.com/mapfiles/kml/pushpin/blue-pushpin.png",
-              scaledSize: new window.google.maps.Size(50, 50), // Set the size of the icon
-              origin: new window.google.maps.Point(0, 0), // Origin point
-              anchor: new window.google.maps.Point(15, 50), // Anchor point
+              scaledSize: new window.google.maps.Size(50, 50),
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 50),
             }}
             position={{
-              lat: company.location?.primary.coordinates?.lat,
-              lng: company.location?.primary.coordinates?.long,
+              lat: provider.location?.primary.coordinates?.lat,
+              lng: provider.location?.primary.coordinates?.long,
             }}
-            // onClick={() => handleMarkerClick(company)} // Handle marker click
-            title={company.companyName}
+            // onClick={() => handleMarkerClick(provider)}
+            title={provider.providerName}
           />
-
-          {/* Smaller Yellow Circle for Selected Company */}
-          {selectedCompany?._id === company._id && (
+          {selectedCompany?._id === provider._id && (
             <Circle
               center={{
-                lat: company.location?.primary.coordinates.lat,
-                lng: company.location?.primary.coordinates.long,
+                lat: provider.location?.primary.coordinates.lat,
+                lng: provider.location?.primary.coordinates.long,
               }}
-              radius={500} // Smaller radius (e.g., 2 km)
+              radius={500}
               options={{
-                fillColor: "#FFD700", // Yellow fill
-                fillOpacity: 0.4, // Semi-transparent fill
-                strokeColor: "#FFD700", // Yellow border
+                fillColor: "#FFD700",
+                fillOpacity: 0.4,
+                strokeColor: "#FFD700",
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
               }}

@@ -15,22 +15,22 @@ export const onboardingFormSchema = z.object({
   profilePicture: z.instanceof(File, {
     message: "Profile picture must be a valid file",
   }),
-  companyEmail: z.string().email("Company email must be a valid email address"),
-  companyName: z
+  providerEmail: z.string().email("Company email must be a valid email address"),
+  providerName: z
     .string()
     .min(3, "Company name must be at least 3 characters long")
     .max(50, "Company name must be at most 50 characters long"),
-  companyDescription: z
+  providerDescription: z
     .string()
     .min(100, "Company description must be at least 100 characters long")
     .max(1500, "Company description must be at most 1500 characters long"),
-  companyPhoneNumber: z
+  providerPhoneNumber: z
     .string()
     .regex(
       /^\+?[1-9]\d{1,14}$/,
       "Company phone number must be a valid phone number"
     ),
-  companyLocation: z
+  providerLocation: z
     .object({
       address: z.string().min(1, "Address is required"),
       city: z.string().min(1, "City is required"),
@@ -50,7 +50,7 @@ export const onboardingFormSchema = z.object({
       }
     )
     .optional(),
-  companyImages: z
+  providerImages: z
     .array(z.instanceof(File))
     .min(1, "Images are required")
     .refine(

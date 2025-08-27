@@ -56,9 +56,9 @@ const ProfileDetails = ({
     try {
       const formData = new FormData();
       Object.entries(editingFields).forEach(([key, value]) => {
-        if (key.startsWith("companySocialMedia.")) {
+        if (key.startsWith("providerSocialMedia.")) {
           const platform = key.split(".")[1];
-          formData.append(`companySocialMedia[${platform}]`, value || "");
+          formData.append(`providerSocialMedia[${platform}]`, value || "");
         } else {
           formData.append(key, value || "");
         }
@@ -116,15 +116,15 @@ const ProfileDetails = ({
           <Heading size="xs" className="md:text-md mb-2">
             Description
           </Heading>
-          {"companyDescription" in editingFields ? (
+          {"providerDescription" in editingFields ? (
             <VStack className="gap-2">
               <Input className="h-32">
                 <InputField
                   multiline
                   numberOfLines={4}
-                  value={editingFields.companyDescription || ""}
+                  value={editingFields.providerDescription || ""}
                   onChangeText={(text) =>
-                    handleEditStart({ companyDescription: text })
+                    handleEditStart({ providerDescription: text })
                   }
                   autoFocus
                   className="h-32"
@@ -147,7 +147,7 @@ const ProfileDetails = ({
           ) : (
             <Card variant="filled" className="flex-row p-4">
               <Text size="xs" className="md:text-sm">
-                {activeRoleId?.companyDescription}
+                {activeRoleId?.providerDescription}
               </Text>
               {isEditable && (
                 <Button
@@ -155,8 +155,8 @@ const ProfileDetails = ({
                   size="xs"
                   onPress={() =>
                     handleEditStart({
-                      companyDescription:
-                        activeRoleId?.companyDescription || "",
+                      providerDescription:
+                        activeRoleId?.providerDescription || "",
                     })
                   }
                 >

@@ -136,10 +136,10 @@ const ProfilePage = () => {
 
   return (
     <VStack className="md:mt-28 mt-32">
-      {activeRoleId?.companyImages && (
+      {activeRoleId?.providerImages && (
         <Image
           className="w-full md:h-64 h-32 object-cover"
-          src={activeRoleId?.companyImages[0]}
+          src={activeRoleId?.providerImages[0]}
           alt="Company Banner"
           width={1920}
           height={400}
@@ -218,7 +218,7 @@ const ProfilePage = () => {
                             <Text size="sm">Online</Text>
                           </VStack>
                           <ActionButtons
-                            companyData={activeRoleId}
+                            providerData={activeRoleId}
                             userData={userData}
                             setNewReviews={setNewReviews}
                           />
@@ -237,12 +237,12 @@ const ProfilePage = () => {
                       Brand Showcase
                     </Heading>
                     <VStack className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {activeRoleId?.companyImages?.map((src, index) => (
+                      {activeRoleId?.providerImages?.map((src, index) => (
                         <Image
                           key={index}
                           className="object-cover w-full md:h-56 h-40"
                           src={src}
-                          alt={`company-image-${index}`}
+                          alt={`provider-image-${index}`}
                           width={1920}
                           height={1080}
                           priority
@@ -256,7 +256,7 @@ const ProfilePage = () => {
 
             {activeRoleId?._id && (
               <ReviewSection
-                companyId={activeRoleId._id}
+                providerId={activeRoleId._id}
                 newReviews={newReviews}
               />
             )}
@@ -266,7 +266,7 @@ const ProfilePage = () => {
             {activeRoleId?._id && (
               <VStack className="w-full">
                 <ServiceSection
-                  company={activeRoleId}
+                  provider={activeRoleId}
                   isCurrentUser={isCurrentUser}
                   isProfilePage={true}
                 />

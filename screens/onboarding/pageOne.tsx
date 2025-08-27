@@ -38,7 +38,7 @@ const PageOne = () => {
       router.replace("/companies");
     } else if (values === "Client" && !session) {
       setIsAuthModalOpen(true);
-    } else if (values === "Company") {
+    } else if (values === "Provider") {
       setData({ role: values });
       nextStep();
     }
@@ -56,7 +56,7 @@ const PageOne = () => {
           size="lg"
           className="text-black data-[hover=true]:no-underline"
         >
-          CompanyCenterLLC
+          CompaniesCenterLLC
         </ButtonText>
       </Button>
 
@@ -97,11 +97,11 @@ const PageOne = () => {
               <Pressable
                 className="w-64 p-4 md:h-full h-40 hover:bg-[#F6F6F6] border-2 border-[#D9D9D9] hover:border-black hover:border-2 rounded-xl"
                 onPress={() => {
-                  setValues("Company");
+                  setValues("Provider");
                   if (!session) setIsAuthModalOpen(true);
                 }}
               >
-                <Radio value="Company" className="ml-auto">
+                <Radio value="Provider" className="ml-auto">
                   <RadioIndicator className="w-6 h-6">
                     <RadioIcon
                       as={CircleIcon}
@@ -135,7 +135,7 @@ const PageOne = () => {
           >
             {values === "Client"
               ? t("pageone_apply_client")
-              : values === "Company"
+              : values === "Provider"
               ? t("pageone_apply_company")
               : t("pageone_apply_default")}
           </ButtonText>

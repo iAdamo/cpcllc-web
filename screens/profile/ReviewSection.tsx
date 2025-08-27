@@ -19,10 +19,10 @@ import { format } from "date-fns";
 import ReviewInfoModal from "@/components/overlay/ReviewInfoModal";
 
 const ReviewSection = ({
-  companyId,
+  providerId,
   newReviews,
 }: {
-  companyId: string;
+  providerId: string;
   newReviews?: ReviewData[];
 }) => {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
@@ -38,7 +38,7 @@ const ReviewSection = ({
   useEffect(() => {
     const handleReview = async () => {
       try {
-        const reviews = await getReviews(companyId);
+        const reviews = await getReviews(providerId);
         setReviews(reviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -49,7 +49,7 @@ const ReviewSection = ({
     } else {
       handleReview();
     }
-  }, [companyId, newReviews]);
+  }, [providerId, newReviews]);
 
   const loadMoreReviews = () => {
     setVisibleReviews((prev) => prev + 3); // Show 3 more reviews

@@ -17,13 +17,13 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 const ServiceSection = ({
-  company,
+  provider,
   isCurrentUser,
   isProfilePage,
   isCompanyPage,
   isMobile,
 }: {
-  company: CompanyData;
+  provider: CompanyData;
   isCurrentUser?: boolean;
   isProfilePage?: boolean;
   isCompanyPage?: boolean;
@@ -33,21 +33,21 @@ const ServiceSection = ({
   const [serviceData, setServiceData] = useState<ServiceData | null>(null);
   const router = useRouter();
 
-  // Example: If you want to build params from an array of services in company.servicesProvided
-  // (assuming company.servicesProvided is an array of strings or similar)
+  // Example: If you want to build params from an array of services in provider.servicesProvided
+  // (assuming provider.servicesProvided is an array of strings or similar)
   const params = new URLSearchParams(
-    (company.subcategories || []).map((service, idx) => [
+    (provider?.subcategories || []).map((service, idx) => [
       `serviceprovided${idx}`,
       typeof service === "string" ? service : service.name || String(service),
     ])
   );
 
-  // alert(company.services);
+  // alert(provider.services);
 
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const response = await getServicesByCompany(company._id);
+        const response = await getServicesByCompany(provider._id);
         setServices(response);
       } catch (error) {
         console.error("Error fetching service data:", error);
@@ -55,7 +55,7 @@ const ServiceSection = ({
     };
 
     fetchService();
-  }, [company._id]);
+  }, [provider?._id]);
 
   return (
     <VStack>
@@ -131,7 +131,7 @@ const ServiceSection = ({
                   size="xs"
                   className="md:text-base text-text-secondary text-center mt-8"
                 >
-                  No updates available for this company.
+                  No updates available for this provider.
                 </Text>
               )}
             </VStack>
@@ -145,7 +145,7 @@ const ServiceSection = ({
               isCompanyPage ? "md:text-lg" : "md:text-sm"
             } font-bold text-brand-primary`}
           >
-            Updates from this service provider
+            Updates from this service company
           </Heading>
           {services.length > 0 ? (
             <div className="relative w-full">

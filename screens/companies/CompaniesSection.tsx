@@ -126,12 +126,12 @@ const CompaniesSection = () => {
             variant="filled"
             className="overflow-auto md:flex grid grid-cols-2 gap-2 md:bg-white min-h-0 max-h-[1500px] p-2"
           >
-            {companies.map((company, index) => (
+            {companies.map((provider, index) => (
               <Pressable
                 key={index}
                 onPress={() =>
                   isMobile
-                    ? router.push(`companies/${company?._id}`)
+                    ? router.push(`companies/${provider?._id}`)
                     : handleCompanySelect(index)
                 }
                 className={`mb-4 hover:drop-shadow-md transition-shadow duration-300 rounded-lg ${
@@ -147,25 +147,25 @@ const CompaniesSection = () => {
                   <Image
                     className="md:h-28 md:w-24 h-40 w-full md:rounded-l-md md:rounded-r-none rounded-t-md object-cover"
                     src={
-                      company?.companyImages?.[0] || "/assets/placeholder.jpg"
+                      provider?.providerImages?.[0] || "/assets/placeholder.jpg"
                     }
-                    alt={company?.companyName || "Company Logo"}
+                    alt={provider?.providerName || "Company Logo"}
                     width={1400}
                     height={600}
                   />
                   <VStack className="justify-between p-2 md:p-1 md:h-auto h-28">
-                    <Heading className="text-md">{company.companyName}</Heading>
+                    <Heading className="text-md">{provider.providerName}</Heading>
                     <Text
                       className={`${
-                        company.location?.primary?.address?.address.length >
+                        provider.location?.primary?.address?.address.length >
                           32 && "line-clamp-2"
                       } text-xs text-gray-500`}
                     >
-                      {company.location?.primary?.address?.address}
+                      {provider.location?.primary?.address?.address}
                     </Text>
                     <RatingSection
-                      rating={company?.averageRating || 0}
-                      reviewCount={company?.reviewCount || 0}
+                      rating={provider?.averageRating || 0}
+                      reviewCount={provider?.reviewCount || 0}
                     />
                   </VStack>
                 </Card>

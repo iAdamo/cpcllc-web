@@ -15,10 +15,10 @@ import { CompanyData } from "@/types";
 import { useTranslation } from "@/context/TranslationContext";
 
 const ContactInfo = ({
-  companyData,
+  providerData,
   isCompanyPage,
 }: {
-  companyData: CompanyData;
+  providerData: CompanyData;
   isCompanyPage: boolean;
 }) => {
   const router = useRouter();
@@ -50,7 +50,7 @@ const ContactInfo = ({
         </div>
         <Button
           onPress={() => router.push("/service/request-quote")}
-          className="bg-blue-600 companyData-[hover=true]:bg-blue-500"
+          className="bg-blue-600 providerData-[hover=true]:bg-blue-500"
         >
           <ButtonText className="text-md">
             {t("request_quote_availability")}
@@ -69,12 +69,12 @@ const ContactInfo = ({
       >
         <div className="flex flex-row justify-between gap-2">
           <Link
-            href={`mailto:${companyData?.companyEmail}`}
+            href={`mailto:${providerData?.providerEmail}`}
             className={`font-extrablack ${
               isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
             } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
           >
-            {companyData?.companyEmail || t("no_email")}
+            {providerData?.providerEmail || t("no_email")}
           </Link>
           <Icon as={ExternalLinkIcon} className="" />
         </div>
@@ -82,7 +82,7 @@ const ContactInfo = ({
 
         <div className="flex flex-row justify-between gap-2">
           <Link
-            href={`https://${companyData?.companySocialMedia?.other || ""}`}
+            href={`https://${providerData?.providerSocialMedia?.other || ""}`}
             className={`font-extrablack ${
               isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
             } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
@@ -96,13 +96,13 @@ const ContactInfo = ({
 
         <div className="flex flex-row justify-between gap-2">
           <Link
-            href={`tel:+${companyData?.companyPhoneNumber}` || "google.com"}
+            href={`tel:+${providerData?.providerPhoneNumber}` || "google.com"}
             className={`font-extrablack ${
               isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
             } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
           >
-            {companyData?.companyPhoneNumber
-              ? `+${companyData?.companyPhoneNumber}`
+            {providerData?.providerPhoneNumber
+              ? `+${providerData?.providerPhoneNumber}`
               : t("no_phone")}
           </Link>
           <Icon as={PhoneIcon} />
@@ -122,7 +122,7 @@ const ContactInfo = ({
               {t("get_directions")}
             </Link>
             <p className="font-semibold md:text-md text-xs text-text-secondary break-words">
-              {companyData?.location?.primary?.address?.address}
+              {providerData?.location?.primary?.address?.address}
             </p>
           </div>
           <Icon as={GlobeIcon} className="" />

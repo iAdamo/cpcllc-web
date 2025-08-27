@@ -34,7 +34,7 @@ export interface ServiceData {
   category: string;
   ratings: number;
   location: string;
-  company: CompanyData;
+  provider: CompanyData;
   favoritedBy: string[];
   favoriteCount: number;
   images: string[];

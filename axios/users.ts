@@ -6,7 +6,7 @@ const { axiosInstance } = ApiClientSingleton.getInstance();
 export const updateCompanyProfile = async (
   data: FormData
 ): Promise<CompanyData> => {
-  const response = await axiosInstance.patch("company", data, {
+  const response = await axiosInstance.patch("provider/profile", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -15,20 +15,18 @@ export const updateCompanyProfile = async (
   return response.data;
 };
 
-export const registerCompany = async (
-  data: FormData,
-  id: string
-): Promise<CompanyData> => {
-  const response = await axiosInstance.post(`company/${id}`, data, {
+export const updateUserProfile = async (data: FormData): Promise<UserData> => {
+  const response = await axiosInstance.patch("users/profile", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+
   return response.data;
 };
 
 export const userProfile = async (id: string): Promise<UserData> => {
-  const response = await axiosInstance.get(`users/${id}`);
+  const response = await axiosInstance.get(`users/profile/${id}`);
   return response.data;
 };
 
@@ -45,14 +43,14 @@ export const getCompanies = async (
   limit: number
 ): Promise<{ companies: CompanyData[]; totalPages: number }> => {
   const response = await axiosInstance.get(
-    `company?page=${page}&limit=${limit}`
+    `provider?page=${page}&limit=${limit}`
   );
   return response.data;
 };
 
 export const setUserFavourites = async (
-  companyId: string
+  providerId: string
 ): Promise<CompanyData> => {
-  const response = await axiosInstance.patch(`company/${companyId}/favorite`);
+  const response = await axiosInstance.patch(`provider/${providerId}/favorite`);
   return response.data;
 };

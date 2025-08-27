@@ -8,7 +8,7 @@ import { useStorageState } from "@/utils/StorageState";
 import { login, logout as logoutRequest } from "@/axios/auth";
 import { useRouter, usePathname } from "next/navigation";
 import type { AuthContextProps, UserData, CompanyData } from "@/types";
-import { registerCompany, userProfile } from "@/axios/users";
+import { updateCompanyProfile, userProfile } from "@/axios/users";
 import { Spinner } from "@/components/ui/spinner";
 // import { Heading } from "@/components/ui/heading";
 // import { Center } from "@/components/ui/center";
@@ -29,8 +29,8 @@ export function useSession() {
 export function SessionProvider({ children }: PropsWithChildren<object>) {
   const [[isLoading, session], setSession] = useStorageState<string>("session");
   const [[loading, userData], setUserData] = useStorageState<UserData>("user");
-  const [[loadingCompany, companyData], setCompanyData] =
-    useStorageState<CompanyData>("company");
+  const [[loadingCompany, providerData], setCompanyData] =
+    useStorageState<CompanyData>("provider");
 
   const router = useRouter();
   const pathname = usePathname();
@@ -61,18 +61,18 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     router.replace("/");
   }, [router, setSession, setUserData, setCompanyData]);
 
-  const registerCompanyHandler = useCallback(
+  const updateCompanyProfileHandler = useCallback(
     async (data: FormData) => {
       try {
         if (!userData) throw new Error("User data is not available.");
         if (!session) throw new Error("Session is not available.");
-        const response = await registerCompany(data, session);
+        const response = await updateCompanyProfile(data);
         if (response) {
-          const companyData: CompanyData = {
+          const providerData: CompanyData = {
             ...response,
             id: response._id,
           };
-          setCompanyData(companyData);
+          setCompanyData(providerData);
         }
       } catch (err) {
         console.error("Error updating profile:", err);
@@ -122,7 +122,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
           className="h-fit p-4 justify-start items-start w-full"
         />
       );
-    } else if (userData?.activeRole === "Company") {
+    } else if (userData?.activeRole === "Provider") {
       router.replace(`/cpc/${userData.id}`);
       return (
         <Spinner
@@ -139,7 +139,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
         />
       );
     }
-  } else if (session && userData?.activeRole === "Company") {
+  } else if (session && userData?.activeRole === "Provider") {
     if (pathname.startsWith("/companies")) {
       router.replace(`/cpc/${userData.id}`);
       return (
@@ -174,11 +174,11 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       value={{
         login: loginHandler,
         logout: logoutHandler,
-        registerCompany: registerCompanyHandler,
+        updateCompanyProfile: updateCompanyProfileHandler,
         fetchUserProfile: fetchUserProfileHandler,
         userData,
         setUserData,
-        companyData,
+        providerData,
         session,
         isLoading,
         loading,

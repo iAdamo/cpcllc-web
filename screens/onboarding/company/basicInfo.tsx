@@ -26,6 +26,7 @@ import {
 } from "@/components/forms/OnboardingFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "@/context/TranslationContext";
+import { updateUserProfile } from "@/axios/users";
 
 const BasicInfo = () => {
   const { prevStep, nextStep, setData, data } = useOnboarding();
@@ -49,11 +50,11 @@ const BasicInfo = () => {
       firstName: data.firstName,
       lastName: data.lastName,
       profilePicture: data.profilePicture ?? undefined,
-      companyEmail: data.companyEmail,
-      companyName: data.companyName,
-      companyDescription: data.companyDescription,
-      companyPhoneNumber: data.companyPhoneNumber,
-      companyImages: data.companyImages || [],
+      providerEmail: data.providerEmail,
+      providerName: data.providerName,
+      providerDescription: data.providerDescription,
+      providerPhoneNumber: data.providerPhoneNumber,
+      providerImages: data.providerImages || [],
     },
   });
 
@@ -73,17 +74,20 @@ const BasicInfo = () => {
     );
 
     if (oversizedFile) {
-      setError("companyImages", {
+      setError("providerImages", {
         type: "manual",
-        message: t(`validation.imageSizeError`).replace("{maxSize}", MAX_IMAGE_SIZE_MB.toString()),
+        message: t(`validation.imageSizeError`).replace(
+          "{maxSize}",
+          MAX_IMAGE_SIZE_MB.toString()
+        ),
       });
       return;
     }
 
     const updated = [...selectedImages, ...newFiles];
     setSelectedImages(updated);
-    setValue("companyImages", updated);
-    clearErrors("companyImages");
+    setValue("providerImages", updated);
+    clearErrors("providerImages");
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -102,23 +106,26 @@ const BasicInfo = () => {
     );
 
     if (oversizedFile) {
-      setError("companyImages", {
+      setError("providerImages", {
         type: "manual",
-        message: t("validation.imageSizeError").replace("{maxSize}", MAX_IMAGE_SIZE_MB.toString()),
+        message: t("validation.imageSizeError").replace(
+          "{maxSize}",
+          MAX_IMAGE_SIZE_MB.toString()
+        ),
       });
       return;
     }
 
     const updated = [...selectedImages, ...droppedFiles];
     setSelectedImages(updated);
-    setValue("companyImages", updated);
-    clearErrors("companyImages");
+    setValue("providerImages", updated);
+    clearErrors("providerImages");
   };
 
   const handleRemoveImage = (index: number) => {
     const updated = selectedImages.filter((_, i) => i !== index);
     setSelectedImages(updated);
-    setValue("companyImages", updated);
+    setValue("providerImages", updated);
   };
 
   const handleProfileImageChange = (
@@ -130,11 +137,24 @@ const BasicInfo = () => {
     }
   };
 
-  const onSubmit = (formData: onboardingFormSchemaType) => {
+  const onSubmit = async (formData: onboardingFormSchemaType) => {
+    // Prepare data for updateUserProfile
+    const updateData = new FormData();
+    updateData.append("firstName", formData.firstName);
+    updateData.append("lastName", formData.lastName);
+    if (selectedProfileImage) {
+      updateData.append("profilePicture", selectedProfileImage);
+    }
+    try {
+      await updateUserProfile(updateData);
+    } catch (err) {
+      // Optionally handle error (e.g., show a toast)
+      console.error("Profile update failed", err);
+    }
     setData({
       ...formData,
       profilePicture: selectedProfileImage,
-      companyImages: selectedImages,
+      providerImages: selectedImages,
     });
     nextStep();
   };
@@ -144,8 +164,8 @@ const BasicInfo = () => {
   });
 
   return (
-    <VStack className="w-full h-full px-4 my-10">
-      <VStack className="md:flex-row gap-4">
+    <VStack className="w-full h-full px-4 my-10 justify-center">
+      <VStack className="md:flex-row gap-4 h-full">
         <VStack className="md:w-1/2 w-full gap-6">
           <HStack className="justify-between">
             <FormControl isInvalid={!!errors.firstName} className="w-[48%]">
@@ -159,7 +179,7 @@ const BasicInfo = () => {
                 control={control}
                 rules={{ required: t("validation.firstNameRequired") }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <Input className="">
+                  <Input className="h-12">
                     <InputField
                       placeholder={t("placeholders.firstName")}
                       value={value}
@@ -189,7 +209,7 @@ const BasicInfo = () => {
                 control={control}
                 rules={{ required: t("validation.lastNameRequired") }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <Input className="">
+                  <Input className="h-12">
                     <InputField
                       placeholder={t("placeholders.lastName")}
                       value={value}
@@ -210,20 +230,20 @@ const BasicInfo = () => {
             </FormControl>
           </HStack>
           {/** Company Name */}
-          <FormControl isInvalid={!!errors.companyName}>
+          <FormControl isInvalid={!!errors.providerName}>
             <FormControlLabel>
               <FormControlLabelText className="font-semibold text-md">
-                {t("companyName")}
+                {t("Company Name")}
               </FormControlLabelText>
             </FormControlLabel>
             <Controller
-              name="companyName"
+              name="providerName"
               control={control}
-              rules={{ required: t("validation.companyNameRequired") }}
+              rules={{ required: t("validation.providerNameRequired") }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input className="">
+                <Input className="h-12">
                   <InputField
-                    placeholder={t("placeholders.companyName")}
+                    placeholder={t("placeholders.providerName")}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -232,25 +252,28 @@ const BasicInfo = () => {
                 </Input>
               )}
             />
-            {errors.companyName && (
+            {errors.providerName && (
               <FormControlError>
                 <FormControlErrorText className="text-sm">
-                  {errors.companyName.message}
+                  {errors.providerName.message}
                 </FormControlErrorText>
               </FormControlError>
             )}
           </FormControl>
           {/** Company Phone Number */}
-          <FormControl isInvalid={!!errors.companyPhoneNumber} className="z-50">
+          <FormControl
+            isInvalid={!!errors.providerPhoneNumber}
+            className="z-50"
+          >
             <FormControlLabel>
               <FormControlLabelText className="font-semibold text-md">
-                {t("companyPhoneNumber")}
+                {t("Company Phone Number")}
               </FormControlLabelText>
             </FormControlLabel>
             <Controller
-              name="companyPhoneNumber"
+              name="providerPhoneNumber"
               control={control}
-              rules={{ required: t("validation.companyPhoneRequired") }}
+              rules={{ required: t("validation.providerPhoneRequired") }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <PhoneInput
                   country={"us"}
@@ -259,7 +282,7 @@ const BasicInfo = () => {
                   onBlur={onBlur}
                   inputStyle={{
                     width: "100%",
-                    height: "2.5rem",
+                    height: "3rem",
                     zIndex: 1,
                   }}
                   containerStyle={{
@@ -275,35 +298,35 @@ const BasicInfo = () => {
                 />
               )}
             />
-            {errors.companyPhoneNumber && (
+            {errors.providerPhoneNumber && (
               <FormControlError>
                 <FormControlErrorText className="text-sm">
-                  {errors.companyPhoneNumber.message}
+                  {errors.providerPhoneNumber.message}
                 </FormControlErrorText>
               </FormControlError>
             )}
           </FormControl>
           {/** Company Email */}
-          <FormControl isInvalid={!!errors.companyEmail}>
+          <FormControl isInvalid={!!errors.providerEmail}>
             <FormControlLabel>
               <FormControlLabelText className="font-semibold text-md">
-                {t("companyEmail")}
+                {t("Company Email")}
               </FormControlLabelText>
             </FormControlLabel>
             <Controller
-              name="companyEmail"
+              name="providerEmail"
               control={control}
               rules={{
-                required: t("validation.companyEmailRequired"),
+                required: t("validation.providerEmailRequired"),
                 pattern: {
                   value: /^\S+@\S+$/i,
-                  message: t("validation.companyEmailInvalid"),
+                  message: t("validation.providerEmailInvalid"),
                 },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input className="">
+                <Input className="h-12">
                   <InputField
-                    placeholder={t("placeholders.companyEmail")}
+                    placeholder={t("placeholders.providerEmail")}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -311,29 +334,29 @@ const BasicInfo = () => {
                 </Input>
               )}
             />
-            {errors.companyEmail && (
+            {errors.providerEmail && (
               <FormControlError>
                 <FormControlErrorText className="text-sm">
-                  {errors.companyEmail.message}
+                  {errors.providerEmail.message}
                 </FormControlErrorText>
               </FormControlError>
             )}
           </FormControl>
           {/** Description */}
-          <FormControl isInvalid={!!errors.companyDescription}>
+          <FormControl isInvalid={!!errors.providerDescription}>
             <FormControlLabel>
               <FormControlLabelText className="font-semibold text-md">
-                {t("companyDescription")}
+                {t("Company Description")}
               </FormControlLabelText>
             </FormControlLabel>
             <Controller
-              name="companyDescription"
+              name="providerDescription"
               control={control}
-              rules={{ required: t("validation.companyDescriptionRequired") }}
+              rules={{ required: t("validation.providerDescriptionRequired") }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <Textarea className="h-20">
+                <Textarea className="h-20 md:h-32">
                   <TextareaInput
-                    placeholder={t("placeholders.companyDescription")}
+                    placeholder={t("placeholders.providerDescription")}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -341,10 +364,10 @@ const BasicInfo = () => {
                 </Textarea>
               )}
             />
-            {errors.companyDescription && (
+            {errors.providerDescription && (
               <FormControlError>
                 <FormControlErrorText className="text-sm">
-                  {errors.companyDescription.message}
+                  {errors.providerDescription.message}
                 </FormControlErrorText>
               </FormControlError>
             )}
@@ -429,7 +452,7 @@ const BasicInfo = () => {
           </FormControl>
           {/**Company Images */}
           <FormControl
-            isInvalid={selectedImages.length === 0 || !!errors.companyImages}
+            isInvalid={selectedImages.length === 0 || !!errors.providerImages}
             className="border border-gray-300 rounded-xl p-4 gap-4"
           >
             <FormControlLabel className="flex-col flex items-start">
@@ -493,10 +516,10 @@ const BasicInfo = () => {
                 </Card>
               )}
             </HStack>
-            {errors.companyImages && (
+            {errors.providerImages && (
               <FormControlError>
                 <FormControlErrorText className="text-sm">
-                  {errors.companyImages.message}
+                  {errors.providerImages.message}
                 </FormControlErrorText>
               </FormControlError>
             )}

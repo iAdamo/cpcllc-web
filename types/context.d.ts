@@ -9,15 +9,18 @@ export interface UserData {
   username: string;
   firstName?: string;
   lastName?: string;
-  activeRole: "Client" | "Company" | "Admin";
+  activeRole: "Client" | "Provider" | "Admin";
   email: string;
+  phoneNumber?: string;
   profilePicture?: string;
   purchasedServices: any[];
   hiredCompanies: any[];
   admins: any[];
   createdAt: string;
   activeRoleId?: CompanyData;
-  verified: boolean;
+  isVerified?: boolean;
+  isEmailVerified: boolean;
+  isPhoneVerified: boolean;
   clients: {
     _id: string;
     firstName: string;
@@ -32,13 +35,13 @@ export interface UserData {
 export interface CompanyData {
   _id: string;
   id: string;
-  companyName: string;
-  companyDescription: string;
-  companyEmail: string;
-  companyPhoneNumber: string;
+  providerName: string;
+  providerDescription: string;
+  providerEmail: string;
+  providerPhoneNumber: string;
   subcategories: SubcategoryData[];
   website: string;
-  companySocialMedia: {
+  providerSocialMedia: {
     facebook?: string;
     twitter?: string;
     instagram?: string;
@@ -47,7 +50,7 @@ export interface CompanyData {
   };
   reviewCount: number;
   averageRating: number;
-  companyImages: string[];
+  providerImages: string[];
   services: any[];
   clients: any[];
   latitude: number;
@@ -109,9 +112,9 @@ export interface AuthContextProps {
   isLoading: boolean;
   loading: boolean;
   logout: () => void;
-  registerCompany: (data: FormData) => Promise<void>;
+  updateCompanyProfile: (data: FormData) => Promise<void>;
   fetchUserProfile: () => Promise<void>;
-  companyData: CompanyData | null;
+  providerData: CompanyData | null;
 }
 
 export interface OnboardingData {
@@ -119,12 +122,12 @@ export interface OnboardingData {
   firstName: string;
   lastName: string;
   profilePicture: File | null;
-  companyName: string;
-  companyDescription: string;
-  companyEmail: string;
-  companyPhoneNumber: string;
-  companyAddress: string;
-  companyImages: File[] | null;
+  providerName: string;
+  providerDescription: string;
+  providerEmail: string;
+  providerPhoneNumber: string;
+  providerAddress: string;
+  providerImages: File[] | null;
   zip: string;
   city: string;
   latitude: number | null;

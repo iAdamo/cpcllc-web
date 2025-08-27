@@ -8,11 +8,11 @@ export interface ReviewData {
   images: string[]; // Array of image URLs
   status: "pending" | "approved" | "rejected";
   helpfulVotes: string[];
-  companyReply?: string;
+  providerReply?: string;
   tags: string[];
   isDeleted: boolean;
   user: UserData;
-  company: CompanyData;
+  provider: CompanyData;
   service: string;
   createdAt: string;
 }

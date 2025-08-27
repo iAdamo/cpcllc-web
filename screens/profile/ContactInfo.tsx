@@ -39,8 +39,8 @@ const ContactInfo = ({
   handleEditStart: (fields: Partial<Record<EditableFields, string>>) => void;
   handleCancelEdit: () => void;
 }) => {
-  const isEditingPhone = editingFields.hasOwnProperty("companyPhoneNumber");
-  const isEditingEmail = editingFields.hasOwnProperty("companyEmail");
+  const isEditingPhone = editingFields.hasOwnProperty("providerPhoneNumber");
+  const isEditingEmail = editingFields.hasOwnProperty("providerEmail");
 
   // Email validation only
   const isValidEmail = (email: string) => {
@@ -49,9 +49,9 @@ const ContactInfo = ({
 
   // Get current values with fallbacks
   const currentPhone =
-    editingFields.companyPhoneNumber || activeRoleId?.companyPhoneNumber || "";
+    editingFields.providerPhoneNumber || activeRoleId?.providerPhoneNumber || "";
   const currentEmail =
-    editingFields.companyEmail || activeRoleId?.companyEmail || "";
+    editingFields.providerEmail || activeRoleId?.providerEmail || "";
 
   // Only validate email
   const canSave = !isEditingEmail || isValidEmail(currentEmail);
@@ -67,10 +67,10 @@ const ContactInfo = ({
                 country={"us"}
                 value={currentPhone}
                 onChange={(phone) =>
-                  handleEditStart({ companyPhoneNumber: phone })
+                  handleEditStart({ providerPhoneNumber: phone })
                 }
                 inputProps={{
-                  name: "companyPhoneNumber",
+                  name: "providerPhoneNumber",
                   autoFocus: true,
                 }}
                 inputStyle={{
@@ -88,13 +88,13 @@ const ContactInfo = ({
                   <InputField
                     value={currentEmail}
                     onChangeText={(text) =>
-                      handleEditStart({ companyEmail: text })
+                      handleEditStart({ providerEmail: text })
                     }
                     autoFocus={!isEditingPhone}
                     className={
                       !isValidEmail(currentEmail) ? "border-red-500" : ""
                     }
-                    placeholder="example@company.com"
+                    placeholder="example@provider.com"
                   />
                 </Input>
                 {!isValidEmail(currentEmail) && currentEmail && (
@@ -128,14 +128,14 @@ const ContactInfo = ({
       ) : (
         <>
           <VStack className="gap-4 flex-1">
-            {activeRoleId?.companyPhoneNumber ? (
+            {activeRoleId?.providerPhoneNumber ? (
               <Link
-                href={`tel:${activeRoleId.companyPhoneNumber}`}
+                href={`tel:${activeRoleId.providerPhoneNumber}`}
                 className="flex-row gap-2 w-fit"
               >
                 <Icon as={PhoneIcon} className="text-green-500" />
                 <LinkText size="xs" className="font-semibold">
-                  {activeRoleId.companyPhoneNumber}
+                  {activeRoleId.providerPhoneNumber}
                 </LinkText>
               </Link>
             ) : (
@@ -146,14 +146,14 @@ const ContactInfo = ({
                 </Text>
               </HStack>
             )}
-            {activeRoleId?.companyEmail ? (
+            {activeRoleId?.providerEmail ? (
               <Link
-                href={`mailto:${activeRoleId.companyEmail}`}
+                href={`mailto:${activeRoleId.providerEmail}`}
                 className="flex-row gap-2"
               >
                 <Icon as={MailIcon} className="text-blue-500" />
                 <LinkText size="xs" className="font-semibold">
-                  {activeRoleId.companyEmail}
+                  {activeRoleId.providerEmail}
                 </LinkText>
               </Link>
             ) : (
@@ -171,8 +171,8 @@ const ContactInfo = ({
               size="xs"
               onPress={() =>
                 handleEditStart({
-                  companyPhoneNumber: activeRoleId?.companyPhoneNumber || "",
-                  companyEmail: activeRoleId?.companyEmail || "",
+                  providerPhoneNumber: activeRoleId?.providerPhoneNumber || "",
+                  providerEmail: activeRoleId?.providerEmail || "",
                 })
               }
               className="items-start"

@@ -39,7 +39,7 @@ const NavBar = () => {
   const options2 = [
     ...(session ? [{ name: t("myRequests"), href: "/requests" }] : []),
     { name: t("favorites"), href: "/favorites" },
-    ...(userData?.activeRole !== "Company"
+    ...(userData?.activeRole !== "Provider"
       ? [{ name: t("beACompany"), href: "/onboarding" }]
       : []),
   ];
@@ -66,22 +66,22 @@ const NavBar = () => {
     <>
       {/** Verify Code Modal */}
       <VerifyCodeModal
-        isOpen={userData! && !userData?.verified}
-        onClose={() => userData?.verified}
+        isOpen={userData! && !userData?.isEmailVerified}
+        onClose={() => userData?.isEmailVerified}
         email={userData?.email || ""}
         onVerified={() => {
           setIsAuthodalOpen(false);
           if (userData?.id) {
             setUserData({
               ...userData,
-              verified: true,
+              isEmailVerified: true,
             });
           } else {
             console.error("User ID is undefined");
           }
           router.replace("/cpc/" + userData?.id);
         }}
-        isVerified={!userData?.verified}
+        isEmailVerified={!userData?.isEmailVerified}
       />
 
       {/** Desktop */}
@@ -211,8 +211,8 @@ const NavBar = () => {
                                   ...userData,
                                   activeRole:
                                     userData?.activeRole === "Client"
-                                      ? "Company"
-                                      : "Company",
+                                      ? "Provider"
+                                      : "Provider",
                                 });
                               },
                             },
@@ -334,14 +334,14 @@ const NavBar = () => {
                           ...userData,
                           activeRole:
                             userData?.activeRole === "Client"
-                              ? "Company"
+                              ? "Provider"
                               : "Client",
                         });
                       }}
                       className="justify-start"
                     >
                       <ButtonText className="font-normal">{`${t("switchTo")} ${
-                        userData?.activeRole === "Client" ? "Company" : "Client"
+                        userData?.activeRole === "Client" ? "Provider" : "Client"
                       }`}</ButtonText>
                     </Button>
                     <Divider orientation="horizontal" className="w-full" />

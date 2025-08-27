@@ -45,7 +45,7 @@ const SocialMediaDetails = ({
   handleCancelEdit,
 }: ProfileEditProps) => {
   const isEditingPlatform = (platform: string) =>
-    editingFields.hasOwnProperty(`companySocialMedia.${platform}`);
+    editingFields.hasOwnProperty(`providerSocialMedia.${platform}`);
 
   const platformPatterns: Record<string, RegExp> = {
     website: /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?$/i,
@@ -57,10 +57,10 @@ const SocialMediaDetails = ({
   };
 
   const platformPlaceholders: Record<string, string> = {
-    website: "https://yourcompany.com",
+    website: "https://yourprovider.com",
     facebook: "https://facebook.com/yourpage",
     instagram: "https://instagram.com/yourprofile",
-    linkedin: "https://linkedin.com/in/yourcompany",
+    linkedin: "https://linkedin.com/in/yourprovider",
     twitter: "https://x.com/yourhandle",
     other: "https://example.com",
   };
@@ -93,8 +93,8 @@ const SocialMediaDetails = ({
           "twitter",
           "other",
         ].map((platform) => {
-          const link = activeRoleId?.companySocialMedia?.[platform];
-          const editingKey = `companySocialMedia.${platform}`;
+          const link = activeRoleId?.providerSocialMedia?.[platform];
+          const editingKey = `providerSocialMedia.${platform}`;
           const isEditing = isEditingPlatform(platform);
           const currentValue = isEditing
             ? editingFields[editingKey] || ""

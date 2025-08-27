@@ -49,37 +49,37 @@ const BrowseCompanies = () => {
           {t("browseCompanies")}
         </Link>
       </VStack>
-      <VStack className="md:flex-row md:grid grid-cols-3 h-full w-full md:bg-transparent rounded-xl p-2 bg-[#F1F0FF] gap-x-4 gap-y-8">
-        {companies.map((company, index) => (
+      <VStack className="md:flex-row md:grid grid-cols-3 h-full w-full md:bg-transparent rounded-xl p-2 bg-[#F1F0FF] gap-8">
+        {companies.map((provider, index) => (
           <Link
             key={index}
-            href={`companies/${company?._id || ""}`}
-            className="aspect-square"
+            href={`companies/${provider?._id || ""}`}
+            className="md:aspect-square"
           >
             <Card
               variant="ghost"
               className="md:flex-col flex-row md:h-80 h-fit w-full p-0 md:bg-[#F1F0FF] rounded-lg"
             >
               <Image
-                className="md:h-[55%] md:w-full w-2/5 md:rounded-t-md rounded-l-md object-cover"
-                src={company?.companyImages[0] || "/assets/placeholder.jpg"}
-                alt={company?.companyName || "Company Logo"}
+                className="md:h-[55%] md:w-full w-2/5 md:rounded-t-md md:rounded-l-none rounded-l-md object-cover"
+                src={provider?.providerImages?.[0] || "/assets/placeholder.jpg"}
+                alt={provider?.providerName || "Company Logo"}
                 width={1400}
                 height={600}
               />
               <VStack className="md:h-[45%] gap-2 md:p-4 p-2 backdrop:p-2">
                 <Heading size="sm" className="md:text-lg">
-                  {company?.companyName}
+                  {provider?.providerName}
                 </Heading>
                 <RatingSection
-                  rating={company?.averageRating || 0}
-                  reviewCount={company?.reviewCount || 0}
+                  rating={provider?.averageRating || 0}
+                  reviewCount={provider?.reviewCount || 0}
                 />
                 <Text
                   size="xs"
                   className="md:text-md md:font-medium line-clamp-3"
                 >
-                  {company?.location?.primary?.address?.address}
+                  {provider?.location?.primary?.address?.address}
                 </Text>
               </VStack>
             </Card>

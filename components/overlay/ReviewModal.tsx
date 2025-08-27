@@ -17,15 +17,15 @@ import { createReview } from "@/axios/reviews";
 import { ReviewData } from "@/types";
 
 interface ReviewModalProps {
-  companyId: string;
-  companyName: string;
+  providerId: string;
+  providerName: string;
   isOpen: boolean;
   onClose: () => void;
   setNewReviews: (newReview: ReviewData[]) => void;
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = (props) => {
-  const { isOpen, onClose, companyId, companyName, setNewReviews } = props;
+  const { isOpen, onClose, providerId, providerName, setNewReviews } = props;
   const [description, setDesc] = useState("");
   const [rating, setRating] = useState(0);
   const [images, setImages] = useState<File[]>([]);
@@ -60,7 +60,7 @@ const ReviewModal: React.FC<ReviewModalProps> = (props) => {
         formData.append(`images`, image, `image_${index}.jpg`);
       });
 
-      const newReviews = await createReview(companyId, formData);
+      const newReviews = await createReview(providerId, formData);
       setNewReviews([newReviews]);
       onClose();
       resetForm();
@@ -96,7 +96,7 @@ const ReviewModal: React.FC<ReviewModalProps> = (props) => {
       <ModalContent className="w-full md:max-w-2xl">
         <ModalHeader>
           <Heading size="sm" className="md:text-2xl">
-            Review {companyName}
+            Review {providerName}
           </Heading>
         </ModalHeader>
         <ModalBody className="space-y-4">

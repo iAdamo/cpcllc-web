@@ -6,7 +6,7 @@ export interface Company {
     lat: number;
     lng: number;
   };
-  // Add other company properties as needed
+  // Add other provider properties as needed
 }
 
 export interface MapProps {

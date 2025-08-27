@@ -28,9 +28,9 @@ import { Heading } from "@/components/ui/heading";
 import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
-import { register, sendCode } from "@/axios/auth";
+import { register } from "@/axios/auth";
 import VerifyCodeModal from "../VerifyCodeModal";
-import { useSession } from "@/context/AuthContext";
+
 // import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -62,7 +62,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showVerifyEmailModal, setShowVerifyEmailModal] = useState(false);
-  const { login } = useSession();
 
   const { isOpen, onClose, switchToSignIn } = props;
 
@@ -111,7 +110,6 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
 
         const response = await register(formData);
         if (response) {
-          await sendCode({ email: data.email });
           setShowVerifyEmailModal(true);
           toast.show({
             placement: "top",
@@ -376,12 +374,8 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
             reset();
             setShowVerifyEmailModal(false);
             onClose();
-            await login({
-              email: getValues("email"),
-              password: getValues("password"),
-            });
           }}
-          isVerified={true}
+          isEmailVerified={true}
         />
       )}
     </>
