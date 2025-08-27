@@ -1,0 +1,158 @@
+{
+  "home": "Home",
+  "companies": "Companies",
+  "myRequests": "My Requests",
+  "favorites": "Favorites",
+  "beACompany": "Be a Company",
+  "logIn": "Log in",
+  "getStarted": "Get Started",
+  "profile": "Profile",
+  "membership": "Membership",
+  "settings": "Settings",
+  "switchTo": "Switch to",
+  "logout": "Logout",
+  "signUp": "Sign Up",
+  "openInApp": "Open in App",
+  "english": "English",
+  "spanish": "Español",
+  "language": "Language",
+  "homeServices": "Home Services",
+  "allRightsReserved": "All Rights Reserved.",
+  "customerSupport": "Customer Support",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "connectWithTopCompanies": "Connect With Top Companies",
+  "joinCompaniesCenter": "Join companiescenter and connect with leading companies offering a wide range of services.",
+  "browseCompanies": "Browse companies",
+
+  "companyDetails": {
+    "serviceProvidersNearYou": "Service Providers Near You",
+    "loadMore": "Load More",
+    "noMoreCompanies": "No more companies to load.",
+    "noCompanySelected": "No company selected."
+  },
+
+  "contactInfo": {
+  "request_quote_availability": "Request quote & availability",
+  "response_time": "Response time",
+  "response_time_value": "10 minutes",
+  "response_rate": "Response rate",
+  "response_rate_value": "100%",
+  "locals_requested_quote": "107 locals recently requested a quote",
+  "no_email": "No email provided",
+  "website": "Website",
+  "no_phone": "No phone number provided",
+  "get_directions": "Get Directions"
+},
+
+
+
+  "for_clients": "For Clients",
+  "find_companies_your_way": "Find companies your way",
+  "for_clients_paragraph": "Work with the largest network of service providers and get things done from quick turnarounds to big transformations.",
+
+  "for_client_card1_title": "Search a service with our filters enabled engine",
+  "for_client_card1_desc": "Use Our Search Engine",
+  "for_client_card2_title": "Browse a service and hire a company",
+  "for_client_card2_desc": "Companies Marketplace™",
+  "for_client_card3_title": "Get advice from a service expert",
+  "for_client_card3_desc": "Consultations",
+
+
+
+
+  "home_company_alt": "home_company",
+  "for_companies": "For Companies",
+  "find_great_jobs": "Find great jobs",
+  "for_companies_paragraph": "Meet clients you're excited to work with and take your career or business to new heights.",
+  "for_companies_point1": "Discover opportunities for every phase of your business growth",
+  "for_companies_point2": "Maintain control over budgets and timelines",
+  "for_companies_point3": "Explore different engagement models to suit your needs",
+  "find_opportunities": "Find opportunities",
+
+
+
+  "homeheader_title": "CompanyCenterLLC",
+  "homeheader_subtitle": "Your Trusted Platform for Connecting with Leading Companies. Whether you're looking to hire or get hired, we provide a comprehensive marketplace for businesses and job seekers.",
+  "homeheader_slide_alt": "Carousel slide {{index}}",
+
+
+
+  "whychooseus_heading": "Why businesses turn to CompaniesCenterLLC",
+  "whychooseus_network_title": "Extensive Network",
+  "whychooseus_network_description": "Connect with top companies and professionals in various industries.",
+  "whychooseus_jobs_title": "Job Opportunities",
+  "whychooseus_jobs_description": "Find the best job opportunities that match your skills and interests.",
+  "whychooseus_trust_title": "Trust and Reviews",
+  "whychooseus_trust_description": "Read reviews and ratings from other users to make informed decisions.",
+  "whychooseus_join_button": "Join Now",
+
+
+
+  "becomeACompany_step1": "Step 1: Create Your Account",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "companyName": "Company Name",
+  "companyPhoneNumber": "Company Phone Number",
+  "companyEmail": "Company Email",
+  "companyDescription": "Company Description",
+  "profilePicture": "Profile Picture",
+  "professionalCompanyImages": "Professional Company Images",
+  "uploadImagesHint": "Upload up to 6 professional company images (.jpg or .png) that showcase your company. Ensure each image is under 10MB.",
+  "firstImageHint": "The first image should be the company's logo or the most preferred image.",
+  "clickToUpload": "Click to Upload",
+  "dragImagesHere": "Drag images here or",
+  "back": "Back",
+  "continue": "Continue",
+  "profilePictureBenefits": "A profile picture helps build trust and credibility by allowing clients to recognize and connect with you, creating a more personalized and professional experience",
+  "validation": {
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "companyNameRequired": "Company name is required",
+    "companyPhoneRequired": "Company phone number is required",
+    "companyEmailRequired": "Company email is required",
+    "companyEmailInvalid": "Invalid email address",
+    "companyDescriptionRequired": "Company description is required",
+    "imageSizeError": "Each image must be less than {maxSize}MB"
+  },
+  "placeholders": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "companyName": "Your Company Name",
+    "companyEmail": "companyemail@example.com",
+    "companyDescription": "Describe your company and its services"
+  },
+
+
+  "profileUpdatedSuccess": "Profile updated successfully!",
+  "profileUpdateFailed": "Failed to update profile. Please try again.",
+
+
+
+
+  "chooseServicesTitle": "Choose Specialized Company Services",
+  "chooseServicesDescription": "Select up to {maxServices} specialized services that best represent your company's expertise.",
+  "selectedCount": "({current}/{max} selected)",
+  "selectionLimitReached": "You've reached the maximum selection limit. Remove some services to add others.",
+  "availableServices": "Available Services",
+  "noSubcategories": "No subcategories available",
+  "selectedServices": "Selected Services",
+
+
+
+
+
+  "pageone_heading": "Join as a Client or Service Provider",
+  "pageone_client_option": "I'm a Client, hiring for a project",
+  "pageone_company_option": "I'm a Service Provider, ready to render my services",
+  "pageone_apply_client": "Apply as Client",
+  "pageone_apply_company": "Apply as Service Provider",
+  "pageone_apply_default": "Apply",
+  "pageone_already_account": "Already have an account?",
+  "pageone_signin": "Sign In"
+
+
+
+}
+
+

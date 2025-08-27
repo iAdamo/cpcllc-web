@@ -9,6 +9,7 @@ import Footer from "@/components/layout/Footer";
 import { usePathname } from "next/navigation";
 // import { MapProvider } from "@/context/MapContext";
 import AiChat from "@/components/AiChatFab";
+import { TranslationProvider } from "@/context/TranslationContext";
 
 export default function RootLayout({
   children,
@@ -18,12 +19,7 @@ export default function RootLayout({
   const pathname = usePathname();
 
   const hideLayoutForRoutes = ["/onboarding", "/admin"];
-  const hideAiChatForRoutes = [
-    "/onboarding",
-    "/admin",
-    "/profile",
-    "/service",
-  ];
+  const hideAiChatForRoutes = ["/onboarding", "/admin", "/profile", "/service"];
 
   const hideAiChatForRoutesRegex = hideAiChatForRoutes.map(
     (route) => new RegExp(`^${route}(?:/|$)`)
@@ -45,11 +41,13 @@ export default function RootLayout({
         <StyledJsxRegistry>
           <GluestackUIProvider mode="light">
             <SessionProvider>
-              {!shouldHideLayout && <NavBar />}
-              {children}
-              {/* {!shouldHideLayout && <PreFooter />} */}
-              {!shouldHideLayout && <Footer />}
-              {!shouldHideAiChat && <AiChat />}
+              <TranslationProvider>
+                {!shouldHideLayout && <NavBar />}
+                {children}
+                {/* {!shouldHideLayout && <PreFooter />} */}
+                {!shouldHideLayout && <Footer />}
+                {!shouldHideAiChat && <AiChat />}
+              </TranslationProvider>
             </SessionProvider>
           </GluestackUIProvider>
         </StyledJsxRegistry>

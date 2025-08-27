@@ -10,8 +10,11 @@ import {
   twitter,
   youtube,
 } from "@/public/assets/icons";
+import { useTranslation } from "@/context/TranslationContext";
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className="flex flex-col md:mx-10 mx-6 mt-20 md:flex-row md:justify-between gap-2 border-t border-gray-300">
       <VStack className="md:flex-row justify-center items-center md:gap-6">
@@ -19,7 +22,7 @@ const Footer = () => {
           COMPANYCENTERLLC&trade;
         </Text>
         <Text className="text-xs">
-          &copy; 2025 CPCLLC. All Rights Reserved.
+          &copy; 2025 CPCLLC. {t("allRightsReserved")}
         </Text>
       </VStack>
       <VStack className="md:flex-row md:gap-12 gap-4">
@@ -33,7 +36,7 @@ const Footer = () => {
         </HStack>
         <VStack className="justify-center md:items-start items-center md:pt-4 gap-1">
           <Text className="font-semibold text-sm md:text-sm">
-            Customer Support: +1 (813)897-1727
+            {t("customerSupport")}: +1 (813)897-1727
           </Text>
 
           <Text className="font-semibold text-sm md:text-sm">
@@ -45,10 +48,10 @@ const Footer = () => {
         </VStack>
         <HStack className="md:flex-col justify-center items-center gap-2">
           <Text className="font-semibold text-sm md:text-sm">
-            Privacy Policy
+            {t("privacyPolicy")}
           </Text>
           <Text className="font-semibold text-sm md:text-sm">
-            Terms of Service
+            {t("termsOfService")}
           </Text>
         </HStack>
       </VStack>

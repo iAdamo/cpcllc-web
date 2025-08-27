@@ -10,10 +10,12 @@ import Image from "next/image";
 import { globalSearch } from "@/axios/search";
 import { CompanyData } from "@/types";
 import RatingSection from "@/components/RatingSection";
+import { useTranslation } from "@/context/TranslationContext";
 
 const BrowseCompanies = () => {
   const [companies, setUsers] = useState<CompanyData[]>([]);
   const router = useRouter();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -35,17 +37,16 @@ const BrowseCompanies = () => {
     <VStack className="md:px-20 px-2 gap-4">
       <VStack className="gap-2">
         <Heading size="md" className="md:text-3xl">
-          Connect With Top Companies
+          {t("connectWithTopCompanies")}
         </Heading>
         <Text size="sm" className="md:text-lg">
-          Join companiescenter and connect with leading companies offering a
-          wide range of services.
+          {t("joinCompaniesCenter")}
         </Text>
         <Link
           href="/companies"
           className="hidden md:inline text-2xl text-btn-primary hover:text-brand-secondary font-semibold underline"
         >
-          Browse companies
+          {t("browseCompanies")}
         </Link>
       </VStack>
       <VStack className="md:flex-row md:grid grid-cols-3 h-full w-full md:bg-transparent rounded-xl p-2 bg-[#F1F0FF] gap-x-4 gap-y-8">
@@ -90,7 +91,7 @@ const BrowseCompanies = () => {
         onPress={() => router.push("/companies")}
         className="md:hidden "
       >
-        <ButtonText> Browse companies</ButtonText>
+        <ButtonText>{t("browseCompanies")}</ButtonText>
       </Button>
     </VStack>
   );

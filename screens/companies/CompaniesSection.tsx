@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import RatingSection from "@/components/RatingSection";
 import { useMediaQuery } from "@/components/ui/utils/use-media-query";
 import { getCurrentLocation } from "@/utils/GeoLocation";
+import { useTranslation } from "@/context/TranslationContext";
 
 const CompaniesSection = () => {
   const [companies, setCompanies] = useState<CompanyData[]>([]);
@@ -27,6 +28,7 @@ const CompaniesSection = () => {
   const [paginationLoading, setPaginationLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
 
+  const { t } = useTranslation();
   const limit = 20;
   const [isMobile] = useMediaQuery([{ maxWidth: 768 }]);
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -34,7 +36,6 @@ const CompaniesSection = () => {
   const category = searchParams.get("category") || "";
   const router = useRouter();
 
-  // ✅ Fetch companies (with pagination append)
   useEffect(() => {
     const fetchCompaniesBySearch = async () => {
       setSearchLoading(true);
@@ -69,7 +70,6 @@ const CompaniesSection = () => {
     fetchCompaniesBySearch();
   }, [currentPage, limit, category, companies.length]);
 
-  // ✅ Intersection Observer for infinite scroll
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const target = entries[0];
@@ -98,12 +98,6 @@ const CompaniesSection = () => {
       if (currentRef) observer.unobserve(currentRef);
     };
   }, [handleObserver]);
-  //const observer = new IntersectionObserver(handleObserver, option);
-  //if (loadMoreRef.current) observer.observe(loadMoreRef.current);
-  //return () => {
-  // if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
-  //};
-  //}, [handleObserver]);
 
   const handleCompanySelect = (index: number) => {
     setSelectedCompanyIndex(index);
@@ -119,9 +113,11 @@ const CompaniesSection = () => {
   return (
     <VStack className="md:mt-28 mt-32 bg-[#F6F6F6]">
       <div className="rounded md:m-2 p-4">
-        <h1 className="md:text-3xl text-xl font-bold text-brand-primary">{`${
-          category.charAt(0).toUpperCase() + category.slice(1)
-        } Service Providers Near You`}</h1>
+        <h1 className="md:text-3xl text-xl font-bold text-brand-primary">
+          {`${category.charAt(0).toUpperCase() + category.slice(1)} ${t(
+            "companies.serviceProvidersNearYou"
+          )}`}
+        </h1>
       </div>
       <VStack className="md:flex-row bg-[#F6F6F6]">
         {/* Sidebar List */}
@@ -189,12 +185,12 @@ const CompaniesSection = () => {
                     variant="outline"
                     onPress={() => setCurrentPage((prev) => prev + 1)}
                   >
-                    <ButtonText>Load More</ButtonText>
+                    <ButtonText>{t("companies.loadMore")}</ButtonText>
                   </Button>
                 )}
                 {!paginationLoading && currentPage >= totalPages && (
                   <Text className="text-gray-400 text-xs md:text-sm">
-                    No more companies to load.
+                    {t("companies.noMoreCompanies")}
                   </Text>
                 )}
               </div>
@@ -210,7 +206,7 @@ const CompaniesSection = () => {
             </VStack>
           ) : (
             <VStack className="w-2/3 rounded-none p-6 bg-[#F6F6F6]">
-              <Text>No company selected.</Text>
+              <Text>{t("companies.noCompanySelected")}</Text>
             </VStack>
           ))}
 

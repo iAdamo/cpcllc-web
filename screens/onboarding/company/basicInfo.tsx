@@ -25,9 +25,11 @@ import {
   onboardingFormSchemaType,
 } from "@/components/forms/OnboardingFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "@/context/TranslationContext";
 
 const BasicInfo = () => {
   const { prevStep, nextStep, setData, data } = useOnboarding();
+  const { t } = useTranslation();
 
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
@@ -55,14 +57,6 @@ const BasicInfo = () => {
     },
   });
 
-  // useEffect(() => {
-  // setValue("firstName", data.firstName);
-  //setValue("lastName", data.lastName);
-  //setSelectedProfileImage(data.profilePicture);
-  //setSelectedImages(data.companyImages || []);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  //}, []);
-
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
 
@@ -81,7 +75,7 @@ const BasicInfo = () => {
     if (oversizedFile) {
       setError("companyImages", {
         type: "manual",
-        message: `Each image must be less than ${MAX_IMAGE_SIZE_MB}MB`,
+        message: t(`validation.imageSizeError`).replace("{maxSize}", MAX_IMAGE_SIZE_MB.toString()),
       });
       return;
     }
@@ -110,7 +104,7 @@ const BasicInfo = () => {
     if (oversizedFile) {
       setError("companyImages", {
         type: "manual",
-        message: `Each image must be less than ${MAX_IMAGE_SIZE_MB}MB`,
+        message: t("validation.imageSizeError").replace("{maxSize}", MAX_IMAGE_SIZE_MB.toString()),
       });
       return;
     }
@@ -157,17 +151,17 @@ const BasicInfo = () => {
             <FormControl isInvalid={!!errors.firstName} className="w-[48%]">
               <FormControlLabel>
                 <FormControlLabelText className="font-semibold text-md">
-                  First Name
+                  {t("firstName")}
                 </FormControlLabelText>
               </FormControlLabel>
               <Controller
                 name="firstName"
                 control={control}
-                rules={{ required: "First name is required" }}
+                rules={{ required: t("validation.firstNameRequired") }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input className="">
                     <InputField
-                      placeholder="John"
+                      placeholder={t("placeholders.firstName")}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
@@ -187,17 +181,17 @@ const BasicInfo = () => {
             <FormControl isInvalid={!!errors.lastName} className="w-[48%]">
               <FormControlLabel>
                 <FormControlLabelText className="font-semibold text-md">
-                  Last Name
+                  {t("lastName")}
                 </FormControlLabelText>
               </FormControlLabel>
               <Controller
                 name="lastName"
                 control={control}
-                rules={{ required: "Last name is required" }}
+                rules={{ required: t("validation.lastNameRequired") }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input className="">
                     <InputField
-                      placeholder="Doe"
+                      placeholder={t("placeholders.lastName")}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
@@ -219,17 +213,17 @@ const BasicInfo = () => {
           <FormControl isInvalid={!!errors.companyName}>
             <FormControlLabel>
               <FormControlLabelText className="font-semibold text-md">
-                Company Name
+                {t("companyName")}
               </FormControlLabelText>
             </FormControlLabel>
             <Controller
               name="companyName"
               control={control}
-              rules={{ required: "Company name is required" }}
+              rules={{ required: t("validation.companyNameRequired") }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input className="">
                   <InputField
-                    placeholder="Your Company Name"
+                    placeholder={t("placeholders.companyName")}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -250,13 +244,13 @@ const BasicInfo = () => {
           <FormControl isInvalid={!!errors.companyPhoneNumber} className="z-50">
             <FormControlLabel>
               <FormControlLabelText className="font-semibold text-md">
-                Company Phone Number
+                {t("companyPhoneNumber")}
               </FormControlLabelText>
             </FormControlLabel>
             <Controller
               name="companyPhoneNumber"
               control={control}
-              rules={{ required: "Company phone number is required" }}
+              rules={{ required: t("validation.companyPhoneRequired") }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <PhoneInput
                   country={"us"}
@@ -293,23 +287,23 @@ const BasicInfo = () => {
           <FormControl isInvalid={!!errors.companyEmail}>
             <FormControlLabel>
               <FormControlLabelText className="font-semibold text-md">
-                Company Email
+                {t("companyEmail")}
               </FormControlLabelText>
             </FormControlLabel>
             <Controller
               name="companyEmail"
               control={control}
               rules={{
-                required: "Company email is required",
+                required: t("validation.companyEmailRequired"),
                 pattern: {
                   value: /^\S+@\S+$/i,
-                  message: "Invalid email address",
+                  message: t("validation.companyEmailInvalid"),
                 },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input className="">
                   <InputField
-                    placeholder="companyemail@example.com"
+                    placeholder={t("placeholders.companyEmail")}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -329,17 +323,17 @@ const BasicInfo = () => {
           <FormControl isInvalid={!!errors.companyDescription}>
             <FormControlLabel>
               <FormControlLabelText className="font-semibold text-md">
-                Company Description
+                {t("companyDescription")}
               </FormControlLabelText>
             </FormControlLabel>
             <Controller
               name="companyDescription"
               control={control}
-              rules={{ required: "Company description is required" }}
+              rules={{ required: t("validation.companyDescriptionRequired") }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Textarea className="h-20">
                   <TextareaInput
-                    placeholder="Describe your company and its services"
+                    placeholder={t("placeholders.companyDescription")}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -358,10 +352,10 @@ const BasicInfo = () => {
 
           <HStack className="hidden md:flex justify-between mt-auto">
             <Button variant="outline" onPress={prevStep} className="">
-              <ButtonText>Back</ButtonText>
+              <ButtonText>{t("back")}</ButtonText>
             </Button>
             <Button onPress={handleFormSubmit} className="">
-              <ButtonText>Continue</ButtonText>
+              <ButtonText>{t("continue")}</ButtonText>
             </Button>
           </HStack>
         </VStack>
@@ -398,7 +392,7 @@ const BasicInfo = () => {
                         </div>
                       ) : (
                         <p className="text-md text-gray-500 mt-16">
-                          Click to Upload
+                          {t("clickToUpload")}
                         </p>
                       )}
                     </label>
@@ -409,7 +403,7 @@ const BasicInfo = () => {
             <VStack className="md:w-1/2 w-full ml-auto">
               <FormControlLabel>
                 <FormControlLabelText className="font-semibold text-md">
-                  Profile Picture
+                  {t("profilePicture")}
                 </FormControlLabelText>
               </FormControlLabel>
               <Card
@@ -427,9 +421,7 @@ const BasicInfo = () => {
                     size="xs"
                     className="md:text-md font-medium text-green-950 "
                   >
-                    A profile picture helps build trust and credibility by
-                    allowing clients to recognize and connect with you, creating
-                    a more personalized and professional experience
+                    {t("profilePictureBenefits")}
                   </Text>
                 )}
               </Card>
@@ -441,16 +433,14 @@ const BasicInfo = () => {
             className="border border-gray-300 rounded-xl p-4 gap-4"
           >
             <FormControlLabel className="flex-col flex items-start">
-              <Heading size="md">Professional Company Images</Heading>
+              <Heading size="md">{t("professionalCompanyImages")}</Heading>
             </FormControlLabel>
             <Card className=" bg-green-200 p-2 rounded">
               <Text size="xs" className="md:text-md font-medium">
-                Upload up to 6 professional company images (.jpg or .png) that
-                showcase your company. Ensure each image is under 10MB.
+                {t("uploadImagesHint")}
               </Text>
               <Text size="xs" className="md:text-md font-medium text-red-400">
-                The first image should be the company&apos;s logo or the most
-                preferred image.
+                {t("firstImageHint")}
               </Text>
             </Card>
 
@@ -493,10 +483,10 @@ const BasicInfo = () => {
                         className="hidden"
                       />
                       <p className="text-gray-500 md:text-sm text-xs ">
-                        Drag companyImages here or
+                        {t("dragImagesHere")}
                       </p>
                       <p className=" md:text-sm text-xs text-blue-500 ">
-                        Click to Upload
+                        {t("clickToUpload")}
                       </p>
                     </label>
                   </div>
@@ -515,10 +505,10 @@ const BasicInfo = () => {
       </VStack>
       <HStack className="md:hidden mt-4 justify-between">
         <Button variant="outline" onPress={prevStep} className="">
-          <ButtonText>Back</ButtonText>
+          <ButtonText>{t("back")}</ButtonText>
         </Button>
         <Button onPress={handleFormSubmit} className="">
-          <ButtonText>Continue</ButtonText>
+          <ButtonText>{t("continue")}</ButtonText>
         </Button>
       </HStack>
     </VStack>

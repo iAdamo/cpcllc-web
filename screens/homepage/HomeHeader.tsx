@@ -12,10 +12,13 @@ import {
   carousel3,
   carousel4,
 } from "@/public/assets/homepage";
+import { useTranslation } from "@/context/TranslationContext";
 
 const carouselImages = [carousel0, carousel1, carousel2, carousel3, carousel4];
 
 const HomeHeader = () => {
+  const { t } = useTranslation();
+
   return (
     <header className="hidden md:flex -mt-20 relative">
       <Swiper
@@ -30,7 +33,7 @@ const HomeHeader = () => {
             <Image
               className="object-cover w-full h-full rounded-lg"
               src={src}
-              alt={`slide-${index}`}
+              alt={t("homeheader_slide_alt")}
               width={1920}
               height={1080}
               priority
@@ -42,12 +45,10 @@ const HomeHeader = () => {
       <VStack className="absolute z-50 inset-0 mt-24">
         <VStack className="mt-44 w-1/2 pl-24 gap-10">
           <h1 className="text-white text-6xl font-extrablack homeheader-title-shadow">
-            CompanyCenterLLC
+            {t("homeheader_title")}
           </h1>
           <h2 className="text-white text-xl font-semibold pr-14">
-            Your Trusted Platform for Connecting with Leading Companies. Whether
-            you&apos;re looking to hire or get hired, we provide a comprehensive
-            marketplace for businesses and job seekers.
+            {t("homeheader_subtitle")}
           </h2>
           <SearchEngine />
         </VStack>

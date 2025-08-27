@@ -7,6 +7,7 @@ import { useOnboarding } from "@/context/OnboardingContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/context/AuthContext";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 const FinalStep = () => {
   const [loading, setLoading] = useState(true);
@@ -16,6 +17,7 @@ const FinalStep = () => {
   const { data, submitData } = useOnboarding();
   const router = useRouter();
   const { userData, registerCompany, fetchUserProfile } = useSession();
+  const { t } = useTranslation(); // Add this hook
 
   const handleSubmit = async () => {
     try {
@@ -86,7 +88,7 @@ const FinalStep = () => {
         <VStack className="items-center gap-4">
           <Icon as={CheckIcon} className="text-green-500" size="lg" />
           <p className="text-green-500 text-lg font-semibold">
-            Profile updated successfully!
+            {t("profileUpdatedSuccess")}
           </p>
         </VStack>
       )}
@@ -94,7 +96,7 @@ const FinalStep = () => {
         <VStack className="items-center gap-4">
           <Icon as={CloseIcon} className="text-red-500" size="lg" />
           <p className="text-red-500 text-lg font-semibold">
-            Failed to update profile. Please try again.
+            {t("profileUpdateFailed")}
           </p>
         </VStack>
       )}

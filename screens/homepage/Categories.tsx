@@ -25,6 +25,7 @@ import {
   handyman,
 } from "@/public/assets/icons";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "@/context/TranslationContext";
 // import { searchCompanies } from "@/axios/users";
 // import CompaniesSection from "../companies/CompaniesSection";
 
@@ -145,6 +146,8 @@ const Categories = () => {
   ];
   const router = useRouter();
 
+  const { t } = useTranslation();
+
   const handleCategoryClick = (categoryTitle: string) => {
     // Redirect to the CompaniesSection page with the category title as a query parameter
     router.push(`/companies?category=${encodeURIComponent(categoryTitle)}`);
@@ -153,7 +156,7 @@ const Categories = () => {
   return (
     <VStack className="md:px-12 px-4 gap-4 pt-24 md:pt-0 ">
       <Heading size="md" className="md:text-2xl">
-        Home Services
+        {t("homeServices")}
       </Heading>
       <HStack className="hidden md:grid grid-cols-7 rounded-lg">
         {categories.map((category, index) => (

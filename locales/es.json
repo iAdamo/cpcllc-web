@@ -1,0 +1,154 @@
+{
+  "home": "Inicio",
+  "companies": "Empresas",
+  "myRequests": "Mis Solicitudes",
+  "favorites": "Favoritos",
+  "beACompany": "Ser una Empresa",
+  "logIn": "Iniciar Sesión",
+  "getStarted": "Comenzar",
+  "profile": "Perfil",
+  "membership": "Membresía",
+  "settings": "Configuración",
+  "switchTo": "Cambiar a",
+  "logout": "Cerrar Sesión",
+  "signUp": "Registrarse",
+  "openInApp": "Abrir en App",
+  "english": "Inglés",
+  "spanish": "Español",
+  "language": "Idioma",
+  "homeServices": "Servicios a domicilio",
+  "allRightsReserved": "Todos los derechos reservados.",
+  "customerSupport": "Atención al Cliente",
+  "privacyPolicy": "Política de Privacidad",
+  "termsOfService": "Términos del Servicio",
+  "connectWithTopCompanies": "Conéctate con las mejores empresas",
+  "joinCompaniesCenter": "Únete a companiescenter y conéctate con empresas líderes que ofrecen una amplia gama de servicios.",
+  "browseCompanies": "Explorar empresas",
+
+
+  "companyDetails": {
+    "serviceProvidersNearYou": "Proveedores de servicios cerca de ti",
+    "loadMore": "Cargar más",
+    "noMoreCompanies": "No hay más empresas para mostrar.",
+    "noCompanySelected": "Ninguna empresa seleccionada."
+  },
+
+
+
+  "contactInfo": {
+  "request_quote_availability": "Solicitar cotización y disponibilidad",
+  "response_time": "Tiempo de respuesta",
+  "response_time_value": "10 minutos",
+  "response_rate": "Tasa de respuesta",
+  "response_rate_value": "100%",
+  "locals_requested_quote": "107 personas locales solicitaron una cotización recientemente",
+  "no_email": "No se proporcionó correo electrónico",
+  "website": "Sitio web",
+  "no_phone": "No se proporcionó número de teléfono",
+  "get_directions": "Obtener indicaciones"
+},
+
+"for_clients": "Para clientes",
+  "find_companies_your_way": "Encuentra empresas a tu manera",
+  "for_clients_paragraph": "Trabaja con la red más grande de proveedores de servicios y haz que las cosas se realicen, desde entregas rápidas hasta grandes transformaciones.",
+
+  "for_client_card1_title": "Busca un servicio con nuestro motor de filtros",
+  "for_client_card1_desc": "Usa nuestro motor de búsqueda",
+  "for_client_card2_title": "Explora un servicio y contrata una empresa",
+  "for_client_card2_desc": "Mercado de empresas™",
+  "for_client_card3_title": "Obtén asesoría de un experto en servicios",
+  "for_client_card3_desc": "Consultas",
+
+
+
+  "home_company_alt": "empresa_hogar",
+  "for_companies": "Para empresas",
+  "find_great_jobs": "Encuentra excelentes trabajos",
+  "for_companies_paragraph": "Conoce clientes con los que te entusiasme trabajar y lleva tu carrera o negocio a nuevas alturas.",
+  "for_companies_point1": "Descubre oportunidades para cada fase del crecimiento de tu negocio",
+  "for_companies_point2": "Mantén el control sobre presupuestos y plazos",
+  "for_companies_point3": "Explora diferentes modelos de trabajo que se adapten a tus necesidades",
+  "find_opportunities": "Buscar oportunidades",
+
+
+
+  "homeheader_title": "CompanyCenterLLC",
+  "homeheader_subtitle": "Tu plataforma de confianza para conectar con empresas líderes. Ya sea que busques contratar o ser contratado, ofrecemos un mercado integral para negocios y buscadores de empleo.",
+  "homeheader_slide_alt": "Diapositiva del carrusel {{index}}",
+
+
+
+
+  "whychooseus_heading": "Por qué las empresas recurren a CompaniesCenterLLC",
+  "whychooseus_network_title": "Red amplia",
+  "whychooseus_network_description": "Conéctate con las mejores empresas y profesionales en diversas industrias.",
+  "whychooseus_jobs_title": "Oportunidades de empleo",
+  "whychooseus_jobs_description": "Encuentra las mejores oportunidades que coincidan con tus habilidades e intereses.",
+  "whychooseus_trust_title": "Confianza y reseñas",
+  "whychooseus_trust_description": "Lee reseñas y calificaciones de otros usuarios para tomar decisiones informadas.",
+  "whychooseus_join_button": "Únete ahora",
+
+
+
+
+  "firstName": "Nombre",
+  "lastName": "Apellido",
+  "companyName": "Nombre de la Empresa",
+  "companyPhoneNumber": "Número de Teléfono de la Empresa",
+  "companyEmail": "Correo Electrónico de la Empresa",
+  "companyDescription": "Descripción de la Empresa",
+  "profilePicture": "Foto de Perfil",
+  "professionalCompanyImages": "Imágenes Profesionales de la Empresa",
+  "uploadImagesHint": "Sube hasta 6 imágenes profesionales de la empresa (.jpg o .png) que muestren tu empresa. Asegúrate de que cada imagen tenga menos de 10MB.",
+  "firstImageHint": "La primera imagen debe ser el logotipo de la empresa o la imagen más preferida.",
+  "clickToUpload": "Haz Clic para Subir",
+  "dragImagesHere": "Arrastra imágenes aquí o",
+  "continue": "Continuar",
+  "profilePictureBenefits": "Una foto de perfil ayuda a generar confianza y credibilidad al permitir que los clientes te reconozcan y conecten contigo, creando una experiencia más personalizada y profesional",
+  "validation": {
+    "firstNameRequired": "El nombre es requerido",
+    "lastNameRequired": "El apellido es requerido",
+    "companyNameRequired": "El nombre de la empresa es requerido",
+    "companyPhoneRequired": "El número de teléfono de la empresa es requerido",
+    "companyEmailRequired": "El correo electrónico de la empresa es requerido",
+    "companyEmailInvalid": "Dirección de correo electrónico inválida",
+    "companyDescriptionRequired": "La descripción de la empresa es requerida",
+    "imageSizeError": "Cada imagen debe ser menor de {maxSize}MB"
+  },
+  "placeholders": {
+    "firstName": "Juan",
+    "lastName": "Pérez",
+    "companyName": "Nombre de Tu Empresa",
+    "companyEmail": "correoempresa@ejemplo.com",
+    "companyDescription": "Describe tu empresa y sus servicios"
+  },
+
+  "profileUpdatedSuccess": "¡Perfil actualizado exitosamente!",
+  "profileUpdateFailed": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
+
+
+
+
+  "chooseServicesTitle": "Elige Servicios Especializados de la Empresa",
+  "chooseServicesDescription": "Selecciona hasta {maxServices} servicios especializados que mejor representen la experiencia de tu empresa.",
+  "selectedCount": "({current}/{max} seleccionados)",
+  "selectionLimitReached": "Has alcanzado el límite máximo de selección. Elimina algunos servicios para agregar otros.",
+  "availableServices": "Servicios Disponibles",
+  "noSubcategories": "No hay subcategorías disponibles",
+  "selectedServices": "Servicios Seleccionados",
+
+
+
+
+  "pageone_heading": "Únete como Cliente o Proveedor de Servicios",
+  "pageone_client_option": "Soy un Cliente, contratando para un proyecto",
+  "pageone_company_option": "Soy un Proveedor de Servicios, listo para ofrecer mis servicios",
+  "pageone_apply_client": "Aplicar como Cliente",
+  "pageone_apply_company": "Aplicar como Proveedor de Servicios",
+  "pageone_apply_default": "Aplicar",
+  "pageone_already_account": "¿Ya tienes una cuenta?",
+  "pageone_signin": "Iniciar sesión"
+
+
+
+}

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/icon";
 import { useRouter } from "next/navigation";
 import { CompanyData } from "@/types";
+import { useTranslation } from "@/context/TranslationContext";
 
 const ContactInfo = ({
   companyData,
@@ -21,24 +22,30 @@ const ContactInfo = ({
   isCompanyPage: boolean;
 }) => {
   const router = useRouter();
+  const { t } = useTranslation();
+
   return (
     <VStack className="md:w-1/3 w-full md:sticky md:top-32 self-start h-fit gap-4 bg-[#F6F6F6]">
       <VStack className="hidden bg-white p-4 gap-4">
         <Heading className="text-xl font-extrablack">
-          Request quote & availability
+          {t("request_quote_availability")}
         </Heading>
         <div className="flex flex-row gap-10">
           <VStack>
             <Heading className="text-xs text-text-secondary">
-              Response time
+              {t("response_time")}
             </Heading>
-            <Heading className="text-sm text-green-700">10 minutes</Heading>
+            <Heading className="text-sm text-green-700">
+              {t("response_time_value")}
+            </Heading>
           </VStack>
           <VStack>
             <Heading className="text-xs text-text-secondary">
-              Response rate
+              {t("response_rate")}
             </Heading>
-            <Heading className="text-sm text-green-700">100%</Heading>
+            <Heading className="text-sm text-green-700">
+              {t("response_rate_value")}
+            </Heading>
           </VStack>
         </div>
         <Button
@@ -46,16 +53,20 @@ const ContactInfo = ({
           className="bg-blue-600 companyData-[hover=true]:bg-blue-500"
         >
           <ButtonText className="text-md">
-            Request quote & availability
+            {t("request_quote_availability")}
           </ButtonText>
         </Button>
         <small className="text-center text-text-secondary">
-          107 locals recently requested a quote
+          {t("locals_requested_quote")}
         </small>
       </VStack>
 
       {/* Contact Card */}
-      <Card className={`${!isCompanyPage && "p-2"} gap-4 md:rounded-md rounded-none`}>
+      <Card
+        className={`${
+          !isCompanyPage && "p-2"
+        } gap-4 md:rounded-md rounded-none`}
+      >
         <div className="flex flex-row justify-between gap-2">
           <Link
             href={`mailto:${companyData?.companyEmail}`}
@@ -63,7 +74,7 @@ const ContactInfo = ({
               isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
             } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
           >
-            {companyData?.companyEmail || "No email provided"}
+            {companyData?.companyEmail || t("no_email")}
           </Link>
           <Icon as={ExternalLinkIcon} className="" />
         </div>
@@ -71,14 +82,12 @@ const ContactInfo = ({
 
         <div className="flex flex-row justify-between gap-2">
           <Link
-            href={`https://${
-              companyData?.companySocialMedia?.other || ""
-            }`}
+            href={`https://${companyData?.companySocialMedia?.other || ""}`}
             className={`font-extrablack ${
               isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
             } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
           >
-            Website
+            {t("website")}
           </Link>
           <Icon as={GlobeIcon} />
         </div>
@@ -92,7 +101,9 @@ const ContactInfo = ({
               isCompanyPage ? "md:text-[16px] text-xs" : "text-sm"
             } text-cyan-700 md:w-9/12 w-full break-words flex-grow`}
           >
-            {`+${companyData?.companyPhoneNumber}` || "No phone number provided"}
+            {companyData?.companyPhoneNumber
+              ? `+${companyData?.companyPhoneNumber}`
+              : t("no_phone")}
           </Link>
           <Icon as={PhoneIcon} />
         </div>
@@ -108,7 +119,7 @@ const ContactInfo = ({
               href="#"
               className="font-extrablack md:text-[16px] text-xs text-cyan-700  break-words"
             >
-              Get Directions
+              {t("get_directions")}
             </Link>
             <p className="font-semibold md:text-md text-xs text-text-secondary break-words">
               {companyData?.location?.primary?.address?.address}

@@ -8,6 +8,7 @@ import { Text } from "@/components/ui/text";
 import { CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { ServiceCategory, Subcategory } from "@/types";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 interface SelectedSubcategory extends Subcategory {
   categoryName: string;
@@ -17,6 +18,8 @@ const MAX_SERVICES = 3;
 
 const ServicesInfo = () => {
   const { prevStep, nextStep, data, setData, categories } = useOnboarding();
+  const { t } = useTranslation(); // Add this hook
+
   const [selectedServices, setSelectedSubcategory] = useState<
     SelectedSubcategory[]
   >((data.subcategories as SelectedSubcategory[]) || []);
@@ -102,18 +105,19 @@ const ServicesInfo = () => {
       <VStack space="3xl">
         <VStack className="items-center gap-2">
           <Heading size="2xl" className="hidden md:inline text-center">
-            Choose Specialized Company Services
+            {t("chooseServicesTitle")}
           </Heading>
           <Text
             size="sm"
             className="text-gray-600 text-center max-w-2xl mx-auto"
           >
-            Select up to {MAX_SERVICES} specialized services that best represent
-            your company&apos;s expertise.
+            {`${t("chooseServicesDescription")} ${MAX_SERVICES}`}
             {selectedServices.length > 0 && (
               <Text size="sm" className="text-primary-500 font-medium">
                 {" "}
-                ({selectedServices.length}/{MAX_SERVICES} selected)
+                {t("selectedCount")
+                  .replace("{current}", selectedServices.length.toString())
+                  .replace("{max}", MAX_SERVICES.toString())}
               </Text>
             )}
           </Text>
@@ -122,8 +126,7 @@ const ServicesInfo = () => {
               size="sm"
               className="md:bg-transparent bg-red-100 text-red-500 rounded p-2"
             >
-              You&apos;ve reached the maximum selection limit. Remove some
-              services to add others.
+              {t("selectionLimitReached")}
             </Text>
           )}
         </VStack>
@@ -136,7 +139,7 @@ const ServicesInfo = () => {
             } h-full`}
           >
             <Heading size="sm" className="md:text-lg mb-4">
-              Available Services
+              {t("availableServices")}
             </Heading>
             {availableCategories.map((category, categoryIndex) => (
               <VStack key={categoryIndex} className="mb-6">
@@ -174,7 +177,7 @@ const ServicesInfo = () => {
                     </HStack>
                   ) : (
                     <Text className="text-sm text-gray-400">
-                      No subcategories available
+                      {t("noSubcategories")}
                     </Text>
                   )}
                 </Card>
@@ -186,7 +189,7 @@ const ServicesInfo = () => {
           {selectedServices.length > 0 && (
             <VStack className="md:w-3/5 w-full h-full">
               <Heading size="sm" className="md:text-lg mb-4">
-                Selected Services
+                {t("selectedServices")}
               </Heading>
               <Card variant="outline" className="flex-row flex-wrap gap-2 p-4">
                 {selectedServices.map((subcategory, index) => (
@@ -209,7 +212,7 @@ const ServicesInfo = () => {
 
       <HStack className="ml-auto gap-8 mt-auto">
         <Button variant="outline" onPress={prevStep}>
-          <ButtonText>Back</ButtonText>
+          <ButtonText>{t("back")}</ButtonText>
         </Button>
         <Button
           onPress={nextStep}
@@ -220,7 +223,7 @@ const ServicesInfo = () => {
               : ""
           }`}
         >
-          <ButtonText>Continue</ButtonText>
+          <ButtonText>{t("continue")}</ButtonText>
         </Button>
       </HStack>
     </VStack>

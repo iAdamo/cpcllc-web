@@ -7,35 +7,34 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { categories, matching, quickly } from "@/public/assets/icons";
-
-const whyChooseUsData = [
-  {
-    icon: categories,
-    title: "Extensive Network",
-    description:
-      "Connect with top companies and professionals in various industries.",
-  },
-  {
-    icon: matching,
-    title: "Job Opportunities",
-    description:
-      "Find the best job opportunities that match your skills and interests.",
-  },
-  {
-    icon: quickly,
-    title: "Trust and Reviews",
-    description:
-      "Read reviews and ratings from other users to make informed decisions.",
-  },
-];
+import { useTranslation } from "@/context/TranslationContext";
 
 const WhyChooseUs = () => {
   const router = useRouter();
+  const { t } = useTranslation();
+
+  const whyChooseUsData = [
+    {
+      icon: categories,
+      title: t("whychooseus_network_title"),
+      description: t("whychooseus_network_description"),
+    },
+    {
+      icon: matching,
+      title: t("whychooseus_jobs_title"),
+      description: t("whychooseus_jobs_description"),
+    },
+    {
+      icon: quickly,
+      title: t("whychooseus_trust_title"),
+      description: t("whychooseus_trust_description"),
+    },
+  ];
 
   return (
     <VStack className="md:flex md:mx-20 px-4 my-10 md:rounded-xl bg-text-primary">
       <Heading size="md" className="md:text-2xl pr-20 py-8 md:text-center">
-        Why businesses turn to CompaniesCenterLLC
+        {t("whychooseus_heading")}
       </Heading>
       <VStack className="md:flex-row md:px-10 flex-wrap justify-between gap-2">
         {whyChooseUsData.map((item, index) => (
@@ -58,7 +57,7 @@ const WhyChooseUs = () => {
           onPress={() => router.push("/onboarding")}
           className="bg-brand-secondary hover:bg-btn-primary active:bg-brand-secondary rounded-3xl"
         >
-          <ButtonText> Join Now</ButtonText>
+          <ButtonText>{t("whychooseus_join_button")}</ButtonText>
         </Button>
       </HStack>
     </VStack>
