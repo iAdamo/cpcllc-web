@@ -1,9 +1,9 @@
 import { ApiClientSingleton } from "./conf";
-import { LoginUser, AuthResponse, UserData, RegisterUser } from "@/types";
+import { LoginUser, UserData, RegisterUser } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
-export const register = async (data: RegisterUser): Promise<AuthResponse> => {
+export const register = async (data: RegisterUser): Promise<UserData> => {
   const response = await axiosInstance.post("auth/register", data, {});
   return response.data;
 };

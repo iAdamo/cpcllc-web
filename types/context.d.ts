@@ -1,7 +1,4 @@
-import {
-  Subcategory,
-  SubcategoryData,
-} from "@/types";
+import { Subcategory, SubcategoryData } from "@/types";
 
 export interface UserData {
   id: string;
@@ -107,6 +104,11 @@ export interface CompanyData {
 export interface AuthContextProps {
   userData: UserData | null;
   setUserData: (data: UserData) => void;
+  register: (data: {
+    email: string;
+    phoneNumber: string;
+    password: string;
+  }) => Promise<void>;
   login: (credentials: { email: string; password: string }) => Promise<void>;
   session?: string | null;
   isLoading: boolean;

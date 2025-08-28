@@ -5,7 +5,7 @@ import {
   type PropsWithChildren,
 } from "react";
 import { useStorageState } from "@/utils/StorageState";
-import { login, logout as logoutRequest } from "@/axios/auth";
+import { register, login, logout as logoutRequest } from "@/axios/auth";
 import { useRouter, usePathname } from "next/navigation";
 import type { AuthContextProps, UserData, CompanyData } from "@/types";
 import { updateCompanyProfile, userProfile } from "@/axios/users";
@@ -36,6 +36,25 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   const pathname = usePathname();
 
   // Memoized functions
+  const registerHandler = useCallback(
+    async (data: { email: string; phoneNumber: string; password: string }) => {
+      try {
+        const response = await register(data);
+        if (response) {
+          if (response) {
+            setSession(response._id);
+            const userData: UserData = { ...response, id: response._id };
+            setUserData(userData);
+          }
+        }
+      } catch (e) {
+        console.error("Error registering:", e);
+        throw e;
+      }
+    },
+    [setSession, setUserData]
+  );
+
   const loginHandler = useCallback(
     async (credentials: { email: string; password: string }) => {
       try {
@@ -172,6 +191,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
   return (
     <AuthContext.Provider
       value={{
+        register: registerHandler,
         login: loginHandler,
         logout: logoutHandler,
         updateCompanyProfile: updateCompanyProfileHandler,

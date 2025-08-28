@@ -28,8 +28,8 @@ import { Heading } from "@/components/ui/heading";
 import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
-import { register } from "@/axios/auth";
 import VerifyCodeModal from "../VerifyCodeModal";
+import { useSession } from "@/context/AuthContext";
 
 // import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
@@ -66,6 +66,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   const { isOpen, onClose, switchToSignIn } = props;
 
   const toast = useToast();
+  const { register } = useSession();
 
   // handle form submission
   const {
@@ -104,22 +105,19 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
       return;
     } else {
       try {
-        const response = await register(data);
-        console.log(response);
-        if (response) {
-          setShowVerifyEmailModal(true);
-          toast.show({
-            placement: "top",
-            duration: 3000,
-            render: ({ id }: { id: string }) => {
-              return (
-                <Toast nativeID={id} variant="outline" action="success">
-                  <ToastTitle>Account created successfully</ToastTitle>
-                </Toast>
-              );
-            },
-          });
-        }
+        await register(data);
+        setShowVerifyEmailModal(true);
+        toast.show({
+          placement: "top",
+          duration: 3000,
+          render: ({ id }: { id: string }) => {
+            return (
+              <Toast nativeID={id} variant="outline" action="success">
+                <ToastTitle>Account created successfully</ToastTitle>
+              </Toast>
+            );
+          },
+        });
       } catch (error) {
         setValidated({ emailValid: false, passwordValid: false });
         toast.show({
