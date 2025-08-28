@@ -64,7 +64,7 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
               setUserData({
                 ...userData,
                 activeRole:
-                  userData?.activeRole === "Client" ? "Company" : "Client",
+                  userData?.activeRole === "Client" ? "Provider" : "Client",
               });
               router.push(
                 userData?.activeRole === "Client"
@@ -75,7 +75,7 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
             className="w-52"
           >
             <ButtonText>{`Switch to ${
-              userData?.activeRole === "Client" ? "Company" : "Client"
+              userData?.activeRole === "Client" ? "Provider" : "Client"
             }`}</ButtonText>
           </Button>
         </VStack>

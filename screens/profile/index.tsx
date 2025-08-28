@@ -14,7 +14,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { useSession } from "@/context/AuthContext";
-import { userProfile, updateCompanyProfile } from "@/axios/users";
+import { userProfile, updateUserProfile } from "@/axios/users";
 import { UserData, ReviewData } from "@/types";
 import ReviewSection from "./ReviewSection";
 import ServiceSection from "./ServiceSection";
@@ -101,7 +101,7 @@ const ProfilePage = () => {
       const formData = new FormData();
       formData.append("profilePicture", file);
 
-      const updatedUser = await updateCompanyProfile(formData);
+      const updatedUser = await updateUserProfile(formData);
       if (updatedUser) {
         showToast("Profile picture updated successfully!", "success");
         if (userData?.id === id) {

@@ -104,11 +104,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
       return;
     } else {
       try {
-        const formData = new FormData();
-        formData.append("email", data.email);
-        formData.append("password", data.password);
-
-        const response = await register(formData);
+        const response = await register(data);
         if (response) {
           setShowVerifyEmailModal(true);
           toast.show({
@@ -227,6 +223,41 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
                     <FormControlError>
                       <FormControlErrorText className="md:text-sm text-xs">
                         {errors?.email?.message || !validated.emailValid}
+                      </FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
+
+                  {/** Phone Number */}
+                  <FormControl
+                    className="md:w-96 w-full"
+                    isInvalid={!!errors?.phoneNumber}
+                  >
+                    <FormControlLabel>
+                      <FormControlLabelText className="md:text-lg text-sm">
+                        Phone Number
+                      </FormControlLabelText>
+                    </FormControlLabel>
+                    <Controller
+                      defaultValue=""
+                      name="phoneNumber"
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Input className="h-12">
+                          <InputField
+                            placeholder="Phone Number"
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            onSubmitEditing={handleKeyPress}
+                            returnKeyType="done"
+                            className=""
+                          />
+                        </Input>
+                      )}
+                    />
+                    <FormControlError>
+                      <FormControlErrorText className="md:text-sm text-xs">
+                        {errors?.phoneNumber?.message}
                       </FormControlErrorText>
                     </FormControlError>
                   </FormControl>

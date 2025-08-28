@@ -76,7 +76,7 @@ const ReviewInfoModal: React.FC<ReviewInfoModalProps> = (props) => {
           </ModalFooter>
         )}
         <small className="mt-2 self-end text-typography-500 ">
-          {review.company.companyName}
+          {review.provider.providerName}
         </small>
       </ModalContent>
     </Modal>

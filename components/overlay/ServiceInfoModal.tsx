@@ -74,10 +74,10 @@ const ServiceInfoModal = ({
               <HStack space="lg" className="w-full items-center">
                 <Avatar size="md" className="shrink-0">
                   <AvatarFallbackText className="text-sm">
-                    {getInitial(serviceData?.company?.name || "Service")}
+                    {getInitial(serviceData?.provider?.name || "Service")}
                   </AvatarFallbackText>
                   <AvatarImage
-                    source={{ uri: serviceData?.company?.logo || "" }}
+                    source={{ uri: serviceData?.provider?.logo || "" }}
                   />
                 </Avatar>
                 <Heading size="sm" className="md:text-xl text-gray-800">
@@ -162,7 +162,7 @@ const ServiceInfoModal = ({
                   Contact Information
                 </Heading>
                 <Text size="xs" className="md:text-sm text-gray-700">
-                  {serviceData?.company?.contact || "Not Provided"}
+                  {serviceData?.provider?.contact || "Not Provided"}
                 </Text>
               </Card>
             </VStack>

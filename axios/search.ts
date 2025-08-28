@@ -25,6 +25,6 @@ export const globalSearch = async (
   if (long) params.long = long;
   if (address) params.address = address;
 
-  const response = await axiosInstance.get("search/companies", { params });
+  const response = await axiosInstance.get("search/providers", { params });
   return response.data;
 };

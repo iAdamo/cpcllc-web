@@ -47,7 +47,7 @@ export const getServiceById = async (id: string): Promise<ServiceData> => {
 export const getServicesByCompany = async (
   id: string
 ): Promise<ServiceData[]> => {
-  const response = await axiosInstance.get(`services/company/${id}`);
+  const response = await axiosInstance.get(`services/provider/${id}`);
 
   return response.data;
 };
