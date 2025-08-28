@@ -105,6 +105,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
     } else {
       try {
         const response = await register(data);
+        console.log(response);
         if (response) {
           setShowVerifyEmailModal(true);
           toast.show({
