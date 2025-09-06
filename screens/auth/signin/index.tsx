@@ -71,7 +71,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
     formState: { errors },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(
-      FormSchema.omit({ confirmPassword: true, code: true })
+      FormSchema.omit({ phoneNumber: true, confirmPassword: true, code: true })
     ),
   });
 
