@@ -43,6 +43,7 @@ import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 import { createService } from "@/axios/services";
 import { useSession } from "@/context/AuthContext";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 type ControllerRenderType<T> = {
   field: {
@@ -55,6 +56,7 @@ type ControllerRenderType<T> = {
 const CreateService = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { t } = useTranslation(); // Add this hook
 
   const router = useRouter();
   const { userData } = useSession();
@@ -148,19 +150,21 @@ const CreateService = () => {
       <VStack className="p-20 bg-[#F7F7F7] gap-8 border-b">
         <Card className="bg-green-200 w-3/5">
           <Heading className="text-green-800">
-            Create and showcase your service globally
+            {t("createService.title")}
           </Heading>
           <Text className="text-green-800">
-            Fill out the form below to create your service listing.
+            {t("createService.description")}
           </Text>
         </Card>
         <HStack className="justify-between">
           <VStack className="gap-6 w-3/5 bg-white p-8 border rounded-lg">
             <FormControl isInvalid={!!errors?.title}>
               <FormControlLabel className="flex-col flex items-start gap-2">
-                <Heading size="xl">Title</Heading>
+                <Heading size="xl">
+                  {t("createService.form.title.label")}
+                </Heading>
                 <FormControlLabelText>
-                  Describe what the client will be hiring you for.
+                  {t("createService.form.title.description")}
                 </FormControlLabelText>
               </FormControlLabel>
               <Controller
@@ -171,7 +175,7 @@ const CreateService = () => {
                 }: ControllerRenderType<string>) => (
                   <Input>
                     <InputField
-                      placeholder="We offer ..."
+                      placeholder={t("createService.form.title.placeholder")}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
@@ -189,10 +193,11 @@ const CreateService = () => {
             </FormControl>
             <FormControl isInvalid={!!errors.category} className="w-96">
               <FormControlLabel className="flex-col flex items-start gap-2">
-                <Heading size="xl">Service Category</Heading>
+                <Heading size="xl">
+                  {t("createService.form.category.label")}
+                </Heading>
                 <FormControlLabelText>
-                  Select a category so it&apos;s easy for clients to find your
-                  service.
+                  {t("createService.form.category.description")}
                 </FormControlLabelText>
               </FormControlLabel>
               <Controller
@@ -208,23 +213,32 @@ const CreateService = () => {
                     isRequired
                   >
                     <SelectTrigger>
-                      <SelectInput placeholder="Browse our list of categories" />
+                      <SelectInput
+                        placeholder={t(
+                          "createService.form.category.placeholder"
+                        )}
+                      />
                       <SelectIcon className="mr-3" as={ChevronDownIcon} />
                     </SelectTrigger>
                     <SelectPortal>
                       <SelectBackdrop />
                       <SelectContent>
-                        <SelectItem label="Plumbing" value="plumbing" />
                         <SelectItem
-                          label="House Cleaning"
+                          label={t("createService.categories.plumbing")}
+                          value="plumbing"
+                        />
+                        <SelectItem
+                          label={t("createService.categories.houseCleaning")}
                           value="house-cleaning"
                         />
                         <SelectItem
-                          label="Electrical Work"
+                          label={t("createService.categories.electricalWork")}
                           value="electrical-work"
                         />
                         <SelectItem
-                          label="Industrial Painting"
+                          label={t(
+                            "createService.categories.industrialPainting"
+                          )}
                           value="industrial-painting"
                         />
                       </SelectContent>
@@ -246,8 +260,12 @@ const CreateService = () => {
             </FormControl>
             <FormControl isInvalid={!!errors.price} className="w-40">
               <FormControlLabel className="flex-col flex items-start gap-2">
-                <Heading size="xl">Pricing</Heading>
-                <FormControlLabelText>Price</FormControlLabelText>
+                <Heading size="xl">
+                  {t("createService.form.price.label")}
+                </Heading>
+                <FormControlLabelText>
+                  {t("createService.form.price.description")}
+                </FormControlLabelText>
               </FormControlLabel>
               <Controller
                 name="price"
@@ -257,7 +275,7 @@ const CreateService = () => {
                 }: ControllerRenderType<number>) => (
                   <Input>
                     <InputField
-                      placeholder="Enter price in $"
+                      placeholder={t("createService.form.price.placeholder")}
                       value={value?.toString()}
                       onChangeText={(text) => onChange(Number(text))}
                       onBlur={onBlur}
@@ -276,9 +294,11 @@ const CreateService = () => {
             {/** Location */}
             <FormControl isInvalid={!!errors.location} className="w-60">
               <FormControlLabel className="flex-col flex items-start gap-2">
-                <Heading size="xl">Service Location</Heading>
+                <Heading size="xl">
+                  {t("createService.form.location.label")}
+                </Heading>
                 <FormControlLabelText>
-                  Where will you be providing this service?
+                  {t("createService.form.location.description")}
                 </FormControlLabelText>
               </FormControlLabel>
               <Controller
@@ -292,7 +312,11 @@ const CreateService = () => {
                     isRequired
                   >
                     <SelectTrigger>
-                      <SelectInput placeholder="Choose from your registered address" />
+                      <SelectInput
+                        placeholder={t(
+                          "createService.form.location.placeholder"
+                        )}
+                      />
                       <SelectIcon className="mr-3" as={ChevronDownIcon} />
                     </SelectTrigger>
                     <SelectPortal>
@@ -325,14 +349,18 @@ const CreateService = () => {
                 )}
               />
               <FormControlError>
-                <FormControlErrorText>address is required</FormControlErrorText>
+                <FormControlErrorText>
+                  {t("createService.form.location.error")}
+                </FormControlErrorText>
               </FormControlError>
             </FormControl>
             <FormControl isInvalid={!!errors.description}>
               <FormControlLabel className="flex-col flex items-start gap-2">
-                <Heading size="xl">Service Description</Heading>
+                <Heading size="xl">
+                  {t("createService.form.description.label")}
+                </Heading>
                 <FormControlLabelText>
-                  Briefly explain what sets you and your Service apart.
+                  {t("createService.form.description.description")}
                 </FormControlLabelText>
               </FormControlLabel>
               <Controller
@@ -343,7 +371,9 @@ const CreateService = () => {
                 }: ControllerRenderType<string>) => (
                   <Textarea>
                     <TextareaInput
-                      placeholder="Enter service description"
+                      placeholder={t(
+                        "createService.form.description.placeholder"
+                      )}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
@@ -361,10 +391,11 @@ const CreateService = () => {
             </FormControl>
             <FormControl isInvalid={selectedImages.length === 0} className="">
               <FormControlLabel className="flex-col flex items-start gap-2">
-                <Heading size="xl">Service Image</Heading>
+                <Heading size="xl">
+                  {t("createService.form.images.label")}
+                </Heading>
                 <FormControlLabelText>
-                  Upload up to 3 images (.jpg or .png), up to 10MB each and less
-                  than 4,000 pixels, in width or height.
+                  {t("createService.form.images.description")}
                 </FormControlLabelText>
               </FormControlLabel>
               <HStack className="gap-4 grid grid-cols-3">
@@ -404,8 +435,7 @@ const CreateService = () => {
                           className="hidden"
                         />
                         <p className="text-gray-500">
-                          Drag images here or{" "}
-                          <span className="text-blue-500">Click to Upload</span>
+                          {t("createService.form.images.uploadText")}
                         </p>
                       </label>
                     </div>
@@ -428,10 +458,13 @@ const CreateService = () => {
               <ButtonText>
                 {isLoading ? (
                   <HStack space="sm">
-                    <Spinner /> <Text size="md">Please Wait</Text>
+                    <Spinner />{" "}
+                    <Text size="md">
+                      {t("createService.buttons.pleaseWait")}
+                    </Text>
                   </HStack>
                 ) : (
-                  "Done"
+                  t("createService.buttons.done")
                 )}
               </ButtonText>
             </Button>

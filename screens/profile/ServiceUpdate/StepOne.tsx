@@ -63,7 +63,7 @@ const StepOne = ({
     categories.push(value);
     i++;
   }
-  
+
   return (
     <VStack>
       {/* Title Field */}

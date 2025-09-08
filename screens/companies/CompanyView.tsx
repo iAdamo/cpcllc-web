@@ -27,9 +27,11 @@ import ActionButtons from "@/components/ActionTab";
 import RatingSection from "../../components/RatingSection";
 import ServiceSection from "../profile/ServiceSection";
 import { useMediaQuery } from "@/components/ui/utils/use-media-query";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 const CompanyView = (providerData: CompanyData) => {
   const [newReviews, setNewReviews] = useState<ReviewData[]>([]);
+  const { t } = useTranslation(); // Add this hook
 
   const { userData } = useSession();
   const router = useRouter();
@@ -37,7 +39,7 @@ const CompanyView = (providerData: CompanyData) => {
 
   const isCompanyPage = /^\/companies\/[^/]+$/.test(pathname);
   const isProfilePage = /^\/cpc\/[^/]+$/.test(pathname);
-  const [isMobile] = useMediaQuery([{ maxWidth: 768}]);
+  const [isMobile] = useMediaQuery([{ maxWidth: 768 }]);
 
   return (
     <VStack
@@ -120,17 +122,14 @@ const CompanyView = (providerData: CompanyData) => {
                 reviewCount={providerData?.reviewCount || 0}
               />
               <Heading className="text-text-tertiary">
-                {providerData?.clients}
+                {providerData?.clients} {t("clients")}
               </Heading>
               <VStack className="mt-4">
                 <ActionButtons
                   providerData={providerData}
                   userData={userData}
                   isCompanyPage={isCompanyPage}
-                  // setWriteReview={setWriteReview}
                   setNewReviews={setNewReviews}
-                  // isFavourite={isFavourite}
-                  //  setIsFavourite={setIsFavourite}
                 />
               </VStack>
             </VStack>
@@ -156,7 +155,7 @@ const CompanyView = (providerData: CompanyData) => {
                 size="sm"
                 className="md:text-lg font-bold text-brand-primary"
               >
-                Brand Showcase
+                {t("brandShowcase")}
               </Heading>
               <VStack className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {providerData?.providerImages?.map((src, index) => (

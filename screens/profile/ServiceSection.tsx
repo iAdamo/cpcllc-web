@@ -15,6 +15,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 const ServiceSection = ({
   provider,
@@ -32,6 +33,7 @@ const ServiceSection = ({
   const [services, setServices] = useState<ServiceData[] | []>([]);
   const [serviceData, setServiceData] = useState<ServiceData | null>(null);
   const router = useRouter();
+  const { t } = useTranslation(); // Add this hook
 
   // Example: If you want to build params from an array of services in provider.servicesProvided
   // (assuming provider.servicesProvided is an array of strings or similar)
@@ -77,7 +79,7 @@ const ServiceSection = ({
             >
               <ButtonIcon as={AddIcon} />
               <ButtonText size="sm" className="">
-                What&apos;s New In Your Service
+                {t("serviceSection.newServiceButton")}
               </ButtonText>
             </Button>
           )}
@@ -86,8 +88,7 @@ const ServiceSection = ({
               size="xs"
               className="md:text-base text-text-secondary text-center mt-8"
             >
-              No updates available for this service yet. Click the button to add
-              new updates.
+              {t("serviceSection.noUpdatesAvailable")}
             </Text>
           ) : (
             <VStack>
@@ -124,14 +125,14 @@ const ServiceSection = ({
               ))}
               {isCurrentUser && services.length !== 0 ? (
                 <Button size="md" className="mt-4">
-                  <ButtonText>View All Updates</ButtonText>
+                  <ButtonText>{t("serviceSection.viewAllUpdates")}</ButtonText>
                 </Button>
               ) : (
                 <Text
                   size="xs"
                   className="md:text-base text-text-secondary text-center mt-8"
                 >
-                  No updates available for this provider.
+                  {t("serviceSection.noProviderUpdates")}
                 </Text>
               )}
             </VStack>
@@ -145,7 +146,7 @@ const ServiceSection = ({
               isCompanyPage ? "md:text-lg" : "md:text-sm"
             } font-bold text-brand-primary`}
           >
-            Updates from this service company
+            {t("serviceSection.updatesFromCompany")}
           </Heading>
           {services.length > 0 ? (
             <div className="relative w-full">
@@ -222,7 +223,7 @@ const ServiceSection = ({
             </div>
           ) : (
             <Text size="xs" className="md:text-sm">
-              No updates from this company
+              {t("serviceSection.noCompanyUpdates")}
             </Text>
           )}
         </VStack>

@@ -25,17 +25,11 @@
   "joinCompaniesCenter": "Únete a companiescenter y conéctate con empresas líderes que ofrecen una amplia gama de servicios.",
   "browseCompanies": "Explorar empresas",
 
+  "serviceProvidersNearYou": "Proveedores de servicios cerca de ti",
+  "loadMore": "Cargar más",
+  "noMoreCompanies": "No hay más empresas para mostrar.",
+  "noCompanySelected": "Ninguna empresa seleccionada.",
 
-  "companyDetails": {
-    "serviceProvidersNearYou": "Proveedores de servicios cerca de ti",
-    "loadMore": "Cargar más",
-    "noMoreCompanies": "No hay más empresas para mostrar.",
-    "noCompanySelected": "Ninguna empresa seleccionada."
-  },
-
-
-
-  "contactInfo": {
   "request_quote_availability": "Solicitar cotización y disponibilidad",
   "response_time": "Tiempo de respuesta",
   "response_time_value": "10 minutos",
@@ -45,10 +39,9 @@
   "no_email": "No se proporcionó correo electrónico",
   "website": "Sitio web",
   "no_phone": "No se proporcionó número de teléfono",
-  "get_directions": "Obtener indicaciones"
-},
+  "get_directions": "Obtener indicaciones",
 
-"for_clients": "Para clientes",
+  "for_clients": "Para clientes",
   "find_companies_your_way": "Encuentra empresas a tu manera",
   "for_clients_paragraph": "Trabaja con la red más grande de proveedores de servicios y haz que las cosas se realicen, desde entregas rápidas hasta grandes transformaciones.",
 
@@ -59,8 +52,6 @@
   "for_client_card3_title": "Obtén asesoría de un experto en servicios",
   "for_client_card3_desc": "Consultas",
 
-
-
   "home_company_alt": "empresa_hogar",
   "for_companies": "Para empresas",
   "find_great_jobs": "Encuentra excelentes trabajos",
@@ -70,14 +61,9 @@
   "for_companies_point3": "Explora diferentes modelos de trabajo que se adapten a tus necesidades",
   "find_opportunities": "Buscar oportunidades",
 
-
-
   "homeheader_title": "CompanyCenterLLC",
   "homeheader_subtitle": "Tu plataforma de confianza para conectar con empresas líderes. Ya sea que busques contratar o ser contratado, ofrecemos un mercado integral para negocios y buscadores de empleo.",
   "homeheader_slide_alt": "Diapositiva del carrusel {{index}}",
-
-
-
 
   "whychooseus_heading": "Por qué las empresas recurren a CompaniesCenterLLC",
   "whychooseus_network_title": "Red amplia",
@@ -87,9 +73,6 @@
   "whychooseus_trust_title": "Confianza y reseñas",
   "whychooseus_trust_description": "Lee reseñas y calificaciones de otros usuarios para tomar decisiones informadas.",
   "whychooseus_join_button": "Únete ahora",
-
-
-
 
   "firstName": "Nombre",
   "lastName": "Apellido",
@@ -105,29 +88,9 @@
   "dragImagesHere": "Arrastra imágenes aquí o",
   "continue": "Continuar",
   "profilePictureBenefits": "Una foto de perfil ayuda a generar confianza y credibilidad al permitir que los clientes te reconozcan y conecten contigo, creando una experiencia más personalizada y profesional",
-  "validation": {
-    "firstNameRequired": "El nombre es requerido",
-    "lastNameRequired": "El apellido es requerido",
-    "companyNameRequired": "El nombre de la empresa es requerido",
-    "companyPhoneRequired": "El número de teléfono de la empresa es requerido",
-    "companyEmailRequired": "El correo electrónico de la empresa es requerido",
-    "companyEmailInvalid": "Dirección de correo electrónico inválida",
-    "companyDescriptionRequired": "La descripción de la empresa es requerida",
-    "imageSizeError": "Cada imagen debe ser menor de {maxSize}MB"
-  },
-  "placeholders": {
-    "firstName": "Juan",
-    "lastName": "Pérez",
-    "companyName": "Nombre de Tu Empresa",
-    "companyEmail": "correoempresa@ejemplo.com",
-    "companyDescription": "Describe tu empresa y sus servicios"
-  },
 
   "profileUpdatedSuccess": "¡Perfil actualizado exitosamente!",
   "profileUpdateFailed": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
-
-
-
 
   "chooseServicesTitle": "Elige Servicios Especializados de la Empresa",
   "chooseServicesDescription": "Selecciona hasta {maxServices} servicios especializados que mejor representen la experiencia de tu empresa.",
@@ -137,9 +100,6 @@
   "noSubcategories": "No hay subcategorías disponibles",
   "selectedServices": "Servicios Seleccionados",
 
-
-
-
   "pageone_heading": "Únete como Cliente o Proveedor de Servicios",
   "pageone_client_option": "Soy un Cliente, contratando para un proyecto",
   "pageone_company_option": "Soy un Proveedor de Servicios, listo para ofrecer mis servicios",
@@ -147,7 +107,112 @@
   "pageone_apply_company": "Aplicar como Proveedor de Servicios",
   "pageone_apply_default": "Aplicar",
   "pageone_already_account": "¿Ya tienes una cuenta?",
-  "pageone_signin": "Iniciar sesión"
+  "pageone_signin": "Iniciar sesión",
+
+  "brandShowcase": "Escaparate de la Marca",
+  "clients": "clientes",
+  "services": "Servicios",
+  "reviews": "Reseñas",
+  "contactInfo": "Información de Contacto",
+  "hours": "Horario",
+  "location": "Ubicación",
+  "about": "Acerca de",
+  "rating": "Calificación",
+  "reviewsCount": "{count} reseñas",
+
+  "createService": {
+    "title": "Crea y muestra tu servicio globalmente",
+    "description": "Completa el formulario a continuación para crear tu listado de servicio.",
+    "form": {
+      "title": {
+        "label": "Título",
+        "description": "Describe para qué te contratará el cliente.",
+        "placeholder": "Ofrecemos ..."
+      },
+      "category": {
+        "label": "Categoría de Servicio",
+        "description": "Selecciona una categoría para que los clientes encuentren fácilmente tu servicio.",
+        "placeholder": "Explora nuestra lista de categorías"
+      },
+      "price": {
+        "label": "Precio",
+        "description": "Precio",
+        "placeholder": "Ingresa el precio en $"
+      },
+      "location": {
+        "label": "Ubicación del Servicio",
+        "description": "¿Dónde proporcionarás este servicio?",
+        "placeholder": "Elige de tus direcciones registradas",
+        "error": "La dirección es requerida"
+      },
+      "description": {
+        "label": "Descripción del Servicio",
+        "description": "Explica brevemente qué te diferencia a ti y a tu Servicio.",
+        "placeholder": "Ingresa la descripción del servicio"
+      },
+      "images": {
+        "label": "Imagen del Servicio",
+        "description": "Sube hasta 3 imágenes (.jpg o .png), hasta 10MB cada una y menos de 4,000 píxeles de ancho o alto.",
+        "uploadText": "Arrastra imágenes aquí o Haz clic para Subir"
+      }
+    },
+    "buttons": {
+      "done": "Listo",
+      "pleaseWait": "Por favor espera"
+    },
+    "categories": {
+      "plumbing": "Plomería",
+      "houseCleaning": "Limpieza de Casa",
+      "electricalWork": "Trabajo Eléctrico",
+      "industrialPainting": "Pintura Industrial"
+    }
+  },
+
+  "featuredCompanies": "Empresas Destacadas",
+  "reviewScore": "{score}/5.0",
+  "viewAll": "Ver Todos",
+  "seeMore": "Ver Más Empresas",
+
+
+
+    "imagesInfo": "Sube hasta {maxImages} imágenes (máx. {maxImageSize}MB cada una). Muestra tu trabajo con fotos de alta calidad.",
+    "videosInfo": "Sube hasta {maxVideos} videos (máx. {maxVideoSize}MB cada uno). Demuestra tu proceso o muestra ejemplos.",
+    "addImage": "Agregar Imagen",
+    "addVideo": "Agregar Video",
+    "videoPreview": "Vista Previa",
+    "back": "Atrás",
+    "submitService": "Enviar Servicio",
+    "submitting": "Enviando...",
+
+      "serviceCreated": "Los datos del servicio se han creado exitosamente",
+      "serviceUpdated": "Datos del servicio actualizados exitosamente",
+      "fileSizeError": "Cada {fileType} debe ser menor de {maxSize}MB",
+
+
+
+    "categoriesProvided": "Categorías Ofrecidas",
+    "description": "Descripción",
+      "success": "¡Perfil actualizado exitosamente!",
+      "error": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
+
+
+
+    "title": "Reseñas",
+    "noReviews": "¡Aún no hay reseñas!",
+    "anonymousUser": "Usuario Anónimo",
+    "imageCount": "{count} imagen{plural}",
+    "moreButton": "Más",
+    "lessButton": "Menos",
+
+
+
+
+    "newServiceButton": "Qué Hay De Nuevo En Tu Servicio",
+    "noUpdatesAvailable": "Aún no hay actualizaciones disponibles para este servicio. Haz clic en el botón para agregar nuevas actualizaciones.",
+    "viewAllUpdates": "Ver Todas las Actualizaciones",
+    "noProviderUpdates": "No hay actualizaciones disponibles para este proveedor.",
+    "updatesFromCompany": "Actualizaciones de esta empresa de servicios",
+    "noCompanyUpdates": "No hay actualizaciones de esta empresa"
 
 
 

@@ -17,6 +17,7 @@ import { Pressable } from "@/components/ui/pressable";
 import RatingSection from "@/components/RatingSection";
 import { format } from "date-fns";
 import ReviewInfoModal from "@/components/overlay/ReviewInfoModal";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 const ReviewSection = ({
   providerId,
@@ -34,6 +35,7 @@ const ReviewSection = ({
     isOpen: false,
     review: undefined,
   });
+  const { t } = useTranslation(); // Add this hook
 
   useEffect(() => {
     const handleReview = async () => {
@@ -58,15 +60,16 @@ const ReviewSection = ({
   function showLessReviews(): void {
     setVisibleReviews((prev) => Math.max(prev - 3, 3)); // Ensure at least 3 reviews are visible
   }
+
   return (
     <Card className="md:gap-6 gap-3">
       <Heading size="sm" className="md:text-xl  text-brand-primary">
-        Reviews
+        {t("reviews.title")}
       </Heading>
 
       {reviews.length === 0 ? (
         <Text size="xs" className="md:text-base text-gray-500">
-          No reviews yet!
+          {t("reviews.noReviews")}
         </Text>
       ) : (
         <VStack className="gap-4">
@@ -111,7 +114,7 @@ const ReviewSection = ({
                         >
                           {review.user?.firstName && review.user?.lastName
                             ? `${review.user.firstName} ${review.user.lastName}`
-                            : "Anonymous User"}
+                            : t("reviews.anonymousUser")}
                         </Heading>
 
                         <RatingSection rating={review.rating || 0} />
@@ -130,8 +133,7 @@ const ReviewSection = ({
                     </Text>
                     {review.images && review.images.length > 0 && (
                       <Text className="text-sm text-gray-500">
-                        {review.images.length} image
-                        {review.images.length > 1 ? "s" : ""}
+                        {`${t("reviews.imageCount")}: ${review.images.length}`}
                       </Text>
                     )}
                   </VStack>
@@ -143,13 +145,13 @@ const ReviewSection = ({
           <HStack className="self-end gap-4">
             {visibleReviews < reviews.length && (
               <Button variant="outline" size="xs" onPress={loadMoreReviews}>
-                <ButtonText>More</ButtonText>
+                <ButtonText>{t("reviews.moreButton")}</ButtonText>
               </Button>
             )}
 
             {visibleReviews > 3 && (
               <Button variant="outline" size="xs" onPress={showLessReviews}>
-                <ButtonText>Less</ButtonText>
+                <ButtonText>{t("reviews.lessButton")}</ButtonText>
               </Button>
             )}
           </HStack>
