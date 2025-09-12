@@ -250,7 +250,7 @@ const LocationBoard = () => {
 
           <Button
             onPress={handleGeolocation}
-            disabled={isLoadingGeolocation}
+            isDisabled={isLoadingGeolocation}
             className="md:w-full w-fit self-center bg-green-500 hover:bg-green-600 active:bg-green-700 transition-colors duration-200"
           >
             {isLoadingGeolocation ? (
@@ -284,7 +284,7 @@ const LocationBoard = () => {
             </Button>
             <Button
               onPress={nextStep}
-              disabled={!data.address}
+              isDisabled={!data.address}
               className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200"
             >
               <ButtonText>Continue</ButtonText>

@@ -91,7 +91,7 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
         onClose();
 
         if (pathname === "/") {
-          router.replace("/companies");
+          router.replace("/providers");
         }
       }
     } catch (error: any) {
@@ -132,10 +132,7 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
         },
       ]}
       onSubmit={handleVerifyEmail}
-      schema={FormSchema.omit({
-        email: true,
-        password: true,
-        confirmPassword: true,
+      schema={FormSchema.pick({code: true
       })}
     />
   );

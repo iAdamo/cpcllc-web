@@ -12,7 +12,9 @@ import es from "@/locales/es.json";
 
 export type Language = "en" | "es";
 
-export const translations: Record<Language, Record<string, string | Record<string, string>>> = {
+type TranslationValue = string | { [key: string]: TranslationValue };
+
+export const translations: Record<Language, Record<string, TranslationValue>> = {
   en,
   es,
 };

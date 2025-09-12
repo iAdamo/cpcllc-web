@@ -18,7 +18,7 @@ const FinalStep = () => {
   const router = useRouter();
   const { userData, updateCompanyProfile, fetchUserProfile } = useSession();
   const { t } = useTranslation(); // Add this hook
-
+  // console.log("FinalStep data:", data);
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -28,8 +28,18 @@ const FinalStep = () => {
         if (["firstName", "lastName", "profilePicture"].includes(key)) return;
         if (Array.isArray(value)) {
           if (key === "subcategories") {
-            const ids = value.map((item: { id: string }) => item.id);
-            ids.forEach((id) => formData.append("subcategories[]", id));
+            const ids = value.map(
+              (item: { categoryId: string; _id: string }) => ({
+                category: item.categoryId,
+                subcategory: item._id,
+              })
+            );
+            ids.forEach(
+              (id) => (
+                formData.append("subcategories[]", id.category),
+                formData.append("categories[]", id.subcategory)
+              )
+            );
           } else {
             value.forEach((file) => {
               if (file instanceof File) {
@@ -64,6 +74,7 @@ const FinalStep = () => {
           formData.append(key, value as string);
         }
       });
+      // console.log("Submitting formData:", Array.from(formData.entries()));
       await updateCompanyProfile(formData);
       await fetchUserProfile();
       setSuccess(true);

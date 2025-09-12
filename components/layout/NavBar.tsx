@@ -33,7 +33,7 @@ const NavBar = () => {
 
   const options = [
     { name: t("home"), href: "/" },
-    { name: t("companies"), href: "/companies" },
+    { name: t("companies"), href: "/providers" },
   ];
 
   const options2 = [
@@ -312,7 +312,7 @@ const NavBar = () => {
                       variant="link"
                       onPress={() => {
                         setShowDrawer(false);
-                        router.push("/companies");
+                        router.push("/providers");
                       }}
                       className="justify-start"
                     >

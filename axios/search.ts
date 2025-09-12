@@ -12,7 +12,7 @@ export const globalSearch = async (
   long?: string,
   address?: string
 ): Promise<{
-  companies: CompanyData[];
+  providers: CompanyData[];
   services?: ServiceData[];
   totalPages: number;
 }> => {

@@ -45,7 +45,7 @@ const CompaniesSection = () => {
         const lat = coords?.lat;
         const long = coords?.long;
 
-        const { companies: response, totalPages } = await globalSearch(
+        const { providers: response, totalPages } = await globalSearch(
           currentPage,
           limit,
           false,

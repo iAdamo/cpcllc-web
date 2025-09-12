@@ -29,7 +29,7 @@ export const ServiceProviderPage = () => {
 
   useEffect(() => {
     if (!id) {
-      router.push("/companies");
+      router.push("/providers");
       return;
     }
     let user: UserData | null = null;

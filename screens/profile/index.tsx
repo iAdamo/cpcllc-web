@@ -19,16 +19,13 @@ import { UserData, ReviewData } from "@/types";
 import ReviewSection from "./ReviewSection";
 import ServiceSection from "./ServiceSection";
 import { getInitial } from "@/utils/GetInitials";
-//import { Swiper, SwiperSlide } from "swiper/react";
-//import { Autoplay, Pagination } from "swiper/modules";
-//import "swiper/css";
-//import "swiper/css/pagination";
 import { Toast, useToast, ToastTitle } from "@/components/ui/toast";
 import { format } from "date-fns";
 import ProfileDetails from "@/screens/profile/ProfileDetails";
 import { ProfileUploadButton } from "@/screens/profile/ProfileUpload";
 import RatingSection from "@/components/RatingSection";
 import ActionButtons from "@/components/ActionTab";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -42,6 +39,7 @@ const ProfilePage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const toast = useToast();
   const [newReviews, setNewReviews] = useState<ReviewData[]>([]);
+  const { t } = useTranslation(); // Add this hook
 
   const fetchUserData = useCallback(async () => {
     if (typeof id !== "string") return;
@@ -84,15 +82,12 @@ const ProfilePage = () => {
     const file = e.target.files[0];
 
     if (!validImageTypes.includes(file.type)) {
-      showToast(
-        "Please upload a valid image file (JPEG, PNG, GIF, WEBP)",
-        "error"
-      );
+      showToast(t("profile.toast.invalidImage"), "error");
       return;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      showToast("Image size should be less than 5MB", "error");
+      showToast(t("profile.toast.fileTooLarge"), "error");
       return;
     }
 
@@ -103,7 +98,7 @@ const ProfilePage = () => {
 
       const updatedUser = await updateUserProfile(formData);
       if (updatedUser) {
-        showToast("Profile picture updated successfully!", "success");
+        showToast(t("profile.toast.uploadSuccess"), "success");
         if (userData?.id === id) {
           await fetchUserProfile();
         }
@@ -126,7 +121,7 @@ const ProfilePage = () => {
   if (!data) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Text>Loading profile...</Text>
+        <Text>{t("profile.loading")}</Text>
       </div>
     );
   }
@@ -212,10 +207,13 @@ const ProfilePage = () => {
                               {activeRoleId.location?.primary?.address?.country}
                             </Text>
                             <Text size="sm">
-                              Registered on the{" "}
-                              {format(new Date(data.createdAt), "MMM d, yyyy")}
+                              {t("profile.registeredOn").replace(
+                                "{date}",
+                                format(new Date(data.createdAt), "MMM d, yyyy")
+                              )}
                             </Text>
-                            <Text size="sm">Online</Text>
+
+                            <Text size="sm">{t("profile.online")}</Text>
                           </VStack>
                           <ActionButtons
                             providerData={activeRoleId}
@@ -234,7 +232,7 @@ const ProfilePage = () => {
                   </HStack>
                   <Card className="gap-2">
                     <Heading size="xs" className="md:text-md">
-                      Brand Showcase
+                      {t("profile.brandShowcase")}
                     </Heading>
                     <VStack className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {activeRoleId?.providerImages?.map((src, index) => (

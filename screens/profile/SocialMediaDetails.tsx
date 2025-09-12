@@ -4,7 +4,6 @@ import { Card } from "../../components/ui/card";
 import { Text } from "../../components/ui/text";
 import { Link, LinkText } from "../../components/ui/link";
 import { Button, ButtonIcon } from "../../components/ui/button";
-// import { Pressable } from "../ui/pressable";
 import { FormControl } from "../../components/ui/form-control";
 import { Input, InputField } from "../../components/ui/input";
 import {
@@ -22,6 +21,7 @@ import {
   CloseIcon,
 } from "@/components/ui/icon";
 import { UserData, CompanyData } from "@/types";
+import { useTranslation } from "@/context/TranslationContext";
 
 type EditableFields = keyof UserData | keyof CompanyData;
 
@@ -44,6 +44,8 @@ const SocialMediaDetails = ({
   handleEditStart,
   handleCancelEdit,
 }: ProfileEditProps) => {
+  const { t } = useTranslation();
+
   const isEditingPlatform = (platform: string) =>
     editingFields.hasOwnProperty(`providerSocialMedia.${platform}`);
 
@@ -83,7 +85,10 @@ const SocialMediaDetails = ({
   };
 
   return (
-    <Card variant="filled" className="h-fit gap-4 p-2 flex-row -z-50 md:w-auto w-fit">
+    <Card
+      variant="filled"
+      className="h-fit gap-4 p-2 flex-row -z-50 md:w-auto w-fit"
+    >
       <VStack className="grid grid-cols-2 gap-x-4">
         {[
           "website",
@@ -136,7 +141,7 @@ const SocialMediaDetails = ({
                   </Input>
                   {!isValid && currentValue && (
                     <Text size="xs" className="text-red-500 self-start">
-                      Please enter a valid {platform} URL
+                      {`${t("socialMedia.invalidUrl")} ${t(`socialMedia.${platform}`)}`}
                     </Text>
                   )}
                   <HStack className="gap-2 mb-2">
@@ -163,11 +168,8 @@ const SocialMediaDetails = ({
                 <HStack className="w-full justify-between mb-2">
                   {link ? (
                     <Link href={link}>
-                      <LinkText
-                        size="xs"
-                        className="font-semibold"
-                      >
-                        {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                      <LinkText size="xs" className="font-semibold">
+                        {t(`socialMedia.${platform}`)}
                       </LinkText>
                     </Link>
                   ) : (
@@ -175,7 +177,7 @@ const SocialMediaDetails = ({
                       size="xs"
                       className="text-gray-500 font-semibold italic"
                     >
-                      No link added
+                      {t("socialMedia.noLink")}
                     </Text>
                   )}
                   {isEditable && (

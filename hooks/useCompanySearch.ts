@@ -36,7 +36,7 @@ export function useCompanySearch({
           long,
           address
         );
-        setResults(response.companies);
+        setResults(response.providers);
       } catch (err: any) {
         setError(err.response?.data?.message || "Search failed");
       } finally {

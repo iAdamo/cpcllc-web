@@ -10,19 +10,21 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@/components/ui/icon";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { HomeClient } from "@/public/assets/homepage";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 const FeaturedCompanies = () => {
   const scrollRef = useRef<ScrollView>(null);
+  const { t } = useTranslation(); // Add this hook
 
   const companies = [
-    { title: "Kajola Technologies", review: "4.6/5.0" },
-    { title: "Sanux Technologies", review: "4.6/5.0" },
-    { title: "Product 3", review: "4.6/5.0" },
-    { title: "Product 4", review: "4.6/5.0" },
-    { title: "Product 1", review: "4.6/5.0" },
-    { title: "Product 2", review: "4.6/5.0" },
-    { title: "Product 3", review: "4.6/5.0" },
-    { title: "Product 4", review: "4.6/5.0" },
+    { title: "Kajola Technologies", review: 4.6 },
+    { title: "Sanux Technologies", review: 4.6 },
+    { title: "Product 3", review: 4.6 },
+    { title: "Product 4", review: 4.6 },
+    { title: "Product 1", review: 4.6 },
+    { title: "Product 2", review: 4.6 },
+    { title: "Product 3", review: 4.6 },
+    { title: "Product 4", review: 4.6 },
   ];
 
   const scrollLeft = () => {
@@ -39,7 +41,9 @@ const FeaturedCompanies = () => {
 
   return (
     <VStack className="md:mx-12 mx-4 md:mt-0 mt-8 gap-4">
-      <Heading className="md:text-4xl text-lg">Featured Companies</Heading>
+      <Heading className="md:text-4xl text-lg">
+        {t("featuredCompanies")}
+      </Heading>
       <HStack className="items-center justify-between gap-8">
         <Button
           onPress={scrollLeft}
@@ -72,7 +76,7 @@ const FeaturedCompanies = () => {
                     {company.title}
                   </Heading>
                   <Text className="font-semibold">
-                    {company.review}
+                    {t("reviewScore").replace("{score}", company.review.toString())}
                   </Text>
                 </VStack>
               </Card>

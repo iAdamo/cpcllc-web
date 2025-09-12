@@ -128,13 +128,13 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     !session &&
     pathname !== "/" &&
     pathname !== "/admin" &&
-    !pathname.startsWith("/companies") &&
+    !pathname.startsWith("/providers") &&
     pathname !== "/onboarding"
   ) {
     router.replace("/");
   } else if (session && pathname === "/") {
     if (userData?.activeRole === "Client") {
-      router.replace("/companies");
+      router.replace("/providers");
       return (
         <Spinner
           size="small"
@@ -159,7 +159,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
       );
     }
   } else if (session && userData?.activeRole === "Provider") {
-    if (pathname.startsWith("/companies")) {
+    if (pathname.startsWith("/providers")) {
       router.replace(`/cpc/${userData.id}`);
       return (
         <Spinner
@@ -178,7 +178,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     }
   } else if (session && userData?.activeRole === "Client") {
     if (pathname === `/cpc/${userData?.id}`) {
-      router.push("/companies");
+      router.push("/providers");
       return (
         <Spinner
           size="small"

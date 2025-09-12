@@ -5,24 +5,17 @@ import { Card } from "../../components/ui/card";
 import { Heading } from "../../components/ui/heading";
 import { Text } from "../../components/ui/text";
 import { Button, ButtonIcon } from "../../components/ui/button";
-// import { Pressable } from "../ui/pressable";
 import { FormControl } from "../../components/ui/form-control";
 import { Input, InputField } from "../../components/ui/input";
 import { useToast, Toast, ToastTitle } from "../../components/ui/toast";
 import LocationDetails from "./LocationDetails";
 import ContactInfo from "./ContactInfo";
-
-import {
-  Icon,
-  EditIcon,
-  CheckIcon,
-  CloseIcon,
-} from "@/components/ui/icon";
+import { Icon, EditIcon, CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { UserData, CompanyData } from "@/types";
 import { updateCompanyProfile } from "@/axios/users";
 import "react-phone-input-2/lib/style.css";
 import SocialMediaDetails from "./SocialMediaDetails";
-// import { AddIcon } from "@/components/ui/icon";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 type EditableFields = keyof UserData | keyof CompanyData;
 
@@ -40,6 +33,7 @@ const ProfileDetails = ({
   >({});
   const [isSaving, setIsSaving] = useState(false);
   const toast = useToast();
+  const { t } = useTranslation(); // Add this hook
 
   const handleEditStart = (fields: Partial<Record<EditableFields, string>>) => {
     setEditingFields(fields);
@@ -71,7 +65,7 @@ const ProfileDetails = ({
         placement: "top",
         render: ({ id }) => (
           <Toast nativeID={id} action="success">
-            <ToastTitle>Profile updated successfully!</ToastTitle>
+            <ToastTitle>{t("profileDetails.toast.success")}</ToastTitle>
           </Toast>
         ),
       });
@@ -82,7 +76,7 @@ const ProfileDetails = ({
           <Toast nativeID={id} variant="outline" action="error">
             <ToastTitle>
               {(error as any).response?.data?.message ||
-                "Failed to update profile. Please try again."}
+                t("profileDetails.toast.error")}
             </ToastTitle>
           </Toast>
         ),
@@ -97,7 +91,7 @@ const ProfileDetails = ({
       {(activeRoleId?.subcategories ?? []).length > 0 && (
         <VStack>
           <Heading size="xs" className="md:text-md mb-2">
-            Categories Provided
+            {t("profileDetails.categoriesProvided")}
           </Heading>
           <VStack className="w-fit grid grid-cols-3 gap-2">
             {activeRoleId?.subcategories?.map((subcategory) => (
@@ -114,7 +108,7 @@ const ProfileDetails = ({
       <FormControl>
         <VStack>
           <Heading size="xs" className="md:text-md mb-2">
-            Description
+            {t("profileDetails.description")}
           </Heading>
           {"providerDescription" in editingFields ? (
             <VStack className="gap-2">

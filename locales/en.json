@@ -25,14 +25,11 @@
   "joinCompaniesCenter": "Join companiescenter and connect with leading companies offering a wide range of services.",
   "browseCompanies": "Browse companies",
 
-  "companyDetails": {
-    "serviceProvidersNearYou": "Service Providers Near You",
-    "loadMore": "Load More",
-    "noMoreCompanies": "No more companies to load.",
-    "noCompanySelected": "No company selected."
-  },
+  "serviceProvidersNearYou": "Service Providers Near You",
+  "loadMore": "Load More",
+  "noMoreCompanies": "No more companies to load.",
+  "noCompanySelected": "No company selected.",
 
-  "contactInfo": {
   "request_quote_availability": "Request quote & availability",
   "response_time": "Response time",
   "response_time_value": "10 minutes",
@@ -42,10 +39,7 @@
   "no_email": "No email provided",
   "website": "Website",
   "no_phone": "No phone number provided",
-  "get_directions": "Get Directions"
-},
-
-
+  "get_directions": "Get Directions",
 
   "for_clients": "For Clients",
   "find_companies_your_way": "Find companies your way",
@@ -58,9 +52,6 @@
   "for_client_card3_title": "Get advice from a service expert",
   "for_client_card3_desc": "Consultations",
 
-
-
-
   "home_company_alt": "home_company",
   "for_companies": "For Companies",
   "find_great_jobs": "Find great jobs",
@@ -70,13 +61,9 @@
   "for_companies_point3": "Explore different engagement models to suit your needs",
   "find_opportunities": "Find opportunities",
 
-
-
   "homeheader_title": "CompanyCenterLLC",
   "homeheader_subtitle": "Your Trusted Platform for Connecting with Leading Companies. Whether you're looking to hire or get hired, we provide a comprehensive marketplace for businesses and job seekers.",
   "homeheader_slide_alt": "Carousel slide {{index}}",
-
-
 
   "whychooseus_heading": "Why businesses turn to CompaniesCenterLLC",
   "whychooseus_network_title": "Extensive Network",
@@ -87,9 +74,6 @@
   "whychooseus_trust_description": "Read reviews and ratings from other users to make informed decisions.",
   "whychooseus_join_button": "Join Now",
 
-
-
-  "becomeACompany_step1": "Step 1: Create Your Account",
   "firstName": "First Name",
   "lastName": "Last Name",
   "companyName": "Company Name",
@@ -102,33 +86,12 @@
   "firstImageHint": "The first image should be the company's logo or the most preferred image.",
   "clickToUpload": "Click to Upload",
   "dragImagesHere": "Drag images here or",
-  "back": "Back",
+
   "continue": "Continue",
   "profilePictureBenefits": "A profile picture helps build trust and credibility by allowing clients to recognize and connect with you, creating a more personalized and professional experience",
-  "validation": {
-    "firstNameRequired": "First name is required",
-    "lastNameRequired": "Last name is required",
-    "companyNameRequired": "Company name is required",
-    "companyPhoneRequired": "Company phone number is required",
-    "companyEmailRequired": "Company email is required",
-    "companyEmailInvalid": "Invalid email address",
-    "companyDescriptionRequired": "Company description is required",
-    "imageSizeError": "Each image must be less than {maxSize}MB"
-  },
-  "placeholders": {
-    "firstName": "John",
-    "lastName": "Doe",
-    "companyName": "Your Company Name",
-    "companyEmail": "companyemail@example.com",
-    "companyDescription": "Describe your company and its services"
-  },
-
 
   "profileUpdatedSuccess": "Profile updated successfully!",
   "profileUpdateFailed": "Failed to update profile. Please try again.",
-
-
-
 
   "chooseServicesTitle": "Choose Specialized Company Services",
   "chooseServicesDescription": "Select up to {maxServices} specialized services that best represent your company's expertise.",
@@ -138,10 +101,6 @@
   "noSubcategories": "No subcategories available",
   "selectedServices": "Selected Services",
 
-
-
-
-
   "pageone_heading": "Join as a Client or Service Provider",
   "pageone_client_option": "I'm a Client, hiring for a project",
   "pageone_company_option": "I'm a Service Provider, ready to render my services",
@@ -149,7 +108,139 @@
   "pageone_apply_company": "Apply as Service Provider",
   "pageone_apply_default": "Apply",
   "pageone_already_account": "Already have an account?",
-  "pageone_signin": "Sign In"
+  "pageone_signin": "Sign In",
+
+
+  "clients": "clients",
+  "services": "Services",
+  "reviews": "Reviews",
+  "contactInfo": "Contact Information",
+  "hours": "Hours",
+  "location": "Location",
+  "about": "About",
+  "rating": "Rating",
+  "reviewsCount": "{count} reviews",
+
+  "createService": {
+    "title": "Create and showcase your service globally",
+    "description": "Fill out the form below to create your service listing.",
+    "form": {
+      "title": {
+        "label": "Title",
+        "description": "Describe what the client will be hiring you for.",
+        "placeholder": "We offer ..."
+      },
+      "category": {
+        "label": "Service Category",
+        "description": "Select a category so it's easy for clients to find your service.",
+        "placeholder": "Browse our list of categories"
+      },
+      "price": {
+        "label": "Pricing",
+        "description": "Price",
+        "placeholder": "Enter price in $"
+      },
+      "location": {
+        "label": "Service Location",
+        "description": "Where will you be providing this service?",
+        "placeholder": "Choose from your registered address",
+        "error": "Address is required"
+      },
+      "description": {
+        "label": "Service Description",
+        "description": "Briefly explain what sets you and your Service apart.",
+        "placeholder": "Enter service description"
+      },
+      "images": {
+        "label": "Service Image",
+        "description": "Upload up to 3 images (.jpg or .png), up to 10MB each and less than 4,000 pixels, in width or height.",
+        "uploadText": "Drag images here or Click to Upload"
+      }
+    },
+    "buttons": {
+      "done": "Done",
+      "pleaseWait": "Please Wait"
+    },
+    "categories": {
+      "plumbing": "Plumbing",
+      "houseCleaning": "House Cleaning",
+      "electricalWork": "Electrical Work",
+      "industrialPainting": "Industrial Painting"
+    }
+  },
+
+  "featuredCompanies": "Featured Companies",
+  "reviewScore": "{score}/5.0",
+  "viewAll": "View All",
+  "seeMore": "See More Companies",
+
+
+
+
+    "imagesInfo": "Upload up to {maxImages} images (max {maxImageSize}MB each). Showcase your work with high-quality photos.",
+    "videosInfo": "Upload up to {maxVideos} videos (max {maxVideoSize}MB each). Demonstrate your process or showcase examples.",
+    "addImage": "Add Image",
+    "addVideo": "Add Video",
+    "videoPreview": "Video Preview",
+    "back": "Back",
+    "submitService": "Submit Service",
+    "submitting": "Submitting...",
+
+      "serviceCreated": "Service data has been created successfully",
+      "serviceUpdated": "Service data updated successfully",
+
+      "fileSizeError": "Each {fileType} must be less than {maxSize}MB",
+
+
+
+
+    "loading": "Loading profile...",
+    "registeredOn": "Registered on the {date}",
+    "online": "Online",
+    "brandShowcase": "Brand Showcase",
+
+      "invalidImage": "Please upload a valid image file (JPEG, PNG, GIF, WEBP)",
+      "fileTooLarge": "Image size should be less than 5MB",
+      "uploadSuccess": "Profile picture updated successfully!",
+
+
+
+
+    "categoriesProvided": "Categories Provided",
+    "description": "Description",
+
+      "success": "Profile updated successfully!",
+      "error": "Failed to update profile. Please try again.",
+
+
+
+    "title": "Reviews",
+    "noReviews": "No reviews yet!",
+    "anonymousUser": "Anonymous User",
+    "imageCount": "{count} image{plural}",
+    "moreButton": "More",
+    "lessButton": "Less",
+
+
+
+
+    "newServiceButton": "What's New In Your Service",
+    "noUpdatesAvailable": "No updates available for this service yet. Click the button to add new updates.",
+    "viewAllUpdates": "View All Updates",
+    "noProviderUpdates": "No updates available for this provider.",
+    "updatesFromCompany": "Updates from this service company",
+    "noCompanyUpdates": "No updates from this company",
+
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "twitter": "Twitter / X",
+    "other": "Other",
+    "noLink": "No link added",
+    "invalidUrl": "Please enter a valid {{platform}} URL"
+
+
+
 
 
 

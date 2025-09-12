@@ -9,7 +9,6 @@ import Image from "next/image";
 import { createService, updateService } from "@/axios/services";
 import { useRouter } from "next/navigation";
 import { Toast, useToast, ToastTitle } from "@/components/ui/toast";
-
 import {
   UseFormWatch,
   UseFormSetValue,
@@ -19,6 +18,7 @@ import {
   UseFormClearErrors,
 } from "react-hook-form";
 import { ServiceData } from "@/types";
+import { useTranslation } from "@/context/TranslationContext"; // Add this import
 
 type FormData = {
   title: string;
@@ -30,12 +30,11 @@ type FormData = {
   revisions: number;
   images: File[];
   videos: File[];
-  // Optionally add id if you want to distinguish edit mode
   _id?: string;
 };
 
-const MAX_IMAGE_SIZE_MB = 5; // 5MB
-const MAX_VIDEO_SIZE_MB = 20; // 20MB
+const MAX_IMAGE_SIZE_MB = 5;
+const MAX_VIDEO_SIZE_MB = 20;
 const MAX_IMAGES = 3;
 const MAX_VIDEOS = 2;
 
@@ -58,6 +57,7 @@ const StepThree = ({
 }) => {
   const [focusedField, setFocusedField] = useState<string | "">("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useTranslation(); // Add this hook
 
   const images = watch("images") || [];
   const videos = watch("videos") || [];
@@ -97,7 +97,9 @@ const StepThree = ({
         } else {
           setError(type, {
             type: "size",
-            message: `Each ${type.slice(0, -1)} must be less than ${maxSize}MB`,
+            message: t('stepThree.validation.fileSizeError')
+              .replace('{fileType}', type.slice(0, -1))
+              .replace('{maxSize}', maxSize.toString()),
           });
           return;
         }
@@ -109,7 +111,7 @@ const StepThree = ({
         });
       }
     },
-    [watch, setValue, setError, clearErrors]
+    [watch, setValue, setError, clearErrors, t]
   );
 
   const removeFile = useCallback(
@@ -142,13 +144,13 @@ const StepThree = ({
       if (data._id) {
         serviceData = await updateService(data._id, formData);
         if (serviceData) {
-          showToast("Service data updated successfully", "success");
+          showToast(t('stepThree.success.serviceUpdated'), "success");
           router.replace("/");
         }
       } else {
         serviceData = await createService(formData);
         if (serviceData) {
-          showToast("Service data has been created successfully", "success");
+          showToast(t('stepThree.success.serviceCreated'), "success");
           router.replace("/");
         }
       }
@@ -165,7 +167,9 @@ const StepThree = ({
       {/* Images Upload */}
       <FieldWithInfo
         id="images"
-        infoText={`Upload up to ${MAX_IMAGES} images (max ${MAX_IMAGE_SIZE_MB}MB each). Showcase your work with high-quality photos.`}
+        infoText={t('stepThree.imagesInfo')
+          .replace('{maxImages}', MAX_IMAGES.toString())
+          .replace('{maxImageSize}', MAX_IMAGE_SIZE_MB.toString())}
         focusedField={focusedField}
         errors={errors}
       >
@@ -203,7 +207,7 @@ const StepThree = ({
               >
                 <Icon as={ArrowUpIcon} className="w-8 h-8 text-gray-400 mb-2" />
                 <Text className="text-xs md:text-sm text-gray-600">
-                  Add Image
+                  {t('stepThree.addImage')}
                 </Text>
                 <Text className="text-xs text-gray-400">
                   {images.length}/{MAX_IMAGES}
@@ -225,7 +229,9 @@ const StepThree = ({
       {/* Videos Upload */}
       <FieldWithInfo
         id="videos"
-        infoText={`Upload up to ${MAX_VIDEOS} videos (max ${MAX_VIDEO_SIZE_MB}MB each). Demonstrate your process or showcase examples.`}
+        infoText={t('stepThree.videosInfo')
+          .replace('{maxVideos}', MAX_VIDEOS.toString())
+          .replace('{maxVideoSize}', MAX_VIDEO_SIZE_MB.toString())}
         focusedField={focusedField}
         errors={errors}
       >
@@ -234,7 +240,9 @@ const StepThree = ({
             {videos.map((file: File, index: number) => (
               <div key={index} className="relative group">
                 <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Text className="text-gray-500">Video Preview</Text>
+                  <Text className="text-gray-500">
+                    {t('stepThree.videoPreview')}
+                  </Text>
                 </div>
                 <Button
                   size="sm"
@@ -259,7 +267,7 @@ const StepThree = ({
               >
                 <Icon as={ArrowUpIcon} className="w-8 h-8 text-gray-400 mb-2" />
                 <Text className="text-xs md:text-sm text-gray-600">
-                  Add Video
+                  {t('stepThree.addVideo')}
                 </Text>
                 <Text className="text-xs text-gray-400">
                   {videos.length}/{MAX_VIDEOS}
@@ -286,7 +294,7 @@ const StepThree = ({
           onPress={() => setStep(2)}
           className="border-gray-300"
         >
-          <ButtonText>Back</ButtonText>
+          <ButtonText>{t('stepThree.back')}</ButtonText>
         </Button>
         <Button
           size="xs"
@@ -294,7 +302,7 @@ const StepThree = ({
           className="bg-indigo-600 disabled:opacity-50"
         >
           <ButtonText className="text-white">
-            {isSubmitting ? "Submitting..." : "Submit Service"}
+            {isSubmitting ? t('stepThree.submitting') : t('stepThree.submitService')}
           </ButtonText>
         </Button>
       </HStack>
@@ -304,7 +312,7 @@ const StepThree = ({
           onPress={() => setStep(2)}
           className="border-gray-300"
         >
-          <ButtonText>Back</ButtonText>
+          <ButtonText>{t('stepThree.back')}</ButtonText>
         </Button>
         <Button
           onPress={() => handleSubmit(onSubmit)()}
@@ -312,7 +320,7 @@ const StepThree = ({
           className="bg-indigo-600 disabled:opacity-50"
         >
           <ButtonText className="text-white">
-            {isSubmitting ? "Submitting..." : "Submit Service"}
+            {isSubmitting ? t('stepThree.submitting') : t('stepThree.submitService')}
           </ButtonText>
         </Button>
       </HStack>

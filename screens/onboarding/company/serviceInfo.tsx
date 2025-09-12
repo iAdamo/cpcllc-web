@@ -7,97 +7,79 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { ServiceCategory, Subcategory } from "@/types";
-import { useTranslation } from "@/context/TranslationContext"; // Add this import
+import { Subcategory } from "@/types";
+import { useTranslation } from "@/context/TranslationContext";
 
 interface SelectedSubcategory extends Subcategory {
   categoryName: string;
+  categoryId: string;
 }
 
 const MAX_SERVICES = 3;
 
 const ServicesInfo = () => {
   const { prevStep, nextStep, data, setData, categories } = useOnboarding();
-  const { t } = useTranslation(); // Add this hook
+  const { t } = useTranslation();
 
-  const [selectedServices, setSelectedSubcategory] = useState<
+  const [selectedServices, setSelectedServices] = useState<
     SelectedSubcategory[]
   >((data.subcategories as SelectedSubcategory[]) || []);
-  const [availableCategories, setAvailableCategories] = useState<
-    ServiceCategory[]
-  >(
-    (data.availableCategories as ServiceCategory[]) ||
-      categories.map((category) => ({
-        ...category,
-        subcategories: category.subcategories.filter(
-          (subcategory: Subcategory) =>
-            !selectedServices.some((selected) => selected.id === subcategory.id)
-        ),
-      }))
-  );
   const [selectionLimitReached, setSelectionLimitReached] = useState(false);
-
+  // console.log("ServicesInfo selectedServices:", data);
   useEffect(() => {
     setSelectionLimitReached(selectedServices.length >= MAX_SERVICES);
   }, [selectedServices]);
 
-  const handleSelectSubcategory = (
+  const handleToggleSubcategory = (
     subcategory: Subcategory,
-    categoryName: string
+    categoryName: string,
+    categoryId: string
   ): void => {
-    if (selectedServices.length >= MAX_SERVICES) return;
+    const isAlreadySelected = selectedServices.some(
+      (service) => service._id === subcategory._id
+    );
 
-    const subcategoryId = subcategory.id;
+    if (isAlreadySelected) {
+      // Remove from selected
+      handleRemoveSubcategory(subcategory._id);
+    } else {
+      // Add to selected (if under limit)
+      if (selectedServices.length < MAX_SERVICES) {
+        handleAddSubcategory(subcategory, categoryName, categoryId);
+      }
+    }
+  };
 
-    // Remove from available
-    setAvailableCategories((prev: ServiceCategory[]) => {
-      const updatedCategories = prev.map((category) => ({
-        ...category,
-        subcategories: category.subcategories.filter(
-          (item) => item.id !== subcategoryId
-        ),
-      }));
-      setData({ availableCategories: updatedCategories });
-      return updatedCategories;
-    });
-
-    // Add to selected with categoryName
-    setSelectedSubcategory((prev: SelectedSubcategory[]) => {
-      const updated = [...prev, { ...subcategory, categoryName }];
-      setData({
-        subcategories: updated,
-      });
+  const handleAddSubcategory = (
+    subcategory: Subcategory,
+    categoryName: string,
+    categoryId: string
+  ): void => {
+    setSelectedServices((prev: SelectedSubcategory[]) => {
+      const updated = [
+        ...prev,
+        {
+          ...subcategory,
+          _id: subcategory._id, // ensure _id is present
+          categoryName,
+          categoryId,
+        },
+      ];
+      setData({ subcategories: updated });
       return updated;
     });
   };
 
-  const handleRemoveSubcategory = (subcategory: SelectedSubcategory): void => {
-    const subcategoryId = subcategory.id;
-
-    // Remove from selected
-    setSelectedSubcategory((prev: SelectedSubcategory[]) => {
-      const updatedSelected = prev.filter((item) => item.id !== subcategoryId);
+  const handleRemoveSubcategory = (subcategoryId: string): void => {
+    setSelectedServices((prev: SelectedSubcategory[]) => {
+      const updatedSelected = prev.filter((item) => item._id !== subcategoryId);
       setData({ subcategories: updatedSelected });
       return updatedSelected;
     });
+  };
 
-    // Restore to original category
-    setAvailableCategories((prev: ServiceCategory[]) => {
-      const updatedCategories = prev.map((category) =>
-        category.name === subcategory.categoryName
-          ? {
-              ...category,
-              subcategories: [
-                ...category.subcategories,
-                { id: subcategory.id, name: subcategory.name },
-              ],
-            }
-          : category
-      );
-
-      setData({ availableCategories: updatedCategories });
-      return updatedCategories;
-    });
+  const isSubcategorySelected = (subcategoryId: string): boolean => {
+    return selectedServices.some((service) => service._id === subcategoryId);
   };
 
   return (
@@ -131,82 +113,72 @@ const ServicesInfo = () => {
           )}
         </VStack>
 
-        <VStack className="md:flex-row flex-col-reverse h-full gap-4">
-          {/* Available Services */}
-          <VStack
-            className={`${
-              selectedServices.length > 0 ? "md:w-3/5 w-full" : "w-full"
-            } h-full`}
-          >
-            <Heading size="sm" className="md:text-lg mb-4">
-              {t("availableServices")}
-            </Heading>
-            {availableCategories.map((category, categoryIndex) => (
-              <VStack key={categoryIndex} className="mb-6">
-                <Card variant="outline" className="p-4">
-                  <Heading size="md" className="mb-2">
-                    {category.name}
-                  </Heading>
-                  {category.subcategories.length > 0 ? (
-                    <HStack className="flex-wrap gap-x-4 gap-y-2">
-                      {category.subcategories.map(
-                        (subcategory, subcategoryIndex) => (
-                          <Button
-                            key={subcategoryIndex}
-                            variant="outline"
-                            size="xs"
-                            className={`rounded-3xl ${
-                              selectionLimitReached
-                                ? "opacity-50 cursor-not-allowed"
-                                : "data-[hover=true]:bg-[#F6F6F6]"
-                            }`}
-                            onPress={() =>
-                              !selectionLimitReached &&
-                              handleSelectSubcategory(
-                                subcategory,
-                                category.name
-                              )
-                            }
-                            disabled={selectionLimitReached}
-                          >
-                            <ButtonIcon as={CheckIcon} />
-                            <ButtonText>{subcategory.name}</ButtonText>
-                          </Button>
-                        )
-                      )}
-                    </HStack>
-                  ) : (
-                    <Text className="text-sm text-gray-400">
-                      {t("noSubcategories")}
-                    </Text>
-                  )}
-                </Card>
-              </VStack>
-            ))}
-          </VStack>
-
-          {/* Selected Services */}
-          {selectedServices.length > 0 && (
-            <VStack className="md:w-3/5 w-full h-full">
-              <Heading size="sm" className="md:text-lg mb-4">
-                {t("selectedServices")}
-              </Heading>
-              <Card variant="outline" className="flex-row flex-wrap gap-2 p-4">
-                {selectedServices.map((subcategory, index) => (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    size="xs"
-                    className="bg-[#F6F6F6] rounded-3xl"
-                    onPress={() => handleRemoveSubcategory(subcategory)}
-                  >
-                    <ButtonIcon as={CloseIcon} />
-                    <ButtonText>{subcategory.name}</ButtonText>
-                  </Button>
-                ))}
+        {/* Services List with Highlighted Selection */}
+        <VStack className="w-full">
+          <Heading size="sm" className="md:text-lg mb-4">
+            {t("availableServices")}
+          </Heading>
+          {categories.map((category) => (
+            <VStack key={category._id} className="mb-6">
+              <Card variant="outline" className="p-4">
+                <Heading size="md" className="mb-2">
+                  {category.name}
+                </Heading>
+                {category.subcategories.length > 0 ? (
+                  <HStack className="flex-wrap gap-x-4 gap-y-2">
+                    {category.subcategories.map((subcategory) => {
+                      const isSelected = isSubcategorySelected(subcategory._id);
+                      return (
+                        <Button
+                          key={subcategory._id}
+                          variant={isSelected ? "solid" : "outline"}
+                          size="xs"
+                          className={`rounded-3xl ${
+                            selectionLimitReached && !isSelected
+                              ? "opacity-50 cursor-not-allowed"
+                              : "data-[hover=true]:bg-[#F6F6F6]"
+                          } ${
+                            isSelected
+                              ? "bg-brand-primary data-[hover=true]:bg-brand-primary/60"
+                              : ""
+                          }`}
+                          onPress={() =>
+                            handleToggleSubcategory(
+                              subcategory,
+                              category.name,
+                              category._id
+                            )
+                          }
+                          disabled={selectionLimitReached && !isSelected}
+                        >
+                          {isSelected ? (
+                            <>
+                              <ButtonIcon
+                                as={CloseIcon}
+                                className="text-white"
+                              />
+                              <ButtonText className="text-white">
+                                {subcategory.name}
+                              </ButtonText>
+                            </>
+                          ) : (
+                            <>
+                              <ButtonIcon as={CheckIcon} />
+                              <ButtonText>{subcategory.name}</ButtonText>
+                            </>
+                          )}
+                        </Button>
+                      );
+                    })}
+                  </HStack>
+                ) : (
+                  <Text className="text-sm text-gray-400">
+                    {t("noSubcategories")}
+                  </Text>
+                )}
               </Card>
             </VStack>
-          )}
+          ))}
         </VStack>
       </VStack>
 
