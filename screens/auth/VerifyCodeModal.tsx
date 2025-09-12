@@ -5,6 +5,7 @@ import { sendCode, verifyEmail } from "@/axios/auth";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
 import { Keyboard } from "react-native";
 import { useRouter, usePathname } from "next/navigation";
+import { useSession } from "@/context/AuthContext";
 
 interface VerifyCodeModalProps {
   isOpen: boolean;
@@ -25,7 +26,18 @@ const VerifyCodeModal: React.FC<VerifyCodeModalProps> = ({
   const router = useRouter();
   const pathname = usePathname();
 
+  const { fetchUserProfile } = useSession();
+
   const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (isOpen && !isEmailVerified) {
+      (async () => {
+        await fetchUserProfile();
+      })();
+    }
+  }, [isOpen, isEmailVerified, fetchUserProfile]);
+
 
   useEffect(() => {
     let timer: NodeJS.Timeout;

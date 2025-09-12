@@ -13,13 +13,13 @@ import RatingSection from "@/components/RatingSection";
 import { useTranslation } from "@/context/TranslationContext";
 
 const BrowseCompanies = () => {
-  const [companies, setUsers] = useState<CompanyData[]>([]);
+  const [providers, setUsers] = useState<CompanyData[]>([]);
   const router = useRouter();
   const { t } = useTranslation();
 
   useEffect(() => {
     const fetchCompanies = async () => {
-      const { companies: response } = await globalSearch(
+      const { providers: response } = await globalSearch(
         1,
         10,
         false,
@@ -43,17 +43,17 @@ const BrowseCompanies = () => {
           {t("joinCompaniesCenter")}
         </Text>
         <Link
-          href="/companies"
+          href="/providers"
           className="hidden md:inline text-2xl text-btn-primary hover:text-brand-secondary font-semibold underline"
         >
           {t("browseCompanies")}
         </Link>
       </VStack>
       <VStack className="md:flex-row md:grid grid-cols-3 h-full w-full md:bg-transparent rounded-xl p-2 bg-[#F1F0FF] gap-8">
-        {companies.map((provider, index) => (
+        {providers.map((provider, index) => (
           <Link
             key={index}
-            href={`companies/${provider?._id || ""}`}
+            href={`providers/${provider?._id || ""}`}
             className="md:aspect-square"
           >
             <Card
@@ -88,7 +88,7 @@ const BrowseCompanies = () => {
       </VStack>
       <Button
         variant="outline"
-        onPress={() => router.push("/companies")}
+        onPress={() => router.push("/providers")}
         className="md:hidden "
       >
         <ButtonText>{t("browseCompanies")}</ButtonText>
