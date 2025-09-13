@@ -36,8 +36,8 @@ const FinalStep = () => {
             );
             ids.forEach(
               (id) => (
-                formData.append("subcategories[]", id.category),
-                formData.append("categories[]", id.subcategory)
+                formData.append("subcategories[]", id.subcategory),
+                formData.append("categories[]", id.category)
               )
             );
           } else {

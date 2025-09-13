@@ -86,6 +86,8 @@ const ProfileDetails = ({
     }
   };
 
+  console.log("Active Role ID:", activeRoleId);
+
   return (
     <VStack className="gap-8">
       {(activeRoleId?.subcategories ?? []).length > 0 && (

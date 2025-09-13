@@ -57,6 +57,7 @@ const CompaniesSection = () => {
         setCompanies((prev) =>
           currentPage === 1 ? response : [...prev, ...response]
         );
+        console.log("Fetched companies:", response);
         setCompanies(response);
       } catch (error) {
         console.error("Error fetching companies:", error);
