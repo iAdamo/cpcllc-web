@@ -3,15 +3,26 @@ import { CompanyData, UserData } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
-export const updateCompanyProfile = async (
+export const updateProviderProfile = async (
   data: FormData
 ): Promise<CompanyData> => {
-  const response = await axiosInstance.patch("provider/profile", data, {
+  const response = await axiosInstance.patch("provider", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 
+  return response.data;
+};
+
+export const createProviderProfile = async (
+  data: FormData
+): Promise<UserData> => {
+  const response = await axiosInstance.post("provider", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 

@@ -16,7 +16,7 @@ const FinalStep = () => {
 
   const { data, submitData } = useOnboarding();
   const router = useRouter();
-  const { userData, updateCompanyProfile, fetchUserProfile } = useSession();
+  const { userData, createProviderProfile, fetchUserProfile } = useSession();
   const { t } = useTranslation(); // Add this hook
   // console.log("FinalStep data:", data);
   const handleSubmit = async () => {
@@ -41,9 +41,9 @@ const FinalStep = () => {
               )
             );
           } else {
-            value.forEach((file) => {
+            value.forEach((file, idx) => {
               if (file instanceof File) {
-                formData.append(key, file);
+                formData.append(key, file, `providerImage-${idx}`);
               }
             });
           }
@@ -74,8 +74,8 @@ const FinalStep = () => {
           formData.append(key, value as string);
         }
       });
-      // console.log("Submitting formData:", Array.from(formData.entries()));
-      await updateCompanyProfile(formData);
+       console.log("Submitting formData:", Array.from(formData.entries()));
+      await createProviderProfile(formData);
       await fetchUserProfile();
       setSuccess(true);
       submitData();

@@ -12,7 +12,7 @@ import LocationDetails from "./LocationDetails";
 import ContactInfo from "./ContactInfo";
 import { Icon, EditIcon, CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { UserData, CompanyData } from "@/types";
-import { updateCompanyProfile } from "@/axios/users";
+import { updateProviderProfile } from "@/axios/users";
 import "react-phone-input-2/lib/style.css";
 import SocialMediaDetails from "./SocialMediaDetails";
 import { useTranslation } from "@/context/TranslationContext"; // Add this import
@@ -57,7 +57,8 @@ const ProfileDetails = ({
           formData.append(key, value || "");
         }
       });
-      await updateCompanyProfile(formData);
+      // console.log("Submitting formData:", Array.from(formData.entries()));
+      await updateProviderProfile(formData);
       await fetchUserProfile();
 
       setEditingFields({});

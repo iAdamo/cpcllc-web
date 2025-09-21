@@ -83,12 +83,12 @@
   "profilePicture": "Profile Picture",
   "professionalCompanyImages": "Professional Company Images",
   "uploadImagesHint": "Upload up to 6 professional company images (.jpg or .png) that showcase your company. Ensure each image is under 10MB.",
-  "firstImageHint": "The first image should be the company's logo or the most preferred image.",
+  "firstImageHint": "You can add more later on",
   "clickToUpload": "Click to Upload",
   "dragImagesHere": "Drag images here or",
 
   "continue": "Continue",
-  "profilePictureBenefits": "A profile picture helps build trust and credibility by allowing clients to recognize and connect with you, creating a more personalized and professional experience",
+  "profilePictureBenefits": "Your Company's Logo helps build trust and credibility by allowing clients to recognize and connect with you, creating a more personalized and professional experience",
 
   "profileUpdatedSuccess": "Profile updated successfully!",
   "profileUpdateFailed": "Failed to update profile. Please try again.",

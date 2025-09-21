@@ -14,7 +14,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { useSession } from "@/context/AuthContext";
-import { userProfile, updateUserProfile } from "@/axios/users";
+import { userProfile, updateProviderProfile } from "@/axios/users";
 import { UserData, ReviewData } from "@/types";
 import ReviewSection from "./ReviewSection";
 import ServiceSection from "./ServiceSection";
@@ -94,9 +94,9 @@ const ProfilePage = () => {
     try {
       setIsUploading(true);
       const formData = new FormData();
-      formData.append("profilePicture", file);
+      formData.append("providerLogo", file, "providerLogo");
 
-      const updatedUser = await updateUserProfile(formData);
+      const updatedUser = await updateProviderProfile(formData);
       if (updatedUser) {
         showToast(t("profile.toast.uploadSuccess"), "success");
         if (userData?.id === id) {
@@ -156,7 +156,7 @@ const ProfilePage = () => {
                             <Image
                               className="object-cover h-full w-full"
                               src={
-                                data.profilePicture ||
+                                data.activeRoleId?.providerLogo ||
                                 "/assets/default-profile.jpg"
                               }
                               alt="profile-image"
@@ -180,7 +180,7 @@ const ProfilePage = () => {
                                 {getInitial(data.email || data.firstName || "")}
                               </AvatarFallbackText>
                               <AvatarImage
-                                source={{ uri: data.profilePicture }}
+                                source={{ uri: data.activeRoleId?.providerLogo }}
                               />
                               {isCurrentUser && (
                                 <ProfileUploadButton
@@ -197,7 +197,7 @@ const ProfilePage = () => {
                         <VStack className="md:gap-4 gap-2 md:items-start items-center">
                           <VStack className="gap-1 md:items-start items-center">
                             <Heading size="lg" className="md:text-2xl">
-                              {userData?.firstName} {userData?.lastName}
+                              {activeRoleId?.providerName}
                             </Heading>
                             <RatingSection
                               rating={activeRoleId?.averageRating}

@@ -36,6 +36,17 @@ const BasicInfo = () => {
   const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
     data.profilePicture
   );
+  const [selectedProviderLogo, setSelectedProviderLogo] = useState<File | null>(
+    data.providerLogo
+  );
+  const handleProviderLogoChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedProviderLogo(file);
+    }
+  };
 
   const {
     control,
@@ -143,7 +154,7 @@ const BasicInfo = () => {
     updateData.append("firstName", formData.firstName);
     updateData.append("lastName", formData.lastName);
     if (selectedProfileImage) {
-      updateData.append("profilePicture", selectedProfileImage);
+      updateData.append("profilePicture", selectedProfileImage, "profilePicture");
     }
     try {
       await updateUserProfile(updateData);
@@ -154,10 +165,75 @@ const BasicInfo = () => {
     setData({
       ...formData,
       profilePicture: selectedProfileImage,
+      providerLogo: selectedProviderLogo,
       providerImages: selectedImages,
     });
     nextStep();
   };
+  <FormControl
+    isInvalid={!!errors.providerLogo}
+    className="md:flex-row flex-col-reverse gap-4 justify-between items-start border border-gray-300 rounded-lg p-4"
+  >
+    <VStack className="md:w-44 md:h-40 w-48 h-44">
+      <Controller
+        name="providerLogo"
+        control={control}
+        render={({ field: { onChange } }) => (
+          <div className="text-center cursor-pointer md:h-40 h-44 border w-full flex items-center justify-center">
+            <label className="w-full h-full cursor-pointer flex flex-col items-center justify-center">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  onChange((e.target as HTMLInputElement).files?.[0]);
+                  handleProviderLogoChange(e);
+                }}
+                className="hidden"
+              />
+              {selectedProviderLogo instanceof File ? (
+                <div className="relative w-full h-full">
+                  <Image
+                    src={URL.createObjectURL(selectedProviderLogo)}
+                    alt="Selected image"
+                    fill
+                    style={{ objectFit: "cover" }}
+                    className="rounded-lg"
+                  />
+                </div>
+              ) : (
+                <p className="text-md text-gray-500 mt-16">
+                  {t("clickToUpload")}
+                </p>
+              )}
+            </label>
+          </div>
+        )}
+      />
+    </VStack>
+    <VStack className="md:w-1/2 w-full ml-auto">
+      <FormControlLabel>
+        <FormControlLabelText className="font-semibold text-md">
+          {t("profilePicture")}
+        </FormControlLabelText>
+      </FormControlLabel>
+      <Card
+        variant="filled"
+        className={`$ {
+                  errors.providerLogo ? "bg-red-200" : "bg-green-200"
+                }`}
+      >
+        {errors.providerLogo ? (
+          <Text size="sm" className="md:text-md text-red-950">
+            {errors.providerLogo?.message}
+          </Text>
+        ) : (
+          <Text size="xs" className="md:text-md font-medium text-green-950 ">
+            {t("profilePictureBenefits")}
+          </Text>
+        )}
+      </Card>
+    </VStack>
+  </FormControl>;
 
   const handleFormSubmit = handleSubmit(onSubmit, (errors) => {
     console.log("Validation Errors:", errors);
@@ -167,67 +243,122 @@ const BasicInfo = () => {
     <VStack className="w-full h-full px-4 my-10 justify-center">
       <VStack className="md:flex-row gap-4 h-full">
         <VStack className="md:w-1/2 w-full gap-6">
-          <HStack className="justify-between">
-            <FormControl isInvalid={!!errors.firstName} className="w-[48%]">
+          <HStack className="gap-8">
+            <FormControl
+              isInvalid={!!errors.profilePicture}
+              className="gap-4 w-1/3"
+            >
               <FormControlLabel>
                 <FormControlLabelText className="font-semibold text-md">
-                  {t("firstName")}
+                  {t("profilePicture")}
                 </FormControlLabelText>
               </FormControlLabel>
-              <Controller
-                name="firstName"
-                control={control}
-                rules={{ required: t("validation.firstNameRequired") }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <Input className="h-12">
-                    <InputField
-                      placeholder={t("placeholders.firstName")}
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      autoCapitalize="words"
-                    />
-                  </Input>
-                )}
-              />
-              {errors.firstName && (
+              <VStack className="w-full h-full">
+                <Controller
+                  name="profilePicture"
+                  control={control}
+                  render={({ field: { onChange } }) => (
+                    <div className="text-center cursor-pointer md:h-40 h-44 border w-full flex items-center justify-center">
+                      <label className="w-full h-full cursor-pointer flex flex-col items-center justify-center rounded-lg">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            onChange((e.target as HTMLInputElement).files?.[0]);
+                            handleProfileImageChange(e);
+                          }}
+                          className="hidden"
+                        />
+                        {selectedProfileImage instanceof File ? (
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={URL.createObjectURL(selectedProfileImage)}
+                              alt="Selected image"
+                              fill
+                              style={{ objectFit: "cover" }}
+                              className="rounded-lg"
+                            />
+                          </div>
+                        ) : (
+                          <p className="text-md text-gray-500 ">
+                            {t("clickToUpload")}
+                          </p>
+                        )}
+                      </label>
+                    </div>
+                  )}
+                />
+              </VStack>
+              {errors.profilePicture && (
                 <FormControlError>
                   <FormControlErrorText className="text-sm">
-                    {errors.firstName.message}
+                    {errors.profilePicture.message}
                   </FormControlErrorText>
                 </FormControlError>
               )}
             </FormControl>
-            <FormControl isInvalid={!!errors.lastName} className="w-[48%]">
-              <FormControlLabel>
-                <FormControlLabelText className="font-semibold text-md">
-                  {t("lastName")}
-                </FormControlLabelText>
-              </FormControlLabel>
-              <Controller
-                name="lastName"
-                control={control}
-                rules={{ required: t("validation.lastNameRequired") }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <Input className="h-12">
-                    <InputField
-                      placeholder={t("placeholders.lastName")}
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      autoCapitalize="words"
-                    />
-                  </Input>
+            <VStack className="md:w-2/3 w-full ml-auto gap-8">
+              <FormControl isInvalid={!!errors.firstName} className="">
+                <FormControlLabel>
+                  <FormControlLabelText className="font-semibold text-md">
+                    {t("firstName")}
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Controller
+                  name="firstName"
+                  control={control}
+                  rules={{ required: t("validation.firstNameRequired") }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input className="h-12">
+                      <InputField
+                        placeholder={t("placeholders.firstName")}
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        autoCapitalize="words"
+                      />
+                    </Input>
+                  )}
+                />
+                {errors.firstName && (
+                  <FormControlError>
+                    <FormControlErrorText className="text-sm">
+                      {errors.firstName.message}
+                    </FormControlErrorText>
+                  </FormControlError>
                 )}
-              />
-              {errors.lastName && (
-                <FormControlError>
-                  <FormControlErrorText className="text-sm">
-                    {errors.lastName.message}
-                  </FormControlErrorText>
-                </FormControlError>
-              )}
-            </FormControl>
+              </FormControl>
+              <FormControl isInvalid={!!errors.lastName} className="">
+                <FormControlLabel>
+                  <FormControlLabelText className="font-semibold text-md">
+                    {t("lastName")}
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Controller
+                  name="lastName"
+                  control={control}
+                  rules={{ required: t("validation.lastNameRequired") }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input className="h-12">
+                      <InputField
+                        placeholder={t("placeholders.lastName")}
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        autoCapitalize="words"
+                      />
+                    </Input>
+                  )}
+                />
+                {errors.lastName && (
+                  <FormControlError>
+                    <FormControlErrorText className="text-sm">
+                      {errors.lastName.message}
+                    </FormControlErrorText>
+                  </FormControlError>
+                )}
+              </FormControl>
+            </VStack>
           </HStack>
           {/** Company Name */}
           <FormControl isInvalid={!!errors.providerName}>
@@ -384,12 +515,12 @@ const BasicInfo = () => {
         </VStack>
         <VStack className="md:w-1/2 w-full gap-4">
           <FormControl
-            isInvalid={!!errors.profilePicture}
+            isInvalid={!!errors.providerLogo}
             className="md:flex-row flex-col-reverse gap-4 justify-between items-start border border-gray-300 rounded-lg p-4"
           >
             <VStack className="md:w-44 md:h-40 w-48 h-44">
               <Controller
-                name="profilePicture"
+                name="providerLogo"
                 control={control}
                 render={({ field: { onChange } }) => (
                   <div className="text-center cursor-pointer md:h-40 h-44 border w-full flex items-center justify-center">
@@ -399,14 +530,14 @@ const BasicInfo = () => {
                         accept="image/*"
                         onChange={(e) => {
                           onChange((e.target as HTMLInputElement).files?.[0]);
-                          handleProfileImageChange(e);
+                          handleProviderLogoChange(e);
                         }}
                         className="hidden"
                       />
-                      {selectedProfileImage instanceof File ? (
+                      {selectedProviderLogo instanceof File ? (
                         <div className="relative w-full h-full">
                           <Image
-                            src={URL.createObjectURL(selectedProfileImage)}
+                            src={URL.createObjectURL(selectedProviderLogo)}
                             alt="Selected image"
                             fill
                             style={{ objectFit: "cover" }}
@@ -414,7 +545,7 @@ const BasicInfo = () => {
                           />
                         </div>
                       ) : (
-                        <p className="text-md text-gray-500 mt-16">
+                        <p className="text-md text-gray-500">
                           {t("clickToUpload")}
                         </p>
                       )}
@@ -426,18 +557,19 @@ const BasicInfo = () => {
             <VStack className="md:w-1/2 w-full ml-auto">
               <FormControlLabel>
                 <FormControlLabelText className="font-semibold text-md">
-                  {t("profilePicture")}
+                  {/* {t("profilePicture")} */}
+                  Company&apos;s Logo
                 </FormControlLabelText>
               </FormControlLabel>
               <Card
                 variant="filled"
                 className={`${
-                  errors.profilePicture ? "bg-red-200" : "bg-green-200"
+                  errors.providerLogo ? "bg-red-200" : "bg-green-200"
                 }`}
               >
                 {errors.profilePicture ? (
                   <Text size="sm" className="md:text-md text-red-950">
-                    {errors.profilePicture?.message}
+                    {errors.providerLogo?.message}
                   </Text>
                 ) : (
                   <Text

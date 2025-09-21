@@ -15,7 +15,12 @@ export const onboardingFormSchema = z.object({
   profilePicture: z.instanceof(File, {
     message: "Profile picture must be a valid file",
   }),
-  providerEmail: z.string().email("Company email must be a valid email address"),
+  providerLogo: z.instanceof(File, {
+    message: "Provider logo must be a valid file",
+  }),
+  providerEmail: z
+    .string()
+    .email("Company email must be a valid email address"),
   providerName: z
     .string()
     .min(3, "Company name must be at least 3 characters long")

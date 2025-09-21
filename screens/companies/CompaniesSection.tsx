@@ -148,7 +148,7 @@ const CompaniesSection = () => {
                   <Image
                     className="md:h-28 md:w-24 h-40 w-full md:rounded-l-md md:rounded-r-none rounded-t-md object-cover"
                     src={
-                      provider?.providerImages?.[0] || "/assets/placeholder.jpg"
+                      provider?.providerLogo || "/assets/placeholder.jpg"
                     }
                     alt={provider?.providerName || "Company Logo"}
                     width={1400}

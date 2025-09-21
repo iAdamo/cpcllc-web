@@ -33,6 +33,7 @@ export interface CompanyData {
   _id: string;
   id: string;
   providerName: string;
+  providerLogo: string;
   providerDescription: string;
   providerEmail: string;
   providerPhoneNumber: string;
@@ -64,6 +65,7 @@ export interface CompanyData {
         lat: number;
         long: number;
       };
+      coordinates?: [number, number];
       address: {
         zip: string;
         city: string;
@@ -114,7 +116,7 @@ export interface AuthContextProps {
   isLoading: boolean;
   loading: boolean;
   logout: () => void;
-  updateCompanyProfile: (data: FormData) => Promise<void>;
+  createProviderProfile: (data: FormData) => Promise<void>;
   fetchUserProfile: () => Promise<void>;
   providerData: CompanyData | null;
 }
@@ -124,6 +126,7 @@ export interface OnboardingData {
   firstName: string;
   lastName: string;
   profilePicture: File | null;
+  providerLogo: File | null;
   providerName: string;
   providerDescription: string;
   providerEmail: string;

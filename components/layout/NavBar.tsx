@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
@@ -26,10 +26,17 @@ const NavBar = () => {
   const [showDrawer, setShowDrawer] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
-  const { session, userData, logout, setUserData } = useSession();
+  const { session, userData, logout, setUserData, fetchUserProfile } =
+    useSession();
   const router = useRouter();
   const currentPath = usePathname();
   const { t, language, setLanguage } = useTranslation();
+
+  useEffect(() => {
+    if (userData && !userData?.isEmailVerified) {
+      fetchUserProfile();
+    }
+  }, [userData, fetchUserProfile]);
 
   const options = [
     { name: t("home"), href: "/" },
@@ -117,7 +124,10 @@ const NavBar = () => {
                 >
                   {language === "en" ? t("english") : t("spanish")}
                 </ButtonText>
-                <ButtonIcon as={ChevronDownIcon} className="ml-1 text-white w-6 h-6" />
+                <ButtonIcon
+                  as={ChevronDownIcon}
+                  className="ml-1 text-white w-6 h-6"
+                />
               </Button>
 
               {showLanguageDropdown && (
@@ -341,7 +351,9 @@ const NavBar = () => {
                       className="justify-start"
                     >
                       <ButtonText className="font-normal">{`${t("switchTo")} ${
-                        userData?.activeRole === "Client" ? "Provider" : "Client"
+                        userData?.activeRole === "Client"
+                          ? "Provider"
+                          : "Client"
                       }`}</ButtonText>
                     </Button>
                     <Divider orientation="horizontal" className="w-full" />

@@ -8,7 +8,7 @@ import { useStorageState } from "@/utils/StorageState";
 import { register, login, logout as logoutRequest } from "@/axios/auth";
 import { useRouter, usePathname } from "next/navigation";
 import type { AuthContextProps, UserData, CompanyData } from "@/types";
-import { updateCompanyProfile, userProfile } from "@/axios/users";
+import { createProviderProfile, userProfile } from "@/axios/users";
 import { Spinner } from "@/components/ui/spinner";
 // import { Heading } from "@/components/ui/heading";
 // import { Center } from "@/components/ui/center";
@@ -80,25 +80,22 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     router.replace("/");
   }, [router, setSession, setUserData, setCompanyData]);
 
-  const updateCompanyProfileHandler = useCallback(
+  const createProviderProfileHandler = useCallback(
     async (data: FormData) => {
       try {
         if (!userData) throw new Error("User data is not available.");
         if (!session) throw new Error("Session is not available.");
-        const response = await updateCompanyProfile(data);
+        const response = await createProviderProfile(data);
         if (response) {
-          const providerData: CompanyData = {
-            ...response,
-            id: response._id,
-          };
-          setCompanyData(providerData);
+          const userData: UserData = { ...response, id: response._id };
+          setUserData(userData);
         }
       } catch (err) {
         console.error("Error updating profile:", err);
         throw err;
       }
     },
-    [userData, session, setCompanyData]
+    [userData, session, setUserData]
   );
 
   const fetchUserProfileHandler = useCallback(async () => {
@@ -194,7 +191,7 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
         register: registerHandler,
         login: loginHandler,
         logout: logoutHandler,
-        updateCompanyProfile: updateCompanyProfileHandler,
+        createProviderProfile: createProviderProfileHandler,
         fetchUserProfile: fetchUserProfileHandler,
         userData,
         setUserData,

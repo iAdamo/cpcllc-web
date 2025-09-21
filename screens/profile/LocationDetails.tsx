@@ -12,7 +12,7 @@ import { useToast, Toast, ToastTitle } from "../../components/ui/toast";
 import { Icon, EditIcon, CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { MapIcon, MapPin, Loader2 } from "lucide-react";
 import { UserData, CompanyData } from "@/types";
-import { updateCompanyProfile } from "@/axios/users";
+import { updateProviderProfile } from "@/axios/users";
 import { useJsApiLoader } from "@react-google-maps/api";
 
 declare global {
@@ -127,35 +127,40 @@ const LocationDetails = ({
       }
 
       formData.append(
-        `location.${editingLocation}.address.address`,
+        `location[${editingLocation}][address][address]`,
         locationData.address?.address || ""
       );
       formData.append(
-        `location.${editingLocation}.address.city`,
+        `location[${editingLocation}][address][city]`,
         locationData.address?.city || ""
       );
       formData.append(
-        `location.${editingLocation}.address.state`,
+        `location[${editingLocation}][address][state]`,
         locationData.address?.state || ""
       );
       formData.append(
-        `location.${editingLocation}.address.zip`,
+        `location[${editingLocation}][address][zip]`,
         locationData.address?.zip || ""
       );
       formData.append(
-        `location.${editingLocation}.address.country`,
+        `location[${editingLocation}][address][country]`,
         locationData.address?.country || ""
       );
       formData.append(
-        `location.${editingLocation}.coordinates.lat`,
+        `location[${editingLocation}][coordinates][lat]`,
         locationData.coordinates.lat.toString()
       );
       formData.append(
-        `location.${editingLocation}.coordinates.long`,
+        `location[${editingLocation}][coordinates][long]`,
         locationData.coordinates.long.toString()
       );
 
-      await updateCompanyProfile(formData);
+      console.log(
+        "Submitting location formData:",
+        Array.from(formData.entries())
+      );
+
+      await updateProviderProfile(formData);
       await fetchUserProfile();
 
       toast.show({
@@ -447,9 +452,9 @@ const LocationDetails = ({
                         >
                           <ButtonIcon as={EditIcon} />
                         </Button>
-                        {location?.coordinates && (
+                        {activeRoleId?.location?.[locationType].coordinates && (
                           <Link
-                            href={`https://www.google.com/maps?q=${location.coordinates.lat},${location.coordinates.long}`}
+                            href={`https://www.google.com/maps?q=${activeRoleId.location[locationType].coordinates[1]},${activeRoleId.location[locationType].coordinates[0]}`}
                             className="flex-row mt-2 w-4 h-4"
                             isExternal
                           >
