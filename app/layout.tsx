@@ -44,9 +44,9 @@ export default function RootLayout({
               <TranslationProvider>
                 {!shouldHideLayout && <NavBar />}
                 {children}
-                {/* {!shouldHideLayout && <PreFooter />} */}
-                {!shouldHideLayout && <Footer />}
+                {/* {!shouldHideLayout && <PreFooter />} */}{" "}
                 {!shouldHideAiChat && <AiChat />}
+                {!shouldHideLayout && <Footer />}
               </TranslationProvider>
             </SessionProvider>
           </GluestackUIProvider>

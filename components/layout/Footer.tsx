@@ -1,6 +1,7 @@
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
+import Link from "next/link";
 import Image from "next/image";
 import {
   facebook,
@@ -16,7 +17,7 @@ const Footer = () => {
   const { t } = useTranslation();
 
   return (
-    <footer className="flex flex-col md:mx-10 mx-6 mt-20 md:flex-row md:justify-between gap-2 border-t border-gray-300">
+    <footer className="flex flex-col md:mx-10 mx-6 mt-20 md:flex-row md:justify-between gap-2 border-t border-gray-300 z-[15000]">
       <VStack className="md:flex-row justify-center items-center md:gap-6">
         <Text className="text-xl md:text-2xl font-extrabold">
           COMPANYCENTERLLC&trade;
@@ -47,12 +48,16 @@ const Footer = () => {
           </Text>
         </VStack>
         <HStack className="md:flex-col justify-center items-center gap-2">
-          <Text className="font-semibold text-sm md:text-sm">
-            {t("privacyPolicy")}
-          </Text>
-          <Text className="font-semibold text-sm md:text-sm">
-            {t("termsOfService")}
-          </Text>
+          <Link href="/privacy-policy">
+            <Text className="font-semibold text-sm md:text-sm">
+              {t("privacyPolicy")}
+            </Text>
+          </Link>
+          <Link href="/terms-of-service">
+            <Text className="font-semibold text-sm md:text-sm">
+              {t("termsOfService")}
+            </Text>
+          </Link>
         </HStack>
       </VStack>
     </footer>
