@@ -45,14 +45,20 @@ const CompaniesSection = () => {
         const lat = coords?.lat;
         const long = coords?.long;
 
-        const { providers: response, totalPages } = await globalSearch(
-          currentPage,
-          limit,
-          false,
-          category,
-          lat,
-          long
+        const { data, totalPages } = await globalSearch(
+          {
+            model: "providers",
+            page: currentPage,
+            limit,
+            engine: false,
+            searchInput: category !== "all" ? category : undefined,
+            lat,
+            long,
+            address: undefined,
+          }
+
         );
+        const response = data.providers;
         setTotalPages(totalPages);
         setCompanies((prev) =>
           currentPage === 1 ? response : [...prev, ...response]

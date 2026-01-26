@@ -19,16 +19,15 @@ const BrowseCompanies = () => {
 
   useEffect(() => {
     const fetchCompanies = async () => {
-      const { providers: response } = await globalSearch(
-        1,
-        10,
-        false,
-        undefined,
-        undefined,
-        undefined,
-        undefined
+      const { data } = await globalSearch(
+        {
+          model: "providers",
+          page: 1,
+          limit: 6,
+          engine: false,
+        }
       );
-      setUsers(response);
+      setUsers(data.providers);
     };
     fetchCompanies();
   }, []);

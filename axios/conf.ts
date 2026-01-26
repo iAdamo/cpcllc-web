@@ -5,7 +5,7 @@ const createClient = () => {
     baseURL:
       process.env.NODE_ENV === "production"
         ? process.env.NEXT_PUBLIC_API_URL
-        : "http://localhost:3333",
+        : "https://9qc99pwv-3333.uks1.devtunnels.ms/",
     headers: {
       "Content-Type": "application/json",
     },

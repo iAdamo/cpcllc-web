@@ -27,16 +27,17 @@ export function useCompanySearch({
       setError("");
 
       try {
-        const response = await globalSearch(
-          1,
-          30,
-          true,
+        const response = await globalSearch({
+          model: "providers",
+          page: 1,
+          limit: 30,
+          engine: true,
           searchInput,
           lat,
           long,
-          address
-        );
-        setResults(response.providers);
+          address,
+        });
+        setResults(response.data.providers);
       } catch (err: any) {
         setError(err.response?.data?.message || "Search failed");
       } finally {
