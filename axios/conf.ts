@@ -21,6 +21,7 @@ const createClient = () => {
   apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
+      console.log("API error:", error.response.data);
       if (error.response?.status === 403) {
         window.location.href = "/";
       } else if (error.message === "Network Error") {

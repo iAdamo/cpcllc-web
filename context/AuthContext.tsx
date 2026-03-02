@@ -127,7 +127,9 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
     pathname !== "/admin" &&
     !pathname.startsWith("/providers") &&
     pathname !== "/onboarding" &&
-    !pathname.startsWith("/cpc")
+    !pathname.startsWith("/cpc") &&
+    pathname !== "/privacy-policy" &&
+    pathname !== "/terms-of-service"
   ) {
     router.replace("/");
   } else if (session && pathname === "/") {
@@ -174,16 +176,16 @@ export function SessionProvider({ children }: PropsWithChildren<object>) {
         />
       );
     }
-  // } else if (session && userData?.activeRole === "Client") {
-  //   if (pathname === `/cpc/${userData?.id}`) {
-  //     router.push("/providers");
-  //     return (
-  //       <Spinner
-  //         size="small"
-  //         className="h-fit p-4 justify-start items-start w-full"
-  //       />
-  //     );
-  //   }
+    // } else if (session && userData?.activeRole === "Client") {
+    //   if (pathname === `/cpc/${userData?.id}`) {
+    //     router.push("/providers");
+    //     return (
+    //       <Spinner
+    //         size="small"
+    //         className="h-fit p-4 justify-start items-start w-full"
+    //       />
+    //     );
+    //   }
   }
 
   return (
