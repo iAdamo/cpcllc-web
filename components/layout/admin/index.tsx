@@ -17,11 +17,11 @@ import {
   LogoutIcon,
 } from "@/components/ui/icon";
 // import { ProfileIcon } from "@/public/assets/icons/customIcons";
-import { useDashboardStore } from "@/stores/dashboard-store";
+import useGlobalStore from "@/stores";
 
 const SideBar = () => {
   const { activeView, setActiveView, sidebarOpen, toggleSidebar } =
-    useDashboardStore();
+    useGlobalStore();
 
   const options = [
     {
@@ -120,7 +120,7 @@ const SideBar = () => {
 };
 
 const NavBar = () => {
-  const { activeView } = useDashboardStore();
+  const { activeView } = useGlobalStore();
 
   return (
     <VStack className="w-full">
@@ -162,7 +162,9 @@ export default function AdminDashboardLayout({
       <SideBar />
       <VStack className="flex-1 overflow-hidden">
         <NavBar />
-        <VStack className="flex-1 overflow-y-auto p-4 bg-[#F6F6F6] rounded-md">{children}</VStack>
+        <VStack className="flex-1 overflow-y-auto p-4 bg-[#F6F6F6] rounded-md">
+          {children}
+        </VStack>
       </VStack>
     </HStack>
   );

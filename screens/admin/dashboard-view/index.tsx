@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useDashboardStore } from "@/stores/dashboard-store";
+import useGlobalStore from "@/stores";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
@@ -24,6 +24,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { TimeRangeSelector } from "@/components/admin/TimeRangeSelector";
+import { TimeSeriesData, TimeRange } from "@/types";
 
 type MetricData = {
   title: string;
@@ -34,96 +35,52 @@ type MetricData = {
   dataKey: string;
 };
 
-type TimeSeriesData = {
-  date: string;
-  users: number;
-  clients: number;
-  companies: number;
-  activeCompanies: number;
-};
+// type TimeSeriesData = {
+//   date: string;
+//   users: number;
+//   clients: number;
+//   companies: number;
+//   activeCompanies: number;
+// };
 
 export default function DashboardView() {
-  const timeRange = useDashboardStore((s) => s.timeRange);
-  const [showWelcome, setShowWelcome] = useState(false);
-  const fetchMetrics = useDashboardStore((s) => s.fetchMetrics);
-  const setTimeRange = useDashboardStore((s) => s.setTimeRange);
-
-  // Generate more realistic dummy data with different trends for each metric
-  const generateDummyData = (): TimeSeriesData[] => {
-    const data: TimeSeriesData[] = [];
-    const now = new Date();
-
-    for (let i = 50; i >= 0; i--) {
-      const date = new Date(now);
-      date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split("T")[0];
-
-      // Base values with different growth patterns
-      const dayIndex = 50 - i;
-      data.push({
-        date: dateStr,
-        users: Math.round(
-          1000 +
-            Math.sin(dayIndex / 8) * 100 +
-            dayIndex * 5 +
-            Math.random() * 50
-        ),
-        clients: Math.round(
-          800 + Math.sin(dayIndex / 10) * 80 + dayIndex * 3 + Math.random() * 40
-        ),
-        companies: Math.round(
-          300 +
-            Math.sin(dayIndex / 15) * 50 +
-            dayIndex * 1.5 +
-            Math.random() * 30
-        ),
-        activeCompanies: Math.round(
-          250 +
-            Math.sin(dayIndex / 12) * 40 +
-            dayIndex * 1.2 +
-            Math.random() * 20
-        ),
-      });
-    }
-
-    return data;
-  };
-
-  const [timeSeriesData] = useState<TimeSeriesData[]>(generateDummyData());
-  const latestData = timeSeriesData[timeSeriesData.length - 1];
+  // const [showWelcome, setShowWelcome] = useState(false);
+  const { metricsSummary, timeSeries, fetchMetrics, timeRange, isLoading } =
+    useGlobalStore();
+  const [range, setRange] = useState<TimeRange>(timeRange);
 
   const metricsData: MetricData[] = [
     {
       title: "Total Users",
-      value: latestData.users,
-      change: calculateChange(timeSeriesData, "users"),
+      value: metricsSummary?.users || 0,
+      change: calculateChange(timeSeries, "users"),
       icon: <Icon as={TotalUsersIcon} />,
       iconBg: "bg-blue-100 text-blue-600",
       dataKey: "users",
     },
     {
       title: "Total Clients",
-      value: latestData.clients,
-      change: calculateChange(timeSeriesData, "clients"),
+      value: metricsSummary?.clients || 0,
+      change: calculateChange(timeSeries, "clients"),
       icon: <Icon as={TotalClientsIcon} />,
       iconBg: "bg-orange-100 text-orange-600",
       dataKey: "clients",
     },
     {
       title: "Total Companies",
-      value: latestData.companies,
-      change: calculateChange(timeSeriesData, "companies"),
+      value: metricsSummary?.providers || 0,
+      change: calculateChange(timeSeries, "providers"),
       icon: <Icon as={TotalProvidersIcon} />,
       iconBg: "bg-teal-100 text-teal-600",
       dataKey: "companies",
     },
     {
       title: "Active Companies",
-      value: latestData.activeCompanies,
-      change: calculateChange(timeSeriesData, "activeCompanies"),
+      value: metricsSummary?.activeProviders || 0,
+      change: calculateChange(timeSeries, "activeProviders"),
       icon: <Icon as={ActiveIcon} />,
       iconBg: "bg-gray-100 text-gray-600",
-      dataKey: "activeCompanies",
+      dataKey: "activeProviders",
     },
   ];
 
@@ -132,26 +89,30 @@ export default function DashboardView() {
   );
 
   useEffect(() => {
-    fetchMetrics(timeRange);
-  }, [timeRange, fetchMetrics]);
+    fetchMetrics(range);
+  }, [fetchMetrics, range]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowWelcome(true);
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setShowWelcome(true);
+  //   }, 5000);
+  //   return () => clearTimeout(timer);
+  // }, []);
+
+  if (isLoading || !metricsSummary) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <VStack className="space-y-4">
-      {!showWelcome && (
+      {/* {!showWelcome && (
         <Card className="bg-green-100 border-green-200">
           <Heading className="text-green-800">Welcome Alejandro</Heading>
           <Text size="sm" className="text-green-600">
             Your dashboard is ready with the latest metrics
           </Text>
         </Card>
-      )}
+      )} */}
 
       <HStack className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {metricsData.map((metric) => (
@@ -169,19 +130,20 @@ export default function DashboardView() {
           <VStack className="space-y-1">
             <Heading size="lg">{selectedMetric.title} Trends</Heading>
             <Text size="sm" className="text-gray-500">
-              Last {timeSeriesData.length} days
+              Last {timeSeries?.length ?? 0} days
             </Text>
           </VStack>
           <TimeRangeSelector
-            currentRange={timeRange}
-            onRangeChange={setTimeRange}
+            onRangeChange={(newRange) => {
+              setRange(newRange);
+            }}
           />
         </HStack>
 
         <VStack className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              data={timeSeriesData}
+              data={timeSeries || []}
               margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
             >
               <defs>
@@ -275,10 +237,10 @@ function MetricCard({ metric, isActive, onClick }: MetricCardProps) {
 }
 
 function calculateChange(
-  data: TimeSeriesData[],
+  data: TimeSeriesData[] | undefined,
   dataKey: keyof TimeSeriesData
 ): number {
-  if (data.length < 2) return 0;
+  if (!data || data.length < 2) return 0;
 
   // Compare last 7 days with previous 7 days for more stable trend calculation
   const recentPeriod = data.slice(-7);

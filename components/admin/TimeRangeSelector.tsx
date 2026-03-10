@@ -3,18 +3,16 @@
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Button, ButtonText } from "@/components/ui/button";
-import { TimeRange } from "@/stores/dashboard-store";
-
-interface TimeRangeSelectorProps {
-  currentRange: TimeRange;
-  onRangeChange: (range: TimeRange) => void;
-}
+import { TimeRange } from "@/types";
+import useGlobalStore from "@/stores";
 
 export function TimeRangeSelector({
-  currentRange,
   onRangeChange,
-}: TimeRangeSelectorProps) {
-  const ranges: TimeRange[] = ["daily", "weekly", "monthly", "yearly"];
+}: {
+  onRangeChange: (newRange: TimeRange) => void;
+}) {
+  const { timeRange } = useGlobalStore();
+  const ranges: TimeRange[] = ["1d", "7d", "30d", "90d", "1y"];
 
   return (
     <VStack className="self-end">
@@ -23,17 +21,19 @@ export function TimeRangeSelector({
           <Button
             size="sm"
             key={range}
-            variant={currentRange === range ? "solid" : "outline"}
-            onPress={() => onRangeChange(range)}
+            variant={timeRange === range ? "solid" : "outline"}
+            onPress={() => {
+              onRangeChange(range);
+            }}
             className={
-              currentRange === range
+              timeRange === range
                 ? "bg-blue-500 dark:bg-blue-600"
                 : "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
             }
           >
             <ButtonText
               className={`text-sm ${
-                currentRange === range
+                timeRange === range
                   ? "text-white dark:text-gray-100"
                   : "text-gray-700 dark:text-gray-300"
               }`}

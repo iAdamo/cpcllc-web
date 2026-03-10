@@ -2,11 +2,11 @@
 
 import { Box } from "@/components/ui/box";
 import AdminDashboardLayout from "@/components/layout/admin";
-import { useDashboardStore } from "@/stores/dashboard-store";
+import useGlobalStore from "@/stores";
 import DashboardView from "@/screens/admin/dashboard-view";
 
 const AdminDashboard = () => {
-  const { activeView } = useDashboardStore();
+  const { activeView } = useGlobalStore();
 
   return (
     <Box className="w-full h-full">
@@ -23,7 +23,6 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
 
 function UsersView() {
   return <div>Users management...</div>;

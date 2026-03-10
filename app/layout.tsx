@@ -18,8 +18,20 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
 
-  const hideLayoutForRoutes = ["/onboarding", "/admin"];
-  const hideAiChatForRoutes = ["/onboarding", "/admin", "/profile", "/service"];
+  const hideLayoutForRoutes = [
+    "/onboarding",
+    "/admin",
+    "/privacy-policy",
+    "terms-of-service",
+  ];
+  const hideAiChatForRoutes = [
+    "/onboarding",
+    "/admin",
+    "/profile",
+    "/service",
+    "/privacy-policy",
+    "terms-of-service",
+  ];
 
   const hideAiChatForRoutesRegex = hideAiChatForRoutes.map(
     (route) => new RegExp(`^${route}(?:/|$)`)
