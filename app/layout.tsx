@@ -22,7 +22,7 @@ export default function RootLayout({
     "/onboarding",
     "/admin",
     "/privacy-policy",
-    "terms-of-service",
+    "/terms-of-service",
   ];
   const hideAiChatForRoutes = [
     "/onboarding",
@@ -30,7 +30,7 @@ export default function RootLayout({
     "/profile",
     "/service",
     "/privacy-policy",
-    "terms-of-service",
+    "/terms-of-service",
   ];
 
   const hideAiChatForRoutesRegex = hideAiChatForRoutes.map(
@@ -56,7 +56,7 @@ export default function RootLayout({
               <TranslationProvider>
                 {!shouldHideLayout && <NavBar />}
                 {children}
-                {/* {!shouldHideLayout && <PreFooter />} */}{" "}
+                {/* {!shouldHideLayout && <PreFooter />} */}
                 {!shouldHideAiChat && <AiChat />}
                 {!shouldHideLayout && <Footer />}
               </TranslationProvider>

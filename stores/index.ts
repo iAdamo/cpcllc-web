@@ -33,7 +33,9 @@ const useGlobalStore = create<GlobalStore>()(
             timeSeries: state.timeSeries,
             activeView: state.activeView,
             sidebarOpen: state.sidebarOpen,
-            timeRange: state.timeRange,
+            granularity: state.granularity,
+            selectedYear: state.selectedYear,
+            selectedMonth: state.selectedMonth,
           }),
         }
       )

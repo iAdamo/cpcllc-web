@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import { TimeRange, DashboardState, GlobalStore } from "@/types";
+import { DashboardState, GlobalStore } from "@/types";
 import { getMetrics } from "@/axios/admin";
 import { getUsers } from "@/axios/users";
 
@@ -11,23 +11,37 @@ export const dashboardState: StateCreator<
 > = (set, get) => ({
   activeView: "dashboard",
   sidebarOpen: true,
+  granularity: "monthly",
+  selectedYear: new Date().getFullYear(),
+  selectedMonth: new Date().getMonth() + 1,
+  metricsData: null,
+  isLoading: false,
+  error: null,
+
+  // UI Actions
+  setActiveView: (view) => set({ activeView: view }),
+  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+
+  setGranularity: (granularity) => {
+    set({ granularity });
+    get().fetchMetrics();
+  },
+
+  setSelectedYear: (year) => {
+    set({ selectedYear: year });
+    get().fetchMetrics();
+  },
+
+  setSelectedMonth: (month) => {
+    set({ selectedMonth: month });
+    get().fetchMetrics();
+  },
+
   timeRange: "30d",
   users: [],
   metricsSummary: null,
   timeSeries: [],
-  isLoading: false,
-  error: null,
 
-  setActiveView: (view) => set({ activeView: view }),
-
-  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-
-  setTimeRange: (range) => {
-    if (get().timeRange !== range) {
-      set({ timeRange: range });
-      get().fetchMetrics(range);
-    }
-  },
   fetchUsers: async () => {
     set({ isLoading: true, error: null });
 
@@ -50,26 +64,29 @@ export const dashboardState: StateCreator<
     }
   },
 
-  fetchMetrics: async (range: TimeRange) => {
-    set({ isLoading: true, error: null });
-    console.log(get().timeRange, range);
-    try {
-      if (get().timeRange === range) {
-        set({ isLoading: false });
-        return;
-      }
-      const response = await getMetrics(range);
+  fetchMetrics: async () => {
+    const { granularity, selectedYear, selectedMonth } = get();
 
-      set({
-        timeRange: range,
-        metricsSummary: response.summary,
-        timeSeries: response.timeSeries,
-        isLoading: false,
+    // Validate selection
+    if (granularity === "daily" && !selectedMonth) {
+      set({ error: "Please select a month for daily view" });
+      return;
+    }
+
+    set({ isLoading: true, error: null });
+
+    try {
+      const response = await getMetrics({
+        granularity,
+        year: selectedYear,
+        month: granularity === "daily" ? selectedMonth : null,
       });
+
+      set({ metricsData: response, isLoading: false });
     } catch (err) {
       set({
         isLoading: false,
-        error: String(err) || "Failed to fetch metrics",
+        error: err instanceof Error ? err.message : "Failed to fetch metrics",
       });
     }
   },

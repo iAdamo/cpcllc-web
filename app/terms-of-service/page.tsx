@@ -16,10 +16,9 @@ export default function TermsOfService() {
           <h1 className="text-4xl font-bold text-black mb-2">
             COMPANIES CENTER — TERMS OF SERVICE
           </h1>
-          <p className="text-gray-600 mb-8">
+          <p className="text-sm text-gray-600 mb-2">
             <strong>Effective Date:</strong> February 5, 2026
           </p>
-
           <p className="text-gray-600">
             <strong>Website:</strong>{" "}
             <a
