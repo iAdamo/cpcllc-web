@@ -9,6 +9,13 @@ export interface LoginUser {
   password: string;
 }
 
+export interface DeactivateAccountData {
+  password: string;
+  reason: string;
+  shouldDeleteAfter30Days: boolean;
+}
+
+
 export interface AuthResponse {
     _id: string;
     username: string;

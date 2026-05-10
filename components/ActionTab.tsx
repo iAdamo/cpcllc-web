@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { FavouriteIcon, ShareIcon } from "@/components/ui/icon";
-import { setUserFavourites } from "@/axios/users";
+import { setUserFavourites } from "@/axios/user";
 import { UserData, CompanyData, ReviewData } from "@/types";
 import ReviewModal from "@/components/overlay/ReviewModal";
 import { ReviewIcon } from "@/public/assets/icons/customIcons";

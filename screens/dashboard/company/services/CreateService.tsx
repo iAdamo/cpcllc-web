@@ -41,7 +41,7 @@ import PreFooter from "@/components/layout/PreFooter";
 import Footer from "@/components/layout/Footer";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
-import { createService } from "@/axios/services";
+import { createService } from "@/axios/service";
 import { useSession } from "@/context/AuthContext";
 import { useTranslation } from "@/context/TranslationContext"; // Add this import
 

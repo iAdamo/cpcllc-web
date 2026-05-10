@@ -5,6 +5,6 @@ export const metadata: Metadata = {
   description: "Find the Best Companies in Your Area",
 };
 
-import { Companies } from "@/screens/companies";
+import ServiceProvidersPage from "@/screens/providers";
 
-export default Companies;
+export default ServiceProvidersPage;

@@ -27,8 +27,9 @@ import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
 import ForgotPasswordModal from "@/screens/auth/ForgetPassword";
-import { useSession } from "@/context/AuthContext";
+import useGlobalStore from "@/stores";
 import { Spinner } from "@/components/ui/spinner";
+import { useRouter } from "next/navigation";
 
 type ControllerRenderType = {
   field: {
@@ -60,8 +61,9 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
-  const { login } = useSession();
+  const { login } = useGlobalStore();
   const toast = useToast();
+  const router = useRouter();
 
   // handle form submission
   const {
@@ -70,9 +72,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
     reset,
     formState: { errors },
   } = useForm<FormSchemaType>({
-    resolver: zodResolver(
-      FormSchema.pick({ email: true, password: true })
-    ),
+    resolver: zodResolver(FormSchema.pick({ email: true, password: true })),
   });
 
   // handle form validation
@@ -89,6 +89,7 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
       await login(data);
       reset();
       onClose();
+      router.replace("/");
       setIsLoading(false);
     } catch (error) {
       setValidated({ emailValid: false, passwordValid: false });
@@ -137,12 +138,15 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
           <VStack className="md:flex-row h-full w-full md:rounded-2xl">
             <VStack className="hidden md:flex w-1/2 justify-center items-center rounded-l-2xl bg-brand-primary">
               <Image
-                className="object-cover w-full rounded-lg"
-                src="/assets/logo-color.png"
+                className="object-cover w-80  rounded-lg"
+                src="/assets/logo-transparent.png"
                 alt="home_header"
-                width={3264}
-                height={2448}
+                width={1024}
+                height={1024}
               />
+              <Text className="text-5xl text-white text-center font-bold">
+                Companies Center
+              </Text>
             </VStack>
             <ModalContent className="md:w-1/2 w-full h-full md:border-none">
               <ModalHeader>

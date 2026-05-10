@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { userProfile } from "@/axios/users";
+import { userProfile } from "@/axios/user";
 
 import ProfilePage from "@/screens/profile";
 

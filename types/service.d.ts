@@ -1,0 +1,113 @@
+import { ProviderData } from "./provider";
+import { UserData } from "./user";
+import { FileType, MediaItem } from "./media";
+// export interface SubcategoryData {
+//   _id: string;
+//   id: string;
+//   name: string;
+//   description?: string;
+//   category: {
+//     _id: string;
+//     id: string;
+//     name: string;
+//     description?: string;
+//   };
+// }
+
+export interface SubcategoryData {
+  _id: string;
+  name: string;
+  description?: string;
+  icon?: any;
+  categoryId: {
+    _id: string;
+    name: string;
+    description?: string;
+  };
+}
+
+export interface Subcategory {
+  _id: string;
+  name: string;
+  description?: string;
+  icon?: string;
+  iconColor?: string;
+}
+
+export interface Category {
+  _id: string;
+  name: string;
+  description?: string;
+  subcategories: Subcategory[];
+}
+
+export interface ServiceData {
+  _id: string;
+  id: string;
+  title: string;
+  description: string;
+  minPrice: number;
+  maxPrice: number;
+  duration: number;
+  subcategoryId: SubcategoryData;
+  // ratings: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  location: string;
+  media: MediaItem[] | FileType[];
+  // tags: string[];
+  // clients: [];
+  providerId: ProviderData;
+}
+
+export interface JobData {
+  _id: string;
+  id: string;
+  title: string;
+  description: string;
+  budget: number;
+  deadline: string | Date;
+  negotiable: boolean;
+  urgency: "Normal" | "Urgent" | "Immediate" | "";
+  subcategoryId: SubcategoryData;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  location: {
+    coordinates: number[];
+    address?: {
+      zip?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+      address?: string;
+    };
+  };
+  coordinates?: number[];
+  media: MediaItem[] | FileType[];
+  visibility: "Public" | "Verified" | "Private";
+  proposalsCount: number;
+  applicants: string[];
+  proposals: ProposalData[];
+  // tags: string[];
+  anonymous: boolean;
+  userId: UserData;
+  providerId: ProviderData;
+  status: "Active" | "In Progress" | "Completed" | "Cancelled" | "Expired";
+  createdAt: Date;
+}
+
+export interface ProposalData {
+  _id: string;
+  id: string;
+  message: string;
+  proposedPrice: number;
+  estimatedDuration: string;
+  createdAt: string;
+  updatedAt: string;
+  jobId: JobData;
+  providerId: ProviderData;
+  viewedByClient: boolean;
+  attachments: MediaItem[];
+}

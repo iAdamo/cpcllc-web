@@ -12,7 +12,7 @@ import LocationDetails from "./LocationDetails";
 import ContactInfo from "./ContactInfo";
 import { Icon, EditIcon, CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { UserData, CompanyData } from "@/types";
-import { updateProviderProfile } from "@/axios/users";
+import { updateProviderProfile } from "@/axios/user";
 import "react-phone-input-2/lib/style.css";
 import SocialMediaDetails from "./SocialMediaDetails";
 import { useTranslation } from "@/context/TranslationContext"; // Add this import

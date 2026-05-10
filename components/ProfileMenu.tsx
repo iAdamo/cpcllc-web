@@ -11,7 +11,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { Pressable } from "@/components/ui/pressable";
-import { useSession } from "@/context/AuthContext";
+import useGlobalStore from "@/stores";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import Link from "next/link";
@@ -28,20 +28,18 @@ interface ProfileMenuProps {
 }
 
 const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
-  const { userData, logout, setUserData } = useSession();
+  const { user, logout, setUserData, updateProfile } = useGlobalStore();
   const router = useRouter();
 
-  return userData ? (
+  return user ? (
     <Menu
       offset={offset}
       trigger={({ ...triggerProps }) => {
         return (
           <Pressable {...triggerProps}>
             <Avatar>
-              <AvatarFallbackText>
-                {userData?.email?.charAt(0)}
-              </AvatarFallbackText>
-              <AvatarImage source={{ uri: userData?.profilePicture }} />
+              <AvatarFallbackText>{user?.email}</AvatarFallbackText>
+              <AvatarImage source={{ uri: user?.profilePicture?.thumbnail }} />
               <AvatarBadge />
             </Avatar>
           </Pressable>
@@ -52,30 +50,30 @@ const ProfileMenu = ({ options, offset }: ProfileMenuProps) => {
         <VStack className="items-center justify-center gap-4">
           <Avatar>
             <AvatarFallbackText>
-              {getInitial(userData?.email || userData?.firstName || "")}
+              {user?.email || user?.firstName || ""}
             </AvatarFallbackText>
-            <AvatarImage source={{ uri: userData?.profilePicture }} />
+            <AvatarImage source={{ uri: user?.profilePicture?.thumbnail }} />
             <AvatarBadge />
           </Avatar>
           <Button
-            isDisabled={!userData?.activeRoleId}
+            isDisabled={!user?.activeRoleId}
             variant="outline"
             onPress={() => {
               setUserData({
-                ...userData,
+                ...user,
                 activeRole:
-                  userData?.activeRole === "Client" ? "Provider" : "Client",
+                  user?.activeRole === "Client" ? "Provider" : "Client",
               });
               router.push(
-                userData?.activeRole === "Client"
+                user?.activeRole === "Client"
                   ? "/companies"
-                  : `/cpc/${userData?.id}`
+                  : `/cpc/${user?.id}`
               );
             }}
             className="w-52"
           >
             <ButtonText>{`Switch to ${
-              userData?.activeRole === "Client" ? "Provider" : "Client"
+              user?.activeRole === "Client" ? "Provider" : "Client"
             }`}</ButtonText>
           </Button>
         </VStack>

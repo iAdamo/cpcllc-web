@@ -4,6 +4,8 @@ import { immer } from "zustand/middleware/immer";
 import { createJSONStorage } from "zustand/middleware";
 import { StateCreator } from "zustand";
 import { dashboardState } from "./dashboardState";
+import { authState } from "./authState";
+import { globalState } from "./globalState";
 import { GlobalStore } from "@/types";
 
 type MyStateCreator = StateCreator<
@@ -23,6 +25,8 @@ const useGlobalStore = create<GlobalStore>()(
       persist(
         ((...a) => ({
           ...dashboardState(...a),
+          ...authState(...a),
+          ...globalState(...a),
         })) as MyStateCreator,
         {
           name: "web-storage",
@@ -36,6 +40,7 @@ const useGlobalStore = create<GlobalStore>()(
             granularity: state.granularity,
             selectedYear: state.selectedYear,
             selectedMonth: state.selectedMonth,
+            // paramsFrom: state.paramsFrom,
           }),
         }
       )

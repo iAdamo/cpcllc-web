@@ -1,33 +1,6 @@
 import { Subcategory, SubcategoryData } from "@/types";
 
-export interface UserData {
-  id: string;
-  _id: string;
-  username: string;
-  firstName?: string;
-  lastName?: string;
-  activeRole: "Client" | "Provider" | "Admin";
-  email: string;
-  phoneNumber?: string;
-  profilePicture?: string;
-  purchasedServices: any[];
-  hiredCompanies: any[];
-  admins: any[];
-  createdAt: string;
-  activeRoleId?: CompanyData;
-  isVerified?: boolean;
-  isEmailVerified: boolean;
-  isPhoneVerified: boolean;
-  clients: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    profilePicture: string;
-  }[];
-  hiredCompanies: CompanyData[];
-  owner: string;
-}
+
 
 export interface CompanyData {
   _id: string;
@@ -106,16 +79,10 @@ export interface CompanyData {
 export interface AuthContextProps {
   userData: UserData | null;
   setUserData: (data: UserData) => void;
-  register: (data: {
-    email: string;
-    phoneNumber: string;
-    password: string;
-  }) => Promise<void>;
-  login: (credentials: { email: string; password: string }) => Promise<void>;
+
   session?: string | null;
   isLoading: boolean;
   loading: boolean;
-  logout: () => void;
   createProviderProfile: (data: FormData) => Promise<void>;
   fetchUserProfile: () => Promise<void>;
   providerData: CompanyData | null;

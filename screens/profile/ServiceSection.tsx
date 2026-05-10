@@ -8,7 +8,7 @@ import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AddIcon, ArrowRightIcon, ArrowLeftIcon } from "@/components/ui/icon";
-import { getServicesByCompany } from "@/axios/services";
+import { getServicesByCompany } from "@/axios/service";
 import { CompanyData, ServiceData } from "@/types";
 import ServiceInfoModal from "@/components/overlay/ServiceInfoModal";
 import { Swiper, SwiperSlide } from "swiper/react";

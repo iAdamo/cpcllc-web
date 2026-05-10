@@ -12,7 +12,7 @@ import { useToast, Toast, ToastTitle } from "../../components/ui/toast";
 import { Icon, EditIcon, CheckIcon, CloseIcon } from "@/components/ui/icon";
 import { MapIcon, MapPin, Loader2 } from "lucide-react";
 import { UserData, CompanyData } from "@/types";
-import { updateProviderProfile } from "@/axios/users";
+import { updateProviderProfile } from "@/axios/user";
 import { useJsApiLoader } from "@react-google-maps/api";
 
 declare global {

@@ -24,7 +24,7 @@ import {
 import Image from "next/image";
 import ReactPlayer from "react-player";
 import { getInitial } from "@/utils/GetInitials";
-import { deleteService } from "@/axios/services";
+import { deleteService } from "@/axios/service";
 import { ServiceData } from "@/types";
 
 const ServiceInfoModal = ({

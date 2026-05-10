@@ -29,8 +29,7 @@ import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Button, ButtonText } from "@/components/ui/button";
 import Image from "next/image";
 import VerifyCodeModal from "../VerifyCodeModal";
-import { useSession } from "@/context/AuthContext";
-
+import useGlobalStore from "@/stores";
 // import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -66,7 +65,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   const { isOpen, onClose, switchToSignIn } = props;
 
   const toast = useToast();
-  const { register } = useSession();
+  const { signUp } = useGlobalStore();
 
   // handle form submission
   const {
@@ -105,7 +104,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
       return;
     } else {
       try {
-        await register(data);
+        await signUp(data);
         setShowVerifyEmailModal(true);
         toast.show({
           placement: "top",

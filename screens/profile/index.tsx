@@ -14,7 +14,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { useSession } from "@/context/AuthContext";
-import { userProfile, updateProviderProfile } from "@/axios/users";
+import { userProfile, updateProviderProfile } from "@/axios/user";
 import { UserData, ReviewData } from "@/types";
 import ReviewSection from "./ReviewSection";
 import ServiceSection from "./ServiceSection";
@@ -180,7 +180,9 @@ const ProfilePage = () => {
                                 {getInitial(data.email || data.firstName || "")}
                               </AvatarFallbackText>
                               <AvatarImage
-                                source={{ uri: data.activeRoleId?.providerLogo }}
+                                source={{
+                                  uri: data.activeRoleId?.providerLogo,
+                                }}
                               />
                               {isCurrentUser && (
                                 <ProfileUploadButton

@@ -1,5 +1,5 @@
 import { ApiClientSingleton } from "./conf";
-import { CompanyData, ServiceData } from "@/types";
+import { ProviderData, ServiceData, JobData, AddressSuggestion } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -38,10 +38,10 @@ export const globalSearch = async ({
 }): Promise<{
   type?: "suggestions" | "providers" | "jobs" | "services";
   data: {
-    suggestions?: any[];
-    providers: CompanyData[];
+    suggestions?: AddressSuggestion[];
+    providers: ProviderData[];
     services?: ServiceData[];
-    jobs?: any[];
+    jobs?: JobData[];
     page: number;
   };
   page: number;
@@ -67,7 +67,7 @@ export const globalSearch = async ({
   if (country) params.country = country;
   if (radius) params.radius = radius;
 
-  console.log("Executing search with params:", params);
+  // console.log("Executing search with params:", params);
 
   const response = await axiosInstance.get("search", { params });
   return response.data;

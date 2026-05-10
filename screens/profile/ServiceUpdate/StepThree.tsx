@@ -6,7 +6,7 @@ import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { FieldWithInfo } from "./FieldWithInfo";
 import { CloseIcon, ArrowUpIcon, Icon } from "@/components/ui/icon";
 import Image from "next/image";
-import { createService, updateService } from "@/axios/services";
+import { createService, updateService } from "@/axios/service";
 import { useRouter } from "next/navigation";
 import { Toast, useToast, ToastTitle } from "@/components/ui/toast";
 import {
@@ -97,9 +97,9 @@ const StepThree = ({
         } else {
           setError(type, {
             type: "size",
-            message: t('stepThree.validation.fileSizeError')
-              .replace('{fileType}', type.slice(0, -1))
-              .replace('{maxSize}', maxSize.toString()),
+            message: t("stepThree.validation.fileSizeError")
+              .replace("{fileType}", type.slice(0, -1))
+              .replace("{maxSize}", maxSize.toString()),
           });
           return;
         }
@@ -144,13 +144,13 @@ const StepThree = ({
       if (data._id) {
         serviceData = await updateService(data._id, formData);
         if (serviceData) {
-          showToast(t('stepThree.success.serviceUpdated'), "success");
+          showToast(t("stepThree.success.serviceUpdated"), "success");
           router.replace("/");
         }
       } else {
         serviceData = await createService(formData);
         if (serviceData) {
-          showToast(t('stepThree.success.serviceCreated'), "success");
+          showToast(t("stepThree.success.serviceCreated"), "success");
           router.replace("/");
         }
       }
@@ -167,9 +167,9 @@ const StepThree = ({
       {/* Images Upload */}
       <FieldWithInfo
         id="images"
-        infoText={t('stepThree.imagesInfo')
-          .replace('{maxImages}', MAX_IMAGES.toString())
-          .replace('{maxImageSize}', MAX_IMAGE_SIZE_MB.toString())}
+        infoText={t("stepThree.imagesInfo")
+          .replace("{maxImages}", MAX_IMAGES.toString())
+          .replace("{maxImageSize}", MAX_IMAGE_SIZE_MB.toString())}
         focusedField={focusedField}
         errors={errors}
       >
@@ -207,7 +207,7 @@ const StepThree = ({
               >
                 <Icon as={ArrowUpIcon} className="w-8 h-8 text-gray-400 mb-2" />
                 <Text className="text-xs md:text-sm text-gray-600">
-                  {t('stepThree.addImage')}
+                  {t("stepThree.addImage")}
                 </Text>
                 <Text className="text-xs text-gray-400">
                   {images.length}/{MAX_IMAGES}
@@ -229,9 +229,9 @@ const StepThree = ({
       {/* Videos Upload */}
       <FieldWithInfo
         id="videos"
-        infoText={t('stepThree.videosInfo')
-          .replace('{maxVideos}', MAX_VIDEOS.toString())
-          .replace('{maxVideoSize}', MAX_VIDEO_SIZE_MB.toString())}
+        infoText={t("stepThree.videosInfo")
+          .replace("{maxVideos}", MAX_VIDEOS.toString())
+          .replace("{maxVideoSize}", MAX_VIDEO_SIZE_MB.toString())}
         focusedField={focusedField}
         errors={errors}
       >
@@ -241,7 +241,7 @@ const StepThree = ({
               <div key={index} className="relative group">
                 <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
                   <Text className="text-gray-500">
-                    {t('stepThree.videoPreview')}
+                    {t("stepThree.videoPreview")}
                   </Text>
                 </div>
                 <Button
@@ -267,7 +267,7 @@ const StepThree = ({
               >
                 <Icon as={ArrowUpIcon} className="w-8 h-8 text-gray-400 mb-2" />
                 <Text className="text-xs md:text-sm text-gray-600">
-                  {t('stepThree.addVideo')}
+                  {t("stepThree.addVideo")}
                 </Text>
                 <Text className="text-xs text-gray-400">
                   {videos.length}/{MAX_VIDEOS}
@@ -294,7 +294,7 @@ const StepThree = ({
           onPress={() => setStep(2)}
           className="border-gray-300"
         >
-          <ButtonText>{t('stepThree.back')}</ButtonText>
+          <ButtonText>{t("stepThree.back")}</ButtonText>
         </Button>
         <Button
           size="xs"
@@ -302,7 +302,9 @@ const StepThree = ({
           className="bg-indigo-600 disabled:opacity-50"
         >
           <ButtonText className="text-white">
-            {isSubmitting ? t('stepThree.submitting') : t('stepThree.submitService')}
+            {isSubmitting
+              ? t("stepThree.submitting")
+              : t("stepThree.submitService")}
           </ButtonText>
         </Button>
       </HStack>
@@ -312,7 +314,7 @@ const StepThree = ({
           onPress={() => setStep(2)}
           className="border-gray-300"
         >
-          <ButtonText>{t('stepThree.back')}</ButtonText>
+          <ButtonText>{t("stepThree.back")}</ButtonText>
         </Button>
         <Button
           onPress={() => handleSubmit(onSubmit)()}
@@ -320,7 +322,9 @@ const StepThree = ({
           className="bg-indigo-600 disabled:opacity-50"
         >
           <ButtonText className="text-white">
-            {isSubmitting ? t('stepThree.submitting') : t('stepThree.submitService')}
+            {isSubmitting
+              ? t("stepThree.submitting")
+              : t("stepThree.submitService")}
           </ButtonText>
         </Button>
       </HStack>

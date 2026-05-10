@@ -6,7 +6,7 @@ import {
   OnboardingContextType,
   ServiceCategory,
 } from "@/types";
-import { getAllCategoriesWithSubcategories } from "@/axios/services";
+import { getAllCategoriesWithSubcategories } from "@/axios/service";
 
 const OnboardingContext = createContext<OnboardingContextType | undefined>(
   undefined

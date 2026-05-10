@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { useForm } from "react-hook-form";
 import { useParams } from "next/navigation";
-import { getServiceById } from "@/axios/services";
+import { getServiceById } from "@/axios/service";
 import urlToFile from "@/utils/UrlToFile";
 
 import StepOne from "./StepOne";

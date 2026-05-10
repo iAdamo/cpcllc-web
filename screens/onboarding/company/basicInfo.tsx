@@ -26,7 +26,7 @@ import {
 } from "@/components/forms/OnboardingFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "@/context/TranslationContext";
-import { updateUserProfile } from "@/axios/users";
+import { updateUserProfile } from "@/axios/user";
 
 const BasicInfo = () => {
   const { prevStep, nextStep, setData, data } = useOnboarding();
@@ -154,7 +154,11 @@ const BasicInfo = () => {
     updateData.append("firstName", formData.firstName);
     updateData.append("lastName", formData.lastName);
     if (selectedProfileImage) {
-      updateData.append("profilePicture", selectedProfileImage, "profilePicture");
+      updateData.append(
+        "profilePicture",
+        selectedProfileImage,
+        "profilePicture"
+      );
     }
     try {
       await updateUserProfile(updateData);

@@ -1,5 +1,10 @@
 import { ApiClientSingleton } from "./conf";
-import { LoginUser, UserData, RegisterUser } from "@/types";
+import {
+  LoginUser,
+  UserData,
+  RegisterUser,
+  DeactivateAccountData,
+} from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -37,16 +42,7 @@ export const resetPassword = async (data: { email: string; code: string }) => {
   return response.data;
 };
 
-import { useSession } from "@/context/AuthContext";
-
-export const useSignOut = () => {
-  const { logout } = useSession();
-  const signOut = async () => {
-    try {
-      logout();
-    } catch (e) {
-      console.error("Error logging out:", e);
-    }
-  };
-  return signOut;
+export const deactivateUser = async (data: DeactivateAccountData) => {
+  const response = await axiosInstance.post("account/deactivate", data);
+  return response.data;
 };

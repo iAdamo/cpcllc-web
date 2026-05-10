@@ -1,7 +1,7 @@
 import { StateCreator } from "zustand";
 import { DashboardState, GlobalStore } from "@/types";
 import { getMetrics } from "@/axios/admin";
-import { getUsers } from "@/axios/users";
+import { getUsers } from "@/axios/user";
 
 export const dashboardState: StateCreator<
   GlobalStore,

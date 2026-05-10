@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
@@ -8,7 +8,7 @@ import { Pressable } from "@/components/ui/pressable";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
 import ProfileMenu from "@/components/ProfileMenu";
-import { useSession } from "@/context/AuthContext";
+import useGlobalStore from "@/stores";
 import { SearchEngine, MSearchEngine } from "@/components/SearchEngine";
 import { MenuIcon, CloseIcon, ChevronDownIcon } from "@/components/ui/icon";
 import {
@@ -18,7 +18,7 @@ import {
   DrawerBody,
 } from "@/components/ui/drawer";
 import { Divider } from "@/components/ui/divider";
-import VerifyCodeModal from "@/screens/auth/VerifyCodeModal";
+// import VerifyCodeModal from "@/screens/auth/VerifyCodeModal";
 import { useTranslation } from "@/context/TranslationContext"; // Update the path to the correct location
 
 const NavBar = () => {
@@ -26,17 +26,16 @@ const NavBar = () => {
   const [showDrawer, setShowDrawer] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
-  const { session, userData, logout, setUserData, fetchUserProfile } =
-    useSession();
+  const { user, logout, setSwitchRole } = useGlobalStore();
   const router = useRouter();
   const currentPath = usePathname();
   const { t, language, setLanguage } = useTranslation();
 
-  useEffect(() => {
-    if (userData && !userData?.isEmailVerified) {
-      fetchUserProfile();
-    }
-  }, [userData, fetchUserProfile]);
+  // useEffect(() => {
+  //   if (user && !user?.isEmailVerified) {
+  //     fetchUserProfile();
+  //   }
+  // }, [user, fetchUserProfile]);
 
   const options = [
     { name: t("home"), href: "/" },
@@ -44,9 +43,9 @@ const NavBar = () => {
   ];
 
   const options2 = [
-    ...(session ? [{ name: t("myRequests"), href: "/requests" }] : []),
+    ...(user?._id ? [{ name: t("myRequests"), href: "/requests" }] : []),
     { name: t("favorites"), href: "/favorites" },
-    ...(userData?.activeRole !== "Provider"
+    ...(user?.activeRole !== "Provider"
       ? [{ name: t("beACompany"), href: "/onboarding" }]
       : []),
   ];
@@ -72,29 +71,29 @@ const NavBar = () => {
   return (
     <>
       {/** Verify Code Modal */}
-      <VerifyCodeModal
-        isOpen={userData! && !userData?.isEmailVerified}
-        onClose={() => userData?.isEmailVerified}
-        email={userData?.email || ""}
+      {/* <VerifyCodeModal
+        isOpen={user! && !user?.isEmailVerified}
+        onClose={() => user?.isEmailVerified}
+        email={user?.email || ""}
         onVerified={() => {
           setIsAuthodalOpen(false);
-          if (userData?.id) {
+          if (user?.id) {
             setUserData({
-              ...userData,
+              ...user,
               isEmailVerified: true,
             });
           } else {
             console.error("User ID is undefined");
           }
-          router.replace("/cpc/" + userData?.id);
+          router.replace("/cpc/" + user?.id);
         }}
-        isEmailVerified={!userData?.isEmailVerified}
-      />
+        isEmailVerified={!user?.isEmailVerified}
+      /> */}
 
       {/** Desktop */}
       <VStack
         className={`hidden md:flex justify-center items-center ${
-          currentPath !== "/" ? "fixed top-0 h-28" : "h-20"
+          currentPath !== "/" ? "top-0 h-28" : "h-20"
         } z-40 w-full ${styles.navBarClass}`}
       >
         <HStack className="py-10 w-full items-center gap-10 pr-5">
@@ -209,21 +208,20 @@ const NavBar = () => {
                   </Link>
                 ))}
                 {/** User Profile Menu */}
-                {userData && (
+                {user && (
                   <ProfileMenu
                     options={[
-                      ...(userData?.activeRoleId
+                      ...(user?.activeRoleId
                         ? [
                             {
                               name: t("profile"),
                               onPress: () => {
-                                setUserData({
-                                  ...userData,
-                                  activeRole:
-                                    userData?.activeRole === "Client"
-                                      ? "Provider"
-                                      : "Provider",
-                                });
+                                setSwitchRole(
+                                  user?.activeRole === "Client"
+                                    ? "Provider"
+                                    : "Client"
+                                );
+                                router.replace("/profile");
                               },
                             },
                             {
@@ -306,7 +304,7 @@ const NavBar = () => {
                 </div>
                 <Divider orientation="horizontal" className="w-full" />
 
-                {!session && (
+                {!user?._id && (
                   <>
                     <Button
                       variant="link"
@@ -333,36 +331,31 @@ const NavBar = () => {
                     <Divider orientation="horizontal" className="w-full" />
                   </>
                 )}
-                {userData && (
+                {user && (
                   <>
                     <Button
-                      isDisabled={!userData?.activeRoleId}
+                      isDisabled={!user?.activeRoleId}
                       variant="link"
                       onPress={() => {
                         setShowDrawer(false);
-                        setUserData({
-                          ...userData,
-                          activeRole:
-                            userData?.activeRole === "Client"
-                              ? "Provider"
-                              : "Client",
-                        });
+                        setSwitchRole(
+                          user?.activeRole === "Client" ? "Provider" : "Client"
+                        );
                       }}
                       className="justify-start"
                     >
                       <ButtonText className="font-normal">{`${t("switchTo")} ${
-                        userData?.activeRole === "Client"
-                          ? "Provider"
-                          : "Client"
+                        user?.activeRole === "Client" ? "Provider" : "Client"
                       }`}</ButtonText>
                     </Button>
                     <Divider orientation="horizontal" className="w-full" />
 
                     <Button
                       variant="link"
-                      onPress={() => {
+                      onPress={async () => {
                         setShowDrawer(false);
-                        logout();
+                        await logout();
+                        router.replace("/auth/signin");
                       }}
                       className="justify-start"
                     >
@@ -373,7 +366,7 @@ const NavBar = () => {
                   </>
                 )}
 
-                {!session && (
+                {!user?._id && (
                   <Button
                     variant="link"
                     onPress={() => {
