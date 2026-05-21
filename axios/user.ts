@@ -1,67 +1,81 @@
+// import { getUserServices } from "./service";
 import { ApiClientSingleton } from "./conf";
-import { CompanyData, UserData } from "@/types";
+import { UserData, ProviderData } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
-export const updateProviderProfile = async (
-  data: FormData
-): Promise<CompanyData> => {
-  const response = await axiosInstance.patch("provider", data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-
-  return response.data;
-};
-
-export const createProviderProfile = async (
-  data: FormData
-): Promise<UserData> => {
-  const response = await axiosInstance.post("provider", data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return response.data;
-};
-
+// update this to use /users to patch at the backend and return the user full data 9/26/2025 - pending
 export const updateUserProfile = async (data: FormData): Promise<UserData> => {
   const response = await axiosInstance.patch("users/profile", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
-
   return response.data;
 };
 
-export const userProfile = async (id: string): Promise<UserData> => {
-  const response = await axiosInstance.get(`users/profile/${id}`);
+export const createProviderProfile = async (
+  data: FormData
+): Promise<UserData> => {
+  const response = await axiosInstance.post("/provider", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 
-export const getUsers = async (
-  page: number,
-  limit: number
-): Promise<{ users: UserData[]; totalPages: number }> => {
-  const response = await axiosInstance.get(`users?page=${page}&limit=${limit}`);
+export const updateProviderProfile = async (
+  data: FormData
+): Promise<UserData> => {
+  const response = await axiosInstance.patch("/provider", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 
-export const getCompanies = async (
-  page: number,
-  limit: number
-): Promise<{ companies: CompanyData[]; totalPages: number }> => {
-  const response = await axiosInstance.get(
-    `provider?page=${page}&limit=${limit}`
-  );
+export const getUserProfile = async (userId?: string): Promise<UserData> => {
+  const response = await axiosInstance.get(`users/profile/${userId}`);
   return response.data;
 };
 
 export const setUserFavourites = async (
   providerId: string
-): Promise<CompanyData> => {
+): Promise<{
+  provider: ProviderData;
+  isFavorited: boolean;
+  favoriteCount: number;
+}> => {
   const response = await axiosInstance.patch(`provider/${providerId}/favorite`);
   return response.data;
 };
+
+export const toggleFollowProvider = async (
+  providerId: string
+): Promise<UserData> => {
+  const response = await axiosInstance.patch(`users/follow/${providerId}`);
+  return response.data;
+};
+
+export const removeFile = async (fileUrls: string[]): Promise<UserData> => {
+  console.log("Removing files:", fileUrls);
+  const response = await axiosInstance.post("users/delete-files", { fileUrls });
+  return response.data;
+};
+
+export const getFeaturedProviders = async (): Promise<ProviderData[]> => {
+  const response = await axiosInstance.get("provider/featured");
+  return response.data;
+};
+
+// export const getFollowers = async (id: string): Promise<FollowersData> => {
+//   const response = await axiosInstance.get(`users/${id}/followers`);
+//   return response.data;
+// };
+
+// export const getFollowing = async (id: string): Promise<FollowersData> => {
+//   const response = await axiosInstance.get(`users/${id}/following`);
+//   return response.data;
+// };

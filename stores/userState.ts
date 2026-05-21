@@ -1,4 +1,4 @@
-import { UserData, ActiveRole, PresenceResponse } from "@/types";
+import { UserData, ActiveRole } from "@/types";
 import {
   updateUserProfile,
   updateProviderProfile,
@@ -135,16 +135,16 @@ export const userSlice: StateCreator<GlobalStore, [], [], UserState> = (
 
   toggleFollow: async (providerId: string) => {
     set({ error: null });
-    try {
-      socketService.emitEvent(PresenceEvents.SUBSCRIBE, {
-        userIds: [providerId],
-      });
-    } catch (error: any) {
-      set({
-        error:
-          error?.response?.data?.message || "Failed to update follow status",
-      });
-      throw error;
-    }
+    // try {
+    //   socketService.emitEvent(PresenceEvents.SUBSCRIBE, {
+    //     userIds: [providerId],
+    //   });
+    // } catch (error: any) {
+    //   set({
+    //     error:
+    //       error?.response?.data?.message || "Failed to update follow status",
+    //   });
+    //   throw error;
+    // }
   },
 });

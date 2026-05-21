@@ -9,7 +9,7 @@ import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
 import ProfileMenu from "@/components/ProfileMenu";
 import useGlobalStore from "@/stores";
-import { SearchEngine, MSearchEngine } from "@/components/SearchEngine";
+import {  MSearchEngine } from "@/components/SearchEngine";
 import { MenuIcon, CloseIcon, ChevronDownIcon } from "@/components/ui/icon";
 import {
   Drawer,
@@ -154,12 +154,7 @@ const NavBar = () => {
             </div>
           </HStack>
 
-          {/** Search */}
-          {currentPath !== "/" && (
-            <div className="w-[35rem]">
-              <SearchEngine />
-            </div>
-          )}
+         
           <HStack className="gap-32 ml-auto">
             {currentPath === "/" ? (
               <>

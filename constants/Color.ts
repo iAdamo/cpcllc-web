@@ -4,7 +4,7 @@
 
 export const colors = {
   brand: {
-    primary: "#102343",
+    primary: "#162660",
     secondary: "#1E40AF",
   },
   text: {

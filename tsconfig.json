@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
+    "target": "ES2017",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
     "allowJs": true,
-    "noImplicitAny": false,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
+    "noImplicitAny": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -16,6 +17,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "jsxImportSource": "nativewind",
     "incremental": true,
     "plugins": [
       {
@@ -26,18 +28,25 @@
       "@/*": [
         "./*"
       ],
+      "@/utils/*": [
+        "./utils/*"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
       "tailwind.config": [
-        "./tailwind.config.ts"
+        "./tailwind.config.js"
       ]
-    },
-    "jsxImportSource": "nativewind"
+    }
   },
   "include": [
-    "video.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "next.config.mjs",
+    "nativewind-env.d.ts",
+    "tailwind-variants.d.ts"
   ],
   "exclude": [
     "node_modules"

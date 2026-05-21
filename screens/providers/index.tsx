@@ -1,7 +1,7 @@
 "use client";
 
 // import AiChat from "@/components/AiChatFab";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ProviderData } from "@/types";
 import { useParams } from "next/navigation";
@@ -19,14 +19,13 @@ const ServiceProvidersPage = () => {
     executeSearch,
     currentLocation,
     categories,
-    setCurrentView,
     isSearching,
     selectedSubcategories,
   } = useGlobalStore();
   const { id } = useParams();
   const router = useRouter();
 
-  const handleProvidersSearch = async () => {
+  const handleProvidersSearch = useCallback(async () => {
     // console.log("Fetching providers with:", {
     //   sortBy,
     //   lat: currentLocation?.coords.latitude,
@@ -36,24 +35,24 @@ const ServiceProvidersPage = () => {
     await executeSearch({
       model: "providers",
       page: 1,
-      limit: 50,
+      limit: 5,
       engine: false,
       featured: true,
       sortBy: sortBy,
-      lat: currentLocation?.coords.latitude,
-      long: currentLocation?.coords.longitude,
+      lat: currentLocation?.coords.latitude || "7.7427377",
+      long: currentLocation?.coords.longitude || "4.5643091",
       city: currentLocation?.subregion || "",
       state: currentLocation?.region || "",
-      country: currentLocation?.country || "",
+      country: currentLocation?.country || "Nigeria",
       categories: selectedSubcategories.map((s) => s._id),
     });
-  };
+  }, []);
 
   useEffect(() => {
     // console.log(sortBy, currentLocation, categories);
-    if (!currentLocation) return;
+    // if (!currentLocation) return;
     handleProvidersSearch();
-  }, [sortBy, currentLocation, selectedSubcategories]);
+  }, [handleProvidersSearch]);
 
   useEffect(() => {
     if (searchResults && searchResults.providers) {
@@ -62,12 +61,10 @@ const ServiceProvidersPage = () => {
   }, [searchResults]);
 
   return (
-    <VStack className="md:flex-row w-full h-full p-4">
-      <VStack className="md:w-full w-2/3">
-        <ProvidersList providers={providers || []} />
-      </VStack>
-      <VStack className="md:w-full w-1/3"></VStack>
-    </VStack>
+    <section id="companies" className="flex md:flex-row w-full h-full p-4">
+      <ProvidersList providers={providers || []} />
+      <VStack className="md:w-1/3 w-full"></VStack>
+    </section>
   );
 };
 

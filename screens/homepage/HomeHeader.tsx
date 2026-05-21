@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { VStack } from "@/components/ui/vstack";
 import { SearchEngine } from "@/components/SearchEngine";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import { Autoplay, Pagination } from "swiper/modules";
+// import "swiper/css";
+// import "swiper/css/pagination";
 import {
   carousel0,
   carousel1,
@@ -21,7 +21,7 @@ const HomeHeader = () => {
 
   return (
     <header className="hidden md:flex -mt-20 relative">
-      <Swiper
+      {/* <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 4000 }}
         loop
@@ -40,7 +40,7 @@ const HomeHeader = () => {
             />
           </SwiperSlide>
         ))}
-      </Swiper>
+      </Swiper> */}
       <VStack className="absolute inset-0 z-10 h-full bg-gradient-to-b from-brand-secondary via-transparent to-brand-transparent opacity-50"></VStack>
       <VStack className="absolute z-50 inset-0 mt-24">
         <VStack className="mt-44 w-1/2 pl-24 gap-10">

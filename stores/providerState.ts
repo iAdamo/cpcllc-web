@@ -2,7 +2,6 @@ import {
   ProviderData,
   Category,
   SearchParams,
-  AddressSuggestion,
 } from "@/types";
 import { StateCreator } from "zustand";
 import {
@@ -15,7 +14,7 @@ import {
 import { globalSearch } from "@/axios/search";
 import { setUserFavourites } from "@/axios/user";
 
-export const providerViewSlice: StateCreator<
+export const providerState: StateCreator<
   GlobalStore,
   [],
   [],

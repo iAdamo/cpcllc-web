@@ -10,7 +10,7 @@ const renderStars = (rating: number) => {
   for (let i = 1; i <= 5; i++) {
     if (i <= fullStars) {
       // Fully filled star
-      stars.push(<Star key={i} size={16} fill="#FFD700" color="#FFD700" />);
+      stars.push(<Star key={i} size={16} color="#f59e0b" fill="#f59e0b" />);
     } else if (i === fullStars + 1 && decimalPart > 0) {
       // Partially filled star for the decimal part
       stars.push(
@@ -43,13 +43,13 @@ const RatingSection = ({
     {rating !== undefined && rating > 0 && (
       <HStack className="gap-1">
         {renderStars(rating)}
-        <Heading className="text-xs md:text-md text-gray-500">
+        <Heading className="text-xs md:text-md text-black">
           {rating.toFixed(1)}
         </Heading>
       </HStack>
     )}
     {reviewCount !== undefined && reviewCount >= 0 && (
-      <Heading className="text-xs md:text-md text-gray-500">
+      <Heading className="text-xs">
         {reviewCount === 0
           ? "No reviews"
           : `${reviewCount} ${reviewCount === 1 ? "review" : "reviews"}`}

@@ -4,6 +4,11 @@ import {
   ActiveRole,
   RegisterUser,
   LoginUser,
+  DeactivateAccountData,
+  ServiceData,
+  SearchParams,
+  ServiceCategory,
+  Subcategory,
 } from "@/types";
 import {
   MetricsResponse,
@@ -131,8 +136,55 @@ export interface ProviderState {
   clearSearchResults: () => void;
 }
 
+export interface ServiceState {
+  availableCategories: ServiceCategory[];
+  setAvailableCategories: (categories: ServiceCategory[]) => void;
+  selectedServices: Subcategory[];
+  setSelectedServices: (services: Subcategory[]) => void;
+  fetchServiceById: (serviceId: string) => Promise<ServiceData | void>;
+  fetchServicesByProvider: (
+    providerId: string
+  ) => Promise<ServiceData[] | void>;
+  MyProjects: ServiceData[];
+  setMyProjects: (projects: ServiceData[]) => void;
+  createService: (data: FormData) => Promise<ServiceData | void>;
+  updateService: (id: string, data: FormData) => Promise<ServiceData | void>;
+  handleToggleActive: (service: ServiceData) => Promise<void>;
+  OtherProjects: ServiceData[];
+  setOtherProjects: (projects: ServiceData[]) => void;
+  draftProjects: ServiceData[];
+  draftJobs: JobData[];
+  setDraftProjects: (projects: ServiceData[]) => void;
+  setDraftJobs: (projects: JobData[]) => void;
+  removeDraftJob: (id: string) => void;
+  cachedJobs: JobData[];
+  setCachedJobs: (jobs: JobData[]) => void;
+  // deleteService: (id: string) => Promise<void>;
+}
+
+export interface LocationState {
+  currentLocation: (LocationObject & LocationGeocodedAddress) | null;
+  liveLocation: LocationObject | null;
+  isTracking: boolean;
+  watchId: LocationSubscription | null;
+  places: Place[];
+  locationError: string | null;
+  clearLocationError: () => void;
+  selectedPlace: PlaceDetails | null;
+  getCurrentLocation: () => Promise<
+    (LocationObject & LocationGeocodedAddress) | undefined
+  >;
+  startLiveTracking: () => Promise<void>;
+  stopLiveTracking: () => void;
+  setSelectedPlace: (place: PlaceDetails) => void;
+  searchPlaces: (query: string) => Promise<void>;
+  getPlaceDetails: (placeId: string) => Promise<PlaceDetails | undefined>;
+}
+
 export type GlobalStore = GlobalState &
   DashboardState &
   AuthState &
   UserState &
-  ProviderState;
+  ProviderState &
+  ServiceState &
+  LocationState;

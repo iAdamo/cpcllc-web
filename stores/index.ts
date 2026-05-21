@@ -6,6 +6,8 @@ import { StateCreator } from "zustand";
 import { dashboardState } from "./dashboardState";
 import { authState } from "./authState";
 import { globalState } from "./globalState";
+import { providerState } from "./providerState";
+import { serviceState } from "./serviceState";
 import { GlobalStore } from "@/types";
 
 type MyStateCreator = StateCreator<
@@ -26,6 +28,8 @@ const useGlobalStore = create<GlobalStore>()(
         ((...a) => ({
           ...dashboardState(...a),
           ...authState(...a),
+          ...providerState(...a),
+          ...serviceState(...a),
           ...globalState(...a),
         })) as MyStateCreator,
         {

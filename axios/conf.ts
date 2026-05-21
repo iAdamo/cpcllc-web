@@ -14,14 +14,27 @@ const createClient = () => {
 
   apiClient.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
+
+
+      console.log(config.url);
+      // if (config.url?.startsWith("auth"))
+
+      // if (config.url?.startsWith("auth")) {
+      //   config.headers["x-device-id"] = await getDeviceId();
+      //   config.headers["x-session-id"] = await getSessionId();
+      // }
+
       return config;
-    }
+    },
+    (error) => Promise.reject(error)
   );
+
+
 
   apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
-      console.log("API error:", error.response.data);
+      console.log("API error:", error?.response?.data);
       if (error.response?.status === 403) {
         window.location.href = "/";
       } else if (error.message === "Network Error") {

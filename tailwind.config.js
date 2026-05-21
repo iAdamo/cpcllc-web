@@ -1,29 +1,26 @@
-import gluestackPlugin from "@gluestack-ui/nativewind-utils/tailwind-plugin";
+/** @type {import('tailwindcss').Config} */
 import { colors } from "./constants/Color";
 
-/** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: "class",
+  darkMode: process.env.DARK_MODE ? process.env.DARK_MODE : "class",
   content: [
-    "app/**/*.{tsx,jsx,ts,js}",
-    "components/**/*.{tsx,jsx,ts,js}",
-    "./screens/**/*.{js,jsx,ts,tsx}",
+    "./app/**/*.{html,js,jsx,ts,tsx,mdx}",
+    "./components/**/*.{html,js,jsx,ts,tsx,mdx}",
+    "./*.{html,js,jsx,ts,tsx,mdx}",
+    "./src/**/*.{html,js,jsx,ts,tsx,mdx}",
   ],
   presets: [require("nativewind/preset")],
   important: "html",
-
-  theme: {
-    screens: {
-      base: "0",
-      xs: "400px",
-      sm: "480px",
-      md: "768px",
-      lg: "992px",
-      xl: "1280px",
+  safelist: [
+    {
+      pattern:
+        /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background|indicator)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|primary)/,
     },
+  ],
+  theme: {
     extend: {
       colors: {
-        ... colors,
+        ...colors,
         primary: {
           0: "rgb(var(--color-primary-0)/<alpha-value>)",
           50: "rgb(var(--color-primary-50)/<alpha-value>)",
@@ -183,7 +180,11 @@ module.exports = {
         heading: undefined,
         body: undefined,
         mono: undefined,
-        roboto: ["Roboto", "sans-serif"],
+        jakarta: ["var(--font-plus-jakarta-sans)"],
+        roboto: ["var(--font-roboto)"],
+        code: ["var(--font-source-code-pro)"],
+        inter: ["var(--font-inter)"],
+        "space-mono": ["var(--font-space-mono)"],
       },
       fontWeight: {
         extrablack: "950",
@@ -201,23 +202,7 @@ module.exports = {
         "soft-2": "0px 0px 20px rgba(38, 38, 38, 0.2)",
         "soft-3": "0px 0px 30px rgba(38, 38, 38, 0.1)",
         "soft-4": "0px 0px 40px rgba(38, 38, 38, 0.1)",
-        top: "0 -10px 15px -3px rgba(0, 0, 0, 0.1), 0 -4px 6px -2px rgba(0, 0, 0, 0.05)",
-        "top-right":
-          "10px -10px 15px -3px rgba(0, 0, 0, 0.1), 4px -4px 6px -2px rgba(0, 0, 0, 0.05)",
-        right:
-          "10px 0 15px -3px rgba(0, 0, 0, 0.1), 4px 0 6px -2px rgba(0, 0, 0, 0.05)",
-        "bottom-right":
-          "10px 10px 15px -3px rgba(0, 0, 0, 0.1), 4px 4px 6px -2px rgba(0, 0, 0, 0.05)",
-        bottom:
-          "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-        "bottom-left":
-          "-10px 10px 15px -3px rgba(0, 0, 0, 0.1), -4px 4px 6px -2px rgba(0, 0, 0, 0.05)",
-        left: "-10px 0 15px -3px rgba(0, 0, 0, 0.1), -4px 0 6px -2px rgba(0, 0, 0, 0.05)",
-        "top-left":
-          "-10px -10px 15px -3px rgba(0, 0, 0, 0.1), -4px -4px 6px -2px rgba(0, 0, 0, 0.05)",
       },
     },
   },
-
-  plugins: [gluestackPlugin],
 };

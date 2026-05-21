@@ -1,63 +1,33 @@
 "use client";
-
-import StyledJsxRegistry from "./registry";
+import { Geist, Geist_Mono } from "next/font/google";
+import "../global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import NavBar from "@/components/layout/NavBar";
-// import PreFooter from "@/components/layout/PreFooter";
-import Footer from "@/components/layout/Footer";
-import { usePathname } from "next/navigation";
-// import { MapProvider } from "@/context/MapContext";
-import AiChat from "@/components/AiChatFab";
+import StyledJsxRegistry from "./registry";
 import { TranslationProvider } from "@/context/TranslationContext";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-
-  const hideLayoutForRoutes = [
-    "/onboarding",
-    "/admin",
-    "/privacy-policy",
-    "/terms-of-service",
-  ];
-  const hideAiChatForRoutes = [
-    "/onboarding",
-    "/admin",
-    "/profile",
-    "/service",
-    "/privacy-policy",
-    "/terms-of-service",
-  ];
-
-  const hideAiChatForRoutesRegex = hideAiChatForRoutes.map(
-    (route) => new RegExp(`^${route}(?:/|$)`)
-  );
-  const shouldHideAiChat = hideAiChatForRoutesRegex.some((regex) =>
-    regex.test(pathname)
-  );
-
-  const hideLayoutForRoutesRegex = hideLayoutForRoutes.map(
-    (route) => new RegExp(`^${route}(?:/|$)`)
-  );
-  const shouldHideLayout = hideLayoutForRoutesRegex.some((regex) =>
-    regex.test(pathname)
-  );
-
   return (
     <html lang="en">
-      <body className="h-screen min-h-screen m-0 p-0">
+      <body
+        className={`flex-1  antialiased h-screen w-screen overflow-hidden overflow-y-scroll`}
+      >
         <StyledJsxRegistry>
           <GluestackUIProvider mode="light">
-            <TranslationProvider>
-              {!shouldHideLayout && <NavBar />}
-              {children}
-              {/* {!shouldHideLayout && <PreFooter />} */}
-              {!shouldHideAiChat && <AiChat />}
-              {!shouldHideLayout && <Footer />}
-            </TranslationProvider>
+            <TranslationProvider>{children}</TranslationProvider>
           </GluestackUIProvider>
         </StyledJsxRegistry>
       </body>

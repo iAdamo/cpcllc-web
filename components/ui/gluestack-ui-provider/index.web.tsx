@@ -1,10 +1,12 @@
 'use client';
 import React, { useEffect, useLayoutEffect } from 'react';
 import { config } from './config';
-import { OverlayProvider } from '@gluestack-ui/overlay';
-import { ToastProvider } from '@gluestack-ui/toast';
-import { setFlushStyles } from '@gluestack-ui/nativewind-utils/flush';
+import { OverlayProvider } from '@gluestack-ui/core/overlay/creator';
+import { ToastProvider } from '@gluestack-ui/core/toast/creator';
+import { setFlushStyles } from '@gluestack-ui/utils/nativewind-utils';
 import { script } from './script';
+
+export type ModeType = 'light' | 'dark' | 'system';
 
 const variableStyleTagId = 'nativewind-style';
 const createStyle = (styleTagId: string) => {
@@ -21,7 +23,7 @@ export function GluestackUIProvider({
   mode = 'light',
   ...props
 }: {
-  mode?: 'light' | 'dark' | 'system';
+  mode?: ModeType;
   children?: React.ReactNode;
 }) {
   let cssVariablesWithMode = ``;
