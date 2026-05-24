@@ -1,386 +1,485 @@
-import { useState, useMemo } from "react";
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import { HStack } from "@/components/ui/hstack";
-import { VStack } from "@/components/ui/vstack";
-import { Pressable } from "@/components/ui/pressable";
-import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  Globe,
+  Bell,
+  Heart,
+  Sun,
+  Moon,
+  Wrench,
+  Zap,
+  Droplets,
+  Wind,
+  Paintbrush,
+  Bug,
+  Home,
+  Waves,
+  SunMedium,
+  Package,
+  ShieldCheck,
+  Settings,
+  Hammer,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import useGlobalStore from "@/stores";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
 import ProfileMenu from "@/components/ProfileMenu";
-import useGlobalStore from "@/stores";
-import {  MSearchEngine } from "@/components/SearchEngine";
-import { MenuIcon, CloseIcon, ChevronDownIcon } from "@/components/ui/icon";
-import {
-  Drawer,
-  DrawerBackdrop,
-  DrawerContent,
-  DrawerBody,
-} from "@/components/ui/drawer";
-import { Divider } from "@/components/ui/divider";
-// import VerifyCodeModal from "@/screens/auth/VerifyCodeModal";
-import { useTranslation } from "@/context/TranslationContext"; // Update the path to the correct location
+import { useTranslation } from "@/context/TranslationContext";
+
+const categories = [
+  { label: "Plumbing", Icon: Droplets, href: "/providers?category=Plumbing", color: "text-blue-500 bg-blue-50" },
+  { label: "Electrical", Icon: Zap, href: "/providers?category=Electrical", color: "text-yellow-500 bg-yellow-50" },
+  { label: "HVAC", Icon: Wind, href: "/providers?category=HVAC", color: "text-cyan-500 bg-cyan-50" },
+  { label: "Cleaning", Icon: Waves, href: "/providers?category=Cleaning", color: "text-green-500 bg-green-50" },
+  { label: "Painting", Icon: Paintbrush, href: "/providers?category=Painting", color: "text-purple-500 bg-purple-50" },
+  { label: "Pest Control", Icon: Bug, href: "/providers?category=Pest+Control", color: "text-red-500 bg-red-50" },
+  { label: "Roofing", Icon: Home, href: "/providers?category=Roofing", color: "text-orange-500 bg-orange-50" },
+  { label: "Solar", Icon: SunMedium, href: "/providers?category=Solar", color: "text-amber-500 bg-amber-50" },
+  { label: "Moving", Icon: Package, href: "/providers?category=Moving", color: "text-indigo-500 bg-indigo-50" },
+  { label: "Security", Icon: ShieldCheck, href: "/providers?category=Security", color: "text-slate-500 bg-slate-50" },
+  { label: "Handyman", Icon: Wrench, href: "/providers?category=Handyman", color: "text-rose-500 bg-rose-50" },
+  { label: "Appliances", Icon: Settings, href: "/providers?category=Appliance+Repair", color: "text-teal-500 bg-teal-50" },
+  { label: "Carpentry", Icon: Hammer, href: "/providers?category=Carpentry", color: "text-stone-500 bg-stone-50" },
+];
 
 const NavBar = () => {
-  const [isAuthodalOpen, setIsAuthodalOpen] = useState(false);
-  const [showDrawer, setShowDrawer] = useState(false);
-  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const [catOpen, setCatOpen] = useState(false);
+  const catRef = useRef<HTMLDivElement>(null);
 
   const { user, logout, setSwitchRole } = useGlobalStore();
   const router = useRouter();
-  const currentPath = usePathname();
+  const pathname = usePathname();
   const { t, language, setLanguage } = useTranslation();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  // useEffect(() => {
-  //   if (user && !user?.isEmailVerified) {
-  //     fetchUserProfile();
-  //   }
-  // }, [user, fetchUserProfile]);
+  const isHome = pathname === "/";
 
-  const options = [
-    { name: t("home"), href: "/" },
-    { name: t("companies"), href: "/providers" },
-  ];
+  useEffect(() => { setMounted(true); }, []);
 
-  const options2 = [
-    ...(user?._id ? [{ name: t("myRequests"), href: "/requests" }] : []),
-    { name: t("favorites"), href: "/favorites" },
-    ...(user?.activeRole !== "Provider"
-      ? [{ name: t("beACompany"), href: "/onboarding" }]
-      : []),
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  const styles = useMemo(() => {
-    const isHome = currentPath === "/";
+  useEffect(() => {
+    setMobileOpen(false);
+    setLangOpen(false);
+    setCatOpen(false);
+  }, [pathname]);
 
-    return {
-      navBarClass: !isHome && "bg-white",
-      navBarLogo: !isHome ? "/assets/logo-white.svg" : "/assets/logo-color.svg",
-      linkClass: !isHome
-        ? "no-underline text-white text-lg font-bold hover:text-brand-1"
-        : "no-underline text-text-primary text-lg font-bold hover:text-brand-0",
-      buttonClass: !isHome ? "bg-white" : "bg-brand-primary",
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (catRef.current && !catRef.current.contains(e.target as Node)) {
+        setCatOpen(false);
+      }
     };
-  }, [currentPath]);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
-  const handleLanguageChange = (lang: "en" | "es") => {
-    setLanguage(lang);
-    setShowLanguageDropdown(false);
-  };
+  const transparent = isHome && !scrolled && !mobileOpen;
+
+  const navLinks = [
+    { label: t("home"), href: "/" },
+    { label: t("companies"), href: "/providers" },
+  ];
 
   return (
     <>
-      {/** Verify Code Modal */}
-      {/* <VerifyCodeModal
-        isOpen={user! && !user?.isEmailVerified}
-        onClose={() => user?.isEmailVerified}
-        email={user?.email || ""}
-        onVerified={() => {
-          setIsAuthodalOpen(false);
-          if (user?.id) {
-            setUserData({
-              ...user,
-              isEmailVerified: true,
-            });
-          } else {
-            console.error("User ID is undefined");
-          }
-          router.replace("/cpc/" + user?.id);
-        }}
-        isEmailVerified={!user?.isEmailVerified}
-      /> */}
-
-      {/** Desktop */}
-      <VStack
-        className={`hidden md:flex justify-center items-center ${
-          currentPath !== "/" ? "top-0 h-28" : "h-20"
-        } z-40 w-full ${styles.navBarClass}`}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          transparent
+            ? "bg-transparent"
+            : "bg-white/96 backdrop-blur-xl shadow-sm border-b border-gray-100 dark:bg-gray-950/96 dark:border-gray-800"
+        }`}
       >
-        <HStack className="py-10 w-full items-center gap-10 pr-5">
-          <HStack className="items-center">
-            <Pressable onPress={() => router.replace("/")}>
+        <div className="max-w-7xl mx-auto px-5 md:px-10">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            {/* Logo */}
+            <Link href="/" className="flex-shrink-0 flex flex-row gap-2 items-end">
               <Image
-                src={styles.navBarLogo}
-                alt="Logo"
-                width={200}
-                height={80}
+                src={transparent ? "/assets/logo-white.png" : "/assets/logo-color.png"}
+                alt="CompaniesCenterLLC"
+                width={60}
+                height={60}
                 priority
               />
-            </Pressable>
+              {/* <h1 className={`${transparent ? "text-white" : "text-brand-primary"} font-bold text-lg`} >CompaniesCenter</h1> */}
+            </Link>
 
-            {/** Language Selector */}
-            <div className="relative ml-4">
-              <Button
-                variant="link"
-                size="xs"
-                onPress={() => setShowLanguageDropdown(!showLanguageDropdown)}
-                className="flex items-center"
-              >
-                <ButtonText
-                  className={`${
-                    currentPath === "/" ? "text-white" : "text-text-primary"
-                  } text-lg data-[hover=true]:no-underline data-[hover=true]:text-text-primary`}
+            {/* Desktop center links */}
+            <div className="hidden md:flex items-center gap-1">
+              {navLinks.map(({ label, href }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold tracking-wide transition-colors ${
+                    transparent
+                      ? "text-white/80 hover:text-white hover:bg-white/10"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800"
+                  } ${
+                    pathname === href
+                      ? transparent
+                        ? "!text-white bg-white/10"
+                        : "!text-blue-600 bg-blue-50 dark:!text-blue-400 dark:bg-blue-950"
+                      : ""
+                  }`}
                 >
-                  {language === "en" ? t("english") : t("spanish")}
-                </ButtonText>
-                <ButtonIcon
-                  as={ChevronDownIcon}
-                  className="ml-1 text-white w-6 h-6"
-                />
-              </Button>
+                  {label}
+                </Link>
+              ))}
 
-              {showLanguageDropdown && (
-                <div className="absolute flex-row flex gap-4 top-full left-0 mt-1 rounded-md shadow-lg z-50">
-                  <Button
-                    size="xs"
-                    onPress={() => handleLanguageChange("en")}
-                    className="bg-white data-[hover=true]:bg-white"
-                  >
-                    <ButtonText className="text-text-primary data-[hover=true]:text-blue-600">
-                      English
-                    </ButtonText>
-                  </Button>
-                  <Button
-                    size="xs"
-                    onPress={() => handleLanguageChange("es")}
-                    className="bg-white data-[hover=true]:bg-white"
-                  >
-                    <ButtonText className="text-text-primary data-[hover=true]:text-blue-600">
-                      Español
-                    </ButtonText>
-                  </Button>
-                </div>
-              )}
-            </div>
-          </HStack>
+              {/* Categories mega dropdown */}
+              <div ref={catRef} className="relative">
+                <button
+                  type="button"
+                  onClick={() => setCatOpen((v) => !v)}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                    transparent
+                      ? "text-white/80 hover:text-white hover:bg-white/10"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800"
+                  } ${catOpen && !transparent ? "text-blue-600 bg-blue-50" : ""}`}
+                >
+                  Services
+                  <motion.span animate={{ rotate: catOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                    <ChevronDown size={14} />
+                  </motion.span>
+                </button>
 
-         
-          <HStack className="gap-32 ml-auto">
-            {currentPath === "/" ? (
-              <>
-                <HStack className="items-center gap-14 hidden md:flex">
-                  {options.map((option) => (
-                    <Link
-                      key={option.name}
-                      href={option.href}
-                      className={` text-white text-lg font-bold ${
-                        currentPath === option.href ? "font-extrabold" : ""
-                      }`}
+                <AnimatePresence>
+                  {catOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                      transition={{ duration: 0.18 }}
+                      className="absolute left-0 top-full mt-2 w-[480px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden z-30 p-4"
                     >
-                      {option.name}
-                    </Link>
-                  ))}
-                </HStack>
-                <HStack space="lg" className="ml-auto">
-                  <Button
-                    onPress={() => setIsAuthodalOpen(true)}
-                    className="bg-[#FFFFFF20] data-[hover=true]:bg-[#FFFFFF40]"
-                  >
-                    <ButtonText className="">{t("logIn")}</ButtonText>
-                  </Button>
+                      <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 mb-3 px-1">
+                        Browse by Service
+                      </p>
+                      <div className="grid grid-cols-3 gap-1">
+                        {categories.map(({ label, Icon, href, color }) => (
+                          <Link
+                            key={label}
+                            href={href}
+                            onClick={() => setCatOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
+                          >
+                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${color} flex-shrink-0`}>
+                              <Icon size={14} />
+                            </div>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white">
+                              {label}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                      <div className="border-t border-gray-100 dark:border-gray-700 mt-3 pt-3">
+                        <Link
+                          href="/companies/home-services"
+                          onClick={() => setCatOpen(false)}
+                          className="flex items-center justify-center gap-2 py-2 text-sm font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                        >
+                          View all categories →
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
 
-                  <Button
-                    onPress={() => router.push("/onboarding")}
-                    className="bg-btn-primary data-[hover=true]:bg-brand-primary"
-                  >
-                    <ButtonText className="text-white ">
-                      {t("getStarted")}
-                    </ButtonText>
-                  </Button>
-                </HStack>
-              </>
-            ) : (
-              <HStack className="items-center justify-between gap-4 hidden md:flex ">
-                {options2.map((option) => (
-                  <Link
-                    key={option.name}
-                    href={option.href}
-                    className={`no-underline text-md leading-sm font-semibold ${
-                      currentPath === option.href ? "font-extrabold" : ""
+            {/* Desktop right side */}
+            <div className="hidden md:flex items-center gap-1.5">
+              {/* Theme toggle */}
+              {mounted && (
+                <button
+                  type="button"
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                    transparent
+                      ? "text-white/70 hover:text-white hover:bg-white/10"
+                      : "text-gray-500 hover:text-gray-800 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                  aria-label="Toggle theme"
+                >
+                  {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                </button>
+              )}
+
+              {/* Favorites */}
+              {user && (
+                <button
+                  type="button"
+                  onClick={() => router.push("/favorites")}
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                    transparent
+                      ? "text-white/70 hover:text-white hover:bg-white/10"
+                      : "text-gray-500 hover:text-gray-800 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                  aria-label="Favorites"
+                >
+                  <Heart size={16} />
+                </button>
+              )}
+
+              {/* Notifications */}
+              {user && (
+                <button
+                  type="button"
+                  className={`relative w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                    transparent
+                      ? "text-white/70 hover:text-white hover:bg-white/10"
+                      : "text-gray-500 hover:text-gray-800 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                  aria-label="Notifications"
+                >
+                  <Bell size={16} />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+                </button>
+              )}
+
+              {/* Language */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setLangOpen((v) => !v)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+                    transparent
+                      ? "text-white/70 hover:text-white hover:bg-white/10"
+                      : "text-gray-500 hover:text-gray-800 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                >
+                  <Globe size={14} />
+                  <span>{language === "en" ? "EN" : "ES"}</span>
+                  <ChevronDown size={12} />
+                </button>
+                <AnimatePresence>
+                  {langOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 6 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-full mt-2 w-36 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-20"
+                    >
+                      {(["en", "es"] as const).map((lang) => (
+                        <button
+                          key={lang}
+                          type="button"
+                          onClick={() => { setLanguage(lang); setLangOpen(false); }}
+                          className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-blue-50 dark:hover:bg-blue-950 hover:text-blue-600 ${
+                            language === lang
+                              ? "text-blue-600 font-bold bg-blue-50/50 dark:bg-blue-950/50"
+                              : "text-gray-700 dark:text-gray-200"
+                          }`}
+                        >
+                          {lang === "en" ? "🇺🇸 English" : "🇪🇸 Español"}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Divider */}
+              <div className={`w-px h-5 mx-1 ${transparent ? "bg-white/20" : "bg-gray-200 dark:bg-gray-700"}`} />
+
+              {user ? (
+                <ProfileMenu
+                  options={[
+                    ...(user?.activeRoleId
+                      ? [
+                          {
+                            name: t("profile"),
+                            onPress: () => {
+                              setSwitchRole(user?.activeRole === "Client" ? "Provider" : "Client");
+                              router.replace("/profile");
+                            },
+                          },
+                          { name: t("membership"), onPress: () => router.replace("/profile") },
+                        ]
+                      : []),
+                    { name: t("settings"), onPress: () => router.replace("/settings") },
+                  ]}
+                  offset={30}
+                />
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setAuthOpen(true)}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                      transparent
+                        ? "text-white border border-white/30 hover:bg-white/10"
+                        : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
                     }`}
                   >
-                    {option.name}
+                    {t("logIn")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push("/onboarding")}
+                    className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm hover:shadow-md hover:shadow-blue-500/25 active:scale-95"
+                  >
+                    {t("getStarted")}
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Mobile hamburger */}
+            <button
+              type="button"
+              aria-label="Toggle navigation menu"
+              onClick={() => setMobileOpen((v) => !v)}
+              className={`md:hidden p-2 rounded-lg transition-colors ${
+                transparent
+                  ? "text-white hover:bg-white/10"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
+            >
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile dropdown panel */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800 shadow-2xl overflow-hidden"
+            >
+              <div className="px-5 py-4">
+                {navLinks.map(({ label, href }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="flex items-center py-3.5 text-gray-800 dark:text-gray-100 font-semibold border-b border-gray-50 dark:border-gray-800 last:border-0"
+                  >
+                    {label}
                   </Link>
                 ))}
-                {/** User Profile Menu */}
-                {user && (
-                  <ProfileMenu
-                    options={[
-                      ...(user?.activeRoleId
-                        ? [
-                            {
-                              name: t("profile"),
-                              onPress: () => {
-                                setSwitchRole(
-                                  user?.activeRole === "Client"
-                                    ? "Provider"
-                                    : "Client"
-                                );
-                                router.replace("/profile");
-                              },
-                            },
-                            {
-                              name: t("membership"),
-                              onPress: () => router.replace("/profile"),
-                            },
-                          ]
-                        : []),
 
-                      {
-                        name: t("settings"),
-                        onPress: () => router.replace("/settings"),
-                      },
-                    ]}
-                    offset={30}
-                  />
-                )}
-              </HStack>
-            )}
-          </HStack>
-        </HStack>
-        <AuthModalManager
-          isModalOpen={isAuthodalOpen}
-          onClose={() => setIsAuthodalOpen(false)}
-          initialView="signIn"
-        />
-      </VStack>
-      {/**Mobile */}
-      <VStack className="md:hidden w-full z-50 gap-2 p-2 fixed top-0 bg-brand-primary">
-        <HStack className="justify-between items-center">
-          <Button size="sm" className="bg-brand-secondary">
-            <ButtonText>{t("openInApp")}</ButtonText>
-          </Button>
-          <Button
-            variant="outline"
-            className="border-none"
-            onPress={() => router.replace("/")}
-          >
-            <ButtonText>CPCLLC</ButtonText>
-          </Button>
-          <Button
-            variant="link"
-            size="xl"
-            onPress={() => setShowDrawer((prev) => !prev)}
-            className=""
-          >
-            <ButtonIcon
-              className="text-white"
-              as={showDrawer ? CloseIcon : MenuIcon}
-            />
-          </Button>
-          <Drawer
-            isOpen={showDrawer}
-            onClose={() => setShowDrawer(false)}
-            size="sm"
-            anchor="top"
-            className="md:hidden fixed z-50"
-          >
-            <DrawerBackdrop className="bg-transparent" />
-            <DrawerContent className="h-screen mt-16 p-2">
-              <DrawerBody className="w-full h-full m-0 justify-start">
-                {/* Language Selector in Mobile Menu */}
-                <div className="mb-4">
-                  <Button
-                    variant="link"
-                    size="sm"
-                    onPress={() => handleLanguageChange("en")}
-                    className={`mr-2 ${language === "en" ? "font-bold" : ""}`}
-                  >
-                    <ButtonText>English</ButtonText>
-                  </Button>
-                  <Button
-                    variant="link"
-                    size="sm"
-                    onPress={() => handleLanguageChange("es")}
-                    className={`${language === "es" ? "font-bold" : ""}`}
-                  >
-                    <ButtonText>Español</ButtonText>
-                  </Button>
+                {/* Mobile categories */}
+                <div className="py-3 border-b border-gray-50 dark:border-gray-800">
+                  <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 mb-3">
+                    Services
+                  </p>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {categories.slice(0, 9).map(({ label, Icon, href, color }) => (
+                      <Link
+                        key={label}
+                        href={href}
+                        className="flex flex-col items-center gap-1.5 p-2 rounded-xl bg-gray-50 dark:bg-gray-800 text-center"
+                      >
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${color}`}>
+                          <Icon size={15} />
+                        </div>
+                        <span className="text-[10px] font-semibold text-gray-700 dark:text-gray-300 leading-tight">
+                          {label}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-                <Divider orientation="horizontal" className="w-full" />
 
-                {!user?._id && (
-                  <>
-                    <Button
-                      variant="link"
-                      onPress={() => setIsAuthodalOpen(true)}
-                      className="justify-start"
-                    >
-                      <ButtonText className="font-normal">
-                        {t("logIn")}
-                      </ButtonText>
-                    </Button>
-                    <Divider orientation="horizontal" className="w-full" />
-                    <Button
-                      variant="link"
-                      onPress={() => {
-                        setShowDrawer(false);
-                        router.push("/providers");
-                      }}
-                      className="justify-start"
-                    >
-                      <ButtonText className="font-normal">
-                        {t("companies")}
-                      </ButtonText>
-                    </Button>
-                    <Divider orientation="horizontal" className="w-full" />
-                  </>
-                )}
-                {user && (
-                  <>
-                    <Button
-                      isDisabled={!user?.activeRoleId}
-                      variant="link"
-                      onPress={() => {
-                        setShowDrawer(false);
-                        setSwitchRole(
-                          user?.activeRole === "Client" ? "Provider" : "Client"
-                        );
-                      }}
-                      className="justify-start"
-                    >
-                      <ButtonText className="font-normal">{`${t("switchTo")} ${
-                        user?.activeRole === "Client" ? "Provider" : "Client"
-                      }`}</ButtonText>
-                    </Button>
-                    <Divider orientation="horizontal" className="w-full" />
-
-                    <Button
-                      variant="link"
-                      onPress={async () => {
-                        setShowDrawer(false);
-                        await logout();
-                        router.replace("/auth/signin");
-                      }}
-                      className="justify-start"
-                    >
-                      <ButtonText className="font-normal">
+                <div className="pt-4 space-y-2">
+                  {user ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => { router.push("/profile"); setMobileOpen(false); }}
+                        className="w-full py-3.5 text-center font-semibold text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl"
+                      >
+                        {t("profile")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={async () => { await logout(); router.replace("/"); setMobileOpen(false); }}
+                        className="w-full py-3.5 text-center font-semibold text-red-600 border border-red-100 rounded-xl"
+                      >
                         {t("logout")}
-                      </ButtonText>
-                    </Button>
-                  </>
-                )}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => { setAuthOpen(true); setMobileOpen(false); }}
+                        className="w-full py-3.5 text-center font-semibold text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl"
+                      >
+                        {t("logIn")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { router.push("/onboarding"); setMobileOpen(false); }}
+                        className="w-full py-3.5 text-center font-bold text-white bg-gradient-to-r from-blue-600 to-violet-600 rounded-xl"
+                      >
+                        {t("getStarted")}
+                      </button>
+                    </>
+                  )}
 
-                {!user?._id && (
-                  <Button
-                    variant="link"
-                    onPress={() => {
-                      setShowDrawer(false);
-                      router.push("/onboarding");
-                    }}
-                    className="justify-start"
-                  >
-                    <ButtonText className="">{t("signUp")}</ButtonText>
-                  </Button>
-                )}
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
-        </HStack>
-        <VStack className="-z-50">
-          <MSearchEngine />
-        </VStack>
-      </VStack>
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-50 dark:border-gray-800 mt-2">
+                    <div className="flex gap-2">
+                      {(["en", "es"] as const).map((lang) => (
+                        <button
+                          key={lang}
+                          type="button"
+                          onClick={() => setLanguage(lang)}
+                          className={`px-4 py-2 text-sm rounded-xl font-semibold transition-colors ${
+                            language === lang
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+                          }`}
+                        >
+                          {lang === "en" ? "EN 🇺🇸" : "ES 🇪🇸"}
+                        </button>
+                      ))}
+                    </div>
+                    {mounted && (
+                      <button
+                        type="button"
+                        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                        className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300"
+                        aria-label="Toggle theme"
+                      >
+                        {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+
+      <AuthModalManager
+        isModalOpen={authOpen}
+        onClose={() => setAuthOpen(false)}
+        initialView="signIn"
+      />
     </>
   );
 };

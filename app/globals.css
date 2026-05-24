@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hero section grid overlay */
+.hero-grid {
+  background-image: linear-gradient(#3b82f6 1px, transparent 1px),
+    linear-gradient(90deg, #3b82f6 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Dot grid background used in dark sections */
+.dot-pattern {
+  background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+/* Smooth image scale on card hover */
+.card-img-zoom img {
+  transition: transform 700ms ease;
+}
+.card-img-zoom:hover img {
+  transform: scale(1.05);
+}

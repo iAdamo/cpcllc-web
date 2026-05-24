@@ -4,7 +4,7 @@ import { useServerInsertedHTML } from 'next/navigation';
 import { StyleRegistry, createStyleRegistry } from 'styled-jsx';
 import { AppRegistry } from 'react-native-web';
 import { flush } from '@gluestack-ui/utils/nativewind-utils';
-import "../global.css";
+import "./globals.css";
 
 export default function StyledJsxRegistry({
   children,
