@@ -88,7 +88,7 @@ export interface DashboardState {
   metricsSummary: MetricsSummary | null;
   timeSeries: TimeSeriesData[];
 
-  fetchUsers: () => Promise<void>;
+  // fetchUsers: () => Promise<void>;
   fetchMetrics: (params: MetricsRequest) => Promise<void>;
 }
 

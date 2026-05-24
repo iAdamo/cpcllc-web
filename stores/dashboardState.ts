@@ -1,7 +1,7 @@
 import { StateCreator } from "zustand";
 import { DashboardState, GlobalStore } from "@/types";
 import { getMetrics } from "@/axios/admin";
-import { getUsers } from "@/axios/user";
+// import { getUsers } from "@/axios/user";
 
 export const dashboardState: StateCreator<
   GlobalStore,
@@ -42,27 +42,27 @@ export const dashboardState: StateCreator<
   metricsSummary: null,
   timeSeries: [],
 
-  fetchUsers: async () => {
-    set({ isLoading: true, error: null });
+  // fetchUsers: async () => {
+  //   set({ isLoading: true, error: null });
 
-    try {
-      if (get().users.length > 0) {
-        set({ isLoading: false });
-        return;
-      }
-      const response = await getUsers(1, 100);
+  //   try {
+  //     if (get().users.length > 0) {
+  //       set({ isLoading: false });
+  //       return;
+  //     }
+  //     const response = await getUsers(1, 100);
 
-      set({
-        users: response.users,
-        isLoading: false,
-      });
-    } catch (err) {
-      set({
-        isLoading: false,
-        error: String(err) || "Failed to fetch users",
-      });
-    }
-  },
+  //     set({
+  //       users: response.users,
+  //       isLoading: false,
+  //     });
+  //   } catch (err) {
+  //     set({
+  //       isLoading: false,
+  //       error: String(err) || "Failed to fetch users",
+  //     });
+  //   }
+  // },
 
   fetchMetrics: async () => {
     const { granularity, selectedYear, selectedMonth } = get();

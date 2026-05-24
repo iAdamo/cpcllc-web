@@ -4132,6 +4132,11 @@ react-stately@^3.39.0:
     "@react-stately/tree" "^3.9.3"
     "@react-types/shared" "^3.32.1"
 
+react-virtuoso@^4.18.7:
+  version "4.18.7"
+  resolved "https://registry.npmjs.org/react-virtuoso/-/react-virtuoso-4.18.7.tgz"
+  integrity sha512-xNF5zDGEEIMB7cKwcen/pLig0YDf6OnfFrVgKFa7sHPf9fRem0CaLshyObbBcP88jzn0enavL39EgplgdyT21g==
+
 react@^19.2.1:
   version "19.2.1"
   resolved "https://registry.npmjs.org/react/-/react-19.2.1.tgz"
