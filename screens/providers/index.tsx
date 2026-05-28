@@ -27,13 +27,12 @@ import { useProviderSearch } from "../../hooks/useProviderSearch";
 import { useCategories } from "../../hooks/useCategories";
 
 import UniversalSearch from "@/components/UniversalSearch";
-import FilterBar from "./components/FilterBar";
-import FilterDrawer from "./components/FilterDrawer";
-import ProviderCard, { ProviderCardSkeleton } from "./components/ProviderCard";
-import EmptyState from "./components/EmptyState";
-import MapPanel from "./components/MapPanel";
-import { Filters } from "./components/FilterSidebar";
-import { SvgXml } from "react-native-svg";
+import FilterBar from "./FilterBar";
+import FilterDrawer from "./FilterDrawer";
+import ProviderCard, { ProviderCardSkeleton } from "./ProviderCard";
+import EmptyState from "./EmptyState";
+import MapPanel from "./MapPanel";
+import { Filters } from "./FilterSidebar";
 
 // ─── Category icon map ────────────────────────────────────────────────────────
 
@@ -351,14 +350,12 @@ export default function ServiceProvidersPage() {
                                         : "bg-white/70 text-gray-600 hover:bg-blue-50 hover:text-blue-700 border border-gray-100"
                                     }`}
                                   >
-                                    <SvgXml
-                                      xml={sub.icon || ""}
-                                      width={20}
-                                      height={20}
-                                      fill={sub.iconColor || "#666"}
-                                      color="#162660"
-                                    />
-
+                                    {sub.icon && (
+                                      <span
+                                        className="flex-shrink-0 w-4 h-4"
+                                        dangerouslySetInnerHTML={{ __html: sub.icon }}
+                                      />
+                                    )}
                                     {sub.name}
                                   </button>
                                 );

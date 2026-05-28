@@ -147,7 +147,7 @@ const ProviderCard = memo(function ProviderCard({
             />
           </button>
           <Link
-            href={`/providers/${provider._id}`}
+            href={`/profile/${provider.owner}`}
             onClick={(e) => e.stopPropagation()}
             className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-colors whitespace-nowrap"
           >

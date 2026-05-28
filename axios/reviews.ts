@@ -4,10 +4,10 @@ import { ReviewData } from "@/types";
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
 export const createReview = async (
-  companyId: string,
-  review: FormData
+  id: string,
+  data: FormData
 ): Promise<ReviewData> => {
-  const response = await axiosInstance.post(`reviews/${companyId}`, review, {
+  const response = await axiosInstance.post(`reviews/${id}`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -23,7 +23,7 @@ export const updateReview = async (
   return response.data;
 };
 
-export const getReviews = async (companyId: string): Promise<ReviewData[]> => {
-  const response = await axiosInstance.get(`reviews/${companyId}`);
+export const getReviews = async (id?: string): Promise<ReviewData[]> => {
+  const response = await axiosInstance.get(`reviews/${id || "me"}`);
   return response.data;
 };

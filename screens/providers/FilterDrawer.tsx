@@ -36,10 +36,30 @@ export default function FilterDrawer({
   resultCount,
 }: FilterDrawerProps) {
   const quickFilters = [
-    { key: "openNow" as keyof Filters, label: "Open Now", Icon: Clock, color: "green" },
-    { key: "verifiedOnly" as keyof Filters, label: "Verified", Icon: Shield, color: "blue" },
-    { key: "topRated" as keyof Filters, label: "Top Rated", Icon: Award, color: "amber" },
-    { key: "newOnly" as keyof Filters, label: "New", Icon: Zap, color: "violet" },
+    {
+      key: "openNow" as keyof Filters,
+      label: "Open Now",
+      Icon: Clock,
+      color: "green",
+    },
+    {
+      key: "verifiedOnly" as keyof Filters,
+      label: "Verified",
+      Icon: Shield,
+      color: "blue",
+    },
+    {
+      key: "topRated" as keyof Filters,
+      label: "Top Rated",
+      Icon: Award,
+      color: "amber",
+    },
+    {
+      key: "newOnly" as keyof Filters,
+      label: "New",
+      Icon: Zap,
+      color: "violet",
+    },
   ];
 
   return (
@@ -84,6 +104,7 @@ export default function FilterDrawer({
                   Reset
                 </button>
                 <button
+                  title="Reset"
                   type="button"
                   onClick={onClose}
                   className="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center"
@@ -144,7 +165,9 @@ export default function FilterDrawer({
                           <Star size={11} fill="currentColor" />
                           {label}
                         </span>
-                      ) : label}
+                      ) : (
+                        label
+                      )}
                     </button>
                   ))}
                 </div>
@@ -158,10 +181,14 @@ export default function FilterDrawer({
                 <div className="space-y-3">
                   {categories.map((cat) => (
                     <div key={cat._id}>
-                      <p className="text-xs font-bold text-gray-700 mb-2">{cat.name}</p>
+                      <p className="text-xs font-bold text-gray-700 mb-2">
+                        {cat.name}
+                      </p>
                       <div className="flex flex-wrap gap-1.5">
                         {cat.subcategories.map((sub) => {
-                          const selected = selectedSubcategoryIds.includes(sub._id);
+                          const selected = selectedSubcategoryIds.includes(
+                            sub._id
+                          );
                           return (
                             <button
                               key={sub._id}

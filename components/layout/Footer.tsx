@@ -72,7 +72,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="max-w-xs">
             <Image
-              src="/assets/logo-white.svg"
+              src="/assets/logo-white.png"
               alt="CompaniesCenterLLC"
               width={180}
               height={48}
