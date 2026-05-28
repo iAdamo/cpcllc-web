@@ -3,19 +3,7 @@
 import { useState, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import {
-  Star,
-  MapPin,
-  Heart,
-  CheckCircle,
-  Award,
-  Zap,
-  Phone,
-  MessageCircle,
-  Clock,
-  ExternalLink,
-} from "lucide-react";
+import { Star, MapPin, Heart, CheckCircle, Award, Zap, Phone } from "lucide-react";
 import { ProviderData, MediaItem } from "@/types";
 import useGlobalStore from "@/stores";
 
@@ -35,15 +23,6 @@ function getImageUrl(provider: ProviderData): string {
   return "/assets/men.jpg";
 }
 
-function getLogoUrl(provider: ProviderData): string | null {
-  const logo = provider.providerLogo;
-  if (!logo) return null;
-  if (typeof logo === "object" && "thumbnail" in logo) {
-    return (logo as MediaItem).thumbnail || null;
-  }
-  return null;
-}
-
 const ProviderCard = memo(function ProviderCard({
   provider,
   index = 0,
@@ -55,12 +34,9 @@ const ProviderCard = memo(function ProviderCard({
 
   const isSaved = savedProviders.some((p) => p._id === provider._id);
   const imageUrl = getImageUrl(provider);
-  const logoUrl = getLogoUrl(provider);
   const rating = provider.averageRating ?? 0;
   const reviewCount = provider.reviewCount ?? 0;
-  const address =
-    provider.location?.primary?.address?.address ?? "Location not specified";
-  const subcategory = provider.subcategories?.[0];
+  const address = provider.location?.primary?.address?.address ?? "Location not specified";
   const isVerified = provider.isVerified ?? false;
   const isFeatured = provider.isFeatured ?? false;
   const isOnline = provider.availability === "Online";
@@ -75,202 +51,139 @@ const ProviderCard = memo(function ProviderCard({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: Math.min(index * 0.05, 0.4), ease: [0.22, 1, 0.36, 1] }}
+    <div
       onMouseEnter={() => onHover?.(provider._id)}
       onMouseLeave={() => onHover?.(null)}
-      className={`group relative transition-all duration-200 ${isHovered ? "z-10" : ""}`}
+      className={`relative bg-white border rounded-xl transition-all duration-150 cursor-pointer group ${
+        isHovered
+          ? "border-blue-400 shadow-md shadow-blue-100/60"
+          : "border-gray-100 hover:border-gray-200 hover:shadow-sm"
+      }`}
     >
-      <div
-        className={`bg-white rounded-2xl border transition-all duration-200 overflow-hidden ${
-          isHovered
-            ? "border-blue-300 shadow-xl shadow-blue-100/50 -translate-y-1"
-            : "border-gray-100 hover:border-gray-200 hover:shadow-lg"
-        }`}
-      >
-        <div className="flex">
-          {/* Cover image */}
-          <div className="relative w-36 sm:w-44 flex-shrink-0 overflow-hidden">
-            <Image
-              src={imageUrl}
-              alt={provider.providerName}
-              fill
-              sizes="(max-width: 640px) 144px, 176px"
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent" />
+      <div className="flex items-center gap-3">
+        {/* Thumbnail */}
+        <div className="relative w-40 h-28 flex-shrink-0 rounded-l-lg overflow-hidden bg-gray-100">
+          <Image
+            src={imageUrl}
+            alt={provider.providerName}
+            fill
+            sizes="200px"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          {isOnline && (
+            <div className="absolute bottom-1 left-1 w-2 h-2 bg-emerald-400 rounded-full border border-white" />
+          )}
+        </div>
 
-            {/* Logo */}
-            {logoUrl && (
-              <div className="absolute bottom-2 left-2 w-8 h-8 rounded-lg overflow-hidden border-2 border-white shadow-lg">
-                <Image src={logoUrl} alt="logo" fill className="object-cover" />
-              </div>
+        {/* Info */}
+        <div className="flex-1 min-w-0 gap-1">
+          <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
+            {isVerified && (
+              <span className="inline-flex items-center gap-0.5 text-emerald-600 text-[10px] font-bold">
+                <CheckCircle size={9} /> Verified
+              </span>
             )}
-
-            {/* Save button */}
-            <button
-              type="button"
-              onClick={handleSave}
-              className={`absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shadow-md transition-all active:scale-90 ${
-                savePending ? "opacity-50" : ""
-              }`}
-              aria-label="Save provider"
-            >
-              <Heart
-                size={13}
-                fill={isSaved ? "#ef4444" : "none"}
-                color={isSaved ? "#ef4444" : "#6b7280"}
-              />
-            </button>
-
-            {/* Online dot */}
-            {isOnline && (
-              <div className="absolute top-2 left-2 flex items-center gap-1 bg-emerald-500 px-1.5 py-0.5 rounded-full">
-                <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-                <span className="text-[9px] font-black text-white">Online</span>
-              </div>
+            {isFeatured && (
+              <span className="inline-flex items-center gap-0.5 text-amber-600 text-[10px] font-bold">
+                <Award size={9} /> Featured
+              </span>
+            )}
+            {rating >= 4.8 && (
+              <span className="inline-flex items-center gap-0.5 text-blue-600 text-[10px] font-bold">
+                <Zap size={9} /> Top Rated
+              </span>
             )}
           </div>
 
-          {/* Content */}
-          <div className="flex-1 p-4 min-w-0 flex flex-col justify-between">
-            <div>
-              {/* Badges row */}
-              <div className="flex items-center gap-1.5 mb-2 flex-wrap">
-                {isVerified && (
-                  <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-black rounded-full border border-emerald-100">
-                    <CheckCircle size={9} />
-                    Verified
-                  </span>
-                )}
-                {isFeatured && (
-                  <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-amber-50 text-amber-700 text-[10px] font-black rounded-full border border-amber-100">
-                    <Award size={9} />
-                    Featured
-                  </span>
-                )}
-                {rating >= 4.8 && (
-                  <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-black rounded-full border border-blue-100">
-                    <Zap size={9} />
-                    Top Rated
-                  </span>
-                )}
-              </div>
+          <h3 className="font-bold text-gray-900 text-sm leading-snug line-clamp-1">
+            {provider.providerName}
+          </h3>
 
-              {/* Name */}
-              <h3 className="font-black text-gray-900 text-base leading-tight line-clamp-1 mb-1">
-                {provider.providerName}
-              </h3>
-
-              {/* Rating */}
-              <div className="flex items-center gap-1.5 mb-2">
-                <div className="flex gap-0.5">
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <Star
-                      key={i}
-                      size={11}
-                      fill={i < Math.floor(rating) ? "#f59e0b" : "#e5e7eb"}
-                      color={i < Math.floor(rating) ? "#f59e0b" : "#e5e7eb"}
-                    />
-                  ))}
-                </div>
-                {rating > 0 ? (
-                  <span className="text-xs font-bold text-gray-800">
-                    {rating.toFixed(1)}
-                  </span>
-                ) : null}
-                <span className="text-xs text-gray-400">
-                  ({reviewCount} {reviewCount === 1 ? "review" : "reviews"})
-                </span>
-              </div>
-
-              {/* Subcategory */}
-              {subcategory && (
-                <div className="flex items-center gap-1 mb-2">
-                  <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-[11px] font-semibold rounded-full">
-                    {subcategory.name}
-                  </span>
-                  {provider.subcategories.length > 1 && (
-                    <span className="text-[11px] text-gray-400">
-                      +{provider.subcategories.length - 1} more
-                    </span>
-                  )}
-                </div>
-              )}
-
-              {/* Description */}
-              {provider.providerDescription && (
-                <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed mb-2 hidden sm:block">
-                  {provider.providerDescription}
-                </p>
-              )}
-
-              {/* Location */}
-              <div className="flex items-center gap-1 text-gray-400">
-                <MapPin size={11} className="text-blue-400 flex-shrink-0" />
-                <span className="text-xs line-clamp-1">{address}</span>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex items-center gap-2 mt-3">
-              <Link
-                href={`/providers/${provider._id}`}
-                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all group/btn"
-              >
-                View Profile
-                <ExternalLink
-                  size={11}
-                  className="group-hover/btn:translate-x-0.5 transition-transform"
+          <div className="flex items-center gap-1 mt-0.5">
+            <div className="flex gap-px">
+              {Array.from({ length: 5 }, (_, i) => (
+                <Star
+                  key={i}
+                  size={9}
+                  fill={i < Math.floor(rating) ? "#f59e0b" : "#e5e7eb"}
+                  color={i < Math.floor(rating) ? "#f59e0b" : "#e5e7eb"}
                 />
-              </Link>
-              {provider.providerPhoneNumber && (
-                <a
-                  href={`tel:${provider.providerPhoneNumber}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="w-8 h-8 bg-gray-100 hover:bg-green-50 hover:text-green-600 rounded-xl flex items-center justify-center text-gray-500 transition-colors"
-                  aria-label="Call provider"
-                >
-                  <Phone size={13} />
-                </a>
-              )}
-              <button
-                type="button"
-                className="w-8 h-8 bg-gray-100 hover:bg-blue-50 hover:text-blue-600 rounded-xl flex items-center justify-center text-gray-500 transition-colors"
-                aria-label="Message provider"
-              >
-                <MessageCircle size={13} />
-              </button>
+              ))}
             </div>
+            {rating > 0 && (
+              <span className="text-[11px] font-bold text-gray-800">{rating.toFixed(1)}</span>
+            )}
+            <span className="text-[10px] text-gray-400">({reviewCount})</span>
+          </div>
+          <p className="text-xs text-gray-700 line-clamp-2" >{provider.providerDescription}</p>
+
+          <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+            {provider.subcategories?.length > 0 && (
+              <span className="text-[10px] text-gray-500 font-medium">
+                {provider.subcategories.slice(0, 2).map((s) => s.name).join(" · ")}
+              </span>
+            )}
+            <span className="flex items-center gap-0.5 text-[10px] text-gray-400">
+              <MapPin size={8} className="text-blue-400 flex-shrink-0" />
+              <span className="line-clamp-1 max-w-[110px]">{address}</span>
+            </span>
           </div>
         </div>
+
+        {/* Actions */}
+        <div className="flex flex-col items-end gap-1.5 flex-shrink-0 ml-1 mr-3">
+          <button
+            type="button"
+            onClick={handleSave}
+            className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
+              savePending ? "opacity-40" : "hover:bg-red-50"
+            }`}
+            aria-label="Save"
+          >
+            <Heart
+              size={13}
+              fill={isSaved ? "#ef4444" : "none"}
+              color={isSaved ? "#ef4444" : "#9ca3af"}
+            />
+          </button>
+          <Link
+            href={`/providers/${provider._id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-colors whitespace-nowrap"
+          >
+            View Profile
+          </Link>
+          {provider.providerPhoneNumber && (
+            <a
+              href={`tel:${provider.providerPhoneNumber}`}
+              onClick={(e) => e.stopPropagation()}
+              className="w-7 h-7 bg-gray-100 hover:bg-green-50 hover:text-green-600 rounded-lg flex items-center justify-center text-gray-400 transition-colors"
+              aria-label="Call"
+            >
+              <Phone size={11} />
+            </a>
+          )}
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 });
 
 export default ProviderCard;
 
 export const ProviderCardSkeleton = () => (
-  <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse">
-    <div className="flex">
-      <div className="w-36 sm:w-44 flex-shrink-0 bg-gray-200 h-40" />
-      <div className="flex-1 p-4 space-y-3">
-        <div className="flex gap-1.5">
-          <div className="h-4 w-16 bg-gray-200 rounded-full" />
-          <div className="h-4 w-14 bg-gray-200 rounded-full" />
-        </div>
-        <div className="h-5 bg-gray-200 rounded-lg w-3/4" />
-        <div className="h-3 bg-gray-200 rounded-full w-24" />
-        <div className="h-3 bg-gray-200 rounded-full w-1/2" />
-        <div className="h-3 bg-gray-200 rounded-full w-2/3" />
-        <div className="flex gap-2 mt-4">
-          <div className="h-8 bg-gray-200 rounded-xl w-24" />
-          <div className="h-8 w-8 bg-gray-200 rounded-xl" />
-        </div>
+  <div className="bg-white rounded-xl border border-gray-100 p-3 animate-pulse">
+    <div className="flex items-center gap-3">
+      <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0" />
+      <div className="flex-1 space-y-1.5">
+        <div className="h-2.5 w-16 bg-gray-200 rounded-full" />
+        <div className="h-3.5 w-36 bg-gray-200 rounded" />
+        <div className="h-2 w-20 bg-gray-200 rounded-full" />
+        <div className="h-2 w-28 bg-gray-200 rounded-full" />
+      </div>
+      <div className="flex flex-col items-end gap-2">
+        <div className="w-7 h-7 bg-gray-200 rounded-full" />
+        <div className="w-20 h-6 bg-gray-200 rounded-lg" />
       </div>
     </div>
   </div>

@@ -2,19 +2,64 @@
 
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Wrench,
+  Zap,
+  Wind,
+  Snowflake,
+  PaintBucket,
+  Hammer,
+  Package,
+  Bug,
+  Scissors,
+  Truck,
+  ChevronRight,
+  Loader2,
+  MapPin,
+  Search,
+} from "lucide-react";
+import Link from "next/link";
 import useGlobalStore from "@/stores";
-import { Subcategory } from "@/types";
+import { Subcategory, Category } from "@/types";
 
 import { useProviderSearch } from "../../hooks/useProviderSearch";
 import { useCategories } from "../../hooks/useCategories";
 
-import SearchHeader from "./components/SearchHeader";
-import CategoryBar from "./components/CategoryBar";
-import FilterSidebar, { Filters } from "./components/FilterSidebar";
+import UniversalSearch from "@/components/UniversalSearch";
+import FilterBar from "./components/FilterBar";
 import FilterDrawer from "./components/FilterDrawer";
-import ProviderList from "./components/ProviderList";
+import ProviderCard, { ProviderCardSkeleton } from "./components/ProviderCard";
+import EmptyState from "./components/EmptyState";
 import MapPanel from "./components/MapPanel";
+import { Filters } from "./components/FilterSidebar";
+import { SvgXml } from "react-native-svg";
+
+// ─── Category icon map ────────────────────────────────────────────────────────
+
+const CATEGORY_ICONS: Record<string, React.ElementType> = {
+  plumbing: Wrench,
+  electrical: Zap,
+  cleaning: Wind,
+  "ac repair": Snowflake,
+  "air conditioning": Snowflake,
+  painting: PaintBucket,
+  carpentry: Hammer,
+  appliance: Package,
+  pest: Bug,
+  landscaping: Scissors,
+  moving: Truck,
+};
+
+function getCategoryIcon(name: string): React.ElementType {
+  const key = name.toLowerCase();
+  for (const [k, Icon] of Object.entries(CATEGORY_ICONS)) {
+    if (key.includes(k)) return Icon;
+  }
+  return Wrench;
+}
+
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 const DEFAULT_FILTERS: Filters = {
   minRating: 0,
@@ -25,45 +70,59 @@ const DEFAULT_FILTERS: Filters = {
   radius: "30",
 };
 
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function ServiceProvidersPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const {
+    selectedSubcategories,
+    toggleSubcategory,
+    clearSelectedSubcategories,
+  } = useGlobalStore();
 
-  const { selectedSubcategories, toggleSubcategory, clearSelectedSubcategories } =
-    useGlobalStore();
-
-  // ── URL-driven state ──────────────────────────────────────────
+  // ── State ──────────────────────────────────────────────────────────────────
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [location, setLocation] = useState(searchParams.get("location") ?? "");
-
-  // ── UI state ──────────────────────────────────────────────────
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [sortBy, setSortBy] = useState("Relevance");
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [listStyle, setListStyle] = useState<"list" | "grid">("list");
+  /** Which category row is expanded to show its subcategories */
+  const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
 
-  // ── Sync URL category param → Zustand on mount ────────────────
   useEffect(() => {
-    const catParam = searchParams.get("q");
-    if (catParam) setQuery(catParam);
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) =>
+        setUserLocation({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        }),
+      () => {
+        /* silently fall back to default center */
+      }
+    );
   }, []);
 
-  // ── Derived filter count for badge ────────────────────────────
+  // ── Derived ────────────────────────────────────────────────────────────────
   const activeFiltersCount = useMemo(() => {
-    let count = 0;
-    if (filters.minRating > 0) count++;
-    if (filters.openNow) count++;
-    if (filters.verifiedOnly) count++;
-    if (filters.topRated) count++;
-    if (filters.newOnly) count++;
-    if (filters.radius !== "30") count++;
-    if (selectedSubcategories.length > 0) count += selectedSubcategories.length;
-    return count;
+    let n = 0;
+    if (filters.minRating > 0) n++;
+    if (filters.openNow) n++;
+    if (filters.verifiedOnly) n++;
+    if (filters.topRated) n++;
+    if (filters.newOnly) n++;
+    if (filters.radius !== "30") n++;
+    n += selectedSubcategories.length;
+    return n;
   }, [filters, selectedSubcategories]);
 
-  // ── Data hooks ────────────────────────────────────────────────
   const searchFilters = useMemo(
     () => ({
       query: query || undefined,
@@ -75,10 +134,13 @@ export default function ServiceProvidersPage() {
       verifiedOnly: filters.verifiedOnly,
       topRated: filters.topRated,
       radius: filters.radius,
+      lat: userLocation?.lat,
+      long: userLocation?.lng,
     }),
-    [query, location, sortBy, selectedSubcategories, filters]
+    [query, location, sortBy, selectedSubcategories, filters, userLocation]
   );
 
+  // ── Data ───────────────────────────────────────────────────────────────────
   const {
     data,
     isLoading,
@@ -95,37 +157,33 @@ export default function ServiceProvidersPage() {
     () => data?.pages.flatMap((p) => p.providers) ?? [],
     [data]
   );
-
   const totalCount = data?.pages[0]?.total ?? providers.length;
-  const categories = categoriesData ?? [];
+  const categories: Category[] = categoriesData ?? [];
 
-  // ── Handlers ─────────────────────────────────────────────────
-  const handleSearch = useCallback((q: string, loc: string) => {
-    setQuery(q);
-    setLocation(loc);
-    const params = new URLSearchParams();
-    if (q) params.set("q", q);
-    if (loc) params.set("location", loc);
-    router.replace(`/providers?${params.toString()}`, { scroll: false });
-  }, [router]);
+  // ── Handlers ───────────────────────────────────────────────────────────────
+  const handleSearch = useCallback(
+    (q: string, loc: string) => {
+      setQuery(q);
+      setLocation(loc);
+      const p = new URLSearchParams();
+      if (q) p.set("q", q);
+      if (loc) p.set("location", loc);
+      router.replace(`/providers?${p.toString()}`, { scroll: false });
+    },
+    [router]
+  );
 
-  const handleFiltersChange = useCallback((partial: Partial<Filters>) => {
-    setFilters((prev) => ({ ...prev, ...partial }));
-  }, []);
+  const handleFiltersChange = useCallback(
+    (partial: Partial<Filters>) =>
+      setFilters((prev) => ({ ...prev, ...partial })),
+    []
+  );
 
   const handleFiltersReset = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
     clearSelectedSubcategories?.();
+    setExpandedCatId(null);
   }, [clearSelectedSubcategories]);
-
-  const handleToggleSubcategory = useCallback(
-    (sub: Subcategory) => toggleSubcategory(sub),
-    [toggleSubcategory]
-  );
-
-  const handleLoadMore = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleReset = useCallback(() => {
     setQuery("");
@@ -134,114 +192,328 @@ export default function ServiceProvidersPage() {
     router.replace("/providers", { scroll: false });
   }, [handleFiltersReset, router]);
 
+  const handleLoadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const handleToggleSubcat = useCallback(
+    (sub: Subcategory) => toggleSubcategory(sub),
+    [toggleSubcategory]
+  );
+
+  const handleCategoryClick = useCallback((cat: Category) => {
+    setExpandedCatId((prev) => (prev === cat._id ? null : cat._id));
+  }, []);
+
+  // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col mt-28">
-      {/* ── Sticky search header ─────────────────────────────── */}
-      <SearchHeader
-        initialQuery={query}
-        initialLocation={location}
-        activeFiltersCount={activeFiltersCount}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        onFiltersOpen={() => setFiltersOpen(true)}
-        onSearch={handleSearch}
-      />
+    <div className="relative h-[calc(100vh-5rem)] mt-20 overflow-hidden m-4">
+      {/* ══════════════════════════════════════════════════════
+          LAYER 1 — Full-width Google Map (background)
+      ══════════════════════════════════════════════════════ */}
+      <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[40%]">
+        <MapPanel
+          providers={providers}
+          hoveredId={hoveredId}
+          onHover={setHoveredId}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          center={userLocation ?? undefined}
+          className="w-full h-full"
+        />
+      </div>
 
-      {/* ── Category bar ─────────────────────────────────────── */}
-      <CategoryBar
-        categories={categories}
-        selectedSubcategoryIds={selectedSubcategories.map((s) => s._id)}
-        onToggle={handleToggleSubcategory}
-        onClear={handleFiltersReset}
-      />
+      {/* ══════════════════════════════════════════════════════
+          LAYER 2 — Floating glassmorphism panel (left ~65%)
+      ══════════════════════════════════════════════════════ */}
+      <div className="absolute gap-4 left-0 top-0 bottom-0 w-full lg:w-2/3 flex flex-col overflow-hidden">
+        {/* ── Page heading ── */}
+        <div className="flex-shrink-0 px-4 pt-4 pb-2 space-y-2">
+          <h1 className="text-3xl font-bold text-gray-900 leading-tight">
+            Find trusted <span className="text-brand-primary">business</span>
+            <br /> near you
+          </h1>
+          <p className="text-xs text-gray-500 mt-0.5">
+            Quality services from verified professionals.
+          </p>
+        </div>
 
-      {/* ── Main content ─────────────────────────────────────── */}
-      <div className="flex flex-1 max-w-[1600px] mx-auto w-full px-4 py-4 gap-5">
-        {/* Left: Filter sidebar (desktop only) */}
-        <aside className="hidden lg:block w-64 xl:w-72 flex-shrink-0">
-          <div className="sticky top-[128px]">
-            <FilterSidebar
-              filters={filters}
-              onChange={handleFiltersChange}
-              onReset={handleFiltersReset}
-              resultCount={totalCount}
-              categories={categories}
-              selectedSubcategoryIds={selectedSubcategories.map((s) => s._id)}
-              onToggleSubcategory={handleToggleSubcategory}
-            />
+        {/* ── Universal Search (non-sticky, inside glass panel) ── */}
+        <div className="flex-shrink-0">
+          <UniversalSearch
+            variant="hero"
+            initialQuery={query}
+            initialLocation={location}
+            onSearch={handleSearch}
+          />
+        </div>
+        {/* ── Categories sidebar + Provider list ── */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Categories sidebar */}
+          <div className="hidden gap-2 lg:flex flex-col w-44 xl:w-60 flex-shrink-0 overflow-y-auto no-scrollbar">
+            <p className="px-4 py-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+              Categories
+            </p>
+
+            {isLoading && categories.length === 0
+              ? Array.from({ length: 7 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 px-4 py-2.5 animate-pulse"
+                  >
+                    <div className="w-6 h-6 bg-gray-200 rounded-lg" />
+                    <div className="flex-1 h-3 bg-gray-200 rounded" />
+                  </div>
+                ))
+              : categories.map((cat) => {
+                  const Icon = getCategoryIcon(cat.name);
+                  const isExpanded = expandedCatId === cat._id;
+                  const hasSubcats = (cat.subcategories?.length ?? 0) > 0;
+                  const activeSubCount = selectedSubcategories.filter((s) =>
+                    cat.subcategories?.some((sub) => sub._id === s._id)
+                  ).length;
+
+                  return (
+                    <div key={cat._id}>
+                      {/* Category row */}
+                      <button
+                        type="button"
+                        onClick={() => handleCategoryClick(cat)}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-left transition-colors group ${
+                          isExpanded || activeSubCount > 0
+                            ? "bg-blue-50/80 text-blue-700"
+                            : "bg-white text-gray-600 hover:bg-white/60 hover:text-gray-900"
+                        }`}
+                      >
+                        <div
+                          className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                            isExpanded || activeSubCount > 0
+                              ? "bg-blue-100"
+                              : "bg-gray-100/80 group-hover:bg-gray-200"
+                          }`}
+                        >
+                          <Icon
+                            size={12}
+                            className={
+                              isExpanded || activeSubCount > 0
+                                ? "text-blue-600"
+                                : "text-gray-500"
+                            }
+                          />
+                        </div>
+                        <span className="flex-1 text-xs font-semibold line-clamp-1">
+                          {cat.name}
+                        </span>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          {activeSubCount > 0 && (
+                            <span className="w-4 h-4 bg-blue-600 text-white text-[9px] font-black rounded-full flex items-center justify-center">
+                              {activeSubCount}
+                            </span>
+                          )}
+                          {hasSubcats && (
+                            <ChevronRight
+                              size={11}
+                              className={`text-gray-400 transition-transform duration-200 ${
+                                isExpanded ? "rotate-90" : ""
+                              }`}
+                            />
+                          )}
+                        </div>
+                      </button>
+
+                      {/* Subcategories (expand/collapse) */}
+                      <AnimatePresence initial={false}>
+                        {isExpanded && hasSubcats && (
+                          <motion.div
+                            key="subcats"
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{
+                              duration: 0.22,
+                              ease: [0.4, 0, 0.2, 1],
+                            }}
+                            className="overflow-hidden"
+                          >
+                            <div className="px-3 pt-2 flex flex-col gap-1">
+                              {cat.subcategories.map((sub) => {
+                                const isActive = selectedSubcategories.some(
+                                  (s) => s._id === sub._id
+                                );
+                                return (
+                                  <button
+                                    key={sub._id}
+                                    type="button"
+                                    onClick={() => handleToggleSubcat(sub)}
+                                    className={`flex flex-row gap-2 text-left px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
+                                      isActive
+                                        ? "bg-blue-600 text-white shadow-sm shadow-blue-200"
+                                        : "bg-white/70 text-gray-600 hover:bg-blue-50 hover:text-blue-700 border border-gray-100"
+                                    }`}
+                                  >
+                                    <SvgXml
+                                      xml={sub.icon || ""}
+                                      width={20}
+                                      height={20}
+                                      fill={sub.iconColor || "#666"}
+                                      color="#162660"
+                                    />
+
+                                    {sub.name}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+
+            {categories.length > 0 && (
+              <button
+                type="button"
+                onClick={handleFiltersReset}
+                className="flex items-center gap-1 px-4 py-2.5 text-xs font-semibold text-blue-600 hover:underline"
+              >
+                Clear all filters
+              </button>
+            )}
+
+            {/* Provider CTA */}
+            <div className="mx-3 mt-4 mb-3 rounded-xl bg-blue-600 p-3 text-white flex-shrink-0">
+              <p className="text-xs font-black leading-snug mb-1">
+                Are you a provider?
+              </p>
+              <p className="text-[10px] text-blue-100 mb-2.5">
+                Join and grow your business
+              </p>
+              <Link
+                href="/register"
+                className="block text-center py-1.5 bg-white text-blue-600 text-[10px] font-black rounded-lg hover:bg-blue-50 transition-colors"
+              >
+                Join now
+              </Link>
+            </div>
           </div>
-        </aside>
 
-        {/* Center: Provider list */}
-        <AnimatePresence mode="wait">
-          {(viewMode === "list" || true) && (
-            <motion.div
-              key="list-panel"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className={`flex-1 min-w-0 ${viewMode === "map" ? "hidden md:flex" : "flex"} flex-col`}
-            >
-              <ProviderList
-                providers={providers}
-                isLoading={isLoading}
-                isFetchingNextPage={isFetchingNextPage}
-                hasNextPage={!!hasNextPage}
-                isError={isError}
-                sortBy={sortBy}
-                onSortChange={setSortBy}
-                onLoadMore={handleLoadMore}
+          {/* Provider list */}
+          <div className="flex-1 overflow-y-auto no-scrollbar">
+            {isError ? (
+              <EmptyState variant="error" onRetry={refetch} />
+            ) : isLoading ? (
+              <div className="flex flex-col gap-2 p-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <ProviderCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : providers.length === 0 ? (
+              <EmptyState
+                variant="no-results"
                 query={query || undefined}
                 onReset={handleReset}
-                onRetry={refetch}
-                hoveredId={hoveredId}
-                onHover={setHoveredId}
-                listStyle={listStyle}
-                onListStyleChange={setListStyle}
               />
-            </motion.div>
-          )}
-        </AnimatePresence>
+            ) : (
+              <>
+                {/* ── Filter bar ── */}
+                <div className="flex-shrink-0 px-6">
+                  <FilterBar
+                    filters={filters}
+                    sortBy={sortBy}
+                    resultCount={totalCount}
+                    isLoading={isLoading}
+                    onFiltersOpen={() => setFiltersOpen(true)}
+                    onSortChange={setSortBy}
+                    onFiltersChange={handleFiltersChange}
+                    activeFiltersCount={activeFiltersCount}
+                  />
+                </div>
+                <div className="flex flex-col gap-2 pl-8  pt-8">
+                  {providers.map((p, i) => (
+                    <ProviderCard
+                      key={p._id}
+                      provider={p}
+                      index={i}
+                      isHovered={hoveredId === p._id}
+                      onHover={setHoveredId}
+                    />
+                  ))}
+                </div>
 
-        {/* Right: Map panel (hidden on mobile in list mode) */}
-        <div
-          className={`${
-            viewMode === "map"
-              ? "flex-1"
-              : "hidden xl:block w-[420px] 2xl:w-[500px]"
-          } flex-shrink-0`}
-        >
-          <div className="sticky top-[128px] h-[calc(100vh-160px)]">
-            <MapPanel
-              providers={providers}
-              hoveredId={hoveredId}
-              onHover={setHoveredId}
-              className="h-full"
-            />
+                <div className="py-5 flex justify-center">
+                  {isFetchingNextPage ? (
+                    <div className="flex items-center gap-2 text-gray-400 text-sm">
+                      <Loader2
+                        size={15}
+                        className="animate-spin text-blue-500"
+                      />
+                      Loading more...
+                    </div>
+                  ) : hasNextPage ? (
+                    <button
+                      type="button"
+                      onClick={handleLoadMore}
+                      className="px-6 py-2.5 border-2 border-blue-600 text-blue-600 font-bold rounded-xl hover:bg-blue-50 transition-colors text-sm"
+                    >
+                      Load more
+                    </button>
+                  ) : (
+                    <p className="text-xs text-gray-400 font-medium">
+                      All {providers.length} companies shown
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* ── Mobile: full-screen map mode ─────────────────────── */}
+      {/* ══════════════════════════════════════════════════════
+          MOBILE — full-screen map overlay
+      ══════════════════════════════════════════════════════ */}
       <AnimatePresence>
         {viewMode === "map" && (
           <motion.div
-            key="mobile-map"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 xl:hidden pt-[120px]"
+            className="fixed inset-0 z-50 lg:hidden pt-20"
           >
             <MapPanel
               providers={providers}
               hoveredId={hoveredId}
               onHover={setHoveredId}
-              className="h-full rounded-none"
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              center={userLocation ?? undefined}
+              className="h-full"
             />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── Mobile filter drawer ──────────────────────────────── */}
+      {/* Mobile FAB */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden">
+        <button
+          type="button"
+          onClick={() => setViewMode((v) => (v === "list" ? "map" : "list"))}
+          className="flex items-center gap-2 px-5 py-3 bg-gray-900 text-white text-sm font-bold rounded-full shadow-2xl"
+        >
+          {viewMode === "list" ? (
+            <>
+              <MapPin size={14} /> Show map
+            </>
+          ) : (
+            <>
+              <Search size={14} /> Show list
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Filter drawer */}
       <FilterDrawer
         open={filtersOpen}
         onClose={() => setFiltersOpen(false)}
@@ -251,7 +523,7 @@ export default function ServiceProvidersPage() {
         resultCount={totalCount}
         categories={categories}
         selectedSubcategoryIds={selectedSubcategories.map((s) => s._id)}
-        onToggleSubcategory={handleToggleSubcategory}
+        onToggleSubcategory={handleToggleSubcat}
       />
     </div>
   );

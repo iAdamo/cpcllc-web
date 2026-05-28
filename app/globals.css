@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background: #ededed;
+}
+
 /* Hero section grid overlay */
 .hero-grid {
   background-image: linear-gradient(#3b82f6 1px, transparent 1px),
@@ -11,8 +15,27 @@
 
 /* Dot grid background used in dark sections */
 .dot-pattern {
-  background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0);
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    white 1px,
+    transparent 0
+  );
   background-size: 40px 40px;
+}
+
+/* Fade panel right edge into the map */
+.panel-fade-right {
+  -webkit-mask-image: linear-gradient(to right, black 82%, transparent 100%);
+  mask-image: linear-gradient(to right, black 82%, transparent 100%);
+}
+
+/* Hide scrollbar while keeping scroll functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Smooth image scale on card hover */
