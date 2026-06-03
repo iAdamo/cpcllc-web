@@ -72,13 +72,10 @@ function getProviderPosition(
   center: { lat: number; lng: number }
 ) {
   // coordinates is typed ambiguously: { lat, long } object OR [number, number] tuple
-  const raw = provider.location?.primary?.coordinates as any;
+  const raw = provider.location?.primary?.coordinates;
   if (raw) {
-    if (typeof raw.lat === "number" && typeof raw.long === "number") {
-      return { lat: raw.lat, lng: raw.long };
-    }
     if (Array.isArray(raw) && raw.length >= 2) {
-      return { lat: raw[0] as number, lng: raw[1] as number };
+      return { lat: raw[1] as number, lng: raw[0] as number };
     }
   }
   const seed1 = (provider._id?.charCodeAt(0) ?? index) * 13 + index * 7;
@@ -111,6 +108,13 @@ function getImageUrl(provider: ProviderData): string {
   return "/assets/men.jpg";
 }
 
+const USER_PIN_SVG = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+    <circle cx="14" cy="14" r="10" fill="#2563eb" stroke="white" stroke-width="3"/>
+    <circle cx="14" cy="14" r="5" fill="white"/>
+  </svg>`
+)}`;
+
 interface MapPanelProps {
   providers: ProviderData[];
   hoveredId: string | null;
@@ -131,6 +135,7 @@ export default function MapPanel({
   center,
   className = "",
 }: MapPanelProps) {
+  console.log("MapPanel render", { providers, hoveredId, viewMode, center });
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     libraries: LIBRARIES,
@@ -297,6 +302,16 @@ export default function MapPanel({
               />
             );
           })}
+
+          {/* User location pin */}
+          {center && (
+            <Marker
+              position={center}
+              icon={USER_PIN_SVG}
+              zIndex={30}
+              title="Your location"
+            />
+          )}
 
           {selectedProvider && (
             <InfoWindow

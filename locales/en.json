@@ -1,6 +1,8 @@
 {
   "home": "Home",
-  "companies": "Companies",
+  "service_providers": "Service Providers",
+  "jobs": "Jobs",
+  "how_it_works": "How it works",
   "myRequests": "My Requests",
   "favorites": "Favorites",
   "beACompany": "Be a Company",
@@ -110,7 +112,6 @@
   "pageone_already_account": "Already have an account?",
   "pageone_signin": "Sign In",
 
-
   "clients": "clients",
   "services": "Services",
   "reviews": "Reviews",
@@ -174,76 +175,54 @@
   "viewAll": "View All",
   "seeMore": "See More Companies",
 
+  "imagesInfo": "Upload up to {maxImages} images (max {maxImageSize}MB each). Showcase your work with high-quality photos.",
+  "videosInfo": "Upload up to {maxVideos} videos (max {maxVideoSize}MB each). Demonstrate your process or showcase examples.",
+  "addImage": "Add Image",
+  "addVideo": "Add Video",
+  "videoPreview": "Video Preview",
+  "back": "Back",
+  "submitService": "Submit Service",
+  "submitting": "Submitting...",
 
+  "serviceCreated": "Service data has been created successfully",
+  "serviceUpdated": "Service data updated successfully",
 
+  "fileSizeError": "Each {fileType} must be less than {maxSize}MB",
 
-    "imagesInfo": "Upload up to {maxImages} images (max {maxImageSize}MB each). Showcase your work with high-quality photos.",
-    "videosInfo": "Upload up to {maxVideos} videos (max {maxVideoSize}MB each). Demonstrate your process or showcase examples.",
-    "addImage": "Add Image",
-    "addVideo": "Add Video",
-    "videoPreview": "Video Preview",
-    "back": "Back",
-    "submitService": "Submit Service",
-    "submitting": "Submitting...",
+  "loading": "Loading profile...",
+  "registeredOn": "Registered on the {date}",
+  "online": "Online",
+  "brandShowcase": "Brand Showcase",
 
-      "serviceCreated": "Service data has been created successfully",
-      "serviceUpdated": "Service data updated successfully",
+  "invalidImage": "Please upload a valid image file (JPEG, PNG, GIF, WEBP)",
+  "fileTooLarge": "Image size should be less than 5MB",
+  "uploadSuccess": "Profile picture updated successfully!",
 
-      "fileSizeError": "Each {fileType} must be less than {maxSize}MB",
+  "categoriesProvided": "Categories Provided",
+  "description": "Description",
 
+  "success": "Profile updated successfully!",
+  "error": "Failed to update profile. Please try again.",
 
+  "title": "Reviews",
+  "noReviews": "No reviews yet!",
+  "anonymousUser": "Anonymous User",
+  "imageCount": "{count} image{plural}",
+  "moreButton": "More",
+  "lessButton": "Less",
 
+  "newServiceButton": "What's New In Your Service",
+  "noUpdatesAvailable": "No updates available for this service yet. Click the button to add new updates.",
+  "viewAllUpdates": "View All Updates",
+  "noProviderUpdates": "No updates available for this provider.",
+  "updatesFromCompany": "Updates from this service company",
+  "noCompanyUpdates": "No updates from this company",
 
-    "loading": "Loading profile...",
-    "registeredOn": "Registered on the {date}",
-    "online": "Online",
-    "brandShowcase": "Brand Showcase",
-
-      "invalidImage": "Please upload a valid image file (JPEG, PNG, GIF, WEBP)",
-      "fileTooLarge": "Image size should be less than 5MB",
-      "uploadSuccess": "Profile picture updated successfully!",
-
-
-
-
-    "categoriesProvided": "Categories Provided",
-    "description": "Description",
-
-      "success": "Profile updated successfully!",
-      "error": "Failed to update profile. Please try again.",
-
-
-
-    "title": "Reviews",
-    "noReviews": "No reviews yet!",
-    "anonymousUser": "Anonymous User",
-    "imageCount": "{count} image{plural}",
-    "moreButton": "More",
-    "lessButton": "Less",
-
-
-
-
-    "newServiceButton": "What's New In Your Service",
-    "noUpdatesAvailable": "No updates available for this service yet. Click the button to add new updates.",
-    "viewAllUpdates": "View All Updates",
-    "noProviderUpdates": "No updates available for this provider.",
-    "updatesFromCompany": "Updates from this service company",
-    "noCompanyUpdates": "No updates from this company",
-
-    "facebook": "Facebook",
-    "instagram": "Instagram",
-    "linkedin": "LinkedIn",
-    "twitter": "Twitter / X",
-    "other": "Other",
-    "noLink": "No link added",
-    "invalidUrl": "Please enter a valid {{platform}} URL"
-
-
-
-
-
-
+  "facebook": "Facebook",
+  "instagram": "Instagram",
+  "linkedin": "LinkedIn",
+  "twitter": "Twitter / X",
+  "other": "Other",
+  "noLink": "No link added",
+  "invalidUrl": "Please enter a valid {{platform}} URL"
 }
-
-

@@ -32,7 +32,9 @@ import FilterDrawer from "./FilterDrawer";
 import ProviderCard, { ProviderCardSkeleton } from "./ProviderCard";
 import EmptyState from "./EmptyState";
 import MapPanel from "./MapPanel";
+import MobileAppBanner from "@/components/MobileAppBanner";
 import { Filters } from "./FilterSidebar";
+import { SvgXml } from "react-native-svg";
 
 // ─── Category icon map ────────────────────────────────────────────────────────
 
@@ -78,6 +80,9 @@ export default function ServiceProvidersPage() {
     selectedSubcategories,
     toggleSubcategory,
     clearSelectedSubcategories,
+    currentLocation,
+    getCurrentLocation,
+    filteredProviders,
   } = useGlobalStore();
 
   // ── State ──────────────────────────────────────────────────────────────────
@@ -90,23 +95,20 @@ export default function ServiceProvidersPage() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   /** Which category row is expanded to show its subcategories */
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
-  const [userLocation, setUserLocation] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
+  const userLocation = useMemo(
+    () =>
+      currentLocation
+        ? {
+            lat: currentLocation.coords.latitude,
+            lng: currentLocation.coords.longitude,
+          }
+        : null,
+    [currentLocation]
+  );
 
   useEffect(() => {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
-      (pos) =>
-        setUserLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        }),
-      () => {
-        /* silently fall back to default center */
-      }
-    );
+    if (!currentLocation) getCurrentLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── Derived ────────────────────────────────────────────────────────────────
@@ -126,6 +128,7 @@ export default function ServiceProvidersPage() {
     () => ({
       query: query || undefined,
       location: location || undefined,
+      country: currentLocation?.country ?? undefined,
       sortBy,
       categoryIds: selectedSubcategories.map((s) => s._id),
       minRating: filters.minRating,
@@ -136,7 +139,15 @@ export default function ServiceProvidersPage() {
       lat: userLocation?.lat,
       long: userLocation?.lng,
     }),
-    [query, location, sortBy, selectedSubcategories, filters, userLocation]
+    [
+      query,
+      location,
+      currentLocation?.country,
+      sortBy,
+      selectedSubcategories,
+      filters,
+      userLocation,
+    ]
   );
 
   // ── Data ───────────────────────────────────────────────────────────────────
@@ -156,6 +167,12 @@ export default function ServiceProvidersPage() {
     () => data?.pages.flatMap((p) => p.providers) ?? [],
     [data]
   );
+
+  // When the user types in the "What" field, UniversalSearch filters
+  // the list client-side and writes to filteredProviders in the store.
+  // Use that filtered list when present; otherwise show API results.
+  const displayedProviders = filteredProviders.length > 0 ? filteredProviders : providers;
+
   const totalCount = data?.pages[0]?.total ?? providers.length;
   const categories: Category[] = categoriesData ?? [];
 
@@ -243,6 +260,7 @@ export default function ServiceProvidersPage() {
             variant="hero"
             initialQuery={query}
             initialLocation={location}
+            providers={providers}
             onSearch={handleSearch}
           />
         </div>
@@ -351,10 +369,21 @@ export default function ServiceProvidersPage() {
                                     }`}
                                   >
                                     {sub.icon && (
-                                      <span
-                                        className="flex-shrink-0 w-4 h-4"
-                                        dangerouslySetInnerHTML={{ __html: sub.icon }}
-                                      />
+                                      <div>
+                                        <SvgXml
+                                          xml={sub.icon || ""}
+                                          width={20}
+                                          height={20}
+                                          fill={sub.iconColor || "#666"}
+                                          color="#162660"
+                                        />
+                                        <span
+                                          className="flex-shrink-0 w-4 h-4"
+                                          dangerouslySetInnerHTML={{
+                                            __html: sub.icon,
+                                          }}
+                                        />
+                                      </div>
                                     )}
                                     {sub.name}
                                   </button>
@@ -405,7 +434,7 @@ export default function ServiceProvidersPage() {
                   <ProviderCardSkeleton key={i} />
                 ))}
               </div>
-            ) : providers.length === 0 ? (
+            ) : displayedProviders.length === 0 ? (
               <EmptyState
                 variant="no-results"
                 query={query || undefined}
@@ -418,7 +447,7 @@ export default function ServiceProvidersPage() {
                   <FilterBar
                     filters={filters}
                     sortBy={sortBy}
-                    resultCount={totalCount}
+                    resultCount={filteredProviders.length > 0 ? filteredProviders.length : totalCount}
                     isLoading={isLoading}
                     onFiltersOpen={() => setFiltersOpen(true)}
                     onSortChange={setSortBy}
@@ -427,7 +456,7 @@ export default function ServiceProvidersPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-2 pl-8  pt-8">
-                  {providers.map((p, i) => (
+                  {displayedProviders.map((p, i) => (
                     <ProviderCard
                       key={p._id}
                       provider={p}
@@ -457,7 +486,7 @@ export default function ServiceProvidersPage() {
                     </button>
                   ) : (
                     <p className="text-xs text-gray-400 font-medium">
-                      All {providers.length} companies shown
+                      All {displayedProviders.length} companies shown
                     </p>
                   )}
                 </div>
@@ -509,6 +538,8 @@ export default function ServiceProvidersPage() {
           )}
         </button>
       </div>
+
+      <MobileAppBanner />
 
       {/* Filter drawer */}
       <FilterDrawer

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getUserProfile } from "@/axios/user";
-import { MediaItem } from "@/types";
+import { MediaItem, UserData } from "@/types";
 
 import ProfilePage from "@/screens/profile";
 
@@ -9,7 +9,12 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata> {
-  const user = await getUserProfile(params.id);
+  let user: UserData | null = null;
+  try {
+    user = await getUserProfile(params.id);
+  } catch {
+    return { title: "Provider Profile" };
+  }
   const provider = user?.activeRole === "Provider" ? user.activeRoleId : null;
 
   const title = provider?.providerName;
@@ -31,7 +36,7 @@ export async function generateMetadata({
         ...(provider?.providerLogo
           ? [(provider.providerLogo as MediaItem).thumbnail]
           : []),
-        ...((provider?.providerImages ?? []) as unknown as MediaItem[])
+        ...((provider?.providerImages ?? []) as MediaItem[])
           .slice()
           .map((img) => img.thumbnail)
           .filter((v): v is string => Boolean(v)),

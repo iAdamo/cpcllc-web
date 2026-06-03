@@ -9,6 +9,7 @@ import NavBar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
 import { usePathname } from "next/navigation";
 import { Providers } from "./providers";
+import { SessionProvider } from "@/context/SessionContext";
 // import { MapProvider } from "@/context/MapContext";
 
 const geistSans = Geist({
@@ -48,16 +49,18 @@ export default function RootLayout({
         className={`flex-1  antialiased h-screen w-screen overflow-hidden overflow-y-scroll`}
       >
         <StyledJsxRegistry>
-          <Providers>
-            <GluestackUIProvider mode="light">
-              <TranslationProvider>
-                {!shouldHideLayout && <NavBar />}
-                {children}
-                {/* {!shouldHideLayout && <PreFooter />} */}
-                {!shouldHideLayout && <Footer />}
-              </TranslationProvider>
-            </GluestackUIProvider>
-          </Providers>
+          <SessionProvider>
+            <Providers>
+              <GluestackUIProvider mode="light">
+                <TranslationProvider>
+                  {!shouldHideLayout && <NavBar />}
+                  {children}
+                  {/* {!shouldHideLayout && <PreFooter />} */}
+                  {!shouldHideLayout && <Footer />}
+                </TranslationProvider>
+              </GluestackUIProvider>
+            </Providers>
+          </SessionProvider>
         </StyledJsxRegistry>
       </body>
     </html>

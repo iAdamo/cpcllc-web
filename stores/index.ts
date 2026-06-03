@@ -8,6 +8,8 @@ import { authState } from "./authState";
 import { globalState } from "./globalState";
 import { providerState } from "./providerState";
 import { serviceState } from "./serviceState";
+import { locationSlice } from "./locationState";
+import { onboardingSlice } from "./onboardingState";
 import { GlobalStore } from "@/types";
 
 type MyStateCreator = StateCreator<
@@ -31,11 +33,21 @@ const useGlobalStore = create<GlobalStore>()(
           ...providerState(...a),
           ...serviceState(...a),
           ...globalState(...a),
+          ...locationSlice(...a),
+          ...onboardingSlice(...a),
         })) as MyStateCreator,
         {
           name: "web-storage",
           storage: createJSONStorage(() => localStorage),
           partialize: (state) => ({
+            user: state.user,
+            isAuthenticated: state.isAuthenticated,
+            onboardingStep: state.onboardingStep,
+            onboardingData: { role: state.onboardingData.role },
+            currentLocation: state.currentLocation,
+            switchRole: state.switchRole,
+            savedProviders: state.savedProviders,
+            paramsFrom: state.paramsFrom,
             users: state.users,
             metricsSummary: state.metricsSummary,
             timeSeries: state.timeSeries,

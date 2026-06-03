@@ -1,4 +1,5 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
+// import useGlobalStore from "@/stores";
 
 const createClient = () => {
   const apiClient = axios.create({
@@ -14,8 +15,6 @@ const createClient = () => {
 
   apiClient.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
-
-
       console.log(config.url);
       // if (config.url?.startsWith("auth"))
 
@@ -29,14 +28,13 @@ const createClient = () => {
     (error) => Promise.reject(error)
   );
 
-
-
   apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
       console.log("API error:", error?.response?.data);
+      // const { logout } = useGlobalStore.getState();
       if (error.response?.status === 403) {
-        window.location.href = "/";
+        if (typeof window !== "undefined") window.location.href = "/";
       } else if (error.message === "Network Error") {
         console.error("Network Error: Please check your internet connection.");
       } else if (!error.response) {

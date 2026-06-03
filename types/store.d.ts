@@ -181,10 +181,52 @@ export interface LocationState {
   getPlaceDetails: (placeId: string) => Promise<PlaceDetails | undefined>;
 }
 
+export interface OnboardingData {
+  role?: "Client" | "Provider";
+  firstName?: string;
+  lastName?: string;
+  profilePictureFile?: File | null;
+  providerName?: string;
+  providerTagline?: string;
+  providerDescription?: string;
+  providerLogoFile?: File | null;
+  providerEmail?: string;
+  providerPhoneNumber?: string;
+  phoneCountry?: string;
+  subcategories?: Array<{
+    _id: string;
+    name: string;
+    categoryId: string;
+    categoryName: string;
+  }>;
+  location?: {
+    address?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    country?: string;
+    latitude?: number;
+    longitude?: number;
+  };
+  providerImageFiles?: File[];
+}
+
+export interface OnboardingState {
+  onboardingStep: number;
+  onboardingData: OnboardingData;
+  setOnboardingStep: (step: number) => void;
+  nextOnboardingStep: () => void;
+  prevOnboardingStep: () => void;
+  updateOnboardingData: (data: Partial<OnboardingData>) => void;
+  resetOnboarding: () => void;
+  submitOnboarding: () => Promise<boolean>;
+}
+
 export type GlobalStore = GlobalState &
   DashboardState &
   AuthState &
   UserState &
   ProviderState &
   ServiceState &
-  LocationState;
+  LocationState &
+  OnboardingState;

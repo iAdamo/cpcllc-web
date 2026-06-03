@@ -48,6 +48,7 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
     try {
       const response = await login(credentials);
       if (response) {
+        console.log({ response });
         set({
           // currentLocation: null,
           user: { ...response, accessToken: "" },
@@ -165,39 +166,34 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
   // },
 
   logout: async (data) => {
-    set({
-      user: null,
-      // await logoutRequest(),
-      // router.replace("/"),
-    });
-    // set({
-    //   user: null,
-    //   isAuthenticated: false,
-    //   error: null,
-    //   chatError: null,
-    //   currentStep: 1,
-    //   currentView: "Home",
-    //   displayStyle: "Grid",
-    //   selectedFiles: [],
-    //   // draftJobs: [], // test purpose
-    //   // savedProviders: [],
-    //   // currentLocation: null,
-    //   paramsFrom: null,
-    //   selectedChat: null,
-    //   messages: [],
-    //   groupedMessages: [],
-    //   hasMoreMessages: true,
-    //   chats: null,
-    //   chatLoading: false,
-    //   isLoading: false,
-    //   isChecking: true,
-    //   notifications: null,
-    //   availability: {},
-    // });
     if (data) {
       await deactivateUser(data);
     }
     await logout();
+    set({
+      user: null,
+      isAuthenticated: false,
+      error: null,
+      // chatError: null,
+      // currentStep: 1,
+      // currentView: "Home",
+      // displayStyle: "Grid",
+      // selectedFiles: [],
+      // draftJobs: [], // test purpose
+      // savedProviders: [],
+      // currentLocation: null,
+      paramsFrom: null,
+      // selectedChat: null,
+      // messages: [],
+      // groupedMessages: [],
+      // hasMoreMessages: true,
+      // chats: null,
+      // chatLoading: false,
+      isLoading: false,
+      // isChecking: true,
+      // notifications: null,
+      availability: {},
+    });
 
     // if (await SecureStore.getItemAsync("accessToken")) await disablePushToken();
     // socketService.emitEvent(PresenceEvents.UPDATE_STATUS, {

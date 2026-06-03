@@ -55,7 +55,7 @@ export default function HeroSection() {
                 transition={{ repeat: Infinity, duration: 2 }}
               />
               <span className="text-white/85 text-sm font-medium">
-                Florida&apos;s #1 Home Service Network
+                Your&apos;s #1 Home Service Network
               </span>
             </motion.div>
 
@@ -83,7 +83,7 @@ export default function HeroSection() {
               custom={0.3}
               className="text-white/55 text-lg max-w-lg leading-relaxed mb-10"
             >
-              Connect with 500+ background-checked professionals across Florida.
+              Connect with 500+ background-checked professionals across your location.
               Fast quotes, real reviews, verified credentials.
             </motion.p>
 

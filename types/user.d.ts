@@ -2,7 +2,7 @@ import { SubcategoryData } from "./subcategory";
 import { FileType, MediaItem } from "./media";
 
 
-export type ActiveRole = "Client" | "Provider";
+export type ActiveRole = "Client" | "Provider" | "Admin";
 
 export interface UserData {
   id: string;

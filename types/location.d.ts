@@ -1,5 +1,15 @@
 import { ProviderData } from "./provider";
 
+export type LocationObjectCoords = {
+  latitude: number;
+  longitude: number;
+  accuracy: number;
+  altitude: number | null;
+  altitudeAccuracy: number | null;
+  heading: number | null;
+  speed: number | null;
+};
+
 /**
  * Type representing the location object.
  */

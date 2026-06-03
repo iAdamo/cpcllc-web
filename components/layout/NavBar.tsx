@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
@@ -35,19 +35,84 @@ import ProfileMenu from "@/components/ProfileMenu";
 import { useTranslation } from "@/context/TranslationContext";
 
 const categories = [
-  { label: "Plumbing", Icon: Droplets, href: "/providers?category=Plumbing", color: "text-blue-500 bg-blue-50" },
-  { label: "Electrical", Icon: Zap, href: "/providers?category=Electrical", color: "text-yellow-500 bg-yellow-50" },
-  { label: "HVAC", Icon: Wind, href: "/providers?category=HVAC", color: "text-cyan-500 bg-cyan-50" },
-  { label: "Cleaning", Icon: Waves, href: "/providers?category=Cleaning", color: "text-green-500 bg-green-50" },
-  { label: "Painting", Icon: Paintbrush, href: "/providers?category=Painting", color: "text-purple-500 bg-purple-50" },
-  { label: "Pest Control", Icon: Bug, href: "/providers?category=Pest+Control", color: "text-red-500 bg-red-50" },
-  { label: "Roofing", Icon: Home, href: "/providers?category=Roofing", color: "text-orange-500 bg-orange-50" },
-  { label: "Solar", Icon: SunMedium, href: "/providers?category=Solar", color: "text-amber-500 bg-amber-50" },
-  { label: "Moving", Icon: Package, href: "/providers?category=Moving", color: "text-indigo-500 bg-indigo-50" },
-  { label: "Security", Icon: ShieldCheck, href: "/providers?category=Security", color: "text-slate-500 bg-slate-50" },
-  { label: "Handyman", Icon: Wrench, href: "/providers?category=Handyman", color: "text-rose-500 bg-rose-50" },
-  { label: "Appliances", Icon: Settings, href: "/providers?category=Appliance+Repair", color: "text-teal-500 bg-teal-50" },
-  { label: "Carpentry", Icon: Hammer, href: "/providers?category=Carpentry", color: "text-stone-500 bg-stone-50" },
+  {
+    label: "Plumbing",
+    Icon: Droplets,
+    href: "/providers?category=Plumbing",
+    color: "text-blue-500 bg-blue-50",
+  },
+  {
+    label: "Electrical",
+    Icon: Zap,
+    href: "/providers?category=Electrical",
+    color: "text-yellow-500 bg-yellow-50",
+  },
+  {
+    label: "HVAC",
+    Icon: Wind,
+    href: "/providers?category=HVAC",
+    color: "text-cyan-500 bg-cyan-50",
+  },
+  {
+    label: "Cleaning",
+    Icon: Waves,
+    href: "/providers?category=Cleaning",
+    color: "text-green-500 bg-green-50",
+  },
+  {
+    label: "Painting",
+    Icon: Paintbrush,
+    href: "/providers?category=Painting",
+    color: "text-purple-500 bg-purple-50",
+  },
+  {
+    label: "Pest Control",
+    Icon: Bug,
+    href: "/providers?category=Pest+Control",
+    color: "text-red-500 bg-red-50",
+  },
+  {
+    label: "Roofing",
+    Icon: Home,
+    href: "/providers?category=Roofing",
+    color: "text-orange-500 bg-orange-50",
+  },
+  {
+    label: "Solar",
+    Icon: SunMedium,
+    href: "/providers?category=Solar",
+    color: "text-amber-500 bg-amber-50",
+  },
+  {
+    label: "Moving",
+    Icon: Package,
+    href: "/providers?category=Moving",
+    color: "text-indigo-500 bg-indigo-50",
+  },
+  {
+    label: "Security",
+    Icon: ShieldCheck,
+    href: "/providers?category=Security",
+    color: "text-slate-500 bg-slate-50",
+  },
+  {
+    label: "Handyman",
+    Icon: Wrench,
+    href: "/providers?category=Handyman",
+    color: "text-rose-500 bg-rose-50",
+  },
+  {
+    label: "Appliances",
+    Icon: Settings,
+    href: "/providers?category=Appliance+Repair",
+    color: "text-teal-500 bg-teal-50",
+  },
+  {
+    label: "Carpentry",
+    Icon: Hammer,
+    href: "/providers?category=Carpentry",
+    color: "text-stone-500 bg-stone-50",
+  },
 ];
 
 const NavBar = () => {
@@ -55,10 +120,8 @@ const NavBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const [catOpen, setCatOpen] = useState(false);
-  const catRef = useRef<HTMLDivElement>(null);
 
-  const { user, logout, setSwitchRole } = useGlobalStore();
+  const { user, logout, isAuthenticated } = useGlobalStore();
   const router = useRouter();
   const pathname = usePathname();
   const { t, language, setLanguage } = useTranslation();
@@ -66,8 +129,9 @@ const NavBar = () => {
   const [mounted, setMounted] = useState(false);
 
   const isHome = pathname === "/";
-
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -78,25 +142,40 @@ const NavBar = () => {
   useEffect(() => {
     setMobileOpen(false);
     setLangOpen(false);
-    setCatOpen(false);
   }, [pathname]);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (catRef.current && !catRef.current.contains(e.target as Node)) {
-        setCatOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
 
   const transparent = isHome && !scrolled && !mobileOpen;
 
-  const navLinks = [
-    { label: t("home"), href: "/" },
-    { label: t("companies"), href: "/providers" },
-  ];
+  const navLinks = useMemo(
+    () =>
+      [
+        { label: t("home"), href: "/", show: !isAuthenticated },
+        {
+          label: t("service_providers"),
+          href: "/providers",
+          show: pathname !== "/providers" || user?.activeRole === "Client",
+        },
+        {
+          label: t("jobs"),
+          href: "/jobs",
+          show:
+            isAuthenticated &&
+            pathname !== "/jobs" &&
+            user?.activeRole === "Provider",
+        },
+        {
+          label: "Register your business",
+          href: "/onboarding",
+          show: !user?.activeRoleId?._id && pathname !== "/jobs",
+        },
+        {
+          label: t("how_it_works"),
+          href: "/how-it-works",
+          show: !isAuthenticated || pathname !== "/how-it-works",
+        },
+      ].filter((link) => link.show),
+    [t, isAuthenticated, pathname, user]
+  );
 
   return (
     <>
@@ -110,9 +189,16 @@ const NavBar = () => {
         <div className="max-w-7xl mx-auto px-5 md:px-10">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0 flex flex-row gap-2 items-end">
+            <Link
+              href="/"
+              className="flex-shrink-0 flex flex-row gap-2 items-end"
+            >
               <Image
-                src={transparent ? "/assets/logo-white.png" : "/assets/logo-color.png"}
+                src={
+                  transparent
+                    ? "/assets/logo-white.png"
+                    : "/assets/logo-color.png"
+                }
                 alt="CompaniesCenterLLC"
                 width={60}
                 height={60}
@@ -142,66 +228,6 @@ const NavBar = () => {
                   {label}
                 </Link>
               ))}
-
-              {/* Categories mega dropdown */}
-              <div ref={catRef} className="relative">
-                <button
-                  type="button"
-                  onClick={() => setCatOpen((v) => !v)}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
-                    transparent
-                      ? "text-white/80 hover:text-white hover:bg-white/10"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800"
-                  } ${catOpen && !transparent ? "text-blue-600 bg-blue-50" : ""}`}
-                >
-                  Services
-                  <motion.span animate={{ rotate: catOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                    <ChevronDown size={14} />
-                  </motion.span>
-                </button>
-
-                <AnimatePresence>
-                  {catOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                      transition={{ duration: 0.18 }}
-                      className="absolute left-0 top-full mt-2 w-[480px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden z-30 p-4"
-                    >
-                      <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 mb-3 px-1">
-                        Browse by Service
-                      </p>
-                      <div className="grid grid-cols-3 gap-1">
-                        {categories.map(({ label, Icon, href, color }) => (
-                          <Link
-                            key={label}
-                            href={href}
-                            onClick={() => setCatOpen(false)}
-                            className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
-                          >
-                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${color} flex-shrink-0`}>
-                              <Icon size={14} />
-                            </div>
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white">
-                              {label}
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-                      <div className="border-t border-gray-100 dark:border-gray-700 mt-3 pt-3">
-                        <Link
-                          href="/companies/home-services"
-                          onClick={() => setCatOpen(false)}
-                          className="flex items-center justify-center gap-2 py-2 text-sm font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400"
-                        >
-                          View all categories →
-                        </Link>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
             </div>
 
             {/* Desktop right side */}
@@ -282,7 +308,10 @@ const NavBar = () => {
                         <button
                           key={lang}
                           type="button"
-                          onClick={() => { setLanguage(lang); setLangOpen(false); }}
+                          onClick={() => {
+                            setLanguage(lang);
+                            setLangOpen(false);
+                          }}
                           className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-blue-50 dark:hover:bg-blue-950 hover:text-blue-600 ${
                             language === lang
                               ? "text-blue-600 font-bold bg-blue-50/50 dark:bg-blue-950/50"
@@ -298,27 +327,14 @@ const NavBar = () => {
               </div>
 
               {/* Divider */}
-              <div className={`w-px h-5 mx-1 ${transparent ? "bg-white/20" : "bg-gray-200 dark:bg-gray-700"}`} />
+              <div
+                className={`w-px h-5 mx-1 ${
+                  transparent ? "bg-white/20" : "bg-gray-200 dark:bg-gray-700"
+                }`}
+              />
 
               {user ? (
-                <ProfileMenu
-                  options={[
-                    ...(user?.activeRoleId
-                      ? [
-                          {
-                            name: t("profile"),
-                            onPress: () => {
-                              setSwitchRole(user?.activeRole === "Client" ? "Provider" : "Client");
-                              router.replace("/profile");
-                            },
-                          },
-                          { name: t("membership"), onPress: () => router.replace("/profile") },
-                        ]
-                      : []),
-                    { name: t("settings"), onPress: () => router.replace("/settings") },
-                  ]}
-                  offset={30}
-                />
+                <ProfileMenu />
               ) : (
                 <>
                   <button
@@ -386,20 +402,24 @@ const NavBar = () => {
                     Services
                   </p>
                   <div className="grid grid-cols-3 gap-1.5">
-                    {categories.slice(0, 9).map(({ label, Icon, href, color }) => (
-                      <Link
-                        key={label}
-                        href={href}
-                        className="flex flex-col items-center gap-1.5 p-2 rounded-xl bg-gray-50 dark:bg-gray-800 text-center"
-                      >
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${color}`}>
-                          <Icon size={15} />
-                        </div>
-                        <span className="text-[10px] font-semibold text-gray-700 dark:text-gray-300 leading-tight">
-                          {label}
-                        </span>
-                      </Link>
-                    ))}
+                    {categories
+                      .slice(0, 9)
+                      .map(({ label, Icon, href, color }) => (
+                        <Link
+                          key={label}
+                          href={href}
+                          className="flex flex-col items-center gap-1.5 p-2 rounded-xl bg-gray-50 dark:bg-gray-800 text-center"
+                        >
+                          <div
+                            className={`w-8 h-8 rounded-lg flex items-center justify-center ${color}`}
+                          >
+                            <Icon size={15} />
+                          </div>
+                          <span className="text-[10px] font-semibold text-gray-700 dark:text-gray-300 leading-tight">
+                            {label}
+                          </span>
+                        </Link>
+                      ))}
                   </div>
                 </div>
 
@@ -408,14 +428,21 @@ const NavBar = () => {
                     <>
                       <button
                         type="button"
-                        onClick={() => { router.push("/profile"); setMobileOpen(false); }}
+                        onClick={() => {
+                          router.push("/profile");
+                          setMobileOpen(false);
+                        }}
                         className="w-full py-3.5 text-center font-semibold text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl"
                       >
                         {t("profile")}
                       </button>
                       <button
                         type="button"
-                        onClick={async () => { await logout(); router.replace("/"); setMobileOpen(false); }}
+                        onClick={async () => {
+                          await logout();
+                          router.replace("/");
+                          setMobileOpen(false);
+                        }}
                         className="w-full py-3.5 text-center font-semibold text-red-600 border border-red-100 rounded-xl"
                       >
                         {t("logout")}
@@ -425,20 +452,42 @@ const NavBar = () => {
                     <>
                       <button
                         type="button"
-                        onClick={() => { setAuthOpen(true); setMobileOpen(false); }}
+                        onClick={() => {
+                          setAuthOpen(true);
+                          setMobileOpen(false);
+                        }}
                         className="w-full py-3.5 text-center font-semibold text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl"
                       >
                         {t("logIn")}
                       </button>
                       <button
                         type="button"
-                        onClick={() => { router.push("/onboarding"); setMobileOpen(false); }}
+                        onClick={() => {
+                          router.push("/onboarding");
+                          setMobileOpen(false);
+                        }}
                         className="w-full py-3.5 text-center font-bold text-white bg-gradient-to-r from-blue-600 to-violet-600 rounded-xl"
                       >
                         {t("getStarted")}
                       </button>
                     </>
                   )}
+
+                  {/* Terms & Privacy */}
+                  <div className="flex items-center gap-4 pt-3 border-t border-gray-50 dark:border-gray-800 mt-2">
+                    <Link
+                      href="/terms-of-service"
+                      className="text-xs font-medium text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    >
+                      Terms of Use
+                    </Link>
+                    <Link
+                      href="/privacy-policy"
+                      className="text-xs font-medium text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    >
+                      Privacy Policy
+                    </Link>
+                  </div>
 
                   <div className="flex items-center justify-between pt-3 border-t border-gray-50 dark:border-gray-800 mt-2">
                     <div className="flex gap-2">
@@ -460,11 +509,17 @@ const NavBar = () => {
                     {mounted && (
                       <button
                         type="button"
-                        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                        onClick={() =>
+                          setTheme(theme === "dark" ? "light" : "dark")
+                        }
                         className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300"
                         aria-label="Toggle theme"
                       >
-                        {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                        {theme === "dark" ? (
+                          <Sun size={16} />
+                        ) : (
+                          <Moon size={16} />
+                        )}
                       </button>
                     )}
                   </div>

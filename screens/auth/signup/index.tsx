@@ -32,6 +32,7 @@ import VerifyCodeModal from "../VerifyCodeModal";
 import useGlobalStore from "@/stores";
 // import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
+import z from "zod";
 
 type ControllerRenderType = {
   field: {
@@ -67,6 +68,9 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   const toast = useToast();
   const { signUp } = useGlobalStore();
 
+
+   type SignUpFormType = Omit<z.infer<typeof FormSchema>, "code">;
+
   // handle form submission
   const {
     control,
@@ -74,7 +78,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
     getValues,
     reset,
     formState: { errors },
-  } = useForm<FormSchemaType>({
+  } = useForm<SignUpFormType>({
     resolver: zodResolver(FormSchema.omit({ code: true })),
   });
 
@@ -85,7 +89,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props) => {
   });
 
   // handle form submission
-  const onSubmit = async (data: FormSchemaType) => {
+  const onSubmit = async (data: SignUpFormType) => {
     Keyboard.dismiss();
     setIsLoading(true);
     if (data.password !== data.confirmPassword) {

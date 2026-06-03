@@ -7,6 +7,7 @@ import { ProviderData } from "@/types";
 export interface ProviderFilters {
   query?: string;
   location?: string;
+  country?: string;
   lat?: number;
   long?: number;
   sortBy?: string;
@@ -30,27 +31,27 @@ export function useProviderSearch(filters: ProviderFilters) {
     queryKey: ["providers-explore", filters],
     queryFn: async ({ pageParam }) => {
       const page = (pageParam as number) ?? 1;
+      const hasLocation = !!filters.location;
       const result = await globalSearch({
         model: "providers",
         page,
         limit: 12,
-        engine: false,
-        searchInput: filters.query || undefined,
-        lat: filters.lat?.toString() ?? "7.7427377",
-        long: filters.long?.toString() ?? "4.5643091",
+        engine: hasLocation,
+        searchInput: filters.query || (hasLocation ? "pass" : undefined),
+        lat: filters.lat?.toString(),
+        long: filters.long?.toString(),
         sortBy: filters.sortBy,
-        categories: filters.categoryIds?.length
-          ? filters.categoryIds
-          : undefined,
-        city: filters.location ?? "",
+        categories: filters.categoryIds?.length ? filters.categoryIds : undefined,
+        address: hasLocation ? filters.location : undefined,
         state: "",
-        country: "Nigeria",
+        country: filters.country || "Nigeria",
         radius: filters.radius,
       });
       return {
         providers: result.data.providers ?? [],
         totalPages: result.totalPages ?? 1,
         page,
+        total: (result as any).total,
       };
     },
     initialPageParam: 1,

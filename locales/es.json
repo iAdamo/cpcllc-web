@@ -1,6 +1,8 @@
 {
   "home": "Inicio",
-  "companies": "Empresas",
+  "service_providers": "Service Providers",
+  "jobs": "Trabajo",
+  "how_it_works": "How it works",
   "myRequests": "Mis Solicitudes",
   "favorites": "Favoritos",
   "beACompany": "Ser una Empresa",
@@ -173,47 +175,35 @@
   "viewAll": "Ver Todos",
   "seeMore": "Ver Más Empresas",
 
+  "imagesInfo": "Sube hasta {maxImages} imágenes (máx. {maxImageSize}MB cada una). Muestra tu trabajo con fotos de alta calidad.",
+  "videosInfo": "Sube hasta {maxVideos} videos (máx. {maxVideoSize}MB cada uno). Demuestra tu proceso o muestra ejemplos.",
+  "addImage": "Agregar Imagen",
+  "addVideo": "Agregar Video",
+  "videoPreview": "Vista Previa",
+  "back": "Atrás",
+  "submitService": "Enviar Servicio",
+  "submitting": "Enviando...",
 
+  "serviceCreated": "Los datos del servicio se han creado exitosamente",
+  "serviceUpdated": "Datos del servicio actualizados exitosamente",
+  "fileSizeError": "Cada {fileType} debe ser menor de {maxSize}MB",
 
-    "imagesInfo": "Sube hasta {maxImages} imágenes (máx. {maxImageSize}MB cada una). Muestra tu trabajo con fotos de alta calidad.",
-    "videosInfo": "Sube hasta {maxVideos} videos (máx. {maxVideoSize}MB cada uno). Demuestra tu proceso o muestra ejemplos.",
-    "addImage": "Agregar Imagen",
-    "addVideo": "Agregar Video",
-    "videoPreview": "Vista Previa",
-    "back": "Atrás",
-    "submitService": "Enviar Servicio",
-    "submitting": "Enviando...",
+  "categoriesProvided": "Categorías Ofrecidas",
+  "description": "Descripción",
+  "success": "¡Perfil actualizado exitosamente!",
+  "error": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
 
-      "serviceCreated": "Los datos del servicio se han creado exitosamente",
-      "serviceUpdated": "Datos del servicio actualizados exitosamente",
-      "fileSizeError": "Cada {fileType} debe ser menor de {maxSize}MB",
+  "title": "Reseñas",
+  "noReviews": "¡Aún no hay reseñas!",
+  "anonymousUser": "Usuario Anónimo",
+  "imageCount": "{count} imagen{plural}",
+  "moreButton": "Más",
+  "lessButton": "Menos",
 
-
-
-    "categoriesProvided": "Categorías Ofrecidas",
-    "description": "Descripción",
-      "success": "¡Perfil actualizado exitosamente!",
-      "error": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
-
-
-
-    "title": "Reseñas",
-    "noReviews": "¡Aún no hay reseñas!",
-    "anonymousUser": "Usuario Anónimo",
-    "imageCount": "{count} imagen{plural}",
-    "moreButton": "Más",
-    "lessButton": "Menos",
-
-
-
-
-    "newServiceButton": "Qué Hay De Nuevo En Tu Servicio",
-    "noUpdatesAvailable": "Aún no hay actualizaciones disponibles para este servicio. Haz clic en el botón para agregar nuevas actualizaciones.",
-    "viewAllUpdates": "Ver Todas las Actualizaciones",
-    "noProviderUpdates": "No hay actualizaciones disponibles para este proveedor.",
-    "updatesFromCompany": "Actualizaciones de esta empresa de servicios",
-    "noCompanyUpdates": "No hay actualizaciones de esta empresa"
-
-
-
+  "newServiceButton": "Qué Hay De Nuevo En Tu Servicio",
+  "noUpdatesAvailable": "Aún no hay actualizaciones disponibles para este servicio. Haz clic en el botón para agregar nuevas actualizaciones.",
+  "viewAllUpdates": "Ver Todas las Actualizaciones",
+  "noProviderUpdates": "No hay actualizaciones disponibles para este proveedor.",
+  "updatesFromCompany": "Actualizaciones de esta empresa de servicios",
+  "noCompanyUpdates": "No hay actualizaciones de esta empresa"
 }

@@ -30,6 +30,7 @@ import ForgotPasswordModal from "@/screens/auth/ForgetPassword";
 import useGlobalStore from "@/stores";
 import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
+import z from "zod";
 
 type ControllerRenderType = {
   field: {
@@ -65,14 +66,18 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
   const toast = useToast();
   const router = useRouter();
 
+
+  const SignInSchema = FormSchema.pick({ email: true, password: true });
+  type SignInSchemaType = z.infer<typeof SignInSchema>;
+
   // handle form submission
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(FormSchema.pick({ email: true, password: true })),
+  } = useForm<SignInSchemaType>({
+    resolver: zodResolver(SignInSchema),
   });
 
   // handle form validation
@@ -82,14 +87,14 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
   });
 
   // handle form submission
-  const onSubmit = async (data: FormSchemaType) => {
+  const onSubmit = async (data: SignInSchemaType) => {
     Keyboard.dismiss();
     setIsLoading(true);
     try {
       await login(data);
       reset();
       onClose();
-      router.replace("/");
+      router.replace("providers");
       setIsLoading(false);
     } catch (error) {
       setValidated({ emailValid: false, passwordValid: false });
