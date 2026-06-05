@@ -6,7 +6,6 @@ import {
   LoginUser,
   DeactivateAccountData,
   ServiceData,
-  SearchParams,
   ServiceCategory,
   Subcategory,
   SearchResultData,
@@ -14,8 +13,59 @@ import {
   MetricsRequest,
   TimeSeriesData,
   DashboardView,
+  ProviderData,
+  JobData,
 } from "@/types";
-import { UseInfiniteQueryResult, InfiniteData } from "@tanstack/react-query";
+
+// ── Unified search filters ─────────────────────────────────────────────────────
+export interface SearchFilters {
+  query?: string;
+  location?: string;
+  country?: string;
+  lat?: number;
+  long?: number;
+  sortBy?: string;
+  // Provider-specific
+  categoryIds?: string[];
+  verifiedOnly?: boolean;
+  minRating?: number;
+  radius?: string;
+  topRated?: boolean;
+  openNow?: boolean;
+  // Jobs-specific
+  category?: string;
+  urgency?: string;
+}
+
+// ── Search state ───────────────────────────────────────────────────────────────
+export interface SearchState {
+  searchModel: "providers" | "jobs";
+  setSearchModel: (model: "providers" | "jobs") => void;
+
+  searchFilters: SearchFilters;
+  setSearchFilters: (f: Partial<SearchFilters>) => void;
+  resetSearchFilters: () => void;
+
+  providerResults: ProviderData[];
+  jobResults: JobData[];
+  filteredProviders: ProviderData[];
+  filteredJobs: JobData[];
+  setFilteredProviders: (p: ProviderData[]) => void;
+  setFilteredJobs: (j: JobData[]) => void;
+
+  searchPage: number;
+  searchTotalPages: number;
+  searchTotal: number;
+
+  isSearching: boolean;
+  isLoadingMore: boolean;
+
+  executeSearch: (
+    overrides?: Partial<SearchFilters & { model?: string }>
+  ) => Promise<void>;
+  loadMore: () => Promise<void>;
+  clearSearchResults: () => void;
+}
 
 export interface GlobalState {
   isLoading: boolean;
@@ -132,7 +182,6 @@ export interface ProviderState {
   setSavedJobs: (job: JobData) => void;
   setSavedProviders: (providerId: string) => Promise<ProviderData[] | void>;
   setSearchResults: (results: SearchResultData) => void;
-  executeSearch: (params: SearchParams) => Promise<void>;
   clearSearchResults: () => void;
 }
 
@@ -229,4 +278,5 @@ export type GlobalStore = GlobalState &
   ProviderState &
   ServiceState &
   LocationState &
-  OnboardingState;
+  OnboardingState &
+  SearchState;

@@ -23,10 +23,7 @@ import Link from "next/link";
 import useGlobalStore from "@/stores";
 import { Subcategory, Category } from "@/types";
 
-import { useProviderSearch } from "../../hooks/useProviderSearch";
 import { useCategories } from "../../hooks/useCategories";
-
-import UniversalSearch from "@/components/UniversalSearch";
 import FilterBar from "./FilterBar";
 import FilterDrawer from "./FilterDrawer";
 import ProviderCard, { ProviderCardSkeleton } from "./ProviderCard";
@@ -34,7 +31,7 @@ import EmptyState from "./EmptyState";
 import MapPanel from "./MapPanel";
 import MobileAppBanner from "@/components/MobileAppBanner";
 import { Filters } from "./FilterSidebar";
-import { SvgXml } from "react-native-svg";
+import UniversalSearch from "@/components/UniversalSearch";
 
 // ─── Category icon map ────────────────────────────────────────────────────────
 
@@ -83,33 +80,69 @@ export default function ServiceProvidersPage() {
     currentLocation,
     getCurrentLocation,
     filteredProviders,
+    providerResults,
+    isSearching,
+    isLoadingMore,
+    searchTotalPages,
+    searchPage,
+    searchTotal,
+    executeSearch,
+    loadMore,
+    setSearchFilters,
+    setSearchModel,
+    resetSearchFilters,
+    searchFilters,
   } = useGlobalStore();
 
   // ── State ──────────────────────────────────────────────────────────────────
-  const [query, setQuery] = useState(searchParams.get("q") ?? "");
-  const [location, setLocation] = useState(searchParams.get("location") ?? "");
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [sortBy, setSortBy] = useState("Relevance");
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  /** Which category row is expanded to show its subcategories */
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
+
   const userLocation = useMemo(
     () =>
       currentLocation
-        ? {
-            lat: currentLocation.coords.latitude,
-            lng: currentLocation.coords.longitude,
-          }
+        ? { lat: currentLocation.coords.latitude, lng: currentLocation.coords.longitude }
         : null,
     [currentLocation]
   );
 
+  // ── Bootstrap ──────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!currentLocation) getCurrentLocation();
+    setSearchModel("providers");
+    // Pre-populate filters from URL params on first load
+    const q = searchParams.get("q") ?? "";
+    const loc = searchParams.get("location") ?? "";
+    setSearchFilters({
+      query: q || undefined,
+      location: loc || undefined,
+      country: currentLocation?.country ?? "Nigeria",
+      lat: currentLocation?.coords?.latitude,
+      long: currentLocation?.coords?.longitude,
+    });
+    executeSearch({ model: "providers", query: q || undefined, location: loc || undefined });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Re-search when filter drawer settings or subcategory selection changes
+  useEffect(() => {
+    setSearchFilters({
+      sortBy,
+      categoryIds: selectedSubcategories.map((s) => s._id),
+      verifiedOnly: filters.verifiedOnly,
+      minRating: filters.minRating,
+      topRated: filters.topRated,
+      radius: filters.radius,
+      lat: userLocation?.lat,
+      long: userLocation?.lng,
+    });
+    executeSearch({ model: "providers" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortBy, filters, selectedSubcategories]);
 
   // ── Derived ────────────────────────────────────────────────────────────────
   const activeFiltersCount = useMemo(() => {
@@ -124,71 +157,20 @@ export default function ServiceProvidersPage() {
     return n;
   }, [filters, selectedSubcategories]);
 
-  const searchFilters = useMemo(
-    () => ({
-      query: query || undefined,
-      location: location || undefined,
-      country: currentLocation?.country ?? undefined,
-      sortBy,
-      categoryIds: selectedSubcategories.map((s) => s._id),
-      minRating: filters.minRating,
-      openNow: filters.openNow,
-      verifiedOnly: filters.verifiedOnly,
-      topRated: filters.topRated,
-      radius: filters.radius,
-      lat: userLocation?.lat,
-      long: userLocation?.lng,
-    }),
-    [
-      query,
-      location,
-      currentLocation?.country,
-      sortBy,
-      selectedSubcategories,
-      filters,
-      userLocation,
-    ]
-  );
-
   // ── Data ───────────────────────────────────────────────────────────────────
-  const {
-    data,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-    isError,
-    refetch,
-  } = useProviderSearch(searchFilters);
-
   const { data: categoriesData } = useCategories();
 
-  const providers = useMemo(
-    () => data?.pages.flatMap((p) => p.providers) ?? [],
-    [data]
-  );
+  const isLoading = isSearching;
+  const isFetchingNextPage = isLoadingMore;
+  const hasNextPage = searchPage < searchTotalPages;
+  const totalCount = searchTotal;
 
-  // When the user types in the "What" field, UniversalSearch filters
-  // the list client-side and writes to filteredProviders in the store.
-  // Use that filtered list when present; otherwise show API results.
-  const displayedProviders = filteredProviders.length > 0 ? filteredProviders : providers;
+  // "What" client-side filter takes priority; otherwise show API results
+  const displayedProviders = filteredProviders.length > 0 ? filteredProviders : providerResults;
 
-  const totalCount = data?.pages[0]?.total ?? providers.length;
   const categories: Category[] = categoriesData ?? [];
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleSearch = useCallback(
-    (q: string, loc: string) => {
-      setQuery(q);
-      setLocation(loc);
-      const p = new URLSearchParams();
-      if (q) p.set("q", q);
-      if (loc) p.set("location", loc);
-      router.replace(`/providers?${p.toString()}`, { scroll: false });
-    },
-    [router]
-  );
-
   const handleFiltersChange = useCallback(
     (partial: Partial<Filters>) =>
       setFilters((prev) => ({ ...prev, ...partial })),
@@ -202,15 +184,23 @@ export default function ServiceProvidersPage() {
   }, [clearSelectedSubcategories]);
 
   const handleReset = useCallback(() => {
-    setQuery("");
-    setLocation("");
     handleFiltersReset();
+    resetSearchFilters();
     router.replace("/providers", { scroll: false });
-  }, [handleFiltersReset, router]);
+    executeSearch({ model: "providers" });
+  }, [handleFiltersReset, resetSearchFilters, router, executeSearch]);
 
   const handleLoadMore = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+    if (hasNextPage && !isFetchingNextPage) loadMore();
+  }, [hasNextPage, isFetchingNextPage, loadMore]);
+
+  const handleSearch = useCallback(
+    (q: string, loc: string) => {
+      setSearchFilters({ query: q || undefined, location: loc || undefined });
+      executeSearch({ model: "providers", query: q || undefined, location: loc || undefined });
+    },
+    [setSearchFilters, executeSearch]
+  );
 
   const handleToggleSubcat = useCallback(
     (sub: Subcategory) => toggleSubcategory(sub),
@@ -229,7 +219,7 @@ export default function ServiceProvidersPage() {
       ══════════════════════════════════════════════════════ */}
       <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[40%]">
         <MapPanel
-          providers={providers}
+          providers={displayedProviders}
           hoveredId={hoveredId}
           onHover={setHoveredId}
           viewMode={viewMode}
@@ -244,7 +234,7 @@ export default function ServiceProvidersPage() {
       ══════════════════════════════════════════════════════ */}
       <div className="absolute gap-4 left-0 top-0 bottom-0 w-full lg:w-2/3 flex flex-col overflow-hidden">
         {/* ── Page heading ── */}
-        <div className="flex-shrink-0 px-4 pt-4 pb-2 space-y-2">
+        <div className="flex-shrink-0 px-4 pt-4 pb-2 space-y-3">
           <h1 className="text-3xl font-bold text-gray-900 leading-tight">
             Find trusted <span className="text-brand-primary">business</span>
             <br /> near you
@@ -255,15 +245,13 @@ export default function ServiceProvidersPage() {
         </div>
 
         {/* ── Universal Search (non-sticky, inside glass panel) ── */}
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 px-4">
           <UniversalSearch
-            variant="hero"
-            initialQuery={query}
-            initialLocation={location}
-            providers={providers}
-            onSearch={handleSearch}
+            variant="providers"
+            providers={providerResults}
           />
         </div>
+
         {/* ── Categories sidebar + Provider list ── */}
         <div className="flex flex-1 overflow-hidden">
           {/* Categories sidebar */}
@@ -369,21 +357,12 @@ export default function ServiceProvidersPage() {
                                     }`}
                                   >
                                     {sub.icon && (
-                                      <div>
-                                        <SvgXml
-                                          xml={sub.icon || ""}
-                                          width={20}
-                                          height={20}
-                                          fill={sub.iconColor || "#666"}
-                                          color="#162660"
-                                        />
-                                        <span
-                                          className="flex-shrink-0 w-4 h-4"
-                                          dangerouslySetInnerHTML={{
-                                            __html: sub.icon,
-                                          }}
-                                        />
-                                      </div>
+                                      <span
+                                        className="flex-shrink-0 w-4 h-4"
+                                        dangerouslySetInnerHTML={{
+                                          __html: sub.icon,
+                                        }}
+                                      />
                                     )}
                                     {sub.name}
                                   </button>
@@ -426,9 +405,7 @@ export default function ServiceProvidersPage() {
 
           {/* Provider list */}
           <div className="flex-1 overflow-y-auto no-scrollbar">
-            {isError ? (
-              <EmptyState variant="error" onRetry={refetch} />
-            ) : isLoading ? (
+            {isLoading ? (
               <div className="flex flex-col gap-2 p-3">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <ProviderCardSkeleton key={i} />
@@ -437,7 +414,7 @@ export default function ServiceProvidersPage() {
             ) : displayedProviders.length === 0 ? (
               <EmptyState
                 variant="no-results"
-                query={query || undefined}
+                query={searchFilters?.query || undefined}
                 onReset={handleReset}
               />
             ) : (
@@ -447,7 +424,11 @@ export default function ServiceProvidersPage() {
                   <FilterBar
                     filters={filters}
                     sortBy={sortBy}
-                    resultCount={filteredProviders.length > 0 ? filteredProviders.length : totalCount}
+                    resultCount={
+                      filteredProviders.length > 0
+                        ? filteredProviders.length
+                        : totalCount
+                    }
                     isLoading={isLoading}
                     onFiltersOpen={() => setFiltersOpen(true)}
                     onSortChange={setSortBy}
@@ -508,7 +489,7 @@ export default function ServiceProvidersPage() {
             className="fixed inset-0 z-50 lg:hidden pt-20"
           >
             <MapPanel
-              providers={providers}
+              providers={displayedProviders}
               hoveredId={hoveredId}
               onHover={setHoveredId}
               viewMode={viewMode}

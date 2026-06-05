@@ -1,5 +1,5 @@
 import { ApiClientSingleton } from "./conf";
-import { ServiceData, Category, JobData } from "@/types";
+import { ServiceData, Category, JobData, ProposalData } from "@/types";
 import useGlobalStore from "@/stores";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
@@ -142,12 +142,8 @@ export const getProposalsByJob = async (jobId: string): Promise<any[]> => {
   return response.data;
 };
 
-export const getProposalsByProvider = async (
-  providerId: string
-): Promise<any[]> => {
-  const response = await axiosInstance.get(
-    `services/jobs/proposals/provider/${providerId}`
-  );
+export const getMyProposals = async (): Promise<ProposalData[]> => {
+  const response = await axiosInstance.get(`services/jobs/proposals/me`);
   return response.data;
 };
 

@@ -11,6 +11,7 @@ import { providerState } from "./providerState";
 import { serviceState } from "./serviceState";
 import { locationSlice } from "./locationState";
 import { onboardingSlice } from "./onboardingState";
+import { searchSlice } from "./searchState";
 import { GlobalStore } from "@/types";
 
 type MyStateCreator = StateCreator<
@@ -37,6 +38,7 @@ const useGlobalStore = create<GlobalStore>()(
           ...globalState(...a),
           ...locationSlice(...a),
           ...onboardingSlice(...a),
+          ...searchSlice(...a),
         })) as MyStateCreator,
         {
           name: "web-storage",

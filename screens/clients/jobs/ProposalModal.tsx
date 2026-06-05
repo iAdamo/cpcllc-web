@@ -121,7 +121,7 @@ export default function ProposalModal({ job, onClose, onSuccess }: ProposalModal
                   </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold pointer-events-none">
-                      ₦
+                      $
                     </span>
                     <input
                       type="number"

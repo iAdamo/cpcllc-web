@@ -1,69 +1,25 @@
 "use client";
-import { ProviderData, Category, SearchParams, ServiceData } from "@/types";
+import { ProviderData, Category, SearchResultData } from "@/types";
 import { StateCreator } from "zustand";
-import {
-  GlobalStore,
-  ProviderState,
-  SearchResultData,
-  SortBy,
-  JobData,
-} from "@/types";
-import { globalSearch } from "@/axios/search";
+import { GlobalStore, ProviderState, SortBy, JobData } from "@/types";
 import { setUserFavourites } from "@/axios/user";
 
 export const providerState: StateCreator<GlobalStore, [], [], ProviderState> = (
   set,
   get
 ) => ({
+  // ── Searching flag (legacy — new code should use SearchState.isSearching) ──
   isSearching: false,
-  displayStyle: "Grid",
+
   sortBy: "Relevance",
   categories: [],
   setCategories: (categories: Category[]) => set({ categories }),
   setSortBy: (sortBy: SortBy) => set({ sortBy }),
+
+  // ── Saved ──────────────────────────────────────────────────────────────────
   savedJobs: [],
-  selectedSubcategories: [],
-  // setSelectedSubcategories: (subs) => {
-  //   set({ selectedSubcategories: subs });
-  // },
-
-  setSelectedSubcategories: (subs) => {
-    const unique = Array.from(new Map(subs.map((s) => [s._id, s])).values());
-
-    set({ selectedSubcategories: unique });
-  },
-
-  toggleSubcategory: (sub) => {
-    set((state) => {
-      const map = new Map(state.selectedSubcategories.map((s) => [s._id, s]));
-
-      if (map.has(sub._id)) {
-        map.delete(sub._id);
-      } else {
-        map.set(sub._id, sub);
-      }
-
-      return {
-        selectedSubcategories: Array.from(map.values()),
-      };
-    });
-  },
-
-  clearSelectedSubcategories: () => {
-    set({ selectedSubcategories: [] });
-  },
-
-  // Search-related state and actions
-  searchResults: { providers: [], services: [], jobs: [] },
-  setSearchResults: (results: SearchResultData) =>
-    set({ searchResults: results }),
-
-  filteredProviders: [],
-  setFilteredProviders: (providers: ProviderData[]) => {
-    set({ filteredProviders: providers });
-  },
-
   savedProviders: [],
+
   setSavedProviders: async (providerId) => {
     try {
       const data = await setUserFavourites(providerId);
@@ -76,128 +32,57 @@ export const providerState: StateCreator<GlobalStore, [], [], ProviderState> = (
         } else {
           set({
             savedProviders: get().savedProviders.filter(
-              (provider) => provider._id !== providerId
+              (p) => p._id !== providerId
             ),
             success: "Removed from Saved Companies",
           });
         }
       }
-    } catch (error) {
+    } catch {
       set({ error: "Failed to update favourites." });
-      console.error("Failed to update favourites:", error);
     }
   },
 
   setSavedJobs: (job: JobData) => {
-    const existing = get().savedJobs.find((j) => j._id === job._id);
-    if (existing) {
-      // remove
-      set({ savedJobs: get().savedJobs.filter((j) => j._id !== job._id) });
-      set({ success: "Removed from Saved Jobs" });
+    const exists = get().savedJobs.some((j) => j._id === job._id);
+    if (exists) {
+      set({
+        savedJobs: get().savedJobs.filter((j) => j._id !== job._id),
+        success: "Removed from Saved Jobs",
+      });
     } else {
-      // add
-      set({ savedJobs: [...get().savedJobs, job] });
-      set({ success: "Added to Saved Jobs" });
+      set({ savedJobs: [...get().savedJobs, job], success: "Added to Saved Jobs" });
     }
-  },
-  filteredJobs: [],
-  setFilteredJobs: (jobs: JobData[]) => {
-    set({ filteredJobs: jobs });
   },
 
-  executeSearch: async (params: SearchParams) => {
-    set({ error: null, success: null, isSearching: true });
-    try {
-      const {
-        model,
-        page,
-        limit,
-        engine,
-        featured,
-        searchInput,
-        lat,
-        long,
-        city,
-        state,
-        country,
-        address,
-        sortBy,
-        categories,
-      } = params;
-      if (get().error === "terms error") {
-        set({ isSearching: false });
-        return;
-      }
-      const response = await globalSearch({
-        model,
-        page,
-        limit,
-        engine,
-        featured,
-        searchInput,
-        lat: lat?.toString(),
-        long: long?.toString(),
-        city,
-        state,
-        country,
-        address,
-        sortBy,
-        categories,
-      });
-      if (response.type === "providers") {
-        set({
-          searchResults: {
-            providers: response.data.providers || [],
-            // services: response.services || [],
-            jobs: response.data.jobs || [],
-            page: page,
-            totalPages: response.totalPages,
-          },
-        });
-      } else if (response.type === "jobs") {
-        set({
-          searchResults: {
-            // providers: [],
-            // services: [],
-            jobs: response.data.jobs || [],
-            page: page,
-            totalPages: response.totalPages,
-          },
-        });
-      }
-    } catch (error: any) {
-      console.error("Search error:", error);
-      // set({
-      //   error:
-      //     error?.response?.data?.message || "An error occurred during search.",
-      // });
-    } finally {
-      set({ isSearching: false });
-    }
+  // ── Subcategory selection ───────────────────────────────────────────────────
+  selectedSubcategories: [],
+  setSelectedSubcategories: (subs) => {
+    const unique = Array.from(new Map(subs.map((s) => [s._id, s])).values());
+    set({ selectedSubcategories: unique });
   },
+  toggleSubcategory: (sub) => {
+    set((state) => {
+      const map = new Map(state.selectedSubcategories.map((s) => [s._id, s]));
+      if (map.has(sub._id)) map.delete(sub._id);
+      else map.set(sub._id, sub);
+      return { selectedSubcategories: Array.from(map.values()) };
+    });
+  },
+  clearSelectedSubcategories: () => set({ selectedSubcategories: [] }),
+
+  // ── Legacy search result slot ───────────────────────────────────────────────
+  // SearchState.providerResults / SearchState.jobResults should be used instead.
+  searchResults: { providers: [], services: [], jobs: [] },
+  setSearchResults: (results: SearchResultData) => set({ searchResults: results }),
   clearSearchResults: () =>
     set({ searchResults: { providers: [], services: [], jobs: [] } }),
+
+  // ── Filtered lists (client-side) — now delegated to SearchState ───────────
+  filteredProviders: [],
+  setFilteredProviders: (providers: ProviderData[]) =>
+    set({ filteredProviders: providers }),
+  filteredJobs: [],
+  setFilteredJobs: (jobs: JobData[]) => set({ filteredJobs: jobs }),
+
 });
-function useInfiniteQuery<T, U>(arg0: {
-  queryKey: (string | SearchParams)[];
-  queryFn: ({
-    pageParam,
-  }: {
-    pageParam: any;
-  }) => Promise<{
-    providers: ProviderData[];
-    services: ServiceData[];
-    jobs: JobData[];
-    page: number;
-    totalPages: number;
-  }>;
-  initialPageParam: number;
-  getNextPageParam: (last: any) => any;
-  staleTime: number;
-  refetchOnWindowFocus: boolean;
-}): import("@tanstack/react-query").UseInfiniteQueryResult<
-  import("@tanstack/query-core").InfiniteData<SearchResultData, unknown>,
-  Error
-> {
-  throw new Error("Function not implemented.");
-}

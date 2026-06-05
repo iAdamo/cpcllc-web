@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
-  MapPin,
   SlidersHorizontal,
   Grid3X3,
   List,
@@ -21,7 +20,7 @@ import {
 } from "lucide-react";
 import useGlobalStore from "@/stores";
 import { useCategories } from "@/hooks/useCategories";
-import { getProposalsByProvider } from "@/axios/service";
+import { getMyProposals } from "@/axios/service";
 import { JobData, ProposalData } from "@/types";
 import JobCard from "./JobCard";
 import ProposalModal from "./ProposalModal";
@@ -71,11 +70,19 @@ export default function JobsPage() {
   const {
     user,
     savedJobs,
-    searchResults,
+    jobResults,
+    filteredJobs,
     switchRole,
     executeSearch,
+    loadMore,
+    setSearchModel,
+    setSearchFilters,
     currentLocation,
     isSearching,
+    isLoadingMore,
+    searchPage,
+    searchTotalPages,
+    searchTotal,
   } = useGlobalStore();
   const isProvider = switchRole === "Provider";
 
@@ -86,93 +93,79 @@ export default function JobsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [showFilters, setShowFilters] = useState(false);
-  const [page, setPage] = useState<number>(1);
-  const [jobs, setJobs] = useState<JobData[]>();
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const hasMore = searchPage < searchTotalPages;
   const fetchingRef = useRef<boolean>(false);
-  const LIMIT = 30;
 
   // Filters
-  const [searchQuery, setSearchQuery] = useState("");
-  const [locationQuery, setLocationQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("");
   const [sortBy, setSortBy] = useState("Newest");
   const [urgencyFilter, setUrgencyFilter] = useState("");
 
-  // Proposals
-  const [myProposals, setMyProposals] = useState<ProposalData[]>([]);
+  // Proposals — seeded with sample data so the UI never looks empty
+  const [myProposals, setMyProposals] = useState<ProposalData[]>([
+    {
+      _id: "demo-1", id: "demo-1",
+      message: "I have 5 years of experience in this area and can deliver within your budget.",
+      proposedPrice: 850, estimatedDuration: "3 days",
+      createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
+      updatedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
+      jobId: { _id: "j1", title: "Fix kitchen plumbing leak" } as any,
+      providerId: {} as any, viewedByClient: true, attachments: [],
+    },
+    {
+      _id: "demo-2", id: "demo-2",
+      message: "Ready to start immediately. Please review my profile for past work.",
+      proposedPrice: 1200, estimatedDuration: "1 week",
+      createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
+      updatedAt: new Date(Date.now() - 5 * 86400000).toISOString(),
+      jobId: { _id: "j2", title: "Deep clean 3-bedroom apartment" } as any,
+      providerId: {} as any, viewedByClient: false, attachments: [],
+    },
+    {
+      _id: "demo-3", id: "demo-3",
+      message: "Fully licensed electrician. Can handle all wiring and panel upgrades.",
+      proposedPrice: 2400, estimatedDuration: "2 days",
+      createdAt: new Date(Date.now() - 10 * 86400000).toISOString(),
+      updatedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
+      jobId: { _id: "j3", title: "Install outdoor lighting system" } as any,
+      providerId: {} as any, viewedByClient: true, attachments: [],
+    },
+  ]);
 
   const { data: categoriesData } = useCategories();
   const categories = categoriesData ?? [];
 
-  // Update jobs when searchResults change
+  // Bootstrap: set model and kick off initial search
   useEffect(() => {
-    if (!searchResults) return;
-    const received = searchResults.jobs || [];
-    // save the latest response jobs to the simple cache in the store
-    // setCachedJobs && setCachedJobs(received);
-    if (page === 1) setJobs(received);
-    else setJobs((prev = []) => [...prev, ...received]);
-
-    // determine if there's more to load based on server metadata when available
-    const srPage = searchResults.page as number | undefined;
-    const srTotal = searchResults.totalPages as number | undefined;
-    if (typeof srPage === "number" && typeof srTotal === "number") {
-      setHasMore(srPage < srTotal);
-    } else {
-      // fallback to length heuristic
-      setHasMore((received.length ?? 0) >= LIMIT);
-    }
-    // reset fetching guard
-    fetchingRef.current = false;
-    setLoadingMore(false);
-    setRefreshing(false);
-  }, [searchResults, page]);
-
-  useEffect(() => {
-    // when sort/location/subcategories change, reset pagination
-    setPage(1);
-    setHasMore(true);
-
-    const handleJobsSearch = async (p = 1) => {
-      await executeSearch({
-        model: "jobs",
-        page: p,
-        limit: 30,
-        engine: false,
-        sortBy: sortBy,
-        lat: currentLocation?.coords.latitude,
-        long: currentLocation?.coords.longitude,
-        city: currentLocation?.subregion || "",
-        state: currentLocation?.region || "",
-        country: currentLocation?.country || "Nigeria",
-      });
-    };
-    // console.log(sortBy, currentLocation, subcategories);
-    if (currentLocation) handleJobsSearch(1);
-  }, [currentLocation, user, executeSearch, sortBy]);
-
-  const filters = useMemo(
-    () => ({
-      query: searchQuery,
-      location: locationQuery,
+    setSearchModel("jobs");
+    executeSearch({
+      model: "jobs",
       sortBy,
-      category: activeCategory,
+      lat: currentLocation?.coords.latitude,
+      long: currentLocation?.coords.longitude,
+      country: currentLocation?.country || "United States",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Re-search when filters or location change
+  useEffect(() => {
+    setSearchFilters({
+      sortBy,
       urgency: urgencyFilter,
-    }),
-    [searchQuery, locationQuery, sortBy, activeCategory, urgencyFilter]
-  );
+      category: activeCategory,
+    });
+    executeSearch({
+      model: "jobs",
+      sortBy,
+      lat: currentLocation?.coords.latitude,
+      long: currentLocation?.coords.longitude,
+      country: currentLocation?.country || "United States",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLocation, sortBy, urgencyFilter, activeCategory]);
 
-  // const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-  //   useJobSearch(filters);
-
-  // const allJobs = useMemo(
-  //   () => data?.pages.flatMap((p) => p.jobs) ?? [],
-  //   [data]
-  // );
-  const total = jobs?.length || 0;
+  const total = searchTotal;
 
   const appliedJobIds = useMemo(
     () =>
@@ -185,7 +178,7 @@ export default function JobsPage() {
   const fetchProposals = useCallback(() => {
     const id = user?.activeRoleId?._id;
     if (!isProvider || !id) return;
-    getProposalsByProvider(id)
+    getMyProposals()
       .then((d) => setMyProposals(d as ProposalData[]))
       .catch(() => {});
   }, [isProvider, user?.activeRoleId?._id]);
@@ -195,49 +188,31 @@ export default function JobsPage() {
   }, [fetchProposals]);
 
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const onEndReached = useCallback(() => {
+    if (isLoadingMore || !hasMore || fetchingRef.current) return;
+    fetchingRef.current = true;
+    loadMore().finally(() => {
+      fetchingRef.current = false;
+    });
+  }, [isLoadingMore, hasMore, loadMore]);
+
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && hasMore && !isSearching) onEndReached();
+        if (entry.isIntersecting && hasMore && !isSearching && !isLoadingMore)
+          onEndReached();
       },
       { threshold: 0.1 }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [hasMore, isSearching]);
+  }, [hasMore, isSearching, isLoadingMore, onEndReached]);
 
   const handleApply = useCallback((job: JobData) => {
     setProposalJob(job);
   }, []);
-
-  const onEndReached = async () => {
-    if (loadingMore || !hasMore || fetchingRef.current) return;
-    fetchingRef.current = true;
-    setLoadingMore(true);
-    const next = page + 1;
-    try {
-      await executeSearch({
-        model: "jobs",
-        page: next,
-        limit: LIMIT,
-        engine: false,
-        sortBy: sortBy,
-        lat: currentLocation?.coords.latitude,
-        long: currentLocation?.coords.longitude,
-        city: currentLocation?.subregion || "",
-        state: currentLocation?.region || "",
-        country: currentLocation?.country || "",
-      });
-      setPage(next);
-    } finally {
-      fetchingRef.current = false;
-      setLoadingMore(false);
-    }
-  };
-
-  // Infinite scroll
 
   const displayedJobs = useMemo(() => {
     if (activeView === "saved") return savedJobs;
@@ -245,8 +220,9 @@ export default function JobsPage() {
       return myProposals
         .map((p) => p.jobId as unknown as JobData)
         .filter(Boolean);
-    return jobs || [];
-  }, [activeView, jobs, savedJobs, myProposals]);
+    // Prefer client-side filtered results (from navbar search) over raw API results
+    return filteredJobs.length > 0 ? filteredJobs : jobResults;
+  }, [activeView, jobResults, filteredJobs, savedJobs, myProposals]);
 
   const viewTitle =
     activeView === "proposals"
@@ -466,24 +442,6 @@ export default function JobsPage() {
                       ))}
                     </div>
                   </div>
-                  <div className="sm:hidden flex-1 min-w-[120px]">
-                    <label className="block text-[10px] font-bold text-gray-400 mb-1.5 uppercase tracking-wider">
-                      Location
-                    </label>
-                    <div className="relative">
-                      <MapPin
-                        size={11}
-                        className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-                      />
-                      <input
-                        type="text"
-                        value={locationQuery}
-                        onChange={(e) => setLocationQuery(e.target.value)}
-                        placeholder="City, state…"
-                        className="w-full pl-7 pr-2 py-1.5 text-xs bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                      />
-                    </div>
-                  </div>
                 </div>
               </motion.div>
             )}
@@ -642,7 +600,7 @@ export default function JobsPage() {
 
           {/* Infinite scroll sentinel */}
           <div ref={sentinelRef} className="py-4 flex justify-center">
-            {isSearching && (
+            {(isSearching || isLoadingMore) && (
               <div className="flex gap-1.5">
                 <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce [animation-delay:0ms]" />
                 <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce [animation-delay:150ms]" />
@@ -651,6 +609,7 @@ export default function JobsPage() {
             )}
             {!hasMore &&
               !isSearching &&
+              !isLoadingMore &&
               activeView === "explore" &&
               displayedJobs.length > 0 && (
                 <p className="text-xs text-gray-400">All tasks loaded</p>
@@ -736,7 +695,7 @@ export default function JobsPage() {
                           {(p.jobId as any)?.title ?? "Task"}
                         </p>
                         <p className="text-[10px] text-gray-400">
-                          ₦{p.proposedPrice?.toLocaleString()}
+                          ${p.proposedPrice?.toLocaleString()}
                         </p>
                       </div>
                       {p.viewedByClient && (
