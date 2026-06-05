@@ -22,8 +22,15 @@ import { MediaItem } from "@/types";
 
 type AvatarVariant = "sm" | "md";
 
-const AVATAR_CLASSES: Record<AvatarVariant, { wrap: string; text: string; img: string }> = {
-  sm: { wrap: "w-[34px] h-[34px] text-[13px]", text: "", img: "w-[34px] h-[34px]" },
+const AVATAR_CLASSES: Record<
+  AvatarVariant,
+  { wrap: string; text: string; img: string }
+> = {
+  sm: {
+    wrap: "w-[34px] h-[34px] text-[13px]",
+    text: "",
+    img: "w-[34px] h-[34px]",
+  },
   md: { wrap: "w-11 h-11 text-[17px]", text: "", img: "w-11 h-11" },
 };
 
@@ -34,7 +41,8 @@ function Avatar({ variant = "sm" }: { variant?: AvatarVariant }) {
   const cls = AVATAR_CLASSES[variant];
   const isProvider = switchRole === "Provider";
   const logoSrc = isProvider
-    ? typeof (user.activeRoleId?.providerLogo as MediaItem)?.thumbnail === "string"
+    ? typeof (user.activeRoleId?.providerLogo as MediaItem)?.thumbnail ===
+      "string"
       ? (user.activeRoleId?.providerLogo as MediaItem).thumbnail
       : null
     : typeof user.profilePicture?.thumbnail === "string"
@@ -43,7 +51,9 @@ function Avatar({ variant = "sm" }: { variant?: AvatarVariant }) {
 
   const initials = isProvider
     ? (user.activeRoleId?.providerName ?? "P").charAt(0).toUpperCase()
-    : `${user.firstName?.charAt(0) ?? ""}${user.lastName?.charAt(0) ?? ""}`.toUpperCase() ||
+    : `${user.firstName?.charAt(0) ?? ""}${
+        user.lastName?.charAt(0) ?? ""
+      }`.toUpperCase() ||
       user.email?.charAt(0).toUpperCase() ||
       "U";
 
@@ -81,22 +91,24 @@ export default function ProfileMenu() {
 
   if (!user) return null;
 
-  const isProvider = switchRole === "Provider";
+  const isProvider = user.activeRole === "Provider";
   const hasProviderProfile = !!user.activeRoleId?._id;
 
   const displayName = isProvider
     ? user.activeRoleId?.providerName || "Your Business"
     : `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "Account";
-
-  const handleRoleSwitch = () => {
+  const displayEmail = isProvider
+    ? user.activeRoleId.providerEmail
+    : user.email;
+  const handleRoleSwitch = async () => {
     if (!hasProviderProfile) {
       router.push("/onboarding");
       setOpen(false);
       return;
     }
     const next = isProvider ? "Client" : "Provider";
-    setSwitchRole(next);
-    router.replace(next === "Provider" ? "/" : "/providers");
+    await setSwitchRole(next);
+    router.replace(next === "Provider" ? "/jobs" : "/providers");
     setOpen(false);
   };
 
@@ -148,7 +160,9 @@ export default function ProfileMenu() {
                   <p className="text-sm font-black text-gray-900 dark:text-white truncate">
                     {displayName}
                   </p>
-                  <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                  <p className="text-xs text-gray-400 truncate">
+                    {displayEmail}
+                  </p>
                   <span
                     className={`inline-flex items-center gap-1 mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       isProvider
@@ -156,11 +170,7 @@ export default function ProfileMenu() {
                         : "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
                     }`}
                   >
-                    {isProvider ? (
-                      <Building2 size={9} />
-                    ) : (
-                      <User size={9} />
-                    )}
+                    {isProvider ? <Building2 size={9} /> : <User size={9} />}
                     {isProvider ? "Provider" : "Client"}
                   </span>
                 </div>
@@ -169,7 +179,9 @@ export default function ProfileMenu() {
               {/* Role switch */}
               <button
                 type="button"
-                onClick={handleRoleSwitch}
+                onClick={async () => {
+                  await handleRoleSwitch();
+                }}
                 className="mt-3 w-full flex items-center justify-between px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 hover:border-blue-300 hover:text-blue-700 dark:hover:text-blue-400 transition-all group/sw"
               >
                 <div className="flex items-center gap-2">

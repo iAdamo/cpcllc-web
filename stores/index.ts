@@ -5,6 +5,7 @@ import { createJSONStorage } from "zustand/middleware";
 import { StateCreator } from "zustand";
 import { dashboardState } from "./dashboardState";
 import { authState } from "./authState";
+import { userState } from "./userState";
 import { globalState } from "./globalState";
 import { providerState } from "./providerState";
 import { serviceState } from "./serviceState";
@@ -30,6 +31,7 @@ const useGlobalStore = create<GlobalStore>()(
         ((...a) => ({
           ...dashboardState(...a),
           ...authState(...a),
+          ...userState(...a),
           ...providerState(...a),
           ...serviceState(...a),
           ...globalState(...a),

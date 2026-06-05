@@ -29,17 +29,26 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
 
-  const hideLayoutForRoutes = [
+  const hideNavRoutes = ["/onboarding", "/admin"];
+  const hideFooterRoutes = [
     "/onboarding",
     "/admin",
+    "/jobs",
+    "/providers",
     "/privacy-policy",
     "/terms-of-service",
   ];
-
-  const hideLayoutForRoutesRegex = hideLayoutForRoutes.map(
+  const hideNavBarRoutesRegex = hideNavRoutes.map(
     (route) => new RegExp(`^${route}(?:/|$)`)
   );
-  const shouldHideLayout = hideLayoutForRoutesRegex.some((regex) =>
+  const shouldHideNav = hideNavBarRoutesRegex.some((regex) =>
+    regex.test(pathname)
+  );
+
+  const hideFooterRoutesRegex = hideFooterRoutes.map(
+    (route) => new RegExp(`^${route}(?:/|$)`)
+  );
+  const shouldHideFooter = hideFooterRoutesRegex.some((regex) =>
     regex.test(pathname)
   );
 
@@ -53,10 +62,10 @@ export default function RootLayout({
             <Providers>
               <GluestackUIProvider mode="light">
                 <TranslationProvider>
-                  {!shouldHideLayout && <NavBar />}
+                  {!shouldHideNav && <NavBar />}
                   {children}
                   {/* {!shouldHideLayout && <PreFooter />} */}
-                  {!shouldHideLayout && <Footer />}
+                  {!shouldHideFooter && <Footer />}
                 </TranslationProvider>
               </GluestackUIProvider>
             </Providers>

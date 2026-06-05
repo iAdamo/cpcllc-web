@@ -69,7 +69,7 @@ export const globalState: StateCreator<GlobalStore, [], [], GlobalState> = (
     // });
     const formData = new FormData();
     formData.append("activeRole", role);
-    get().updateUserProfile("Client", formData);
+    await get().updateUserProfile("Client", formData);
     // get().fetchChats();
   },
   paramsFrom: null,

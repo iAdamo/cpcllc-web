@@ -27,93 +27,15 @@ import {
   ShieldCheck,
   Settings,
   Hammer,
+  Search,
+  MapPin,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import useGlobalStore from "@/stores";
 import AuthModalManager from "@/screens/auth/AuthModalManager";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useTranslation } from "@/context/TranslationContext";
-
-const categories = [
-  {
-    label: "Plumbing",
-    Icon: Droplets,
-    href: "/providers?category=Plumbing",
-    color: "text-blue-500 bg-blue-50",
-  },
-  {
-    label: "Electrical",
-    Icon: Zap,
-    href: "/providers?category=Electrical",
-    color: "text-yellow-500 bg-yellow-50",
-  },
-  {
-    label: "HVAC",
-    Icon: Wind,
-    href: "/providers?category=HVAC",
-    color: "text-cyan-500 bg-cyan-50",
-  },
-  {
-    label: "Cleaning",
-    Icon: Waves,
-    href: "/providers?category=Cleaning",
-    color: "text-green-500 bg-green-50",
-  },
-  {
-    label: "Painting",
-    Icon: Paintbrush,
-    href: "/providers?category=Painting",
-    color: "text-purple-500 bg-purple-50",
-  },
-  {
-    label: "Pest Control",
-    Icon: Bug,
-    href: "/providers?category=Pest+Control",
-    color: "text-red-500 bg-red-50",
-  },
-  {
-    label: "Roofing",
-    Icon: Home,
-    href: "/providers?category=Roofing",
-    color: "text-orange-500 bg-orange-50",
-  },
-  {
-    label: "Solar",
-    Icon: SunMedium,
-    href: "/providers?category=Solar",
-    color: "text-amber-500 bg-amber-50",
-  },
-  {
-    label: "Moving",
-    Icon: Package,
-    href: "/providers?category=Moving",
-    color: "text-indigo-500 bg-indigo-50",
-  },
-  {
-    label: "Security",
-    Icon: ShieldCheck,
-    href: "/providers?category=Security",
-    color: "text-slate-500 bg-slate-50",
-  },
-  {
-    label: "Handyman",
-    Icon: Wrench,
-    href: "/providers?category=Handyman",
-    color: "text-rose-500 bg-rose-50",
-  },
-  {
-    label: "Appliances",
-    Icon: Settings,
-    href: "/providers?category=Appliance+Repair",
-    color: "text-teal-500 bg-teal-50",
-  },
-  {
-    label: "Carpentry",
-    Icon: Hammer,
-    href: "/providers?category=Carpentry",
-    color: "text-stone-500 bg-stone-50",
-  },
-];
+import UniversalSearch from "../UniversalSearch";
 
 const NavBar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -153,7 +75,7 @@ const NavBar = () => {
         {
           label: t("service_providers"),
           href: "/providers",
-          show: pathname !== "/providers" || user?.activeRole === "Client",
+          show: pathname !== "/providers" && user?.activeRole === "Client",
         },
         {
           label: t("jobs"),
@@ -228,6 +150,35 @@ const NavBar = () => {
                   {label}
                 </Link>
               ))}
+              <div className="px-4 py-3 flex items-center gap-2.5">
+                <div className="flex-1 relative">
+                  <Search
+                    size={14}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                  />
+                  <input
+                    type="text"
+                    value=""
+                    onChange={(e) => {}}
+                    placeholder="Search tasks…"
+                    className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
+
+                <div className="hidden sm:flex relative w-36">
+                  <MapPin
+                    size={12}
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                  />
+                  <input
+                    type="text"
+                    value=""
+                    onChange={(e) => {}}
+                    placeholder="Location"
+                    className="w-full pl-7 pr-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Desktop right side */}
@@ -395,34 +346,6 @@ const NavBar = () => {
                     {label}
                   </Link>
                 ))}
-
-                {/* Mobile categories */}
-                <div className="py-3 border-b border-gray-50 dark:border-gray-800">
-                  <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 mb-3">
-                    Services
-                  </p>
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {categories
-                      .slice(0, 9)
-                      .map(({ label, Icon, href, color }) => (
-                        <Link
-                          key={label}
-                          href={href}
-                          className="flex flex-col items-center gap-1.5 p-2 rounded-xl bg-gray-50 dark:bg-gray-800 text-center"
-                        >
-                          <div
-                            className={`w-8 h-8 rounded-lg flex items-center justify-center ${color}`}
-                          >
-                            <Icon size={15} />
-                          </div>
-                          <span className="text-[10px] font-semibold text-gray-700 dark:text-gray-300 leading-tight">
-                            {label}
-                          </span>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-
                 <div className="pt-4 space-y-2">
                   {user ? (
                     <>

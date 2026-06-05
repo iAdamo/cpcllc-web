@@ -9,13 +9,13 @@ import {
   SearchParams,
   ServiceCategory,
   Subcategory,
-} from "@/types";
-import {
+  SearchResultData,
   MetricsResponse,
   MetricsRequest,
   TimeSeriesData,
   DashboardView,
-} from "./admin";
+} from "@/types";
+import { UseInfiniteQueryResult, InfiniteData } from "@tanstack/react-query";
 
 export interface GlobalState {
   isLoading: boolean;

@@ -10,7 +10,7 @@ import { GlobalStore, UserState } from "@/types";
 // import appendFormData from "@/utils/AppendFormData";
 // import { socketService, PresenceEvents } from "@/services/socketService";
 
-export const userSlice: StateCreator<GlobalStore, [], [], UserState> = (
+export const userState: StateCreator<GlobalStore, [], [], UserState> = (
   set,
   get
 ) => ({
@@ -68,10 +68,7 @@ export const userSlice: StateCreator<GlobalStore, [], [], UserState> = (
         if (user) {
           if (role === "Client") {
             // appendFormData(formData, user);
-            console.debug(
-              "Submitting formData:",
-              Array.from(formData.entries())
-            );
+            console.log("Submitting formData:", Array.from(formData.entries()));
             response = await updateUserProfile(formData);
           } else {
             // appendFormData(formData, user?.activeRoleId);

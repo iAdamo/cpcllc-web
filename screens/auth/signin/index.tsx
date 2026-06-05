@@ -31,6 +31,7 @@ import useGlobalStore from "@/stores";
 import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
 import z from "zod";
+import jobs from "@/screens/clients/jobs";
 
 type ControllerRenderType = {
   field: {
@@ -62,10 +63,9 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
-  const { login } = useGlobalStore();
+  const { login, user } = useGlobalStore();
   const toast = useToast();
   const router = useRouter();
-
 
   const SignInSchema = FormSchema.pick({ email: true, password: true });
   type SignInSchemaType = z.infer<typeof SignInSchema>;
@@ -94,7 +94,13 @@ const SignInModal: React.FC<SignInModalProps> = (props) => {
       await login(data);
       reset();
       onClose();
-      router.replace("providers");
+      router.replace(
+        user.activeRole === "Admin"
+          ? "/admin"
+          : user.activeRole === "Client"
+          ? "/providers"
+          : "/jobs"
+      );
       setIsLoading(false);
     } catch (error) {
       setValidated({ emailValid: false, passwordValid: false });

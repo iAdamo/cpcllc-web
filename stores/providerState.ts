@@ -1,8 +1,5 @@
-import {
-  ProviderData,
-  Category,
-  SearchParams,
-} from "@/types";
+"use client";
+import { ProviderData, Category, SearchParams, ServiceData } from "@/types";
 import { StateCreator } from "zustand";
 import {
   GlobalStore,
@@ -14,12 +11,10 @@ import {
 import { globalSearch } from "@/axios/search";
 import { setUserFavourites } from "@/axios/user";
 
-export const providerState: StateCreator<
-  GlobalStore,
-  [],
-  [],
-  ProviderState
-> = (set, get) => ({
+export const providerState: StateCreator<GlobalStore, [], [], ProviderState> = (
+  set,
+  get
+) => ({
   isSearching: false,
   displayStyle: "Grid",
   sortBy: "Relevance",
@@ -154,7 +149,7 @@ export const providerState: StateCreator<
           searchResults: {
             providers: response.data.providers || [],
             // services: response.services || [],
-            // jobs: [],
+            jobs: response.data.jobs || [],
             page: page,
             totalPages: response.totalPages,
           },
@@ -183,3 +178,26 @@ export const providerState: StateCreator<
   clearSearchResults: () =>
     set({ searchResults: { providers: [], services: [], jobs: [] } }),
 });
+function useInfiniteQuery<T, U>(arg0: {
+  queryKey: (string | SearchParams)[];
+  queryFn: ({
+    pageParam,
+  }: {
+    pageParam: any;
+  }) => Promise<{
+    providers: ProviderData[];
+    services: ServiceData[];
+    jobs: JobData[];
+    page: number;
+    totalPages: number;
+  }>;
+  initialPageParam: number;
+  getNextPageParam: (last: any) => any;
+  staleTime: number;
+  refetchOnWindowFocus: boolean;
+}): import("@tanstack/react-query").UseInfiniteQueryResult<
+  import("@tanstack/query-core").InfiniteData<SearchResultData, unknown>,
+  Error
+> {
+  throw new Error("Function not implemented.");
+}
