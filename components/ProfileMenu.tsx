@@ -220,14 +220,14 @@ export default function ProfileMenu() {
                   setOpen(false);
                 }}
               />
-              <MenuItem
+              {/* <MenuItem
                 icon={CreditCard}
                 label="Membership & Billing"
                 onClick={() => {
                   router.push("/profile?tab=billing");
                   setOpen(false);
                 }}
-              />
+              /> */}
               <MenuItem
                 icon={Settings}
                 label="Settings"

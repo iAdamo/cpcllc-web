@@ -27,7 +27,7 @@ import { Category } from "@/types";
 // ── Types ────────────────────────────────────────────────────────────────────
 
 type Urgency = "Normal" | "Urgent" | "Immediate";
-type Visibility = "Public" | "Verified" | "Private";
+type Visibility = "Public" | "Verified_Only";
 
 interface FormErrors {
   title?: string;
@@ -130,8 +130,7 @@ function PreviewCard({
 
   const VISIBILITY_ICON: Record<Visibility, React.ReactNode> = {
     Public: <Eye size={10} />,
-    Verified: <Shield size={10} />,
-    Private: <User size={10} />,
+    Verified_Only: <Shield size={10} />,
   };
 
   return (
@@ -322,7 +321,7 @@ export default function CreateTaskPage() {
       await createJob(fd);
       setSubmitted(true);
       setTimeout(() => {
-        router.push("/profile");
+        router.push("/task");
       }, 1500);
     } catch (err: unknown) {
       const message =
@@ -365,8 +364,7 @@ export default function CreateTaskPage() {
     icon: React.ReactNode;
   }[] = [
     { value: "Public", label: "Public", icon: <Eye size={13} /> },
-    { value: "Verified", label: "Verified Only", icon: <Shield size={13} /> },
-    { value: "Private", label: "Private", icon: <User size={13} /> },
+    { value: "Verified_Only", label: "Verified Only", icon: <Shield size={13} /> },
   ];
 
   // ── Success state ───────────────────────────────────────────────────────────

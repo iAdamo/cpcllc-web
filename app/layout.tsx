@@ -7,6 +7,8 @@ import { TranslationProvider } from "@/context/TranslationContext";
 import NavBar from "@/components/layout/NavBar";
 // import PreFooter from "@/components/layout/PreFooter";
 import Footer from "@/components/layout/Footer";
+import GlobalLoadingOverlay from "@/components/GlobalLoadingOverlay";
+import MobileGate from "@/components/MobileGate";
 import { usePathname } from "next/navigation";
 import { Providers } from "./providers";
 import { SessionProvider } from "@/context/SessionContext";
@@ -62,6 +64,8 @@ export default function RootLayout({
             <Providers>
               <GluestackUIProvider mode="light">
                 <TranslationProvider>
+                  <GlobalLoadingOverlay />
+                  <MobileGate />
                   {!shouldHideNav && <NavBar />}
                   {children}
                   {/* {!shouldHideLayout && <PreFooter />} */}

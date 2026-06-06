@@ -179,6 +179,11 @@ const NavBar = () => {
           show: !isProviders && user?.activeRole === "Client",
         },
         {
+          label: "My Tasks",
+          href: "/tasks",
+          show: user?.activeRole === "Client" && pathname !== "/tasks",
+        },
+        {
           label: t("jobs"),
           href: "/jobs",
           show: isAuthenticated && !isJobs && user?.activeRole === "Provider",
