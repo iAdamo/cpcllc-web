@@ -1,7 +1,6 @@
 import { StateCreator } from "zustand";
 import { DashboardState, GlobalStore } from "@/types";
 import { getMetrics } from "@/axios/admin";
-// import { getUsers } from "@/axios/user";
 
 export const dashboardState: StateCreator<
   GlobalStore,
@@ -18,7 +17,6 @@ export const dashboardState: StateCreator<
   isLoading: false,
   error: null,
 
-  // UI Actions
   setActiveView: (view) => set({ activeView: view }),
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
 
@@ -42,32 +40,9 @@ export const dashboardState: StateCreator<
   metricsSummary: null,
   timeSeries: [],
 
-  // fetchUsers: async () => {
-  //   set({ isLoading: true, error: null });
-
-  //   try {
-  //     if (get().users.length > 0) {
-  //       set({ isLoading: false });
-  //       return;
-  //     }
-  //     const response = await getUsers(1, 100);
-
-  //     set({
-  //       users: response.users,
-  //       isLoading: false,
-  //     });
-  //   } catch (err) {
-  //     set({
-  //       isLoading: false,
-  //       error: String(err) || "Failed to fetch users",
-  //     });
-  //   }
-  // },
-
   fetchMetrics: async () => {
     const { granularity, selectedYear, selectedMonth } = get();
 
-    // Validate selection
     if (granularity === "daily" && !selectedMonth) {
       set({ error: "Please select a month for daily view" });
       return;

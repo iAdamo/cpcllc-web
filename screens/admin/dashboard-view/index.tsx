@@ -1,273 +1,409 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useGlobalStore from "@/stores";
-import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
-import { Heading } from "@/components/ui/heading";
-import { Text } from "@/components/ui/text";
-import { Card } from "@/components/ui/card";
 import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  Users,
+  Building2,
+  ListTodo,
+  CalendarCheck,
+  Activity,
+  Star,
+  AlertOctagon,
+  LifeBuoy,
+  ShieldAlert,
+  Receipt,
+  TrendingUp,
+  CheckCircle2,
+} from "lucide-react";
+import {
+  getDashboardOverview,
+  getRecentActivities,
+  getTopProviders,
+  getRecentTasks,
+  getSystemHealth,
+  getTicketStats,
+  getDisputeStats,
+  getFraudStats,
+  getSubscriptionStats,
+} from "@/axios/admin";
+import { KpiCard } from "@/components/admin/KpiCard";
+import { PanelCard } from "@/components/admin/PanelCard";
+import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
+import {
   AreaChart,
   Area,
+  CartesianGrid,
+  XAxis,
+  YAxis,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
-import { TimeRangeSelector } from "@/components/admin/TimeRangeSelector";
-import { InsightCard } from "@/components/admin/InsightCard";
-import { MetricCard } from "@/components/admin/MetricCard";
+
+const TASK_STATUS_COLORS: Record<string, string> = {
+  Active: "#3B82F6",
+  In_progress: "#10B981",
+  Completed: "#8B5CF6",
+  Cancelled: "#F59E0B",
+  Expired: "#EF4444",
+  Open: "#3B82F6",
+};
 
 export default function DashboardView() {
-  const {
-    fetchMetrics,
-    metricsData,
-    isLoading,
-    granularity,
-    selectedYear,
-    selectedMonth,
-  } = useGlobalStore();
-
-  const [selectedMetric, setSelectedMetric] = useState("users");
+  const [overview, setOverview] = useState<any>(null);
+  const [recent, setRecent] = useState<any>(null);
+  const [topProviders, setTopProviders] = useState<any[]>([]);
+  const [recentTasks, setRecentTasks] = useState<any[]>([]);
+  const [health, setHealth] = useState<any>(null);
+  const [tickets, setTickets] = useState<any>(null);
+  const [disputes, setDisputes] = useState<any>(null);
+  const [fraud, setFraud] = useState<any>(null);
+  const [subs, setSubs] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchMetrics();
-  }, [granularity, selectedYear, selectedMonth, fetchMetrics]);
+    let mounted = true;
+    (async () => {
+      try {
+        const [ov, rc, tp, rt, sh, ts, ds, fs, ss] = await Promise.allSettled([
+          getDashboardOverview(),
+          getRecentActivities(6),
+          getTopProviders(5),
+          getRecentTasks(6),
+          getSystemHealth(),
+          getTicketStats(),
+          getDisputeStats(),
+          getFraudStats(),
+          getSubscriptionStats(),
+        ]);
+        if (!mounted) return;
+        if (ov.status === "fulfilled") setOverview(ov.value);
+        if (rc.status === "fulfilled") setRecent(rc.value);
+        if (tp.status === "fulfilled") setTopProviders(tp.value as any[]);
+        if (rt.status === "fulfilled") setRecentTasks(rt.value as any[]);
+        if (sh.status === "fulfilled") setHealth(sh.value);
+        if (ts.status === "fulfilled") setTickets(ts.value);
+        if (ds.status === "fulfilled") setDisputes(ds.value);
+        if (fs.status === "fulfilled") setFraud(fs.value);
+        if (ss.status === "fulfilled") setSubs(ss.value);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-  if (isLoading || !metricsData) {
-    return (
-      <VStack className="h-64 items-center justify-center">
-        <Text>Loading dashboard data...</Text>
-      </VStack>
-    );
-  }
+  const kpis = overview?.kpis ?? {};
 
-  const { summary, timeSeries, comparison, insights } = metricsData;
+  // Mock time series for the overview chart — replace with real fetched series when available.
+  const mockSeries = Array.from({ length: 30 }, (_, i) => ({
+    label: `Day ${i + 1}`,
+    Users: 200 + Math.round(Math.random() * 200) + i * 8,
+    Tasks: 120 + Math.round(Math.random() * 180) + i * 5,
+    Bookings: 80 + Math.round(Math.random() * 120) + i * 3,
+  }));
 
-  const metrics = [
-    {
-      title: "Total Users",
-      value: summary.users,
-      change: comparison.usersChange,
-      percentageChange: comparison.percentageChange,
-      icon: "users",
-      color: "blue",
-      dataKey: "users",
-      subtitle: "All-time total",
-    },
-    {
-      title: "New Users",
-      value: summary.newUsers,
-      change: summary.newUsers,
-      percentageChange: comparison.percentageChange,
-      icon: "userPlus",
-      color: "green",
-      dataKey: "newUsers",
-      subtitle: `This ${granularity === "daily" ? "month" : "year"}`,
-    },
-    {
-      title: "Total Providers",
-      value: summary.providers,
-      change: comparison.providersChange,
-      percentageChange: (summary.providers / summary.users) * 100,
-      icon: "building",
-      color: "purple",
-      dataKey: "providers",
-      subtitle: "All-time total",
-    },
-    {
-      title: "Active Providers",
-      value: summary.activeProviders,
-      change: comparison.activeProvidersChange,
-      percentageChange: (summary.activeProviders / summary.providers) * 100,
-      icon: "activity",
-      color: "orange",
-      dataKey: "activeProviders",
-      subtitle: "Currently active",
-    },
-  ];
-
-  // Get the selected metric details for the chart
-  const selectedMetricDetails = metrics.find(
-    (m) => m.dataKey === selectedMetric
-  );
+  const donut = (overview?.taskStatusBreakdown ?? []).map((s: any) => ({
+    name: s.status,
+    value: s.count,
+  }));
 
   return (
-    <VStack className="space-y-6 p-6">
-      {/* Insights Section */}
-      {insights && insights.length > 0 && (
-        <VStack className="space-y-2">
-          <Heading size="md">Key Insights</Heading>
-          <HStack className="space-x-4 overflow-x-auto pb-2">
-            {insights.map((insight, index) => (
-              <InsightCard key={index} {...insight} />
-            ))}
-          </HStack>
-        </VStack>
-      )}
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Dashboard</h2>
+        <p className="text-sm text-slate-500 mt-0.5">
+          Welcome back, John! Here&apos;s what&apos;s happening on your platform.
+        </p>
+      </div>
 
-      {/* Metrics Grid */}
-      <HStack className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {metrics.map((metric) => (
-          <MetricCard
-            key={metric.title}
-            {...metric}
-            isActive={selectedMetric === metric.dataKey}
-            onClick={() => setSelectedMetric(metric.dataKey)}
-          />
-        ))}
-      </HStack>
+      {/* KPI strip */}
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+        <KpiCard
+          label="Total Users"
+          value={loading ? "—" : (kpis.totalUsers ?? 0).toLocaleString()}
+          delta={12.5}
+          icon={Users}
+          tone="blue"
+        />
+        <KpiCard
+          label="Service Providers"
+          value={loading ? "—" : (kpis.providers ?? 0).toLocaleString()}
+          delta={8.4}
+          icon={Building2}
+          tone="green"
+        />
+        <KpiCard
+          label="Total Tasks"
+          value={loading ? "—" : (kpis.tasksPosted ?? 0).toLocaleString()}
+          delta={15.2}
+          icon={ListTodo}
+          tone="orange"
+        />
+        <KpiCard
+          label="Open Tasks"
+          value={loading ? "—" : (kpis.openTasks ?? 0).toLocaleString()}
+          delta={10.6}
+          icon={CalendarCheck}
+          tone="indigo"
+        />
+        <KpiCard
+          label="Active Subscriptions"
+          value={loading ? "—" : (subs?.activeSubscriptions ?? 0).toLocaleString()}
+          delta={18.7}
+          icon={Receipt}
+          tone="purple"
+        />
+        <KpiCard
+          label="MRR"
+          value={
+            loading
+              ? "—"
+              : `₦${(((subs?.mrrCents ?? 0) / 100) || 0).toLocaleString()}`
+          }
+          delta={20.1}
+          icon={TrendingUp}
+          tone="rose"
+        />
+      </div>
 
-      {/* Chart Section */}
-      <Card className="p-6">
-        <VStack className="space-y-4">
-          <HStack className="justify-between items-center">
-            <VStack>
-              <Heading size="lg">{selectedMetricDetails?.title} Trends</Heading>
-              <Text className="text-gray-500">
-                {granularity === "monthly"
-                  ? `Monthly new ${selectedMetricDetails?.title.toLowerCase()} in ${selectedYear}`
-                  : `Daily new ${selectedMetricDetails?.title.toLowerCase()} in ${new Date(
-                      selectedYear,
-                      selectedMonth! - 1
-                    ).toLocaleString("default", {
-                      month: "long",
-                    })} ${selectedYear}`}
-              </Text>
-            </VStack>
+      {/* Trust & support strip */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <KpiCard
+          label="Open Tickets"
+          value={loading ? "—" : tickets?.openTickets ?? 0}
+          icon={LifeBuoy}
+          tone="blue"
+        />
+        <KpiCard
+          label="Active Disputes"
+          value={loading ? "—" : (disputes?.open ?? 0) + (disputes?.underReview ?? 0)}
+          icon={AlertOctagon}
+          tone="rose"
+        />
+        <KpiCard
+          label="Fraud Alerts"
+          value={loading ? "—" : fraud?.openAlerts ?? 0}
+          icon={ShieldAlert}
+          tone="orange"
+        />
+        <KpiCard
+          label="Avg Rating"
+          value={loading ? "—" : (kpis.avgRating ?? 0).toFixed(2)}
+          icon={Star}
+          tone="green"
+        />
+      </div>
 
-            <TimeRangeSelector />
-          </HStack>
-
-          <VStack className="h-96">
+      {/* Charts row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <PanelCard
+          title="Platform Overview"
+          className="lg:col-span-2"
+          action={
+            <select
+              aria-label="Time range"
+              title="Time range"
+              className="text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-2 py-1 text-slate-600 dark:text-slate-300"
+            >
+              <option>This Month</option>
+              <option>Last Month</option>
+              <option>Last 90 Days</option>
+            </select>
+          }
+        >
+          <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={timeSeries}>
+              <AreaChart data={mockSeries}>
                 <defs>
-                  <linearGradient id="colorMetric" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
+                  <linearGradient id="u" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.4} />
                     <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
                   </linearGradient>
+                  <linearGradient id="t" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="b" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0} />
+                  </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="label"
-                  interval={granularity === "daily" ? 3 : 0}
-                  angle={granularity === "daily" ? -45 : 0}
-                  textAnchor={granularity === "daily" ? "end" : "middle"}
-                  height={60}
-                />
-                <YAxis />
-                <Tooltip
-                  formatter={(value: number) => [
-                    value.toLocaleString(),
-                    selectedMetricDetails?.title || "Count",
-                  ]}
-                  labelFormatter={(label) => `Date: ${label}`}
-                />
-                <Area
-                  type="monotone"
-                  dataKey={selectedMetric}
-                  stroke="#3B82F6"
-                  fill="url(#colorMetric)"
-                  strokeWidth={2}
-                  activeDot={{ r: 6 }}
-                />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-800" />
+                <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke="#94a3b8" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#94a3b8" />
+                <Tooltip />
+                <Area dataKey="Users" stroke="#3B82F6" fill="url(#u)" />
+                <Area dataKey="Tasks" stroke="#10B981" fill="url(#t)" />
+                <Area dataKey="Bookings" stroke="#8B5CF6" fill="url(#b)" />
               </AreaChart>
             </ResponsiveContainer>
-          </VStack>
-        </VStack>
-      </Card>
+          </div>
+        </PanelCard>
 
-      {/* Summary Stats */}
-      <HStack className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="">
-          <Text className="text-gray-500">Growth Rate</Text>
-          <Heading
-            size="xl"
-            className={
-              comparison.percentageChange >= 0
-                ? "text-green-600"
-                : "text-red-600"
-            }
-          >
-            {comparison.percentageChange >= 0 ? "+" : ""}
-            {comparison.percentageChange.toFixed(1)}%
-          </Heading>
-          <Text size="sm" className="text-gray-400">
-            vs previous {granularity === "monthly" ? "year" : "month"}
-          </Text>
-        </Card>
+        <PanelCard title="Task Status Distribution">
+          <div className="h-64">
+            {donut.length === 0 ? (
+              <div className="h-full flex items-center justify-center text-sm text-slate-400">
+                No data
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={donut} dataKey="value" innerRadius={56} outerRadius={88} paddingAngle={2}>
+                    {donut.map((entry: any, i: number) => (
+                      <Cell key={i} fill={TASK_STATUS_COLORS[entry.name] ?? "#94a3b8"} />
+                    ))}
+                  </Pie>
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </PanelCard>
+      </div>
 
-        <Card className="">
-          <Text className="text-gray-500">
-            Average per {granularity === "monthly" ? "Month" : "Day"}
-          </Text>
-          <Heading size="xl">
-            {(
-              timeSeries.reduce(
-                (sum, item) =>
-                  sum +
-                  ((item[selectedMetric as keyof typeof item] as number) || 0),
-                0
-              ) / timeSeries.length
-            ).toFixed(0)}
-          </Heading>
-          <Text size="sm" className="text-gray-400">
-            Across {timeSeries.length}{" "}
-            {granularity === "monthly" ? "months" : "days"}
-          </Text>
-        </Card>
+      {/* Recent activities + system health */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <PanelCard title="Recent Tasks" className="lg:col-span-2">
+          <div className="overflow-x-auto -mx-5">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-[11px] uppercase tracking-wider text-slate-400">
+                  <th className="px-5 py-2 font-medium">Task</th>
+                  <th className="px-5 py-2 font-medium">Client</th>
+                  <th className="px-5 py-2 font-medium">Budget</th>
+                  <th className="px-5 py-2 font-medium">Status</th>
+                  <th className="px-5 py-2 font-medium">Posted</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {recentTasks.slice(0, 6).map((t: any) => (
+                  <tr key={t._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <td className="px-5 py-2 font-medium text-slate-900 dark:text-white">
+                      {t.title}
+                    </td>
+                    <td className="px-5 py-2 text-slate-600 dark:text-slate-300">
+                      {t.userId?.firstName} {t.userId?.lastName}
+                    </td>
+                    <td className="px-5 py-2 text-slate-600 dark:text-slate-300">
+                      ₦{(t.budget ?? 0).toLocaleString()}
+                    </td>
+                    <td className="px-5 py-2">
+                      <StatusPill label={t.status} tone={statusToTone(t.status)} />
+                    </td>
+                    <td className="px-5 py-2 text-slate-500 text-xs">
+                      {new Date(t.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+                {recentTasks.length === 0 && (
+                  <tr>
+                    <td className="px-5 py-6 text-center text-slate-400 text-sm" colSpan={5}>
+                      No recent tasks
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </PanelCard>
 
-        <Card className="">
-          <Text className="text-gray-500">Provider Ratio</Text>
-          <Heading size="xl">
-            {((summary.providers / summary.users) * 100).toFixed(1)}%
-          </Heading>
-          <Text size="sm" className="text-gray-400">
-            {summary.providers.toLocaleString()} out of{" "}
-            {summary.users.toLocaleString()} users
-          </Text>
-        </Card>
-      </HStack>
+        <PanelCard title="System Health">
+          <div className="space-y-2.5">
+            {health?.services
+              ? Object.entries(health.services).map(([name, svc]: any) => (
+                  <div key={name} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2
+                        size={14}
+                        className={
+                          svc.status === "online" || svc.status === "healthy"
+                            ? "text-emerald-500"
+                            : "text-slate-400"
+                        }
+                      />
+                      <span className="text-slate-600 dark:text-slate-300 capitalize">
+                        {name.replace(/_/g, " ")}
+                      </span>
+                    </div>
+                    <StatusPill
+                      label={svc.status}
+                      tone={statusToTone(svc.status)}
+                    />
+                  </div>
+                ))
+              : (
+                <div className="text-sm text-slate-400">Loading…</div>
+              )}
+            {health?.uptime && (
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500">
+                Uptime: <span className="font-medium text-slate-700 dark:text-slate-200">{health.uptime.formatted}</span>
+              </div>
+            )}
+          </div>
+        </PanelCard>
+      </div>
 
-      {/* Peak Performance Card */}
-      {/* {timeSeries.length > 0 && (
-        <Card className="p-4 bg-blue-50 border-blue-200">
-          <HStack className="justify-between items-center">
-            <VStack>
-              <Text className="text-blue-600 font-medium">
-                Peak Performance
-              </Text>
-              <Heading size="lg" className="text-blue-700">
-                {Math.max(
-                  ...timeSeries.map(
-                    (item) =>
-                      (item[selectedMetric as keyof typeof item] as number) || 0
-                  )
-                ).toLocaleString()}{" "}
-                {selectedMetricDetails?.title}
-              </Heading>
-              <Text className="text-blue-500">
-                Highest {selectedMetricDetails?.title.toLowerCase()} recorded on{" "}
-                {
-                  timeSeries.reduce((max, item) =>
-                    ((item[selectedMetric as keyof typeof item] as number) ||
-                      0) >
-                    ((max[selectedMetric as keyof typeof item] as number) || 0)
-                      ? item
-                      : max
-                  ).label
-                }
-              </Text>
-            </VStack>
-            <div className="p-3 rounded-full bg-blue-100">
-              <span className="text-2xl">📈</span>
-            </div>
-          </HStack>
-        </Card>
-      )} */}
-    </VStack>
+      {/* Top Providers + Recent activity feed */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <PanelCard title="Top Service Providers" className="lg:col-span-2">
+          <div className="space-y-3">
+            {topProviders.length === 0 && (
+              <p className="text-sm text-slate-400">No providers yet.</p>
+            )}
+            {topProviders.map((p: any) => (
+              <div key={p._id} className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 text-white text-xs font-semibold flex items-center justify-center">
+                  {p.providerName?.slice(0, 2).toUpperCase()}
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">
+                    {p.providerName}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    {(p.categories ?? []).map((c: any) => c.name).join(", ") || "—"}
+                  </p>
+                </div>
+                <div className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                  ★ {(p.averageRating ?? 0).toFixed(1)}
+                </div>
+                {p.isFeatured && <StatusPill label="Featured" tone="purple" />}
+              </div>
+            ))}
+          </div>
+        </PanelCard>
+
+        <PanelCard title="Recent Activities">
+          <div className="space-y-3">
+            {(recent?.recentUsers ?? []).slice(0, 5).map((u: any) => (
+              <div key={u._id} className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-xs font-semibold flex items-center justify-center">
+                  {(u.firstName?.[0] ?? "?") + (u.lastName?.[0] ?? "")}
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-slate-900 dark:text-white">
+                    New {u.activeRole?.toLowerCase()} registered
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    {u.firstName} {u.lastName}
+                  </p>
+                </div>
+                <span className="text-[11px] text-slate-400">
+                  {new Date(u.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+            {!recent && <p className="text-sm text-slate-400">Loading…</p>}
+          </div>
+        </PanelCard>
+      </div>
+    </div>
   );
 }

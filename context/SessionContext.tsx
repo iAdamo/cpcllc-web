@@ -38,6 +38,7 @@ const PUBLIC_EXACT = [
   "/privacy-policy",
   "/terms-of-service",
   "/settings/account-control/deletion",
+  "/admin",
 ];
 const PUBLIC_PREFIX = ["/providers", "/admin", "/profile"];
 
@@ -89,25 +90,27 @@ export function SessionProvider({ children }: PropsWithChildren) {
   // Redirect unauthenticated users away from protected routes
   useEffect(() => {
     if (!hydrated) return;
-    if (user?.activeRole === "Provider" && pathname === "/providers") {
-      router.replace("/jobs");
-      return;
-    } else if (user?.activeRole === "Client" && pathname === "/jobs") {
-      router.replace("/providers");
-      return;
-    } else if (user?.activeRole === "Admin" && pathname !== "/admin") {
-      router.replace("/admin");
-      return;
-    }
-    if (isAuthenticated && pathname === "/") {
-      if (user?.activeRole === "Admin") {
-        router.replace("/admin");
-        return;
-      } else if (user?.activeRole === "Provider") {
+    if (isAuthenticated) {
+      if (user?.activeRole === "Provider" && pathname === "/providers") {
         router.replace("/jobs");
         return;
-      } else if (user?.activeRole === "Client") {
+      } else if (user?.activeRole === "Client" && pathname === "/jobs") {
         router.replace("/providers");
+        return;
+      } else if (user?.activeRole === "Admin" && pathname !== "/admin") {
+        router.replace("/admin");
+        return;
+      }
+      if (pathname === "/") {
+        if (user?.activeRole === "Admin") {
+          router.replace("/admin");
+          return;
+        } else if (user?.activeRole === "Provider") {
+          router.replace("/jobs");
+          return;
+        } else if (user?.activeRole === "Client") {
+          router.replace("/providers");
+        }
       }
     }
     if (!isAuthenticated && !isPublic(pathname)) {

@@ -1,4 +1,5 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
+import { getDeviceId, getSessionId } from "@/utils/Device";
 // import useGlobalStore from "@/stores";
 
 const createClient = () => {
@@ -18,10 +19,10 @@ const createClient = () => {
       console.log(config.url);
       // if (config.url?.startsWith("auth"))
 
-      // if (config.url?.startsWith("auth")) {
-      //   config.headers["x-device-id"] = await getDeviceId();
-      //   config.headers["x-session-id"] = await getSessionId();
-      // }
+      if (config.url?.startsWith("auth")) {
+        config.headers["x-device-id"] = getDeviceId();
+        config.headers["x-session-id"] = getSessionId();
+      }
 
       return config;
     },
