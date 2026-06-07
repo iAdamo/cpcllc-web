@@ -216,7 +216,7 @@ export default function ProfileMenu() {
                 icon={User}
                 label="My Profile"
                 onClick={() => {
-                  router.push("/profile");
+                  router.push(`/profile/${user._id}`);
                   setOpen(false);
                 }}
               />

@@ -1,10 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import AdminDashboardLayout from "@/components/layout/admin";
 import useGlobalStore from "@/stores";
+import { useAdminLiveUpdates } from "@/hooks/useAdminLiveUpdates";
+import { getMyAdminUser } from "@/axios/admin";
 import DashboardView from "@/screens/admin/dashboard-view";
 import { UsersView } from "@/screens/admin/views/UsersView";
+import { ProvidersView } from "@/screens/admin/views/ProvidersView";
+import { ClientsView } from "@/screens/admin/views/ClientsView";
+import { TasksView } from "@/screens/admin/views/TasksView";
 import { SupportView } from "@/screens/admin/views/SupportView";
 import { DisputesView } from "@/screens/admin/views/DisputesView";
 import { FraudView } from "@/screens/admin/views/FraudView";
@@ -16,9 +22,6 @@ import { SystemHealthView } from "@/screens/admin/views/SystemHealthView";
 import { ModerationView } from "@/screens/admin/views/ModerationView";
 import { PlaceholderView } from "@/screens/admin/views/PlaceholderView";
 import {
-  Building2,
-  UserCog,
-  ListTodo,
   CalendarCheck,
   FolderKanban,
   MessageSquare,
@@ -46,33 +49,112 @@ import {
 } from "@/axios/admin";
 
 const AdminDashboard = () => {
+  const router = useRouter();
   const { activeView } = useGlobalStore();
   const [badges, setBadges] = useState<Record<string, number | undefined>>({});
+  const [authState, setAuthState] = useState<"checking" | "ok" | "denied">(
+    "checking",
+  );
 
   useEffect(() => {
-    let mounted = true;
+    let cancelled = false;
     (async () => {
-      const [t, d, f, m, o] = await Promise.allSettled([
-        getTicketStats(),
-        getDisputeStats(),
-        getFraudStats(),
-        getModerationStats(),
-        getDashboardOverview(),
-      ]);
-      if (!mounted) return;
-      setBadges({
-        openTickets: t.status === "fulfilled" ? (t.value as any).openTickets : undefined,
-        openDisputes:
-          d.status === "fulfilled" ? (d.value as any).open + (d.value as any).underReview : undefined,
-        fraudAlerts: f.status === "fulfilled" ? (f.value as any).openAlerts : undefined,
-        moderationQueue: m.status === "fulfilled" ? (m.value as any).queued : undefined,
-        openTasks: o.status === "fulfilled" ? (o.value as any).kpis?.openTasks : undefined,
-      });
+      try {
+        const me = await getMyAdminUser();
+        if (cancelled) return;
+        if (me && (me as any).adminUser) {
+          setAuthState("ok");
+        } else {
+          setAuthState("denied");
+          router.replace("/signin?next=/admin");
+        }
+      } catch {
+        if (cancelled) return;
+        setAuthState("denied");
+        router.replace("/signin?next=/admin");
+      }
     })();
     return () => {
-      mounted = false;
+      cancelled = true;
     };
+  }, [router]);
+
+  const refreshBadges = useCallback(async (scopes?: Set<string>) => {
+    const want = (s: string) => !scopes || scopes.has(s);
+    const [t, d, f, m, o] = await Promise.allSettled([
+      want("tickets") ? getTicketStats() : Promise.resolve(null),
+      want("disputes") ? getDisputeStats() : Promise.resolve(null),
+      want("fraud") ? getFraudStats() : Promise.resolve(null),
+      want("moderation") ? getModerationStats() : Promise.resolve(null),
+      want("tasks") || want("dashboard")
+        ? getDashboardOverview()
+        : Promise.resolve(null),
+    ]);
+    setBadges((prev) => ({
+      ...prev,
+      ...(want("tickets") && {
+        openTickets:
+          t.status === "fulfilled" && t.value
+            ? (t.value as any).openTickets
+            : prev.openTickets,
+      }),
+      ...(want("disputes") && {
+        openDisputes:
+          d.status === "fulfilled" && d.value
+            ? (d.value as any).open + (d.value as any).underReview
+            : prev.openDisputes,
+      }),
+      ...(want("fraud") && {
+        fraudAlerts:
+          f.status === "fulfilled" && f.value
+            ? (f.value as any).openAlerts
+            : prev.fraudAlerts,
+      }),
+      ...(want("moderation") && {
+        moderationQueue:
+          m.status === "fulfilled" && m.value
+            ? (m.value as any).queued
+            : prev.moderationQueue,
+      }),
+      ...((want("tasks") || want("dashboard")) && {
+        openTasks:
+          o.status === "fulfilled" && o.value
+            ? (o.value as any).kpis?.openTasks
+            : prev.openTasks,
+      }),
+    }));
   }, []);
+
+  useEffect(() => {
+    if (authState !== "ok") return;
+    void refreshBadges();
+  }, [authState, refreshBadges]);
+
+  useAdminLiveUpdates(
+    useCallback(
+      (payload) => {
+        if (authState !== "ok") return;
+        void refreshBadges(new Set([payload.scope]));
+      },
+      [authState, refreshBadges],
+    ),
+  );
+
+  if (authState === "checking") {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-400 text-sm">
+        Verifying access…
+      </div>
+    );
+  }
+
+  if (authState === "denied") {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-400 text-sm">
+        Redirecting to sign in…
+      </div>
+    );
+  }
 
   return (
     <AdminDashboardLayout badges={badges}>
@@ -107,48 +189,11 @@ function renderView(view: string) {
       return <ModerationView />;
 
     case "providers":
-      return (
-        <PlaceholderView
-          title="Service Providers"
-          description="Verify, suspend, feature, blacklist and review KYC for service providers."
-          icon={Building2}
-          features={[
-            "Portfolio, services and certifications",
-            "Jobs, ratings and reviews",
-            "Earnings & withdrawal requests",
-            "KYC, compliance documents and background verification",
-            "Provider, performance and risk scores",
-          ]}
-        />
-      );
+      return <ProvidersView />;
     case "clients":
-      return (
-        <PlaceholderView
-          title="Clients"
-          description="Full client profiles with risk score, support history and admin notes."
-          icon={UserCog}
-          features={[
-            "Identity & verification",
-            "Tasks posted & payment history",
-            "Reviews, reports and risk score",
-            "Suspend, ban, verify and add admin notes",
-          ]}
-        />
-      );
+      return <ClientsView />;
     case "tasks":
-      return (
-        <PlaceholderView
-          title="Tasks"
-          description="Approve, reject, feature, promote, archive or escalate marketplace tasks."
-          icon={ListTodo}
-          features={[
-            "Filter by status, category, location, budget, urgency",
-            "Approve, reject, archive, feature, promote",
-            "Escalate to compliance or moderation",
-            "View task timeline and audit trail",
-          ]}
-        />
-      );
+      return <TasksView />;
     case "bookings":
       return (
         <PlaceholderView
