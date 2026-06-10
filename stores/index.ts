@@ -52,6 +52,7 @@ const useGlobalStore = create<GlobalStore>()(
             switchRole: state.switchRole,
             savedProviders: state.savedProviders,
             paramsFrom: state.paramsFrom,
+            error: state.error,
             users: state.users,
             metricsSummary: state.metricsSummary,
             timeSeries: state.timeSeries,

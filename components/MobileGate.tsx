@@ -10,8 +10,15 @@ const PUBLIC_PATHS = [
   "/privacy-policy",
   "/terms-of-service",
   "/providers",
-  "/jobs",
+  "/tasks",
   "/settings/account-control/deletion",
+  "/admin",
+  "/auth/signin",
+  "/auth/signup",
+  "/auth/reset-password",
+  "/auth/forgot-password",
+  "/auth/verify-email",
+  "/admin/mfa/verify",
 ];
 
 function isPublic(pathname: string) {

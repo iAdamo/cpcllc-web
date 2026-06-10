@@ -20,13 +20,13 @@ function getDeepLink(pathname: string): string {
   if (pathname === "/providers") return `${APP_SCHEME}://providers`;
   if (pathname === "/profile") return `${APP_SCHEME}://profile`;
   if (pathname === "/home") return `${APP_SCHEME}://home`;
-  if (pathname === "/jobs") return `${APP_SCHEME}://jobs`;
+  if (pathname === "/tasks") return `${APP_SCHEME}://tasks`;
   if (pathname === "/settings") return `${APP_SCHEME}://settings`;
   return `${APP_SCHEME}://home`;
 }
 
 // Pages where "Open in app" makes contextual sense
-const DEEP_LINK_PAGES = ["/providers", "/profile", "/home", "/jobs", "/settings"];
+const DEEP_LINK_PAGES = ["/providers", "/profile", "/home", "/tasks", "/settings"];
 function shouldShowDeepLink(pathname: string) {
   return DEEP_LINK_PAGES.some((p) => pathname === p || pathname.startsWith("/providers/"));
 }

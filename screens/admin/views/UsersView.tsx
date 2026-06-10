@@ -2,14 +2,21 @@
 
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client/react";
-import { Users, MailCheck, PhoneCall, UserX, UserCheck } from "lucide-react";
+import {
+  Users,
+  MailCheck,
+  PhoneCall,
+  UserX,
+  UserCheck,
+  ShieldCheck,
+  Briefcase,
+} from "lucide-react";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
 import {
   ADMIN_USERS_QUERY,
   ADMIN_USER_QUERY,
-  ADMIN_USER_STATS_QUERY,
   REACTIVATE_USER_MUTATION,
   SUSPEND_USER_MUTATION,
   VERIFY_USER_EMAIL_MUTATION,
@@ -22,16 +29,16 @@ export function UsersView() {
   const [page, setPage] = useState(1);
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const { data: stats } = useQuery(ADMIN_USER_STATS_QUERY);
-
   const filter: Record<string, unknown> = { page, limit: 25 };
   if (search) filter.search = search;
   if (role) filter.role = role;
 
+  // ONE query returns: stats + page + each user's provider (if any).
   const { data, loading, refetch } = useQuery(ADMIN_USERS_QUERY, {
     variables: { filter },
   });
 
+  const stats = data?.adminUserStats;
   const list = data?.adminUsers;
   const items: any[] = list?.items ?? [];
 
@@ -48,11 +55,11 @@ export function UsersView() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <KpiCard label="Total" value={stats?.adminUserStats?.total ?? "—"} tone="blue" />
-        <KpiCard label="Active" value={stats?.adminUserStats?.active ?? "—"} tone="green" />
-        <KpiCard label="Suspended" value={stats?.adminUserStats?.suspended ?? "—"} tone="rose" />
-        <KpiCard label="Unverified" value={stats?.adminUserStats?.unverified ?? "—"} tone="orange" />
-        <KpiCard label="New (30d)" value={stats?.adminUserStats?.newLast30Days ?? "—"} tone="purple" />
+        <KpiCard label="Total" value={stats?.total ?? "—"} tone="blue" />
+        <KpiCard label="Active" value={stats?.active ?? "—"} tone="green" />
+        <KpiCard label="Suspended" value={stats?.suspended ?? "—"} tone="rose" />
+        <KpiCard label="Unverified" value={stats?.unverified ?? "—"} tone="orange" />
+        <KpiCard label="New (30d)" value={stats?.newLast30Days ?? "—"} tone="purple" />
       </div>
 
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
@@ -95,6 +102,7 @@ export function UsersView() {
               <th className="px-5 py-2.5 font-medium">Email</th>
               <th className="px-5 py-2.5 font-medium">Phone</th>
               <th className="px-5 py-2.5 font-medium">Role</th>
+              <th className="px-5 py-2.5 font-medium">Provider</th>
               <th className="px-5 py-2.5 font-medium">Verified</th>
               <th className="px-5 py-2.5 font-medium">Status</th>
               <th className="px-5 py-2.5 font-medium">Joined</th>
@@ -104,20 +112,20 @@ export function UsersView() {
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {loading && items.length === 0 && (
               <tr>
-                <td className="px-5 py-8 text-center text-slate-400" colSpan={8}>
+                <td className="px-5 py-8 text-center text-slate-400" colSpan={9}>
                   Loading users…
                 </td>
               </tr>
             )}
             {!loading && items.length === 0 && (
               <tr>
-                <td className="px-5 py-8 text-center text-slate-400" colSpan={8}>
+                <td className="px-5 py-8 text-center text-slate-400" colSpan={9}>
                   No users found.
                 </td>
               </tr>
             )}
             {items.map((u) => (
-              <tr key={u._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+              <tr key={String(u._id)} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                 <td className="px-5 py-2.5 font-medium text-slate-900 dark:text-white">
                   {u.firstName || u.lastName ? `${u.firstName ?? ""} ${u.lastName ?? ""}` : "—"}
                 </td>
@@ -125,6 +133,21 @@ export function UsersView() {
                 <td className="px-5 py-2.5 text-slate-600 dark:text-slate-300">{u.phoneNumber}</td>
                 <td className="px-5 py-2.5">
                   <StatusPill label={u.activeRole} tone="blue" />
+                </td>
+                <td className="px-5 py-2.5">
+                  {u.provider ? (
+                    <div className="flex items-center gap-1.5 text-xs">
+                      <Briefcase size={12} className="text-slate-400" />
+                      <span className="truncate max-w-[160px] text-slate-700 dark:text-slate-200">
+                        {u.provider.providerName}
+                      </span>
+                      {u.provider.isVerified && (
+                        <ShieldCheck size={12} className="text-emerald-500" />
+                      )}
+                    </div>
+                  ) : (
+                    <span className="text-xs text-slate-400">—</span>
+                  )}
                 </td>
                 <td className="px-5 py-2.5">
                   <div className="flex gap-1">

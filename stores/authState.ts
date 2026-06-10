@@ -47,17 +47,20 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
     set({ isLoading: true, error: null });
     try {
       const response = await login(credentials);
-      if (response) {
+      if (response.ok && response.data) {
         console.log({ response });
         set({
           // currentLocation: null,
-          user: { ...response, accessToken: "" },
-          switchRole: response.activeRole,
+          user: { ...response.data, accessToken: "" },
+          switchRole: response.data.activeRole,
           isAuthenticated: true,
           isLoading: false,
         });
         // await registerForPushNotifications();
         // get().getCurrentLocation();
+      }
+      if (response.mfaRequired) {
+        set({ error: response.message, isLoading: false });
       }
     } catch (error: any) {
       console.log(
@@ -68,7 +71,7 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
           error?.response?.data?.message || error?.message || "Login failed",
         isLoading: false,
       });
-      throw error;
+      // throw error;
     }
   },
 

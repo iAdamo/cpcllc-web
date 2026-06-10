@@ -9,7 +9,6 @@ import { Drawer } from "@/components/admin/Drawer";
 import {
   ADMIN_PROVIDERS_QUERY,
   ADMIN_PROVIDER_QUERY,
-  ADMIN_PROVIDER_STATS_QUERY,
   APPROVE_PROVIDER_KYC_MUTATION,
   REJECT_PROVIDER_KYC_MUTATION,
   SET_PROVIDER_BOOKABLE_MUTATION,
@@ -22,17 +21,16 @@ export function ProvidersView() {
   const [page, setPage] = useState(1);
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const { data: statsData } = useQuery(ADMIN_PROVIDER_STATS_QUERY);
-  const stats = statsData?.adminProviderStats;
-
   const filter: Record<string, unknown> = { page, limit: 25 };
   if (search) filter.search = search;
   if (isVerified) filter.isVerified = isVerified === "true";
 
+  // ONE query: stats + page bundled
   const { data, loading, refetch } = useQuery(ADMIN_PROVIDERS_QUERY, {
     variables: { filter },
   });
 
+  const stats = data?.adminProviderStats;
   const list = data?.adminProviders;
   const items: any[] = list?.items ?? [];
 

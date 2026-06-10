@@ -70,10 +70,25 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
   {
     title: "Trust & Safety",
     items: [
-      { key: "disputes", label: "Disputes", icon: AlertOctagon, badgeKey: "openDisputes" },
-      { key: "moderation", label: "Moderation", icon: ShieldCheck, badgeKey: "moderationQueue" },
+      {
+        key: "disputes",
+        label: "Disputes",
+        icon: AlertOctagon,
+        badgeKey: "openDisputes",
+      },
+      {
+        key: "moderation",
+        label: "Moderation",
+        icon: ShieldCheck,
+        badgeKey: "moderationQueue",
+      },
       { key: "reports", label: "Reports", icon: FileBarChart2 },
-      { key: "fraud", label: "Fraud Detection", icon: ShieldAlert, badgeKey: "fraudAlerts" },
+      {
+        key: "fraud",
+        label: "Fraud Detection",
+        icon: ShieldAlert,
+        badgeKey: "fraudAlerts",
+      },
       { key: "compliance", label: "Compliance", icon: KeyRound },
     ],
   },
@@ -90,7 +105,12 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
   {
     title: "Support",
     items: [
-      { key: "support", label: "Support Tickets", icon: LifeBuoy, badgeKey: "openTickets" },
+      {
+        key: "support",
+        label: "Support Tickets",
+        icon: LifeBuoy,
+        badgeKey: "openTickets",
+      },
       { key: "notifications", label: "Notifications", icon: BellRing },
     ],
   },
@@ -122,7 +142,10 @@ export const SIDEBAR_FOOTER_ITEMS: SidebarItem[] = [
 export const ALL_ITEMS: SidebarItem[] = SIDEBAR_GROUPS.flatMap((g) => g.items);
 
 export function getItem(view: AdminView): SidebarItem | undefined {
-  return ALL_ITEMS.find((i) => i.key === view) ?? SIDEBAR_FOOTER_ITEMS.find((i) => i.key === view);
+  return (
+    ALL_ITEMS.find((i) => i.key === view) ??
+    SIDEBAR_FOOTER_ITEMS.find((i) => i.key === view)
+  );
 }
 
 export { Search };

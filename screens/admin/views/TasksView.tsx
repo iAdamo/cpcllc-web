@@ -9,7 +9,6 @@ import { Drawer } from "@/components/admin/Drawer";
 import {
   ADMIN_TASKS_QUERY,
   ADMIN_TASK_QUERY,
-  ADMIN_TASK_STATS_QUERY,
   ARCHIVE_TASK_MUTATION,
   RESTORE_TASK_MUTATION,
   SET_TASK_STATUS_MUTATION,
@@ -23,17 +22,16 @@ export function TasksView() {
   const [page, setPage] = useState(1);
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const { data: statsData } = useQuery(ADMIN_TASK_STATS_QUERY);
-  const stats = statsData?.adminTaskStats;
-
   const filter: Record<string, unknown> = { page, limit: 25 };
   if (search) filter.search = search;
   if (status) filter.status = status;
 
+  // ONE query: stats + page bundled
   const { data, loading, refetch } = useQuery(ADMIN_TASKS_QUERY, {
     variables: { filter },
   });
 
+  const stats = data?.adminTaskStats;
   const list = data?.adminTasks;
   const items: any[] = list?.items ?? [];
 

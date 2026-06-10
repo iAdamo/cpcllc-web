@@ -108,7 +108,7 @@ export default function ProfileMenu() {
     }
     const next = isProvider ? "Client" : "Provider";
     await setSwitchRole(next);
-    router.replace(next === "Provider" ? "/jobs" : "/providers");
+    router.replace(next === "Provider" ? "/tasks" : "/providers");
     setOpen(false);
   };
 

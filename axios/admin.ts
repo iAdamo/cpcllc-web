@@ -68,7 +68,8 @@ export const getMyAdminUser = async (): Promise<AdminUserMe> => {
   const r = await axiosInstance.get<AdminUserMe>(`admin/rbac/me`);
   return r.data;
 };
-export const listRoles = async () => (await axiosInstance.get(`admin/rbac/roles`)).data;
+export const listRoles = async () =>
+  (await axiosInstance.get(`admin/rbac/roles`)).data;
 export const listAdminUsers = async (params: any = {}) =>
   (await axiosInstance.get(`admin/rbac/admin-users`, { params })).data;
 export const assignAdminRole = async (userId: string, role: string) =>
@@ -89,8 +90,11 @@ export const setTicketStatus = async (id: string, status: string) =>
   (await axiosInstance.patch(`admin/support/tickets/${id}/status`, { status }))
     .data;
 export const assignTicket = async (id: string, assigneeUserId: string) =>
-  (await axiosInstance.patch(`admin/support/tickets/${id}/assign`, { assigneeUserId }))
-    .data;
+  (
+    await axiosInstance.patch(`admin/support/tickets/${id}/assign`, {
+      assigneeUserId,
+    })
+  ).data;
 
 /* ───────── Disputes ───────── */
 export const getDisputeStats = async (): Promise<DisputeStats> =>
@@ -110,8 +114,11 @@ export const getFraudStats = async (): Promise<FraudStats> =>
 export const listFraudEvents = async (params: any = {}) =>
   (await axiosInstance.get(`admin/fraud/events`, { params })).data;
 export const getHighRiskUsers = async (limit = 25) =>
-  (await axiosInstance.get(`admin/fraud/high-risk-users`, { params: { limit } }))
-    .data;
+  (
+    await axiosInstance.get(`admin/fraud/high-risk-users`, {
+      params: { limit },
+    })
+  ).data;
 
 /* ───────── Moderation ───────── */
 export const getModerationStats = async () =>

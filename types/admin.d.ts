@@ -133,21 +133,27 @@ export interface RecentActivities {
 
 export interface SystemHealthSnapshot {
   generatedAt: string;
-  services: Record<string, { status: string; latencyMs?: number | null; error?: string }>;
-  memory: { rssMb: number; heapUsedMb: number; heapTotalMb: number; externalMb: number };
+  services: Record<
+    string,
+    { status: string; latencyMs?: number | null; error?: string }
+  >;
+  memory: {
+    rssMb: number;
+    heapUsedMb: number;
+    heapTotalMb: number;
+    externalMb: number;
+  };
   uptime: { seconds: number; formatted: string };
 }
 
 export interface AdminUserMe {
-  adminUser: {
-    _id: string;
-    user: string;
-    role: string;
-    extraPermissions: string[];
-    deniedPermissions: string[];
-    department?: string;
-    isActive: boolean;
-  } | null;
+  _id: string;
+  user: string;
+  role: string;
+  extraPermissions: string[];
+  deniedPermissions: string[];
+  department?: string;
+  isActive: boolean;
   permissions: string[];
 }
 

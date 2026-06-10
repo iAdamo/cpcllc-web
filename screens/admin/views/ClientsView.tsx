@@ -23,7 +23,7 @@ export function ClientsView() {
   });
 
   const list = data?.adminClients;
-  const items: any[] = list?.items ?? [];
+  const items = list?.items ?? [];
 
   return (
     <div className="space-y-6">

@@ -1,11 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@apollo/client/react";
 import AdminDashboardLayout from "@/components/layout/admin";
 import useGlobalStore from "@/stores";
-import { useAdminLiveUpdates } from "@/hooks/useAdminLiveUpdates";
+import { useAdminCacheBridge } from "@/hooks/useAdminCacheBridge";
 import { getMyAdminUser } from "@/axios/admin";
+import { ADMIN_BADGES_QUERY } from "@/graphql/admin";
 import DashboardView from "@/screens/admin/dashboard-view";
 import { UsersView } from "@/screens/admin/views/UsersView";
 import { ProvidersView } from "@/screens/admin/views/ProvidersView";
@@ -20,6 +22,7 @@ import { RolesView } from "@/screens/admin/views/RolesView";
 import { SubscriptionsView } from "@/screens/admin/views/SubscriptionsView";
 import { SystemHealthView } from "@/screens/admin/views/SystemHealthView";
 import { ModerationView } from "@/screens/admin/views/ModerationView";
+import { SettingsView } from "@/screens/admin/views/SettingsView";
 import { PlaceholderView } from "@/screens/admin/views/PlaceholderView";
 import {
   CalendarCheck,
@@ -40,105 +43,63 @@ import {
   Plug,
   FileText,
 } from "lucide-react";
-import {
-  getTicketStats,
-  getDisputeStats,
-  getFraudStats,
-  getModerationStats,
-  getDashboardOverview,
-} from "@/axios/admin";
+import { AdminUserMe } from "@/types";
 
 const AdminDashboard = () => {
   const router = useRouter();
-  const { activeView } = useGlobalStore();
-  const [badges, setBadges] = useState<Record<string, number | undefined>>({});
+  const { activeView, user } = useGlobalStore();
   const [authState, setAuthState] = useState<"checking" | "ok" | "denied">(
-    "checking",
+    "checking"
   );
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const me = await getMyAdminUser();
-        if (cancelled) return;
-        if (me && (me as any).adminUser) {
-          setAuthState("ok");
-        } else {
-          setAuthState("denied");
-          router.replace("/signin?next=/admin");
-        }
+        // if (
+        //   !user ||
+        //   (user &&
+        //     (user.activeRole !== "Admin" ||
+        //       (user.activeRoleId as AdminUserMe).adminUser.user !== user._id))
+        // )
+        //   return;
+        // if ((user.activeRoleId as AdminUserMe).adminUser) {
+        //   setAuthState("ok");
+        // } else {
+        //   setAuthState("denied");
+        //   router.replace("/");
+        // }
+        if (user.activeRole === "Admin") setAuthState("ok");
       } catch {
         if (cancelled) return;
         setAuthState("denied");
-        router.replace("/signin?next=/admin");
+        router.replace("/");
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [router]);
+  }, [router, user]);
 
-  const refreshBadges = useCallback(async (scopes?: Set<string>) => {
-    const want = (s: string) => !scopes || scopes.has(s);
-    const [t, d, f, m, o] = await Promise.allSettled([
-      want("tickets") ? getTicketStats() : Promise.resolve(null),
-      want("disputes") ? getDisputeStats() : Promise.resolve(null),
-      want("fraud") ? getFraudStats() : Promise.resolve(null),
-      want("moderation") ? getModerationStats() : Promise.resolve(null),
-      want("tasks") || want("dashboard")
-        ? getDashboardOverview()
-        : Promise.resolve(null),
-    ]);
-    setBadges((prev) => ({
-      ...prev,
-      ...(want("tickets") && {
-        openTickets:
-          t.status === "fulfilled" && t.value
-            ? (t.value as any).openTickets
-            : prev.openTickets,
-      }),
-      ...(want("disputes") && {
-        openDisputes:
-          d.status === "fulfilled" && d.value
-            ? (d.value as any).open + (d.value as any).underReview
-            : prev.openDisputes,
-      }),
-      ...(want("fraud") && {
-        fraudAlerts:
-          f.status === "fulfilled" && f.value
-            ? (f.value as any).openAlerts
-            : prev.fraudAlerts,
-      }),
-      ...(want("moderation") && {
-        moderationQueue:
-          m.status === "fulfilled" && m.value
-            ? (m.value as any).queued
-            : prev.moderationQueue,
-      }),
-      ...((want("tasks") || want("dashboard")) && {
-        openTasks:
-          o.status === "fulfilled" && o.value
-            ? (o.value as any).kpis?.openTasks
-            : prev.openTasks,
-      }),
-    }));
-  }, []);
+  // Badges: cache-first by default. First mount populates the cache from
+  // the network; afterwards the cache is the source of truth and only the
+  // websocket cache-bridge below re-fires this query when scopes change.
+  const { data: badgesData } = useQuery(ADMIN_BADGES_QUERY, {
+    skip: authState !== "ok",
+  });
+  const b = badgesData?.adminDashboard?.badges;
+  const badges: Record<string, number | undefined> = {
+    openTickets: b?.openTickets ?? undefined,
+    openDisputes: b?.openDisputes ?? undefined,
+    fraudAlerts: b?.fraudAlerts ?? undefined,
+    moderationQueue: b?.moderationQueue ?? undefined,
+    openTasks: b?.openTasks ?? undefined,
+  };
 
-  useEffect(() => {
-    if (authState !== "ok") return;
-    void refreshBadges();
-  }, [authState, refreshBadges]);
-
-  useAdminLiveUpdates(
-    useCallback(
-      (payload) => {
-        if (authState !== "ok") return;
-        void refreshBadges(new Set([payload.scope]));
-      },
-      [authState, refreshBadges],
-    ),
-  );
+  // One-shot subscriber that re-fires the affected admin queries whenever
+  // the backend emits admin:stats_invalidated. No polling, no per-view
+  // refetch — the cache is the source of truth, sockets keep it fresh.
+  useAdminCacheBridge(authState === "ok");
 
   if (authState === "checking") {
     return (
@@ -227,7 +188,13 @@ function renderView(view: string) {
         />
       );
     case "wallets":
-      return <PlaceholderView title="Wallets" description="Wallet balances and transactions." icon={Wallet} />;
+      return (
+        <PlaceholderView
+          title="Wallets"
+          description="Wallet balances and transactions."
+          icon={Wallet}
+        />
+      );
     case "withdrawals":
       return (
         <PlaceholderView
@@ -245,7 +212,13 @@ function renderView(view: string) {
         />
       );
     case "reviews":
-      return <PlaceholderView title="Reviews" description="Moderate platform reviews." icon={Star} />;
+      return (
+        <PlaceholderView
+          title="Reviews"
+          description="Moderate platform reviews."
+          icon={Star}
+        />
+      );
     case "reports":
       return (
         <PlaceholderView
@@ -295,12 +268,14 @@ function renderView(view: string) {
         />
       );
     case "settings":
-      return (
-        <PlaceholderView title="Settings" description="Platform-wide configuration." icon={Settings} />
-      );
+      return <SettingsView />;
     case "api":
       return (
-        <PlaceholderView title="API Management" description="API keys, rate limits, webhooks." icon={Cable} />
+        <PlaceholderView
+          title="API Management"
+          description="API keys, rate limits, webhooks."
+          icon={Cable}
+        />
       );
     case "integrations":
       return (

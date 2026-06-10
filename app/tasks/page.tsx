@@ -1,11 +1,12 @@
 import { Metadata } from "next";
-import ClientTasksPage from "@/screens/clients/tasks";
+import TasksRouter from "@/screens/tasks/TasksRouter";
 
 export const metadata: Metadata = {
-  title: "My Tasks — CompaniesCenterLLC",
-  description: "Manage your posted tasks and review proposals from providers",
+  title: "Tasks — CompaniesCenterLLC",
+  description:
+    "Tasks — clients manage posts, providers browse open work to bid on.",
 };
 
 export default function Page() {
-  return <ClientTasksPage />;
+  return <TasksRouter />;
 }

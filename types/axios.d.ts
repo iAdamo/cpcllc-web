@@ -1,3 +1,5 @@
+import { UserData, AdminUserMe } from "@types";
+
 export interface RegisterUser {
   email: string;
   phoneNumber: string;
@@ -7,6 +9,16 @@ export interface RegisterUser {
 export interface LoginUser {
   email: string;
   password: string;
+  mfaToken?: string; // For MFA flow
+}
+
+export interface LoginResult {
+  /** Normal successful login — JWT is set via cookie by the backend. */
+  ok: boolean;
+  /** Set when the server says we need an MFA code to finish login. */
+  mfaRequired?: boolean;
+  message?: string;
+  data?: UserData;
 }
 
 export interface DeactivateAccountData {

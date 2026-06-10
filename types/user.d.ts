@@ -1,6 +1,6 @@
 import { SubcategoryData } from "./subcategory";
 import { FileType, MediaItem } from "./media";
-
+import { AdminUserMe } from "./admin";
 
 export type ActiveRole = "Client" | "Provider" | "Admin";
 
@@ -26,7 +26,7 @@ export interface UserData {
   purchasedServices: any[];
   createdAt: string;
   updatedAt: string;
-  activeRoleId?: Partial<ProviderData>;
+  activeRoleId?: Partial<ProviderData> | Partial<AdminUserMe> | null;
   isVerified: boolean;
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
@@ -41,6 +41,7 @@ export interface UserData {
   }[];
   hiredCompanies: ProviderData[];
   owner: string;
+  isActive: boolean;
 }
 
 export interface ProviderData {

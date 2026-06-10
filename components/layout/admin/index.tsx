@@ -16,7 +16,13 @@ interface Props {
   badges?: Record<string, number | undefined>;
 }
 
-const SidebarHeader = ({ collapsed, toggle }: { collapsed: boolean; toggle: () => void }) => (
+const SidebarHeader = ({
+  collapsed,
+  toggle,
+}: {
+  collapsed: boolean;
+  toggle: () => void;
+}) => (
   <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
     {!collapsed && (
       <div className="flex items-center gap-2">
@@ -24,7 +30,9 @@ const SidebarHeader = ({ collapsed, toggle }: { collapsed: boolean; toggle: () =
           C
         </div>
         <div className="flex flex-col leading-tight">
-          <span className="text-sm font-bold text-slate-900 dark:text-white">CompaniesCenter</span>
+          <span className="text-sm font-bold text-slate-900 dark:text-white">
+            CompaniesCenter
+          </span>
           <span className="text-[10px] uppercase tracking-wider text-blue-600 dark:text-blue-400 font-medium">
             Admin Console
           </span>
@@ -65,8 +73,8 @@ const SidebarItem = ({
   const state = active
     ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-medium"
     : danger
-      ? "text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
-      : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60";
+    ? "text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
+    : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60";
   return (
     <button
       type="button"
@@ -140,7 +148,11 @@ const Sidebar = ({
           key={item.key}
           active={false}
           collapsed={collapsed}
-          onClick={() => setActiveView(item.key)}
+          onClick={() =>
+            item.label === "Logout"
+              ? useGlobalStore.getState().logout()
+              : setActiveView(item.key)
+          }
           Icon={item.icon}
           label={item.label}
           danger
@@ -204,7 +216,9 @@ const TopBar = ({
             JD
           </div>
           <div className="hidden sm:flex flex-col leading-tight">
-            <span className="text-xs font-semibold text-slate-900 dark:text-white">John Admin</span>
+            <span className="text-xs font-semibold text-slate-900 dark:text-white">
+              John Admin
+            </span>
             <span className="text-[10px] text-slate-500">Super Admin</span>
           </div>
         </div>
@@ -214,7 +228,8 @@ const TopBar = ({
 };
 
 export default function AdminDashboardLayout({ children, badges }: Props) {
-  const { activeView, setActiveView, sidebarOpen, toggleSidebar } = useGlobalStore();
+  const { activeView, setActiveView, sidebarOpen, toggleSidebar } =
+    useGlobalStore();
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
@@ -226,7 +241,7 @@ export default function AdminDashboardLayout({ children, badges }: Props) {
 
   const totalNotifications = useMemo(
     () => Object.values(badges ?? {}).reduce((a: number, b) => a + (b ?? 0), 0),
-    [badges],
+    [badges]
   );
 
   return (

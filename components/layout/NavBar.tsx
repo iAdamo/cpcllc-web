@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import useGlobalStore from "@/stores";
-import AuthModalManager from "@/screens/auth/AuthModalManager";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useTranslation } from "@/context/TranslationContext";
 
@@ -140,7 +139,6 @@ function JobsNavSearch() {
 const NavBar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
 
   const { user, logout, isAuthenticated } = useGlobalStore();
@@ -152,7 +150,7 @@ const NavBar = () => {
 
   const isHome = pathname === "/";
   const isProviders = pathname === "/providers";
-  const isJobs = pathname === "/jobs";
+  const isTasks = pathname === "/tasks";
 
   useEffect(() => {
     setMounted(true);
@@ -185,13 +183,13 @@ const NavBar = () => {
         },
         {
           label: t("jobs"),
-          href: "/jobs",
-          show: isAuthenticated && !isJobs && user?.activeRole === "Provider",
+          href: "/tasks",
+          show: isAuthenticated && !isTasks && user?.activeRole === "Provider",
         },
         {
           label: "Register your business",
           href: "/onboarding",
-          show: !user?.activeRoleId?._id && !isJobs,
+          show: !user?.activeRoleId?._id && !isTasks,
         },
         {
           label: t("how_it_works"),
@@ -199,7 +197,7 @@ const NavBar = () => {
           show: !isAuthenticated || pathname !== "/how-it-works",
         },
       ].filter((l) => l.show),
-    [t, isAuthenticated, pathname, user, isProviders, isJobs]
+    [t, isAuthenticated, pathname, user, isProviders, isTasks]
   );
 
   return (
@@ -230,9 +228,9 @@ const NavBar = () => {
           {/* Location chip — left side, authenticated only */}
           <LocationChip transparent={transparent} />
 
-          {/* Center: search on /jobs, nav links elsewhere */}
+          {/* Center: search on /tasks, nav links elsewhere */}
           <div className="hidden md:flex flex-1 items-center justify-center min-w-0 px-4">
-            {isJobs ? (
+            {isTasks ? (
               <JobsNavSearch />
             ) : (
               <div className="flex items-center gap-1">
@@ -383,7 +381,7 @@ const NavBar = () => {
               <>
                 <button
                   type="button"
-                  onClick={() => setAuthOpen(true)}
+                  onClick={() => router.push("/auth/signin")}
                   className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                     transparent
                       ? "text-white border border-white/30 hover:bg-white/10"
@@ -418,8 +416,8 @@ const NavBar = () => {
           </button>
         </div>
 
-        {/* Mobile: search bar on /jobs */}
-        {isJobs && (
+        {/* Mobile: search bar on /tasks */}
+        {isTasks && (
           <div className="md:hidden px-4 pb-3">
             <JobsNavSearch />
           </div>
@@ -489,7 +487,7 @@ const NavBar = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          setAuthOpen(true);
+                          router.push("/auth/signin");
                           setMobileOpen(false);
                         }}
                         className="w-full py-3.5 text-center font-semibold text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl"
@@ -565,12 +563,6 @@ const NavBar = () => {
           )}
         </AnimatePresence>
       </nav>
-
-      <AuthModalManager
-        isModalOpen={authOpen}
-        onClose={() => setAuthOpen(false)}
-        initialView="signIn"
-      />
     </>
   );
 };

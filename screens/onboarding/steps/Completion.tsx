@@ -30,7 +30,7 @@ export default function Completion() {
       if (cancelled) return;
       if (ok) {
         setSubmitted(true);
-        router.replace("/jobs");
+        router.replace("/tasks");
       } else {
         setFailed(true);
       }

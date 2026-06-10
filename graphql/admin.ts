@@ -24,6 +24,15 @@ export interface AdminUserRow {
   isDeleted: boolean;
   averageRating: number;
   createdAt: string;
+  /** Provider profile if this user owns one. Lazily resolved server-side. */
+  provider?: {
+    _id: string;
+    providerName?: string;
+    isVerified?: boolean;
+    isFeatured?: boolean;
+    isBookable?: boolean;
+    averageRating?: number;
+  } | null;
 }
 
 export interface AdminUserDetail extends AdminUserRow {
@@ -123,11 +132,30 @@ interface IdVars {
 
 /* ─── Users ─── */
 
+/**
+ * Bundled users view: stats + page + each row's provider record (if any) in
+ * a single GraphQL document → one HTTP round-trip.
+ */
 export const ADMIN_USERS_QUERY: TypedDocumentNode<
-  { adminUsers: AdminConnection<AdminUserRow> },
+  {
+    adminUserStats: AdminUserStatsShape;
+    adminUsers: AdminConnection<AdminUserRow>;
+  },
   FilterVars
 > = gql`
-  query AdminUsers($filter: AdminUsersFilter) {
+  query AdminUsersView($filter: AdminUsersFilter) {
+    adminUserStats {
+      total
+      active
+      suspended
+      unverified
+      newLast30Days
+      byRole {
+        clients
+        providers
+        admins
+      }
+    }
     adminUsers(filter: $filter) {
       total
       page
@@ -147,6 +175,14 @@ export const ADMIN_USERS_QUERY: TypedDocumentNode<
         isDeleted
         averageRating
         createdAt
+        provider {
+          _id
+          providerName
+          isVerified
+          isFeatured
+          isBookable
+          averageRating
+        }
       }
     }
   }
@@ -189,6 +225,7 @@ export const ADMIN_USER_QUERY: TypedDocumentNode<
   }
 `;
 
+/** @deprecated stats are now returned inline by ADMIN_USERS_QUERY. */
 export const ADMIN_USER_STATS_QUERY: TypedDocumentNode<
   { adminUserStats: AdminUserStatsShape }
 > = gql`
@@ -298,10 +335,21 @@ export const ADMIN_CLIENT_QUERY: TypedDocumentNode<
 /* ─── Providers ─── */
 
 export const ADMIN_PROVIDERS_QUERY: TypedDocumentNode<
-  { adminProviders: AdminConnection<AdminProviderRow> },
+  {
+    adminProviderStats: AdminProviderStatsShape;
+    adminProviders: AdminConnection<AdminProviderRow>;
+  },
   FilterVars
 > = gql`
-  query AdminProviders($filter: AdminProvidersFilter) {
+  query AdminProvidersView($filter: AdminProvidersFilter) {
+    adminProviderStats {
+      total
+      verified
+      featured
+      bookable
+      newLast30Days
+      pendingKyc
+    }
     adminProviders(filter: $filter) {
       total
       page
@@ -368,6 +416,7 @@ export const ADMIN_PROVIDER_QUERY: TypedDocumentNode<
   }
 `;
 
+/** @deprecated stats are now returned inline by ADMIN_PROVIDERS_QUERY. */
 export const ADMIN_PROVIDER_STATS_QUERY: TypedDocumentNode<
   { adminProviderStats: AdminProviderStatsShape }
 > = gql`
@@ -422,10 +471,24 @@ export const SET_PROVIDER_BOOKABLE_MUTATION = gql`
 /* ─── Tasks ─── */
 
 export const ADMIN_TASKS_QUERY: TypedDocumentNode<
-  { adminTasks: AdminConnection<AdminTaskRow> },
+  {
+    adminTaskStats: AdminTaskStatsShape;
+    adminTasks: AdminConnection<AdminTaskRow>;
+  },
   FilterVars
 > = gql`
-  query AdminTasks($filter: AdminTasksFilter) {
+  query AdminTasksView($filter: AdminTasksFilter) {
+    adminTaskStats {
+      total
+      newLast30Days
+      byStatus {
+        active
+        inProgress
+        completed
+        cancelled
+        expired
+      }
+    }
     adminTasks(filter: $filter) {
       total
       page
@@ -500,6 +563,7 @@ export const ADMIN_TASK_QUERY: TypedDocumentNode<
   }
 `;
 
+/** @deprecated stats are now returned inline by ADMIN_TASKS_QUERY. */
 export const ADMIN_TASK_STATS_QUERY: TypedDocumentNode<
   { adminTaskStats: AdminTaskStatsShape }
 > = gql`
@@ -541,6 +605,226 @@ export const RESTORE_TASK_MUTATION = gql`
     restoreAdminTask(id: $id) {
       _id
       isActive
+    }
+  }
+`;
+
+/* ─── Dashboard bundle: one query for everything the dashboard needs ─── */
+
+export interface AdminDashboardShape {
+  overview: {
+    kpis: {
+      totalUsers?: number;
+      activeUsers24h?: number;
+      newUsersLast30?: number;
+      providers?: number;
+      clients?: number;
+      tasksPosted?: number;
+      tasksCompleted?: number;
+      openTasks?: number;
+      avgRating?: number;
+    };
+    taskStatusBreakdown: { status?: string; count: number }[];
+  };
+  ticketStats: {
+    openTickets: number;
+    waitingUser: number;
+    escalated: number;
+    resolved: number;
+    slaBreached: number;
+    avgFirstResponseMinutes?: number;
+    avgResolutionMinutes?: number;
+  };
+  disputeStats: {
+    open: number;
+    underReview: number;
+    escalated: number;
+    resolved: number;
+    awaiting: number;
+  };
+  fraudStats: { openAlerts: number; highRisk: number; criticalRisk: number; last24h: number };
+  moderationStats: {
+    queued: number;
+    reviewing: number;
+    actioned: number;
+    dismissed: number;
+    escalated: number;
+  };
+  subscriptionStats: {
+    active: number;
+    trialing: number;
+    pastDue: number;
+    cancelled: number;
+    mrrCents: number;
+  };
+  badges: {
+    openTickets?: number;
+    openDisputes?: number;
+    fraudAlerts?: number;
+    moderationQueue?: number;
+    openTasks?: number;
+  };
+  recentActivities: {
+    recentUsers: {
+      _id: string;
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+      activeRole?: string;
+      createdAt?: string;
+    }[];
+    recentTasks: {
+      _id: string;
+      title?: string;
+      budget?: number;
+      status?: string;
+      createdAt?: string;
+      clientName?: string;
+      providerName?: string;
+    }[];
+    recentProviders: {
+      _id: string;
+      providerName?: string;
+      isVerified?: boolean;
+      isFeatured?: boolean;
+      averageRating?: number;
+      reviewCount?: number;
+      createdAt?: string;
+    }[];
+  };
+  topProviders: AdminDashboardShape["recentActivities"]["recentProviders"];
+  recentTasks: AdminDashboardShape["recentActivities"]["recentTasks"];
+}
+
+export const ADMIN_DASHBOARD_QUERY: TypedDocumentNode<{
+  adminDashboard: AdminDashboardShape;
+}> = gql`
+  query AdminDashboard {
+    adminDashboard {
+      overview {
+        kpis {
+          totalUsers
+          activeUsers24h
+          newUsersLast30
+          providers
+          clients
+          tasksPosted
+          tasksCompleted
+          openTasks
+          avgRating
+        }
+        taskStatusBreakdown {
+          status
+          count
+        }
+      }
+      ticketStats {
+        openTickets
+        waitingUser
+        escalated
+        resolved
+        slaBreached
+        avgFirstResponseMinutes
+        avgResolutionMinutes
+      }
+      disputeStats {
+        open
+        underReview
+        escalated
+        resolved
+        awaiting
+      }
+      fraudStats {
+        openAlerts
+        highRisk
+        criticalRisk
+        last24h
+      }
+      moderationStats {
+        queued
+        reviewing
+        actioned
+        dismissed
+        escalated
+      }
+      subscriptionStats {
+        active
+        trialing
+        pastDue
+        cancelled
+        mrrCents
+      }
+      badges {
+        openTickets
+        openDisputes
+        fraudAlerts
+        moderationQueue
+        openTasks
+      }
+      recentActivities {
+        recentUsers {
+          _id
+          firstName
+          lastName
+          email
+          activeRole
+          createdAt
+        }
+        recentTasks {
+          _id
+          title
+          budget
+          status
+          createdAt
+          clientName
+          providerName
+        }
+        recentProviders {
+          _id
+          providerName
+          isVerified
+          isFeatured
+          averageRating
+          reviewCount
+          createdAt
+        }
+      }
+      topProviders {
+        _id
+        providerName
+        isVerified
+        isFeatured
+        averageRating
+        reviewCount
+        createdAt
+      }
+      recentTasks {
+        _id
+        title
+        budget
+        status
+        createdAt
+        clientName
+        providerName
+      }
+    }
+  }
+`;
+
+/* ─── Smaller "badges only" subset for the sidebar refetch ─── */
+
+export const ADMIN_BADGES_QUERY: TypedDocumentNode<{
+  adminDashboard: { badges: AdminDashboardShape["badges"] };
+}> = gql`
+  query AdminBadges {
+    adminDashboard {
+      badges {
+        openTickets
+        openDisputes
+        fraudAlerts
+        moderationQueue
+        openTasks
+      }
     }
   }
 `;

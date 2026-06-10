@@ -7,18 +7,30 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Star, MapPin, ArrowRight, Heart, CheckCircle } from "lucide-react";
 import { globalSearch } from "@/axios/search";
-import { CompanyData } from "@/types";
+import { MediaItem, ProviderData } from "@/types";
 import { useTranslation } from "@/context/TranslationContext";
 
 const filters = ["All", "Top Rated", "Verified", "Open Now"] as const;
 type Filter = (typeof filters)[number];
 
 async function fetchProviders() {
-  const { data } = await globalSearch({ model: "providers", page: 1, limit: 8, engine: false });
-  return data.providers as unknown as CompanyData[];
+  // const { data } = await globalSearch({
+  //   model: "providers",
+  //   page: 1,
+  //   limit: 8,
+  //   engine: false,
+  // });
+  // return data.providers as unknown as ProviderData[];
+  return [] as ProviderData[];
 }
 
-const ProviderCard = ({ provider, index }: { provider: CompanyData; index: number }) => {
+const ProviderCard = ({
+  provider,
+  index,
+}: {
+  provider: ProviderData;
+  index: number;
+}) => {
   const [saved, setSaved] = useState(false);
 
   return (
@@ -26,14 +38,21 @@ const ProviderCard = ({ provider, index }: { provider: CompanyData; index: numbe
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.45, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: 0.45,
+        delay: index * 0.07,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       <Link href={`/providers/${provider._id}`} className="group block">
         <div className="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-400 hover:-translate-y-2 border border-gray-100 dark:border-gray-800">
           {/* Image */}
           <div className="relative h-52 overflow-hidden bg-gray-100 dark:bg-gray-800">
             <Image
-              src={provider?.providerImages?.[0] || "/assets/men.jpg"}
+              src={
+                (provider?.providerImages?.[0] as MediaItem).thumbnail ||
+                "/assets/men.jpg"
+              }
               alt={provider?.providerName || "Provider"}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -43,11 +62,18 @@ const ProviderCard = ({ provider, index }: { provider: CompanyData; index: numbe
             {/* Save button */}
             <button
               type="button"
-              onClick={(e) => { e.preventDefault(); setSaved((v) => !v); }}
+              onClick={(e) => {
+                e.preventDefault();
+                setSaved((v) => !v);
+              }}
               className="absolute top-3 left-3 w-8 h-8 bg-white/90 dark:bg-gray-900/90 rounded-full flex items-center justify-center shadow-md transition-transform active:scale-90"
               aria-label="Save provider"
             >
-              <Heart size={14} fill={saved ? "#ef4444" : "none"} color={saved ? "#ef4444" : "#6b7280"} />
+              <Heart
+                size={14}
+                fill={saved ? "#ef4444" : "none"}
+                color={saved ? "#ef4444" : "#6b7280"}
+              />
             </button>
 
             {/* Rating badge */}
@@ -64,7 +90,9 @@ const ProviderCard = ({ provider, index }: { provider: CompanyData; index: numbe
             <div className="absolute bottom-3 left-3">
               <div className="flex items-center gap-1 bg-emerald-500 px-2 py-0.5 rounded-full">
                 <CheckCircle size={9} className="text-white" />
-                <span className="text-[9px] font-black text-white uppercase tracking-wide">Verified</span>
+                <span className="text-[9px] font-black text-white uppercase tracking-wide">
+                  Verified
+                </span>
               </div>
             </div>
 
@@ -81,7 +109,8 @@ const ProviderCard = ({ provider, index }: { provider: CompanyData; index: numbe
             <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 mb-3">
               <MapPin size={12} className="text-blue-500 flex-shrink-0" />
               <span className="text-sm line-clamp-1">
-                {provider?.location?.primary?.address?.address ?? "Location not specified"}
+                {provider?.location?.primary?.address?.address ??
+                  "Location not specified"}
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -90,14 +119,24 @@ const ProviderCard = ({ provider, index }: { provider: CompanyData; index: numbe
                   <Star
                     key={i}
                     size={12}
-                    fill={i < Math.floor(provider?.averageRating ?? 0) ? "#f59e0b" : "#e5e7eb"}
-                    color={i < Math.floor(provider?.averageRating ?? 0) ? "#f59e0b" : "#e5e7eb"}
+                    fill={
+                      i < Math.floor(provider?.averageRating ?? 0)
+                        ? "#f59e0b"
+                        : "#e5e7eb"
+                    }
+                    color={
+                      i < Math.floor(provider?.averageRating ?? 0)
+                        ? "#f59e0b"
+                        : "#e5e7eb"
+                    }
                   />
                 ))}
               </div>
               <span className="text-xs text-gray-400 dark:text-gray-500">
                 {provider?.reviewCount
-                  ? `${provider.reviewCount} review${provider.reviewCount !== 1 ? "s" : ""}`
+                  ? `${provider.reviewCount} review${
+                      provider.reviewCount !== 1 ? "s" : ""
+                    }`
                   : "No reviews yet"}
               </span>
             </div>
@@ -159,7 +198,10 @@ export default function ProvidersSection() {
             className="hidden md:flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-bold text-sm hover:underline group flex-shrink-0"
           >
             {t("browseCompanies")}
-            <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight
+              size={15}
+              className="group-hover:translate-x-0.5 transition-transform"
+            />
           </Link>
         </div>
 
@@ -185,7 +227,9 @@ export default function ProvidersSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {isLoading
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
-            : providers.map((p, i) => <ProviderCard key={p._id ?? i} provider={p} index={i} />)}
+            : providers.map((p, i) => (
+                <ProviderCard key={p._id ?? i} provider={p} index={i} />
+              ))}
         </div>
 
         {/* Mobile CTA */}

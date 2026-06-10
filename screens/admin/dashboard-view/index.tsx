@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client/react";
 import {
   Users,
   Building2,
@@ -15,17 +16,8 @@ import {
   TrendingUp,
   CheckCircle2,
 } from "lucide-react";
-import {
-  getDashboardOverview,
-  getRecentActivities,
-  getTopProviders,
-  getRecentTasks,
-  getSystemHealth,
-  getTicketStats,
-  getDisputeStats,
-  getFraudStats,
-  getSubscriptionStats,
-} from "@/axios/admin";
+import { getSystemHealth } from "@/axios/admin";
+import { ADMIN_DASHBOARD_QUERY } from "@/graphql/admin";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { PanelCard } from "@/components/admin/PanelCard";
 import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
@@ -53,50 +45,31 @@ const TASK_STATUS_COLORS: Record<string, string> = {
 };
 
 export default function DashboardView() {
-  const [overview, setOverview] = useState<any>(null);
-  const [recent, setRecent] = useState<any>(null);
-  const [topProviders, setTopProviders] = useState<any[]>([]);
-  const [recentTasks, setRecentTasks] = useState<any[]>([]);
-  const [health, setHealth] = useState<any>(null);
-  const [tickets, setTickets] = useState<any>(null);
-  const [disputes, setDisputes] = useState<any>(null);
-  const [fraud, setFraud] = useState<any>(null);
-  const [subs, setSubs] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, loading } = useQuery(ADMIN_DASHBOARD_QUERY);
+  const dashboard = data?.adminDashboard;
 
+  // System health stays REST — it's a small, non-stats endpoint kept off the bundle.
+  const [health, setHealth] = useState<any>(null);
   useEffect(() => {
     let mounted = true;
-    (async () => {
-      try {
-        const [ov, rc, tp, rt, sh, ts, ds, fs, ss] = await Promise.allSettled([
-          getDashboardOverview(),
-          getRecentActivities(6),
-          getTopProviders(5),
-          getRecentTasks(6),
-          getSystemHealth(),
-          getTicketStats(),
-          getDisputeStats(),
-          getFraudStats(),
-          getSubscriptionStats(),
-        ]);
-        if (!mounted) return;
-        if (ov.status === "fulfilled") setOverview(ov.value);
-        if (rc.status === "fulfilled") setRecent(rc.value);
-        if (tp.status === "fulfilled") setTopProviders(tp.value as any[]);
-        if (rt.status === "fulfilled") setRecentTasks(rt.value as any[]);
-        if (sh.status === "fulfilled") setHealth(sh.value);
-        if (ts.status === "fulfilled") setTickets(ts.value);
-        if (ds.status === "fulfilled") setDisputes(ds.value);
-        if (fs.status === "fulfilled") setFraud(fs.value);
-        if (ss.status === "fulfilled") setSubs(ss.value);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
+    getSystemHealth()
+      .then((s) => {
+        if (mounted) setHealth(s);
+      })
+      .catch(() => {});
     return () => {
       mounted = false;
     };
   }, []);
+
+  const overview = dashboard?.overview;
+  const recent = dashboard?.recentActivities;
+  const topProviders = dashboard?.topProviders ?? [];
+  const recentTasks = dashboard?.recentTasks ?? [];
+  const tickets = dashboard?.ticketStats;
+  const disputes = dashboard?.disputeStats;
+  const fraud = dashboard?.fraudStats;
+  const subs = dashboard?.subscriptionStats;
 
   const kpis = overview?.kpis ?? {};
 
@@ -154,7 +127,7 @@ export default function DashboardView() {
         />
         <KpiCard
           label="Active Subscriptions"
-          value={loading ? "—" : (subs?.activeSubscriptions ?? 0).toLocaleString()}
+          value={loading ? "—" : (subs?.active ?? 0).toLocaleString()}
           delta={18.7}
           icon={Receipt}
           tone="purple"
@@ -285,12 +258,12 @@ export default function DashboardView() {
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {recentTasks.slice(0, 6).map((t: any) => (
-                  <tr key={t._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <tr key={String(t._id)} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                     <td className="px-5 py-2 font-medium text-slate-900 dark:text-white">
                       {t.title}
                     </td>
                     <td className="px-5 py-2 text-slate-600 dark:text-slate-300">
-                      {t.userId?.firstName} {t.userId?.lastName}
+                      {t.clientName ?? "—"}
                     </td>
                     <td className="px-5 py-2 text-slate-600 dark:text-slate-300">
                       ₦{(t.budget ?? 0).toLocaleString()}
@@ -359,7 +332,7 @@ export default function DashboardView() {
               <p className="text-sm text-slate-400">No providers yet.</p>
             )}
             {topProviders.map((p: any) => (
-              <div key={p._id} className="flex items-center gap-3">
+              <div key={String(p._id)} className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 text-white text-xs font-semibold flex items-center justify-center">
                   {p.providerName?.slice(0, 2).toUpperCase()}
                 </div>
@@ -383,7 +356,7 @@ export default function DashboardView() {
         <PanelCard title="Recent Activities">
           <div className="space-y-3">
             {(recent?.recentUsers ?? []).slice(0, 5).map((u: any) => (
-              <div key={u._id} className="flex items-center gap-3">
+              <div key={String(u._id)} className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-xs font-semibold flex items-center justify-center">
                   {(u.firstName?.[0] ?? "?") + (u.lastName?.[0] ?? "")}
                 </div>
