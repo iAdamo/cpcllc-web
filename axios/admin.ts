@@ -2,8 +2,6 @@ import { ApiClientSingleton } from "@/axios/conf";
 import type {
   MetricsResponse,
   MetricsRequest,
-  DashboardOverview,
-  RecentActivities,
   SystemHealthSnapshot,
   AdminUserMe,
   TicketStats,
@@ -11,8 +9,147 @@ import type {
   FraudStats,
   SubscriptionStats,
 } from "@/types";
+import type {
+  AdminClientsBundle,
+  AdminOverviewShape,
+  AdminProviderDetail,
+  AdminProvidersBundle,
+  AdminTaskDetail,
+  AdminTasksBundle,
+  AdminUserDetail,
+  AdminUsersBundle,
+} from "@/types/admin-marketplace";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
+
+/* ───────── Admin overview (bundled dashboard) ───────── */
+export const getAdminOverview = async (): Promise<AdminOverviewShape> => {
+  const r = await axiosInstance.get<AdminOverviewShape>(`admin/overview`);
+  return r.data;
+};
+
+/* ───────── Admin marketplace — bundled list reads ───────── */
+export const getAdminUsersView = async (
+  params: Record<string, unknown>
+): Promise<AdminUsersBundle> => {
+  const r = await axiosInstance.get<AdminUsersBundle>(
+    `admin/marketplace/users`,
+    { params }
+  );
+  return r.data;
+};
+
+export const getAdminUserDetail = async (
+  id: string
+): Promise<AdminUserDetail> => {
+  const r = await axiosInstance.get<AdminUserDetail>(
+    `admin/marketplace/users/${id}`
+  );
+  return r.data;
+};
+
+export const getAdminProvidersView = async (
+  params: Record<string, unknown>
+): Promise<AdminProvidersBundle> => {
+  const r = await axiosInstance.get<AdminProvidersBundle>(
+    `admin/marketplace/providers`,
+    { params }
+  );
+  return r.data;
+};
+
+export const getAdminProviderDetail = async (
+  id: string
+): Promise<AdminProviderDetail> => {
+  const r = await axiosInstance.get<AdminProviderDetail>(
+    `admin/marketplace/providers/${id}`
+  );
+  return r.data;
+};
+
+export const getAdminClientsView = async (
+  params: Record<string, unknown>
+): Promise<AdminClientsBundle> => {
+  const r = await axiosInstance.get<AdminClientsBundle>(
+    `admin/marketplace/clients`,
+    { params }
+  );
+  return r.data;
+};
+
+export const getAdminClientDetail = async (
+  id: string
+): Promise<AdminUserDetail> => {
+  const r = await axiosInstance.get<AdminUserDetail>(
+    `admin/marketplace/clients/${id}`
+  );
+  return r.data;
+};
+
+export const getAdminTasksView = async (
+  params: Record<string, unknown>
+): Promise<AdminTasksBundle> => {
+  const r = await axiosInstance.get<AdminTasksBundle>(
+    `admin/marketplace/tasks`,
+    { params }
+  );
+  return r.data;
+};
+
+export const getAdminTaskDetail = async (
+  id: string
+): Promise<AdminTaskDetail> => {
+  const r = await axiosInstance.get<AdminTaskDetail>(
+    `admin/marketplace/tasks/${id}`
+  );
+  return r.data;
+};
+
+/* ───────── Admin marketplace — mutations ───────── */
+export const suspendAdminUser = async (id: string, reason: string) =>
+  (
+    await axiosInstance.patch(`admin/marketplace/users/${id}/suspend`, {
+      reason,
+    })
+  ).data;
+export const reactivateAdminUser = async (id: string) =>
+  (await axiosInstance.patch(`admin/marketplace/users/${id}/reactivate`)).data;
+export const verifyAdminUserEmail = async (id: string) =>
+  (await axiosInstance.patch(`admin/marketplace/users/${id}/verify-email`))
+    .data;
+export const verifyAdminUserPhone = async (id: string) =>
+  (await axiosInstance.patch(`admin/marketplace/users/${id}/verify-phone`))
+    .data;
+
+export const approveProviderKyc = async (id: string) =>
+  (await axiosInstance.patch(`admin/marketplace/providers/${id}/kyc-approve`))
+    .data;
+export const rejectProviderKyc = async (id: string) =>
+  (await axiosInstance.patch(`admin/marketplace/providers/${id}/kyc-reject`))
+    .data;
+export const setProviderFeatured = async (id: string, featured: boolean) =>
+  (
+    await axiosInstance.patch(`admin/marketplace/providers/${id}/feature`, {
+      featured,
+    })
+  ).data;
+export const setProviderBookable = async (id: string, bookable: boolean) =>
+  (
+    await axiosInstance.patch(`admin/marketplace/providers/${id}/bookable`, {
+      bookable,
+    })
+  ).data;
+
+export const setAdminTaskStatus = async (id: string, status: string) =>
+  (
+    await axiosInstance.patch(`admin/marketplace/tasks/${id}/status`, {
+      status,
+    })
+  ).data;
+export const archiveAdminTask = async (id: string) =>
+  (await axiosInstance.patch(`admin/marketplace/tasks/${id}/archive`)).data;
+export const restoreAdminTask = async (id: string) =>
+  (await axiosInstance.patch(`admin/marketplace/tasks/${id}/restore`)).data;
 
 /* ───────── Legacy metrics ───────── */
 export const getMetrics = async (
@@ -24,41 +161,10 @@ export const getMetrics = async (
   return response.data;
 };
 
-/* ───────── Dashboard overview ───────── */
-export const getDashboardOverview = async (): Promise<DashboardOverview> => {
-  const r = await axiosInstance.get<DashboardOverview>(
-    `admin/dashboard/overview`
-  );
-  return r.data;
-};
-
-export const getRecentActivities = async (
-  limit = 10
-): Promise<RecentActivities> => {
-  const r = await axiosInstance.get<RecentActivities>(
-    `admin/dashboard/recent-activities`,
-    { params: { limit } }
-  );
-  return r.data;
-};
-
-export const getTopProviders = async (limit = 10) => {
-  const r = await axiosInstance.get(`admin/dashboard/top-providers`, {
-    params: { limit },
-  });
-  return r.data;
-};
-
-export const getRecentTasks = async (limit = 10) => {
-  const r = await axiosInstance.get(`admin/dashboard/recent-tasks`, {
-    params: { limit },
-  });
-  return r.data;
-};
-
+/* ───────── System health (standalone — overview bundle also includes it) ───────── */
 export const getSystemHealth = async (): Promise<SystemHealthSnapshot> => {
   const r = await axiosInstance.get<SystemHealthSnapshot>(
-    `admin/dashboard/system-health`
+    `admin/overview/health`
   );
   return r.data;
 };

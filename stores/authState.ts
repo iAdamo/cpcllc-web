@@ -14,8 +14,8 @@ import { deactivateUser, logout } from "@/axios/auth";
 // import { socketService } from "@/services/socketService";
 
 export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
-  set
-  // get
+  set,
+  get,
 ) => ({
   user: null,
   isAuthenticated: false,
@@ -55,6 +55,7 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
           switchRole: response.data.activeRole,
           isAuthenticated: true,
           isLoading: false,
+          error: null,
         });
         // await registerForPushNotifications();
         // get().getCurrentLocation();
@@ -173,6 +174,9 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
       await deactivateUser(data);
     }
     await logout();
+    // Clear all admin data — back-office caches must not survive sign-out
+    // because the next session may be a different user (or a non-admin).
+    (get() as any).clearAdminCache?.();
     set({
       user: null,
       isAuthenticated: false,

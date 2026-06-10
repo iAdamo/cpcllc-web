@@ -18,7 +18,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import useGlobalStore from "@/stores";
-import { MediaItem } from "@/types";
+import { MediaItem, ProviderData } from "@/types";
 
 type AvatarVariant = "sm" | "md";
 
@@ -39,18 +39,22 @@ function Avatar({ variant = "sm" }: { variant?: AvatarVariant }) {
   if (!user) return null;
 
   const cls = AVATAR_CLASSES[variant];
-  const isProvider = switchRole === "Provider";
+  const provider =
+    switchRole === "Provider"
+      ? (user.activeRoleId as ProviderData | null)
+      : null;
+  const isProvider = Boolean(provider);
   const logoSrc = isProvider
-    ? typeof (user.activeRoleId?.providerLogo as MediaItem)?.thumbnail ===
+    ? typeof (provider?.providerLogo as MediaItem | undefined)?.thumbnail ===
       "string"
-      ? (user.activeRoleId?.providerLogo as MediaItem).thumbnail
+      ? (provider?.providerLogo as MediaItem).thumbnail
       : null
     : typeof user.profilePicture?.thumbnail === "string"
     ? user.profilePicture.thumbnail
     : null;
 
   const initials = isProvider
-    ? (user.activeRoleId?.providerName ?? "P").charAt(0).toUpperCase()
+    ? (provider?.providerName ?? "P").charAt(0).toUpperCase()
     : `${user.firstName?.charAt(0) ?? ""}${
         user.lastName?.charAt(0) ?? ""
       }`.toUpperCase() ||
@@ -93,13 +97,14 @@ export default function ProfileMenu() {
 
   const isProvider = user.activeRole === "Provider";
   const hasProviderProfile = !!user.activeRoleId?._id;
+  const providerData = isProvider
+    ? (user.activeRoleId as Partial<ProviderData> | undefined)
+    : undefined;
 
   const displayName = isProvider
-    ? user.activeRoleId?.providerName || "Your Business"
+    ? providerData?.providerName || "Your Business"
     : `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "Account";
-  const displayEmail = isProvider
-    ? user.activeRoleId.providerEmail
-    : user.email;
+  const displayEmail = isProvider ? providerData?.providerEmail : user.email;
   const handleRoleSwitch = async () => {
     if (!hasProviderProfile) {
       router.push("/onboarding");
@@ -171,7 +176,11 @@ export default function ProfileMenu() {
                     }`}
                   >
                     {isProvider ? <Building2 size={9} /> : <User size={9} />}
-                    {isProvider ? "Provider" : "Client"}
+                    {user.activeRole === "Admin"
+                      ? "Admin"
+                      : isProvider
+                      ? "Provider"
+                      : "Client"}
                   </span>
                 </div>
               </div>

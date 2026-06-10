@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { getSocket } from "@/lib/socket";
+import { AdminEvents, socketService } from "@/lib/socket";
 
 export type AdminScope =
   | "tickets"
@@ -24,14 +24,21 @@ export interface AdminStatsInvalidatedPayload {
  * matches on `scope` and refetches the relevant query.
  */
 export function useAdminLiveUpdates(
-  handler: (payload: AdminStatsInvalidatedPayload) => void,
+  handler: (payload: AdminStatsInvalidatedPayload) => void
 ) {
   useEffect(() => {
-    const socket = getSocket();
-    const onEvent = (payload: AdminStatsInvalidatedPayload) => handler(payload);
-    socket.on("admin:stats_invalidated", onEvent);
+    const socketConnect = async () => {
+      const socket = socketService;
+      await socket.connect();
+    };
+    socketConnect();
+    const onEvent = (payload: AdminStatsInvalidatedPayload) => {
+      console.log("adminstats", { payload });
+      handler(payload);
+    };
+    socketService.onEvent(AdminEvents.STATS_INVALIDATED, onEvent as any);
     return () => {
-      socket.off("admin:stats_invalidated", onEvent);
+      socketService.onEvent(AdminEvents.STATS_INVALIDATED, onEvent as any);
     };
   }, [handler]);
 }

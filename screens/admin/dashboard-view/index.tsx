@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useQuery } from "@apollo/client/react";
+import { useMemo } from "react";
+import useGlobalStore from "@/stores";
 import {
   Users,
   Building2,
@@ -15,9 +15,9 @@ import {
   Receipt,
   TrendingUp,
   CheckCircle2,
+  RefreshCw,
 } from "lucide-react";
-import { getSystemHealth } from "@/axios/admin";
-import { ADMIN_DASHBOARD_QUERY } from "@/graphql/admin";
+import { useAdminDashboard } from "@/hooks/admin/useAdminQueries";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { PanelCard } from "@/components/admin/PanelCard";
 import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
@@ -45,22 +45,11 @@ const TASK_STATUS_COLORS: Record<string, string> = {
 };
 
 export default function DashboardView() {
-  const { data, loading } = useQuery(ADMIN_DASHBOARD_QUERY);
-  const dashboard = data?.adminDashboard;
+  const { data: dashboard, loading, refresh } = useAdminDashboard();
+  const { user } = useGlobalStore();
 
-  // System health stays REST — it's a small, non-stats endpoint kept off the bundle.
-  const [health, setHealth] = useState<any>(null);
-  useEffect(() => {
-    let mounted = true;
-    getSystemHealth()
-      .then((s) => {
-        if (mounted) setHealth(s);
-      })
-      .catch(() => {});
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  // System health is part of the bundled overview now — no extra fetch.
+  const health = dashboard?.systemHealth as any;
 
   const overview = dashboard?.overview;
   const recent = dashboard?.recentActivities;
@@ -74,12 +63,16 @@ export default function DashboardView() {
   const kpis = overview?.kpis ?? {};
 
   // Mock time series for the overview chart — replace with real fetched series when available.
-  const mockSeries = Array.from({ length: 30 }, (_, i) => ({
-    label: `Day ${i + 1}`,
-    Users: 200 + Math.round(Math.random() * 200) + i * 8,
-    Tasks: 120 + Math.round(Math.random() * 180) + i * 5,
-    Bookings: 80 + Math.round(Math.random() * 120) + i * 3,
-  }));
+  const mockSeries = useMemo(
+    () =>
+      Array.from({ length: 30 }, (_, i) => ({
+        label: `Day ${i + 1}`,
+        Users: 200 + i * 8,
+        Tasks: 120 + i * 5,
+        Bookings: 80 + i * 3,
+      })),
+    []
+  );
 
   const donut = (overview?.taskStatusBreakdown ?? []).map((s: any) => ({
     name: s.status,
@@ -88,46 +81,62 @@ export default function DashboardView() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Dashboard</h2>
-        <p className="text-sm text-slate-500 mt-0.5">
-          Welcome back, John! Here&apos;s what&apos;s happening on your platform.
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+            Dashboard
+          </h2>
+          <p className="text-sm text-slate-500 mt-0.5">
+            Welcome back, {user?.firstName || "Admin"}! Here&apos;s what&apos;s
+            happening on your platform.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => void refresh()}
+          disabled={loading}
+          className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50"
+        >
+          <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+          Refresh
+        </button>
       </div>
 
       {/* KPI strip */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
         <KpiCard
           label="Total Users"
-          value={loading ? "—" : (kpis.totalUsers ?? 0).toLocaleString()}
+          value={loading ? "—" : (kpis.totalUsers ?? 0).toLocaleString("en-US")}
           delta={12.5}
           icon={Users}
           tone="blue"
         />
         <KpiCard
           label="Service Providers"
-          value={loading ? "—" : (kpis.providers ?? 0).toLocaleString()}
+          value={loading ? "—" : (kpis.providers ?? 0).toLocaleString("en-US")}
           delta={8.4}
           icon={Building2}
           tone="green"
         />
         <KpiCard
           label="Total Tasks"
-          value={loading ? "—" : (kpis.tasksPosted ?? 0).toLocaleString()}
+          value={
+            loading ? "—" : (kpis.tasksPosted ?? 0).toLocaleString("en-US")
+          }
           delta={15.2}
           icon={ListTodo}
           tone="orange"
         />
         <KpiCard
           label="Open Tasks"
-          value={loading ? "—" : (kpis.openTasks ?? 0).toLocaleString()}
+          value={loading ? "—" : (kpis.openTasks ?? 0).toLocaleString("en-US")}
           delta={10.6}
           icon={CalendarCheck}
           tone="indigo"
         />
         <KpiCard
           label="Active Subscriptions"
-          value={loading ? "—" : (subs?.active ?? 0).toLocaleString()}
+          value={loading ? "—" : (subs?.active ?? 0).toLocaleString("en-US")}
           delta={18.7}
           icon={Receipt}
           tone="purple"
@@ -137,7 +146,7 @@ export default function DashboardView() {
           value={
             loading
               ? "—"
-              : `₦${(((subs?.mrrCents ?? 0) / 100) || 0).toLocaleString()}`
+              : `₦${((subs?.mrrCents ?? 0) / 100 || 0).toLocaleString("en-US")}`
           }
           delta={20.1}
           icon={TrendingUp}
@@ -155,7 +164,9 @@ export default function DashboardView() {
         />
         <KpiCard
           label="Active Disputes"
-          value={loading ? "—" : (disputes?.open ?? 0) + (disputes?.underReview ?? 0)}
+          value={
+            loading ? "—" : (disputes?.open ?? 0) + (disputes?.underReview ?? 0)
+          }
           icon={AlertOctagon}
           tone="rose"
         />
@@ -207,8 +218,15 @@ export default function DashboardView() {
                     <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-800" />
-                <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke="#94a3b8" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  className="stroke-slate-200 dark:stroke-slate-800"
+                />
+                <XAxis
+                  dataKey="label"
+                  tick={{ fontSize: 11 }}
+                  stroke="#94a3b8"
+                />
                 <YAxis tick={{ fontSize: 11 }} stroke="#94a3b8" />
                 <Tooltip />
                 <Area dataKey="Users" stroke="#3B82F6" fill="url(#u)" />
@@ -228,9 +246,18 @@ export default function DashboardView() {
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={donut} dataKey="value" innerRadius={56} outerRadius={88} paddingAngle={2}>
+                  <Pie
+                    data={donut}
+                    dataKey="value"
+                    innerRadius={56}
+                    outerRadius={88}
+                    paddingAngle={2}
+                  >
                     {donut.map((entry: any, i: number) => (
-                      <Cell key={i} fill={TASK_STATUS_COLORS[entry.name] ?? "#94a3b8"} />
+                      <Cell
+                        key={i}
+                        fill={TASK_STATUS_COLORS[entry.name] ?? "#94a3b8"}
+                      />
                     ))}
                   </Pie>
                   <Legend wrapperStyle={{ fontSize: 11 }} />
@@ -258,7 +285,10 @@ export default function DashboardView() {
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {recentTasks.slice(0, 6).map((t: any) => (
-                  <tr key={String(t._id)} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <tr
+                    key={String(t._id)}
+                    className="hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                  >
                     <td className="px-5 py-2 font-medium text-slate-900 dark:text-white">
                       {t.title}
                     </td>
@@ -266,19 +296,25 @@ export default function DashboardView() {
                       {t.clientName ?? "—"}
                     </td>
                     <td className="px-5 py-2 text-slate-600 dark:text-slate-300">
-                      ₦{(t.budget ?? 0).toLocaleString()}
+                      ₦{(t.budget ?? 0).toLocaleString("en-US")}
                     </td>
                     <td className="px-5 py-2">
-                      <StatusPill label={t.status} tone={statusToTone(t.status)} />
+                      <StatusPill
+                        label={t.status}
+                        tone={statusToTone(t.status)}
+                      />
                     </td>
                     <td className="px-5 py-2 text-slate-500 text-xs">
-                      {new Date(t.createdAt).toLocaleDateString()}
+                      {new Date(t.createdAt).toLocaleDateString("en-US")}
                     </td>
                   </tr>
                 ))}
                 {recentTasks.length === 0 && (
                   <tr>
-                    <td className="px-5 py-6 text-center text-slate-400 text-sm" colSpan={5}>
+                    <td
+                      className="px-5 py-6 text-center text-slate-400 text-sm"
+                      colSpan={5}
+                    >
                       No recent tasks
                     </td>
                   </tr>
@@ -290,34 +326,40 @@ export default function DashboardView() {
 
         <PanelCard title="System Health">
           <div className="space-y-2.5">
-            {health?.services
-              ? Object.entries(health.services).map(([name, svc]: any) => (
-                  <div key={name} className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2
-                        size={14}
-                        className={
-                          svc.status === "online" || svc.status === "healthy"
-                            ? "text-emerald-500"
-                            : "text-slate-400"
-                        }
-                      />
-                      <span className="text-slate-600 dark:text-slate-300 capitalize">
-                        {name.replace(/_/g, " ")}
-                      </span>
-                    </div>
-                    <StatusPill
-                      label={svc.status}
-                      tone={statusToTone(svc.status)}
+            {health?.services ? (
+              Object.entries(health.services).map(([name, svc]: any) => (
+                <div
+                  key={name}
+                  className="flex items-center justify-between text-sm"
+                >
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2
+                      size={14}
+                      className={
+                        svc.status === "online" || svc.status === "healthy"
+                          ? "text-emerald-500"
+                          : "text-slate-400"
+                      }
                     />
+                    <span className="text-slate-600 dark:text-slate-300 capitalize">
+                      {name.replace(/_/g, " ")}
+                    </span>
                   </div>
-                ))
-              : (
-                <div className="text-sm text-slate-400">Loading…</div>
-              )}
+                  <StatusPill
+                    label={svc.status}
+                    tone={statusToTone(svc.status)}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="text-sm text-slate-400">Loading…</div>
+            )}
             {health?.uptime && (
               <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500">
-                Uptime: <span className="font-medium text-slate-700 dark:text-slate-200">{health.uptime.formatted}</span>
+                Uptime:{" "}
+                <span className="font-medium text-slate-700 dark:text-slate-200">
+                  {health.uptime.formatted}
+                </span>
               </div>
             )}
           </div>
@@ -341,7 +383,8 @@ export default function DashboardView() {
                     {p.providerName}
                   </p>
                   <p className="text-xs text-slate-500">
-                    {(p.categories ?? []).map((c: any) => c.name).join(", ") || "—"}
+                    {(p.categories ?? []).map((c: any) => c.name).join(", ") ||
+                      "—"}
                   </p>
                 </div>
                 <div className="text-sm font-semibold text-slate-700 dark:text-slate-200">
@@ -369,7 +412,7 @@ export default function DashboardView() {
                   </p>
                 </div>
                 <span className="text-[11px] text-slate-400">
-                  {new Date(u.createdAt).toLocaleDateString()}
+                  {new Date(u.createdAt).toLocaleDateString("en-US")}
                 </span>
               </div>
             ))}

@@ -12,6 +12,7 @@ import { serviceState } from "./serviceState";
 import { locationSlice } from "./locationState";
 import { onboardingSlice } from "./onboardingState";
 import { searchSlice } from "./searchState";
+import { adminCacheState } from "./adminCacheState";
 import { GlobalStore } from "@/types";
 
 type MyStateCreator = StateCreator<
@@ -39,6 +40,7 @@ const useGlobalStore = create<GlobalStore>()(
           ...locationSlice(...a),
           ...onboardingSlice(...a),
           ...searchSlice(...a),
+          ...adminCacheState(...a),
         })) as MyStateCreator,
         {
           name: "web-storage",
@@ -61,7 +63,16 @@ const useGlobalStore = create<GlobalStore>()(
             granularity: state.granularity,
             selectedYear: state.selectedYear,
             selectedMonth: state.selectedMonth,
-            // paramsFrom: state.paramsFrom,
+            // ── Admin cache slices (persisted; cleared by logout via clearAdminCache) ──
+            adminDashboard: state.adminDashboard,
+            adminUsersByKey: state.adminUsersByKey,
+            adminProvidersByKey: state.adminProvidersByKey,
+            adminClientsByKey: state.adminClientsByKey,
+            adminTasksByKey: state.adminTasksByKey,
+            adminUserById: state.adminUserById,
+            adminProviderById: state.adminProviderById,
+            adminClientById: state.adminClientById,
+            adminTaskById: state.adminTaskById,
           }),
         }
       )

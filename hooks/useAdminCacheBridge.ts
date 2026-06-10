@@ -1,60 +1,95 @@
 "use client";
 
-import { useCallback } from "react";
-import { useApolloClient } from "@apollo/client/react";
-import { useAdminLiveUpdates, type AdminScope } from "@/hooks/useAdminLiveUpdates";
+import { useCallback, useEffect } from "react";
+import useGlobalStore from "@/stores";
 import {
-  ADMIN_BADGES_QUERY,
-  ADMIN_DASHBOARD_QUERY,
-  ADMIN_PROVIDERS_QUERY,
-  ADMIN_TASKS_QUERY,
-  ADMIN_USERS_QUERY,
-} from "@/graphql/admin";
+  useAdminLiveUpdates,
+  type AdminScope,
+} from "@/hooks/useAdminLiveUpdates";
+import {
+  AdminEvents,
+  PresenceEvents,
+  PRESENCE_STATUS,
+  socketService,
+} from "@/lib/socket";
 
 /**
- * Maps each backend-emitted scope to the GraphQL queries whose cache entries
- * become stale when that scope changes. Apollo's `refetchQueries({ include })`
- * walks active observers and re-fires only those that were actually mounted,
- * so this is cheap if the user isn't looking at the affected view.
+ * Pulls the server's `ResEventEnvelope.payload` out, falling back to the raw
+ * value if the server happened to emit unwrapped (e.g. legacy paths).
  */
-const SCOPE_QUERIES: Record<AdminScope, any[]> = {
-  users: [ADMIN_USERS_QUERY, ADMIN_DASHBOARD_QUERY, ADMIN_BADGES_QUERY],
-  providers: [ADMIN_PROVIDERS_QUERY, ADMIN_DASHBOARD_QUERY, ADMIN_BADGES_QUERY],
-  tasks: [ADMIN_TASKS_QUERY, ADMIN_DASHBOARD_QUERY, ADMIN_BADGES_QUERY],
-  tickets: [ADMIN_DASHBOARD_QUERY, ADMIN_BADGES_QUERY],
-  disputes: [ADMIN_DASHBOARD_QUERY, ADMIN_BADGES_QUERY],
-  fraud: [ADMIN_DASHBOARD_QUERY, ADMIN_BADGES_QUERY],
-  moderation: [ADMIN_DASHBOARD_QUERY, ADMIN_BADGES_QUERY],
-};
+function unwrap<T = any>(envelope: any): T {
+  if (envelope && typeof envelope === "object" && "payload" in envelope) {
+    return envelope.payload as T;
+  }
+  return envelope as T;
+}
 
 /**
- * Single subscriber for the admin live-update channel: when the backend emits
- * `admin:stats_invalidated { scope }`, refetch only the queries whose data
- * just went stale. All other admin views stay served from the persisted
- * Apollo cache — no automatic refetch on mount, no polling.
+ * Wires admin websocket events into the Zustand cache:
  *
- * Mount this once high in the admin tree (the admin shell does so).
+ *  - `admin:stats_invalidated { scope }` → wipe matching slices so the next
+ *    view mount refetches.
+ *  - `admin:user_registered { user }`    → prepend the user into every cached
+ *    users-list slice (no refetch). Bumps the `total` counter too.
+ *  - `presence:status_change { userId, status }` → track online/offline state
+ *    in `adminOnlineUserIds` so list views render presence dots live. The
+ *    server auto-registers admin sockets as global presence watchers, so we
+ *    receive a change for every user without explicitly subscribing.
+ *
+ * Every payload is wrapped in a `ResEventEnvelope` server-side — `unwrap`
+ * peels off `.payload` so handlers stay clean.
+ *
+ * Mount this once high in the admin tree — the admin shell does that.
  */
 export function useAdminCacheBridge(enabled: boolean) {
-  const apollo = useApolloClient();
+  const invalidate = useGlobalStore((s) => s.invalidateAdminScope);
+  const prependUser = useGlobalStore((s) => s.prependAdminUser);
+  const setHeartbeat = useGlobalStore((s) => s.setAdminUserHeartbeat);
 
   useAdminLiveUpdates(
     useCallback(
-      (payload) => {
+      (envelope) => {
         if (!enabled) return;
-        const queries = SCOPE_QUERIES[payload.scope as AdminScope];
-        if (!queries?.length) return;
-        // Apollo only re-fires queries that are currently being observed by a
-        // mounted component — the others get their cache entries updated lazily
-        // the next time the view is opened.
-        void apollo.refetchQueries({
-          include: queries,
-          // onQueryUpdated returns false to skip silently-updated queries
-          // from the result Promise so they don't pile up in any error paths.
-          onQueryUpdated: () => true,
-        });
+        const payload = unwrap<{ scope?: AdminScope }>(envelope);
+        const scope = payload?.scope;
+        if (!scope) return;
+        invalidate(scope);
       },
-      [apollo, enabled],
+      [enabled, invalidate],
     ),
   );
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    const onRegistered = (envelope: any) => {
+      const payload = unwrap<{ user?: any }>(envelope);
+      const user = payload?.user;
+      if (!user) return;
+      prependUser(user);
+    };
+
+    const onPresenceChange = (envelope: any) => {
+      const payload = unwrap<{ userId?: string; status?: string }>(envelope);
+      const userId = payload?.userId;
+      const status = payload?.status;
+      if (!userId || !status) return;
+      setHeartbeat(String(userId), status === PRESENCE_STATUS.ONLINE);
+    };
+
+    void socketService.connect();
+    socketService.onEvent(AdminEvents.USER_REGISTERED, onRegistered as any);
+    socketService.onEvent(
+      PresenceEvents.STATUS_CHANGE,
+      onPresenceChange as any,
+    );
+
+    return () => {
+      socketService.offEvent(AdminEvents.USER_REGISTERED, onRegistered as any);
+      socketService.offEvent(
+        PresenceEvents.STATUS_CHANGE,
+        onPresenceChange as any,
+      );
+    };
+  }, [enabled, prependUser, setHeartbeat]);
 }

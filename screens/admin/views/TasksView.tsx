@@ -1,18 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client/react";
-import { ClipboardList, Archive, RotateCcw } from "lucide-react";
+import { ClipboardList, Archive, RotateCcw, RefreshCw } from "lucide-react";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
 import {
-  ADMIN_TASKS_QUERY,
-  ADMIN_TASK_QUERY,
-  ARCHIVE_TASK_MUTATION,
-  RESTORE_TASK_MUTATION,
-  SET_TASK_STATUS_MUTATION,
-} from "@/graphql/admin";
+  archiveAdminTask,
+  restoreAdminTask,
+  setAdminTaskStatus,
+} from "@/axios/admin";
+import {
+  useAdminTasksView,
+  useAdminTaskDetail,
+} from "@/hooks/admin/useAdminQueries";
 
 const STATUS_OPTIONS = ["Active", "In_progress", "Completed", "Cancelled", "Expired"] as const;
 
@@ -26,25 +27,33 @@ export function TasksView() {
   if (search) filter.search = search;
   if (status) filter.status = status;
 
-  // ONE query: stats + page bundled
-  const { data, loading, refetch } = useQuery(ADMIN_TASKS_QUERY, {
-    variables: { filter },
-  });
+  const { data, loading, refresh } = useAdminTasksView(filter);
 
-  const stats = data?.adminTaskStats;
-  const list = data?.adminTasks;
+  const stats = data?.stats;
+  const list = data?.page;
   const items: any[] = list?.items ?? [];
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
-          <ClipboardList size={20} />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
+            <ClipboardList size={20} />
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Tasks</h2>
+            <p className="text-sm text-slate-500 mt-0.5">All job posts across the marketplace</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Tasks</h2>
-          <p className="text-sm text-slate-500 mt-0.5">All job posts across the marketplace</p>
-        </div>
+        <button
+          type="button"
+          onClick={() => void refresh()}
+          disabled={loading}
+          className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50"
+        >
+          <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+          Refresh
+        </button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
@@ -185,7 +194,7 @@ export function TasksView() {
       <TaskDetailDrawer
         id={openId}
         onClose={() => setOpenId(null)}
-        onMutated={() => refetch()}
+        onMutated={() => void refresh()}
       />
     </div>
   );
@@ -200,15 +209,7 @@ function TaskDetailDrawer({
   onClose: () => void;
   onMutated: () => void;
 }) {
-  const { data, loading, refetch } = useQuery(ADMIN_TASK_QUERY, {
-    variables: { id },
-    skip: !id,
-  });
-  const [setStatus] = useMutation(SET_TASK_STATUS_MUTATION);
-  const [archive] = useMutation(ARCHIVE_TASK_MUTATION);
-  const [restore] = useMutation(RESTORE_TASK_MUTATION);
-
-  const t = data?.adminTask;
+  const { data: t, loading, refresh: refetch } = useAdminTaskDetail(id);
 
   const run = async (fn: () => Promise<unknown>) => {
     await fn();
@@ -229,9 +230,7 @@ function TaskDetailDrawer({
               aria-label="Change task status"
               value={t.status}
               onChange={(e) =>
-                run(() =>
-                  setStatus({ variables: { id: id!, status: e.target.value } }),
-                )
+                run(() => setAdminTaskStatus(id!, e.target.value))
               }
               className="text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-2 py-1.5"
             >
@@ -243,14 +242,14 @@ function TaskDetailDrawer({
             </select>
             {t.isActive ? (
               <button
-                onClick={() => run(() => archive({ variables: { id } }))}
+                onClick={() => run(() => archiveAdminTask(id!))}
                 className="text-xs px-3 py-1.5 rounded-md bg-rose-600 text-white hover:bg-rose-700 flex items-center gap-1"
               >
                 <Archive size={14} /> Archive
               </button>
             ) : (
               <button
-                onClick={() => run(() => restore({ variables: { id } }))}
+                onClick={() => run(() => restoreAdminTask(id!))}
                 className="text-xs px-3 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 flex items-center gap-1"
               >
                 <RotateCcw size={14} /> Restore

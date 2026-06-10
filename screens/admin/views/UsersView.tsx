@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client/react";
 import {
   Users,
   MailCheck,
@@ -10,18 +9,22 @@ import {
   UserCheck,
   ShieldCheck,
   Briefcase,
+  RefreshCw,
 } from "lucide-react";
+import useGlobalStore from "@/stores";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
 import {
-  ADMIN_USERS_QUERY,
-  ADMIN_USER_QUERY,
-  REACTIVATE_USER_MUTATION,
-  SUSPEND_USER_MUTATION,
-  VERIFY_USER_EMAIL_MUTATION,
-  VERIFY_USER_PHONE_MUTATION,
-} from "@/graphql/admin";
+  reactivateAdminUser,
+  suspendAdminUser,
+  verifyAdminUserEmail,
+  verifyAdminUserPhone,
+} from "@/axios/admin";
+import {
+  useAdminUsersView,
+  useAdminUserDetail,
+} from "@/hooks/admin/useAdminQueries";
 
 export function UsersView() {
   const [search, setSearch] = useState("");
@@ -33,25 +36,35 @@ export function UsersView() {
   if (search) filter.search = search;
   if (role) filter.role = role;
 
-  // ONE query returns: stats + page + each user's provider (if any).
-  const { data, loading, refetch } = useQuery(ADMIN_USERS_QUERY, {
-    variables: { filter },
-  });
+  // Reads from Zustand. First load fetches; subsequent loads use the slice.
+  const { data, loading, refresh } = useAdminUsersView(filter);
+  const onlineUserIds = useGlobalStore((s) => s.adminOnlineUserIds);
 
-  const stats = data?.adminUserStats;
-  const list = data?.adminUsers;
+  const stats = data?.stats;
+  const list = data?.page;
   const items: any[] = list?.items ?? [];
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
-          <Users size={20} />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
+            <Users size={20} />
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">User Management</h2>
+            <p className="text-sm text-slate-500 mt-0.5">All marketplace users</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">User Management</h2>
-          <p className="text-sm text-slate-500 mt-0.5">All marketplace users</p>
-        </div>
+        <button
+          type="button"
+          onClick={() => void refresh()}
+          disabled={loading}
+          className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50"
+        >
+          <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+          Refresh
+        </button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
@@ -127,7 +140,21 @@ export function UsersView() {
             {items.map((u) => (
               <tr key={String(u._id)} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                 <td className="px-5 py-2.5 font-medium text-slate-900 dark:text-white">
-                  {u.firstName || u.lastName ? `${u.firstName ?? ""} ${u.lastName ?? ""}` : "—"}
+                  <span className="inline-flex items-center gap-2">
+                    <span
+                      className={`inline-block w-2 h-2 rounded-full ${
+                        onlineUserIds[String(u._id)]
+                          ? "bg-emerald-500"
+                          : "bg-slate-300 dark:bg-slate-600"
+                      }`}
+                      title={
+                        onlineUserIds[String(u._id)] ? "Online" : "Offline"
+                      }
+                    />
+                    {u.firstName || u.lastName
+                      ? `${u.firstName ?? ""} ${u.lastName ?? ""}`
+                      : "—"}
+                  </span>
                 </td>
                 <td className="px-5 py-2.5 text-slate-600 dark:text-slate-300">{u.email}</td>
                 <td className="px-5 py-2.5 text-slate-600 dark:text-slate-300">{u.phoneNumber}</td>
@@ -205,7 +232,7 @@ export function UsersView() {
       <UserDetailDrawer
         id={openId}
         onClose={() => setOpenId(null)}
-        onMutated={() => refetch()}
+        onMutated={() => void refresh()}
       />
     </div>
   );
@@ -220,29 +247,20 @@ function UserDetailDrawer({
   onClose: () => void;
   onMutated: () => void;
 }) {
-  const { data, loading, refetch } = useQuery(ADMIN_USER_QUERY, {
-    variables: { id },
-    skip: !id,
-  });
-  const [suspend] = useMutation(SUSPEND_USER_MUTATION);
-  const [reactivate] = useMutation(REACTIVATE_USER_MUTATION);
-  const [verifyEmail] = useMutation(VERIFY_USER_EMAIL_MUTATION);
-  const [verifyPhone] = useMutation(VERIFY_USER_PHONE_MUTATION);
-
-  const u = data?.adminUser;
+  const { data: u, loading, refresh: refetch } = useAdminUserDetail(id);
 
   const onSuspend = async () => {
     if (!id) return;
     const reason = window.prompt("Reason for suspension?");
     if (!reason) return;
-    await suspend({ variables: { id, reason } });
+    await suspendAdminUser(id, reason);
     await refetch();
     onMutated();
   };
 
   const onReactivate = async () => {
     if (!id) return;
-    await reactivate({ variables: { id } });
+    await reactivateAdminUser(id);
     await refetch();
     onMutated();
   };
@@ -275,7 +293,7 @@ function UserDetailDrawer({
               <button
                 onClick={async () => {
                   if (!id) return;
-                  await verifyEmail({ variables: { id } });
+                  await verifyAdminUserEmail(id);
                   await refetch();
                 }}
                 className="text-xs px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -287,7 +305,7 @@ function UserDetailDrawer({
               <button
                 onClick={async () => {
                   if (!id) return;
-                  await verifyPhone({ variables: { id } });
+                  await verifyAdminUserPhone(id);
                   await refetch();
                 }}
                 className="text-xs px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"

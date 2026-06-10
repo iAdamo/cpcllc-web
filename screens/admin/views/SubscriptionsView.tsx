@@ -45,7 +45,7 @@ export function SubscriptionsView() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard label="Active" value={stats?.activeSubscriptions ?? "—"} tone="green" />
+        <KpiCard label="Active" value={stats?.active ?? "—"} tone="green" />
         <KpiCard label="Trialing" value={stats?.trialing ?? "—"} tone="blue" />
         <KpiCard label="Past Due" value={stats?.pastDue ?? "—"} tone="orange" />
         <KpiCard

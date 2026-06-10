@@ -8,7 +8,7 @@ import useGlobalStore from "@/stores";
 
 export default function SignInPage() {
   const router = useRouter();
-  const { login, error: mfaError } = useGlobalStore();
+  const { login, error, setError } = useGlobalStore();
   const searchParams = useSearchParams();
   const nextPath = searchParams.get("next") ?? "/";
 
@@ -16,7 +16,6 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,8 +23,8 @@ export default function SignInPage() {
     setLoading(true);
     try {
       await login({ email, password });
-      console.log({ mfaError });
-      if (mfaError && mfaError.includes("MFA")) {
+      const err = useGlobalStore.getState().error;
+      if (err && err.includes("MFA")) {
         // Stash the credentials briefly in sessionStorage so the MFA page can
         // finish the login. Cleared as soon as the MFA page submits.
         if (typeof window !== "undefined") {

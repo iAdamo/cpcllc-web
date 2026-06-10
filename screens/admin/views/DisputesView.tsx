@@ -37,7 +37,7 @@ export function DisputesView() {
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <KpiCard label="Open" value={stats?.open ?? "—"} tone="blue" />
         <KpiCard label="Under Review" value={stats?.underReview ?? "—"} tone="orange" />
-        <KpiCard label="Awaiting Evidence" value={stats?.awaitingEvidence ?? "—"} tone="indigo" />
+        <KpiCard label="Awaiting Evidence" value={stats?.awaiting ?? "—"} tone="indigo" />
         <KpiCard label="Escalated" value={stats?.escalated ?? "—"} tone="rose" />
         <KpiCard label="Resolved" value={stats?.resolved ?? "—"} tone="green" />
       </div>

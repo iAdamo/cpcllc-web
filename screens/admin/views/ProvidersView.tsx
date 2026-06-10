@@ -1,19 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client/react";
-import { Briefcase, Star, ShieldCheck, ShieldX } from "lucide-react";
+import { Briefcase, Star, ShieldCheck, ShieldX, RefreshCw } from "lucide-react";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
 import {
-  ADMIN_PROVIDERS_QUERY,
-  ADMIN_PROVIDER_QUERY,
-  APPROVE_PROVIDER_KYC_MUTATION,
-  REJECT_PROVIDER_KYC_MUTATION,
-  SET_PROVIDER_BOOKABLE_MUTATION,
-  SET_PROVIDER_FEATURED_MUTATION,
-} from "@/graphql/admin";
+  approveProviderKyc,
+  rejectProviderKyc,
+  setProviderBookable,
+  setProviderFeatured,
+} from "@/axios/admin";
+import {
+  useAdminProvidersView,
+  useAdminProviderDetail,
+} from "@/hooks/admin/useAdminQueries";
 
 export function ProvidersView() {
   const [search, setSearch] = useState("");
@@ -25,25 +26,33 @@ export function ProvidersView() {
   if (search) filter.search = search;
   if (isVerified) filter.isVerified = isVerified === "true";
 
-  // ONE query: stats + page bundled
-  const { data, loading, refetch } = useQuery(ADMIN_PROVIDERS_QUERY, {
-    variables: { filter },
-  });
+  const { data, loading, refresh } = useAdminProvidersView(filter);
 
-  const stats = data?.adminProviderStats;
-  const list = data?.adminProviders;
+  const stats = data?.stats;
+  const list = data?.page;
   const items: any[] = list?.items ?? [];
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
-          <Briefcase size={20} />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
+            <Briefcase size={20} />
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Provider Management</h2>
+            <p className="text-sm text-slate-500 mt-0.5">Service providers and their KYC status</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Provider Management</h2>
-          <p className="text-sm text-slate-500 mt-0.5">Service providers and their KYC status</p>
-        </div>
+        <button
+          type="button"
+          onClick={() => void refresh()}
+          disabled={loading}
+          className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50"
+        >
+          <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+          Refresh
+        </button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
@@ -175,7 +184,7 @@ export function ProvidersView() {
       <ProviderDetailDrawer
         id={openId}
         onClose={() => setOpenId(null)}
-        onMutated={() => refetch()}
+        onMutated={() => void refresh()}
       />
     </div>
   );
@@ -190,16 +199,7 @@ function ProviderDetailDrawer({
   onClose: () => void;
   onMutated: () => void;
 }) {
-  const { data, loading, refetch } = useQuery(ADMIN_PROVIDER_QUERY, {
-    variables: { id },
-    skip: !id,
-  });
-  const [approve] = useMutation(APPROVE_PROVIDER_KYC_MUTATION);
-  const [reject] = useMutation(REJECT_PROVIDER_KYC_MUTATION);
-  const [setFeatured] = useMutation(SET_PROVIDER_FEATURED_MUTATION);
-  const [setBookable] = useMutation(SET_PROVIDER_BOOKABLE_MUTATION);
-
-  const p = data?.adminProvider;
+  const { data: p, loading, refresh: refetch } = useAdminProviderDetail(id);
 
   const run = async (fn: () => Promise<unknown>) => {
     await fn();
@@ -218,14 +218,14 @@ function ProviderDetailDrawer({
           <div className="flex flex-wrap gap-2">
             {p.isVerified ? (
               <button
-                onClick={() => run(() => reject({ variables: { id } }))}
+                onClick={() => run(() => rejectProviderKyc(id!))}
                 className="text-xs px-3 py-1.5 rounded-md bg-rose-600 text-white hover:bg-rose-700 flex items-center gap-1"
               >
                 <ShieldX size={14} /> Revoke KYC
               </button>
             ) : (
               <button
-                onClick={() => run(() => approve({ variables: { id } }))}
+                onClick={() => run(() => approveProviderKyc(id!))}
                 className="text-xs px-3 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 flex items-center gap-1"
               >
                 <ShieldCheck size={14} /> Approve KYC
@@ -233,7 +233,7 @@ function ProviderDetailDrawer({
             )}
             <button
               onClick={() =>
-                run(() => setFeatured({ variables: { id, featured: !p.isFeatured } }))
+                run(() => setProviderFeatured(id!, !p.isFeatured))
               }
               className="text-xs px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
             >
@@ -241,7 +241,7 @@ function ProviderDetailDrawer({
             </button>
             <button
               onClick={() =>
-                run(() => setBookable({ variables: { id, bookable: !p.isBookable } }))
+                run(() => setProviderBookable(id!, !p.isBookable))
               }
               className="text-xs px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
             >

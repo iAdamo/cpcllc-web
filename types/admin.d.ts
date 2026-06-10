@@ -173,7 +173,7 @@ export interface DisputeStats {
   underReview: number;
   escalated: number;
   resolved: number;
-  awaitingEvidence: number;
+  awaiting: number;
 }
 
 export interface FraudStats {
@@ -184,9 +184,9 @@ export interface FraudStats {
 }
 
 export interface SubscriptionStats {
-  activeSubscriptions: number;
+  active: number;
   trialing: number;
   pastDue: number;
-  cancelledThisMonth: number;
+  cancelled: number;
   mrrCents: number;
 }

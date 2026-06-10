@@ -10,6 +10,7 @@ import {
 } from "./sidebar-config";
 import { Bell, ChevronsLeft, ChevronsRight, Moon, Sun } from "lucide-react";
 import type { AdminView } from "@/types";
+import ProfileMenu from "@/components/ProfileMenu";
 
 interface Props {
   children: React.ReactNode;
@@ -212,15 +213,7 @@ const TopBar = ({
           )}
         </button>
         <div className="ml-3 flex items-center gap-2 pl-3 border-l border-slate-200 dark:border-slate-700">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white text-xs font-semibold flex items-center justify-center">
-            JD
-          </div>
-          <div className="hidden sm:flex flex-col leading-tight">
-            <span className="text-xs font-semibold text-slate-900 dark:text-white">
-              John Admin
-            </span>
-            <span className="text-[10px] text-slate-500">Super Admin</span>
-          </div>
+          <ProfileMenu />
         </div>
       </div>
     </header>

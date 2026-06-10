@@ -271,6 +271,8 @@ export interface OnboardingState {
   submitOnboarding: () => Promise<boolean>;
 }
 
+import type { AdminCacheState } from "@/stores/adminCacheState";
+
 export type GlobalStore = GlobalState &
   DashboardState &
   AuthState &
@@ -279,4 +281,5 @@ export type GlobalStore = GlobalState &
   ServiceState &
   LocationState &
   OnboardingState &
-  SearchState;
+  SearchState &
+  AdminCacheState;

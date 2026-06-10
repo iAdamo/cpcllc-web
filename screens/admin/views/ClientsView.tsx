@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@apollo/client/react";
-import { UserSquare2 } from "lucide-react";
+import { UserSquare2, RefreshCw } from "lucide-react";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
 import {
-  ADMIN_CLIENTS_QUERY,
-  ADMIN_CLIENT_QUERY,
-} from "@/graphql/admin";
+  useAdminClientsView,
+  useAdminClientDetail,
+} from "@/hooks/admin/useAdminQueries";
 
 export function ClientsView() {
   const [search, setSearch] = useState("");
@@ -18,25 +17,34 @@ export function ClientsView() {
   const filter: Record<string, unknown> = { page, limit: 25 };
   if (search) filter.search = search;
 
-  const { data, loading } = useQuery(ADMIN_CLIENTS_QUERY, {
-    variables: { filter },
-  });
+  const { data, loading, refresh } = useAdminClientsView(filter);
 
-  const list = data?.adminClients;
+  const list = data?.page;
   const items = list?.items ?? [];
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
-          <UserSquare2 size={20} />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
+            <UserSquare2 size={20} />
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Clients</h2>
+            <p className="text-sm text-slate-500 mt-0.5">
+              Marketplace users posting tasks ({list?.total ?? 0})
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Clients</h2>
-          <p className="text-sm text-slate-500 mt-0.5">
-            Marketplace users posting tasks ({list?.total ?? 0})
-          </p>
-        </div>
+        <button
+          type="button"
+          onClick={() => void refresh()}
+          disabled={loading}
+          className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50"
+        >
+          <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+          Refresh
+        </button>
       </div>
 
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
@@ -157,11 +165,7 @@ function ClientDetailDrawer({
   id: string | null;
   onClose: () => void;
 }) {
-  const { data, loading } = useQuery(ADMIN_CLIENT_QUERY, {
-    variables: { id },
-    skip: !id,
-  });
-  const c = data?.adminClient;
+  const { data: c, loading } = useAdminClientDetail(id);
 
   return (
     <Drawer

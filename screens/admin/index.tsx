@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@apollo/client/react";
 import AdminDashboardLayout from "@/components/layout/admin";
 import useGlobalStore from "@/stores";
 import { useAdminCacheBridge } from "@/hooks/useAdminCacheBridge";
-import { getMyAdminUser } from "@/axios/admin";
-import { ADMIN_BADGES_QUERY } from "@/graphql/admin";
+import { useAdminDashboard } from "@/hooks/admin/useAdminQueries";
 import DashboardView from "@/screens/admin/dashboard-view";
 import { UsersView } from "@/screens/admin/views/UsersView";
 import { ProvidersView } from "@/screens/admin/views/ProvidersView";
@@ -56,20 +54,19 @@ const AdminDashboard = () => {
     let cancelled = false;
     (async () => {
       try {
-        // if (
-        //   !user ||
-        //   (user &&
-        //     (user.activeRole !== "Admin" ||
-        //       (user.activeRoleId as AdminUserMe).adminUser.user !== user._id))
-        // )
-        //   return;
-        // if ((user.activeRoleId as AdminUserMe).adminUser) {
-        //   setAuthState("ok");
-        // } else {
-        //   setAuthState("denied");
-        //   router.replace("/");
-        // }
-        if (user.activeRole === "Admin") setAuthState("ok");
+        if (
+          !user ||
+          (user &&
+            (user.activeRole !== "Admin" ||
+              (user.activeRoleId as AdminUserMe).user !== user._id))
+        )
+          return;
+        if ((user.activeRoleId as AdminUserMe)._id) {
+          setAuthState("ok");
+        } else {
+          setAuthState("denied");
+          router.replace("/");
+        }
       } catch {
         if (cancelled) return;
         setAuthState("denied");
@@ -81,13 +78,14 @@ const AdminDashboard = () => {
     };
   }, [router, user]);
 
-  // Badges: cache-first by default. First mount populates the cache from
-  // the network; afterwards the cache is the source of truth and only the
-  // websocket cache-bridge below re-fires this query when scopes change.
-  const { data: badgesData } = useQuery(ADMIN_BADGES_QUERY, {
+  // Badges come from the same Zustand-backed dashboard slice that DashboardView
+  // populates. First admin-area mount fires the bundled query once and parks
+  // the result in the slice; every subsequent navigation reads from the slice.
+  // Refresh / websocket invalidation are the only paths that refetch.
+  const { data: dashboard } = useAdminDashboard({
     skip: authState !== "ok",
   });
-  const b = badgesData?.adminDashboard?.badges;
+  const b = dashboard?.badges;
   const badges: Record<string, number | undefined> = {
     openTickets: b?.openTickets ?? undefined,
     openDisputes: b?.openDisputes ?? undefined,
