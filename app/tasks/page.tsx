@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import TasksRouter from "@/screens/tasks/TasksRouter";
+import JobsPage from "@/screens/clients/jobs";
 
 export const metadata: Metadata = {
   title: "Tasks — CompaniesCenterLLC",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <TasksRouter />;
+  return <JobsPage />;
 }

@@ -16,8 +16,7 @@ interface SearchHeaderProps {
 export default function SearchHeader(props: SearchHeaderProps) {
   return (
     <UniversalSearch
-      variant="header"
-      stickyHeader={props.stickyHeader ?? false}
+      variant="providers"
       initialQuery={props.initialQuery}
       initialLocation={props.initialLocation}
       onSearch={props.onSearch}

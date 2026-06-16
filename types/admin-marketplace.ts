@@ -5,6 +5,19 @@
  * REST + Zustand — no GraphQL anywhere.
  */
 
+/** Admin invalidation scope — the keys the websocket bridge dispatches on.
+ *  Mirrors the backend's `stats.invalidated` domain event payload. Phase 4
+ *  of the WS upgrade moved this here from the now-deleted
+ *  `hooks/useAdminLiveUpdates.ts`. */
+export type AdminScope =
+  | "tickets"
+  | "disputes"
+  | "fraud"
+  | "moderation"
+  | "users"
+  | "providers"
+  | "tasks";
+
 export interface AdminConnection<T> {
   items: T[];
   total: number;

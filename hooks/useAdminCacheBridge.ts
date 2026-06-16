@@ -2,20 +2,18 @@
 
 import { useCallback, useEffect } from "react";
 import useGlobalStore from "@/stores";
+import type { AdminScope } from "@/types/admin-marketplace";
 import {
-  useAdminLiveUpdates,
-  type AdminScope,
-} from "@/hooks/useAdminLiveUpdates";
-import {
-  AdminEvents,
   PresenceEvents,
   PRESENCE_STATUS,
   socketService,
 } from "@/lib/socket";
+import { useSubscription } from "@/hooks/useSubscription";
+import type { DomainEventPayload } from "@/types/domain-events";
 
 /**
- * Pulls the server's `ResEventEnvelope.payload` out, falling back to the raw
- * value if the server happened to emit unwrapped (e.g. legacy paths).
+ * Pulls the server's `ResEventEnvelope.payload` out, falling back to the
+ * raw value if the server happened to emit unwrapped.
  */
 function unwrap<T = any>(envelope: any): T {
   if (envelope && typeof envelope === "object" && "payload" in envelope) {
@@ -27,17 +25,18 @@ function unwrap<T = any>(envelope: any): T {
 /**
  * Wires admin websocket events into the Zustand cache:
  *
- *  - `admin:stats_invalidated { scope }` → wipe matching slices so the next
- *    view mount refetches.
- *  - `admin:user_registered { user }`    → prepend the user into every cached
- *    users-list slice (no refetch). Bumps the `total` counter too.
- *  - `presence:status_change { userId, status }` → track online/offline state
- *    in `adminOnlineUserIds` so list views render presence dots live. The
- *    server auto-registers admin sockets as global presence watchers, so we
- *    receive a change for every user without explicitly subscribing.
- *
- * Every payload is wrapped in a `ResEventEnvelope` server-side — `unwrap`
- * peels off `.payload` so handlers stay clean.
+ *  - `domain:event` on `scope:admin:stats` (`stats.invalidated`) → wipe
+ *    matching slices so the next view mount refetches. Phase 3 moved this
+ *    off the raw `admin:stats_invalidated` event onto the unified
+ *    domain-event channel.
+ *  - `domain:event` on `scope:marketplace:users` (`user.registered`) →
+ *    prepend the projected user row into every cached users-list slice
+ *    with zero refetch.
+ *  - `presence:status_change { userId, status }` → track online/offline in
+ *    `adminOnlineUserIds`. Admins are auto-subscribed to `scope:presence:all`
+ *    in SubscriptionRegistry on connect, so every user transition arrives
+ *    through the existing presence pipeline (Phase 3 retired the parallel
+ *    `presence:admin_watchers` Redis set).
  *
  * Mount this once high in the admin tree — the admin shell does that.
  */
@@ -46,28 +45,40 @@ export function useAdminCacheBridge(enabled: boolean) {
   const prependUser = useGlobalStore((s) => s.prependAdminUser);
   const setHeartbeat = useGlobalStore((s) => s.setAdminUserHeartbeat);
 
-  useAdminLiveUpdates(
-    useCallback(
-      (envelope) => {
-        if (!enabled) return;
-        const payload = unwrap<{ scope?: AdminScope }>(envelope);
-        const scope = payload?.scope;
-        if (!scope) return;
-        invalidate(scope);
-      },
-      [enabled, invalidate],
-    ),
+  /* ─── stats invalidated (Phase 3 — domain events) ─────────────────── */
+  useSubscription<{ scope?: AdminScope }>(
+    enabled ? "scope:admin:stats" : null,
+    {
+      onEvent: useCallback(
+        (event: DomainEventPayload<{ scope?: AdminScope }>) => {
+          if (event.type !== "stats.invalidated") return;
+          const scope = event.data?.scope;
+          if (!scope) return;
+          invalidate(scope);
+        },
+        [invalidate],
+      ),
+    },
   );
 
+  /* ─── marketplace users channel (Phase 2 — domain events) ──────────── */
+  useSubscription<Record<string, any>>(
+    enabled ? "scope:marketplace:users" : null,
+    {
+      onEvent: useCallback(
+        (event: DomainEventPayload<Record<string, any>>) => {
+          if (event.type === "user.registered" && event.data) {
+            prependUser(event.data as any);
+          }
+        },
+        [prependUser],
+      ),
+    },
+  );
+
+  /* ─── presence heartbeat (unchanged) ───────────────────────────────── */
   useEffect(() => {
     if (!enabled) return;
-
-    const onRegistered = (envelope: any) => {
-      const payload = unwrap<{ user?: any }>(envelope);
-      const user = payload?.user;
-      if (!user) return;
-      prependUser(user);
-    };
 
     const onPresenceChange = (envelope: any) => {
       const payload = unwrap<{ userId?: string; status?: string }>(envelope);
@@ -78,18 +89,16 @@ export function useAdminCacheBridge(enabled: boolean) {
     };
 
     void socketService.connect();
-    socketService.onEvent(AdminEvents.USER_REGISTERED, onRegistered as any);
     socketService.onEvent(
       PresenceEvents.STATUS_CHANGE,
       onPresenceChange as any,
     );
 
     return () => {
-      socketService.offEvent(AdminEvents.USER_REGISTERED, onRegistered as any);
       socketService.offEvent(
         PresenceEvents.STATUS_CHANGE,
         onPresenceChange as any,
       );
     };
-  }, [enabled, prependUser, setHeartbeat]);
+  }, [enabled, setHeartbeat]);
 }

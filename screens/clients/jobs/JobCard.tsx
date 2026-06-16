@@ -1,13 +1,23 @@
 "use client";
 
-import { Bookmark, BookmarkCheck, MapPin, Calendar, Users, ChevronRight, Zap, Briefcase } from "lucide-react";
+import {
+  Bookmark,
+  BookmarkCheck,
+  MapPin,
+  Calendar,
+  Users,
+  ChevronRight,
+  Zap,
+  Briefcase,
+} from "lucide-react";
 import { JobData, MediaItem } from "@/types";
 import useGlobalStore from "@/stores";
 import Image from "next/image";
 
 const URGENCY_COLOR: Record<string, string> = {
   Immediate: "bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400",
-  Urgent: "bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
+  Urgent:
+    "bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
 };
 
 const URGENCY_DOT: Record<string, string> = {
@@ -39,7 +49,13 @@ interface JobCardProps {
   hasApplied?: boolean;
 }
 
-export default function JobCard({ job, onSelect, onApply, isSelected, hasApplied }: JobCardProps) {
+export default function JobCard({
+  job,
+  onSelect,
+  onApply,
+  isSelected,
+  hasApplied,
+}: JobCardProps) {
   const { savedJobs, setSavedJobs } = useGlobalStore();
   const isSaved = savedJobs.some((s) => s._id === job._id);
 
@@ -49,8 +65,11 @@ export default function JobCard({ job, onSelect, onApply, isSelected, hasApplied
 
   const clientName = job.anonymous
     ? "Anonymous"
-    : `${job.userId?.firstName ?? ""} ${job.userId?.lastName ?? ""}`.trim() || "Client";
-  const clientAvatar = job.anonymous ? null : (job.userId?.profilePicture as any)?.thumbnail ?? null;
+    : `${job.userId?.firstName ?? ""} ${job.userId?.lastName ?? ""}`.trim() ||
+      "Client";
+  const clientAvatar = job.anonymous
+    ? null
+    : (job.userId?.profilePicture as any)?.thumbnail ?? null;
 
   const city = job.location?.address?.city;
   const locationStr = city || job.location?.address?.state || "";
@@ -70,7 +89,9 @@ export default function JobCard({ job, onSelect, onApply, isSelected, hasApplied
     >
       {/* Urgency accent line */}
       {urgencyDot && (
-        <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${urgencyDot}`} />
+        <div
+          className={`absolute left-0 top-0 bottom-0 w-[3px] ${urgencyDot}`}
+        />
       )}
 
       <div className="flex gap-3 p-3 pl-4">
@@ -86,7 +107,10 @@ export default function JobCard({ job, onSelect, onApply, isSelected, hasApplied
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/40 dark:to-violet-950/40">
-              <Briefcase size={22} className="text-blue-300 dark:text-blue-700" />
+              <Briefcase
+                size={22}
+                className="text-blue-300 dark:text-blue-700"
+              />
             </div>
           )}
         </div>
@@ -101,7 +125,9 @@ export default function JobCard({ job, onSelect, onApply, isSelected, hasApplied
               </span>
             )}
             {job.urgency && job.urgency !== "Normal" && urgencyColor && (
-              <span className={`flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${urgencyColor}`}>
+              <span
+                className={`flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${urgencyColor}`}
+              >
                 <Zap size={8} />
                 {job.urgency}
               </span>
@@ -114,7 +140,10 @@ export default function JobCard({ job, onSelect, onApply, isSelected, hasApplied
             <button
               type="button"
               aria-label={isSaved ? "Unsave" : "Save task"}
-              onClick={(e) => { e.stopPropagation(); setSavedJobs(job); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSavedJobs(job);
+              }}
               className={`ml-auto flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg transition-all ${
                 isSaved
                   ? "text-blue-600 dark:text-blue-400"
@@ -135,12 +164,18 @@ export default function JobCard({ job, onSelect, onApply, isSelected, hasApplied
             <span className="text-sm font-black text-gray-900 dark:text-white flex-shrink-0">
               {formatBudget(job.budget)}
               {job.negotiable && (
-                <span className="ml-1 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 align-middle">NEG</span>
+                <span className="ml-1 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 align-middle">
+                  NEG
+                </span>
               )}
             </span>
 
             <div className="flex items-center gap-2 text-[10px] text-gray-400 dark:text-gray-500 flex-1 min-w-0">
-              <span className={`flex items-center gap-0.5 flex-shrink-0 ${isExpired ? "text-red-400" : ""}`}>
+              <span
+                className={`flex items-center gap-0.5 flex-shrink-0 ${
+                  isExpired ? "text-red-400" : ""
+                }`}
+              >
                 <Calendar size={9} />
                 {deadline}
               </span>
@@ -159,7 +194,13 @@ export default function JobCard({ job, onSelect, onApply, isSelected, hasApplied
             {/* Client */}
             <div className="flex items-center gap-1 flex-shrink-0">
               {clientAvatar ? (
-                <Image src={clientAvatar} alt={clientName} width={16} height={16} className="w-4 h-4 rounded-full object-cover" />
+                <Image
+                  src={clientAvatar}
+                  alt={clientName}
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 rounded-full object-cover"
+                />
               ) : (
                 <div className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-[7px] text-white font-black">
                   {clientName.charAt(0)}
@@ -173,7 +214,10 @@ export default function JobCard({ job, onSelect, onApply, isSelected, hasApplied
             {/* Apply */}
             <button
               type="button"
-              onClick={(e) => { e.stopPropagation(); onApply(job); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onApply(job);
+              }}
               disabled={!canApply}
               className={`flex items-center gap-0.5 text-[11px] font-black px-2.5 py-1.5 rounded-lg transition-all flex-shrink-0 ${
                 hasApplied

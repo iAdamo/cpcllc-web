@@ -187,7 +187,7 @@ export default function AccountDeletionPage() {
         {/* Back */}
         <Link
           href="/settings"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-6"
+          className="hidden lg:inline-flex items-center gap-2 text-sm font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-6"
         >
           <ArrowLeft size={15} />
           Back to Settings

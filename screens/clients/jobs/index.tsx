@@ -21,7 +21,7 @@ import {
 import useGlobalStore from "@/stores";
 import { useCategories } from "@/hooks/useCategories";
 import { getMyProposals } from "@/axios/service";
-import { JobData, ProposalData } from "@/types";
+import { JobData, ProposalData, ProviderData } from "@/types";
 import JobCard from "./JobCard";
 import ProposalModal from "./ProposalModal";
 import JobDetailPanel from "./JobDetailPanel";
@@ -104,31 +104,46 @@ export default function JobsPage() {
   // Proposals — seeded with sample data so the UI never looks empty
   const [myProposals, setMyProposals] = useState<ProposalData[]>([
     {
-      _id: "demo-1", id: "demo-1",
-      message: "I have 5 years of experience in this area and can deliver within your budget.",
-      proposedPrice: 850, estimatedDuration: "3 days",
+      _id: "demo-1",
+      id: "demo-1",
+      message:
+        "I have 5 years of experience in this area and can deliver within your budget.",
+      proposedPrice: 850,
+      estimatedDuration: "3 days",
       createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
       updatedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
       jobId: { _id: "j1", title: "Fix kitchen plumbing leak" } as any,
-      providerId: {} as any, viewedByClient: true, attachments: [],
+      providerId: {} as any,
+      viewedByClient: true,
+      attachments: [],
     },
     {
-      _id: "demo-2", id: "demo-2",
-      message: "Ready to start immediately. Please review my profile for past work.",
-      proposedPrice: 1200, estimatedDuration: "1 week",
+      _id: "demo-2",
+      id: "demo-2",
+      message:
+        "Ready to start immediately. Please review my profile for past work.",
+      proposedPrice: 1200,
+      estimatedDuration: "1 week",
       createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
       updatedAt: new Date(Date.now() - 5 * 86400000).toISOString(),
       jobId: { _id: "j2", title: "Deep clean 3-bedroom apartment" } as any,
-      providerId: {} as any, viewedByClient: false, attachments: [],
+      providerId: {} as any,
+      viewedByClient: false,
+      attachments: [],
     },
     {
-      _id: "demo-3", id: "demo-3",
-      message: "Fully licensed electrician. Can handle all wiring and panel upgrades.",
-      proposedPrice: 2400, estimatedDuration: "2 days",
+      _id: "demo-3",
+      id: "demo-3",
+      message:
+        "Fully licensed electrician. Can handle all wiring and panel upgrades.",
+      proposedPrice: 2400,
+      estimatedDuration: "2 days",
       createdAt: new Date(Date.now() - 10 * 86400000).toISOString(),
       updatedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
       jobId: { _id: "j3", title: "Install outdoor lighting system" } as any,
-      providerId: {} as any, viewedByClient: true, attachments: [],
+      providerId: {} as any,
+      viewedByClient: true,
+      attachments: [],
     },
   ]);
 
@@ -261,9 +276,9 @@ export default function JobsPage() {
               <h2 className="font-black text-gray-900 dark:text-white text-sm">
                 Task Hub
               </h2>
-              {isProvider && user?.activeRoleId?.providerName && (
+              {isProvider && (user?.activeRoleId as ProviderData)?.providerName && (
                 <p className="text-[10px] text-gray-400 mt-0.5 truncate">
-                  {user.activeRoleId.providerName}
+                  {(user.activeRoleId as ProviderData)?.providerName}
                 </p>
               )}
             </div>

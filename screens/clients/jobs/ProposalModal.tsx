@@ -13,7 +13,11 @@ interface ProposalModalProps {
   onSuccess?: () => void;
 }
 
-export default function ProposalModal({ job, onClose, onSuccess }: ProposalModalProps) {
+export default function ProposalModal({
+  job,
+  onClose,
+  onSuccess,
+}: ProposalModalProps) {
   const { setSuccess } = useGlobalStore();
   const [message, setMessage] = useState("");
   const [price, setPrice] = useState(job?.budget?.toString() ?? "");
@@ -24,7 +28,8 @@ export default function ProposalModal({ job, onClose, onSuccess }: ProposalModal
 
   if (!job) return null;
 
-  const canSubmit = message.trim().length > 0 && price.length > 0 && duration.length > 0;
+  const canSubmit =
+    message.trim().length > 0 && price.length > 0 && duration.length > 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,7 +158,9 @@ export default function ProposalModal({ job, onClose, onSuccess }: ProposalModal
               <div>
                 <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">
                   Attachments{" "}
-                  <span className="text-gray-400 font-normal">(optional, max 5)</span>
+                  <span className="text-gray-400 font-normal">
+                    (optional, max 5)
+                  </span>
                 </label>
                 <input
                   ref={fileRef}
@@ -176,7 +183,9 @@ export default function ProposalModal({ job, onClose, onSuccess }: ProposalModal
                         <button
                           type="button"
                           aria-label="Remove file"
-                          onClick={() => setFiles(files.filter((_, j) => j !== i))}
+                          onClick={() =>
+                            setFiles(files.filter((_, j) => j !== i))
+                          }
                         >
                           <X size={10} />
                         </button>

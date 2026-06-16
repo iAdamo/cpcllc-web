@@ -2,8 +2,17 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  X, MapPin, Calendar, Users, Zap, Send, CheckCircle,
-  AlertCircle, Shield, Bookmark, BookmarkCheck,
+  X,
+  MapPin,
+  Calendar,
+  Users,
+  Zap,
+  Send,
+  CheckCircle,
+  AlertCircle,
+  Shield,
+  Bookmark,
+  BookmarkCheck,
 } from "lucide-react";
 import { JobData, MediaItem } from "@/types";
 import useGlobalStore from "@/stores";
@@ -27,16 +36,20 @@ function formatBudget(n: number): string {
 
 const URGENCY_BADGE: Record<string, string> = {
   Immediate: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400",
-  Urgent: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400",
+  Urgent:
+    "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400",
   Normal: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
 };
 
 const STATUS_BADGE: Record<string, string> = {
-  Active: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-  "In Progress": "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  Active:
+    "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  "In Progress":
+    "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
   Completed: "bg-gray-100 text-gray-500 dark:bg-gray-800",
   Cancelled: "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400",
-  Expired: "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
+  Expired:
+    "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
 };
 
 interface JobDetailPanelProps {
@@ -46,7 +59,12 @@ interface JobDetailPanelProps {
   hasApplied?: boolean;
 }
 
-export default function JobDetailPanel({ job, onClose, onApply, hasApplied }: JobDetailPanelProps) {
+export default function JobDetailPanel({
+  job,
+  onClose,
+  onApply,
+  hasApplied,
+}: JobDetailPanelProps) {
   const { savedJobs, setSavedJobs } = useGlobalStore();
   const isSaved = job ? savedJobs.some((s) => s._id === job._id) : false;
 
@@ -59,9 +77,12 @@ export default function JobDetailPanel({ job, onClose, onApply, hasApplied }: Jo
 
   const clientName = job?.anonymous
     ? "Anonymous Client"
-    : `${job?.userId?.firstName ?? ""} ${job?.userId?.lastName ?? ""}`.trim() || "Client";
+    : `${job?.userId?.firstName ?? ""} ${job?.userId?.lastName ?? ""}`.trim() ||
+      "Client";
 
-  const clientAvatar = job?.anonymous ? null : (job?.userId?.profilePicture as any)?.thumbnail ?? null;
+  const clientAvatar = job?.anonymous
+    ? null
+    : (job?.userId?.profilePicture as any)?.thumbnail ?? null;
 
   const locationStr = [
     job?.location?.address?.city,
@@ -104,7 +125,9 @@ export default function JobDetailPanel({ job, onClose, onApply, hasApplied }: Jo
               >
                 <X size={15} />
               </button>
-              <span className="text-xs font-bold text-gray-400 dark:text-gray-500 flex-1">Task Details</span>
+              <span className="text-xs font-bold text-gray-400 dark:text-gray-500 flex-1">
+                Task Details
+              </span>
               <button
                 type="button"
                 aria-label={isSaved ? "Unsave" : "Save task"}
@@ -124,12 +147,20 @@ export default function JobDetailPanel({ job, onClose, onApply, hasApplied }: Jo
               {/* Cover image */}
               {allImages[0] && (
                 <div className="relative aspect-video w-full overflow-hidden">
-                  <img src={allImages[0]} alt={job.title} className="w-full h-full object-cover" />
+                  <img
+                    src={allImages[0]}
+                    alt={job.title}
+                    className="w-full h-full object-cover"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   {job.urgency && job.urgency !== "Normal" && (
-                    <span className={`absolute top-3 right-3 flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full ${
-                      job.urgency === "Immediate" ? "bg-red-500 text-white" : "bg-amber-500 text-white"
-                    }`}>
+                    <span
+                      className={`absolute top-3 right-3 flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full ${
+                        job.urgency === "Immediate"
+                          ? "bg-red-500 text-white"
+                          : "bg-amber-500 text-white"
+                      }`}
+                    >
                       <Zap size={9} />
                       {job.urgency}
                     </span>
@@ -161,28 +192,46 @@ export default function JobDetailPanel({ job, onClose, onApply, hasApplied }: Jo
                     </p>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-3 text-center">
-                    <p className={`text-xs font-black leading-none ${isExpired ? "text-red-500" : "text-gray-900 dark:text-white"}`}>
+                    <p
+                      className={`text-xs font-black leading-none ${
+                        isExpired
+                          ? "text-red-500"
+                          : "text-gray-900 dark:text-white"
+                      }`}
+                    >
                       {deadline}
                     </p>
-                    <p className="text-[10px] text-gray-400 mt-1 font-semibold">Deadline</p>
+                    <p className="text-[10px] text-gray-400 mt-1 font-semibold">
+                      Deadline
+                    </p>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-3 text-center">
                     <p className="text-lg font-black text-gray-900 dark:text-white leading-none">
                       {job.proposalsCount ?? 0}
                     </p>
-                    <p className="text-[10px] text-gray-400 mt-1 font-semibold">Proposals</p>
+                    <p className="text-[10px] text-gray-400 mt-1 font-semibold">
+                      Proposals
+                    </p>
                   </div>
                 </div>
 
                 {/* Badges */}
                 <div className="flex flex-wrap gap-2">
                   {job.urgency && (
-                    <span className={`flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full ${URGENCY_BADGE[job.urgency] ?? URGENCY_BADGE["Normal"]}`}>
+                    <span
+                      className={`flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full ${
+                        URGENCY_BADGE[job.urgency] ?? URGENCY_BADGE["Normal"]
+                      }`}
+                    >
                       <Zap size={10} />
                       {job.urgency}
                     </span>
                   )}
-                  <span className={`text-[11px] font-bold px-3 py-1.5 rounded-full ${STATUS_BADGE[job.status] ?? ""}`}>
+                  <span
+                    className={`text-[11px] font-bold px-3 py-1.5 rounded-full ${
+                      STATUS_BADGE[job.status] ?? ""
+                    }`}
+                  >
                     {job.status}
                   </span>
                   {job.visibility !== "Public" && (
@@ -210,8 +259,12 @@ export default function JobDetailPanel({ job, onClose, onApply, hasApplied }: Jo
                       <MapPin size={13} className="text-gray-500" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Location</p>
-                      <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{locationStr}</p>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                        Location
+                      </p>
+                      <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        {locationStr}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -230,7 +283,9 @@ export default function JobDetailPanel({ job, onClose, onApply, hasApplied }: Jo
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-black text-gray-900 dark:text-white truncate">{clientName}</p>
+                    <p className="text-xs font-black text-gray-900 dark:text-white truncate">
+                      {clientName}
+                    </p>
                     <p className="text-[10px] text-gray-400">Client</p>
                   </div>
                   {job.anonymous && (
@@ -278,13 +333,19 @@ export default function JobDetailPanel({ job, onClose, onApply, hasApplied }: Jo
                 }`}
               >
                 {hasApplied ? (
-                  <><CheckCircle size={16} /> Proposal Submitted</>
+                  <>
+                    <CheckCircle size={16} /> Proposal Submitted
+                  </>
                 ) : isExpired ? (
-                  <><AlertCircle size={16} /> Task Expired</>
+                  <>
+                    <AlertCircle size={16} /> Task Expired
+                  </>
                 ) : job.status !== "Active" ? (
                   `Task ${job.status}`
                 ) : (
-                  <><Send size={15} /> Submit Proposal</>
+                  <>
+                    <Send size={15} /> Submit Proposal
+                  </>
                 )}
               </button>
             </div>

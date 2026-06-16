@@ -31,14 +31,19 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
 
-  const hideNavRoutes = ["/onboarding", "/admin"];
+  const hideNavRoutes = [
+    "/onboarding",
+    "/admin",
+    "/settings/account-control/deletion",
+  ];
   const hideFooterRoutes = [
     "/onboarding",
     "/admin",
-    "/jobs",
+    "/tasks",
     "/providers",
     "/privacy-policy",
     "/terms-of-service",
+    "/settings/account-control/deletion",
   ];
   const hideNavBarRoutesRegex = hideNavRoutes.map(
     (route) => new RegExp(`^${route}(?:/|$)`)

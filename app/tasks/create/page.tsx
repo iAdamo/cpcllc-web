@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CreateTaskPage from "@/screens/tasks/create";
+import CreateTaskPage from "@/screens/clients/jobs/create";
 
 export const metadata: Metadata = {
   title: "Post a Task — CompaniesCenterLLC",

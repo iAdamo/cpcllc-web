@@ -31,6 +31,15 @@ export enum SocketEvents {
   PRESENCE_OFFLINE = "presence:offline",
   PRESENCE_SUBSCRIBE = "presence:subscribe",
 
+  // Subscription primitive (Phase 1 of the WS upgrade). Clients open and
+  // close channel subscriptions via these events; the backend pushes
+  // matching emissions wrapped in a `domain:event` envelope.
+  SUBSCRIPTION_SUBSCRIBE = "subscription:subscribe",
+  SUBSCRIPTION_UNSUBSCRIBE = "subscription:unsubscribe",
+  SUBSCRIPTION_SUBSCRIBED = "subscription:subscribed",
+  SUBSCRIPTION_UNSUBSCRIBED = "subscription:unsubscribed",
+  DOMAIN_EVENT = "domain:event",
+
   // System events
   ERROR = "error",
   RATE_LIMIT_EXCEEDED = "rate_limit:exceeded",
