@@ -1,6 +1,6 @@
 // import { getUserServices } from "./service";
 import { ApiClientSingleton } from "./conf";
-import { UserData, ProviderData } from "@/types";
+import { UserData, ProviderData, FollowersData } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -70,12 +70,12 @@ export const getFeaturedProviders = async (): Promise<ProviderData[]> => {
   return response.data;
 };
 
-// export const getFollowers = async (id: string): Promise<FollowersData> => {
-//   const response = await axiosInstance.get(`users/${id}/followers`);
-//   return response.data;
-// };
+export const getFollowers = async (id: string): Promise<FollowersData> => {
+  const response = await axiosInstance.get(`users/${id}/followers`);
+  return response.data;
+};
 
-// export const getFollowing = async (id: string): Promise<FollowersData> => {
-//   const response = await axiosInstance.get(`users/${id}/following`);
-//   return response.data;
-// };
+export const getFollowing = async (id: string): Promise<FollowersData> => {
+  const response = await axiosInstance.get(`users/${id}/following`);
+  return response.data;
+};

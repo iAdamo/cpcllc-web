@@ -71,7 +71,22 @@ export const onboardingSlice: StateCreator<
     })),
 
   resetOnboarding: () => set({ onboardingStep: 0, onboardingData: {} }),
+  
+  completeOnboarding: async () => {
+    if (get().user?.isOnboardingComplete) return;
+    const form = new FormData();
+    form.append("isOnboardingComplete", "true");
+    await get().updateUserProfile("Client", form);
+    get().updateProfile({ isOnboardingComplete: true });
+  },
 
+  // resetOnboarding: async () => {
+  //   const form = new FormData();
+  //   form.append("isOnboardingComplete", "false");
+  //   await get().updateUserProfile("Client", form);
+  //   if (get().currentStep < 7) set({ currentStep: 1 });
+  //   get().updateProfile({ isOnboardingComplete: false });
+  // },
   submitOnboarding: async () => {
     const { onboardingData } = get();
     try {

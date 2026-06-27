@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 import { usePathname, useRouter } from "next/navigation";
 import { getCurrentUser } from "@/axios/auth";
+import useGlobalStore from "@/stores";
 
 /**
  * Paths where AuthGate does NOT enforce email verification — auth flows
@@ -16,7 +18,7 @@ const PUBLIC_PATHS = new Set<string>([
   "/auth/signup",
   "/auth/forgot-password",
   "/auth/reset-password",
-  "/auth/verify-email",
+  // "/auth/verify-email",
   "/admin/mfa/verify",
   "/terms-of-service",
   "/privacy-policy",
@@ -43,11 +45,11 @@ function isPublicPath(pathname: string): boolean {
 export function AuthGate({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname() ?? "/";
+  const { user } = useGlobalStore();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
-
     (async () => {
       // Public path → no check needed
       if (isPublicPath(pathname)) {
@@ -56,12 +58,10 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
       }
 
       try {
-        const user = await getCurrentUser();
         if (cancelled) return;
-
         if (user && !user.isEmailVerified) {
           router.replace(
-            `/auth/verify-email?email=${encodeURIComponent(user.email)}`,
+            `/auth/verify-email?email=${encodeURIComponent(user.email)}`
           );
           return;
         }
@@ -77,15 +77,16 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [pathname, router]);
+  }, [pathname, router, user]);
 
   // While we're checking on a protected path, render nothing to avoid flashing
   // the protected UI before the redirect lands.
   if (!ready && !isPublicPath(pathname)) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-slate-400 text-sm">
-        Checking access…
-      </div>
+      <Spinner
+        size="small"
+        className="h-fit p-4 justify-start items-start w-full"
+      />
     );
   }
 

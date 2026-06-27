@@ -14,6 +14,7 @@ export default function Completion() {
     resetOnboarding,
     isLoading,
     error,
+    completeOnboarding,
   } = useGlobalStore();
 
   const [submitted, setSubmitted] = useState(false);
@@ -29,6 +30,7 @@ export default function Completion() {
       const ok = await submitOnboarding();
       if (cancelled) return;
       if (ok) {
+        completeOnboarding();
         setSubmitted(true);
         router.replace("/tasks");
       } else {

@@ -13,9 +13,10 @@ import Services from "./steps/Services";
 import LocationContact from "./steps/LocationContact";
 import Gallery from "./steps/Gallery";
 import Completion from "./steps/Completion";
+import SignUpPage from "../auth/SignUpPage";
 
-const PROVIDER_STEPS = [0, 1, 2, 3, 4, 5, 6, 7] as const;
-const CLIENT_STEPS = [0, 1, 2, 7] as const;
+const PROVIDER_STEPS = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
+const CLIENT_STEPS = [0, 1, 2, 3, 8] as const;
 type Step = (typeof PROVIDER_STEPS)[number];
 
 function getNextStep(step: number, role?: string): number {
@@ -34,7 +35,7 @@ function getPrevStep(step: number, role?: string): number {
 
 function getProgressInfo(step: number, role?: string) {
   const inner = (role === "Provider" ? PROVIDER_STEPS : CLIENT_STEPS).filter(
-    (s) => s !== 0 && s !== 7
+    (s) => s !== 0 && s !== 8
   );
   const current = inner.indexOf(step as Step) + 1;
   return { current: Math.max(current, 0), total: inner.length };
@@ -44,32 +45,32 @@ const LEFT_CONTENT: Record<
   number,
   { headline: string; sub: string; badge?: string }
 > = {
-  1: {
+  2: {
     headline: "Join 500+ verified\nprofessionals.",
     sub: "Whether you're looking for help or ready to offer your skills, CompaniesCenterLLC connects the right people.",
     badge: "Trusted across many countries",
   },
-  2: {
+  3: {
     headline: "Your profile is your\nfirst impression.",
     sub: "A complete profile gets up to 3× more enquiries. Take 60 seconds to make it count.",
     badge: "3× more client reach",
   },
-  3: {
+  4: {
     headline: "Stand out from\nthe crowd.",
     sub: "Providers with a complete company profile are featured first in search results.",
     badge: "Featured placement",
   },
-  4: {
+  5: {
     headline: "Reach clients\nwho need you.",
     sub: "The right service tags mean you show up in exactly the searches that matter to you.",
     badge: "Precision matching",
   },
-  5: {
+  6: {
     headline: "Make it easy\nto find you.",
     sub: "Clients search by location. Accurate contact details turn searches into real calls.",
     badge: "Location-aware discovery",
   },
-  6: {
+  7: {
     headline: "A picture is worth\na thousand words.",
     sub: "Providers with 4+ photos get significantly more enquiries. Show off your best work.",
     badge: "4× more engagement",
@@ -109,7 +110,7 @@ export default function Onboarding() {
     role
   );
 
-  const isFullScreen = onboardingStep === 0 || onboardingStep === 7;
+  const isFullScreen = onboardingStep === 0 || onboardingStep === 8;
   const lc = LEFT_CONTENT[onboardingStep];
 
   const slideVariants = {
@@ -132,18 +133,20 @@ export default function Onboarding() {
       >
         {onboardingStep === 0 && <Welcome onNext={goNext} />}
         {onboardingStep === 1 && <RoleSelect onNext={goNext} onBack={goBack} />}
-        {onboardingStep === 2 && (
+        {onboardingStep === 2 && <SignUpPage onNext={goBack} />}
+
+        {onboardingStep === 3 && (
           <ProfileBasics onNext={goNext} onBack={goBack} />
         )}
-        {onboardingStep === 3 && (
+        {onboardingStep === 4 && (
           <CompanyIdentity onNext={goNext} onBack={goBack} />
         )}
-        {onboardingStep === 4 && <Services onNext={goNext} onBack={goBack} />}
-        {onboardingStep === 5 && (
+        {onboardingStep === 5 && <Services onNext={goNext} onBack={goBack} />}
+        {onboardingStep === 6 && (
           <LocationContact onNext={goNext} onBack={goBack} />
         )}
-        {onboardingStep === 6 && <Gallery onNext={goNext} onBack={goBack} />}
-        {onboardingStep === 7 && <Completion />}
+        {onboardingStep === 7 && <Gallery onNext={goNext} onBack={goBack} />}
+        {onboardingStep === 8 && <Completion />}
       </motion.div>
     </AnimatePresence>
   );

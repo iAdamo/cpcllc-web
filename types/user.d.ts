@@ -48,6 +48,7 @@ export interface ProviderData {
   _id: string;
   // id: string;
   providerName: string;
+  slug?: string;
   providerLogo?: MediaItem | FileType;
   isVerified?: boolean;
   isFeatured?: boolean;
@@ -118,4 +119,15 @@ export interface ProviderData {
       };
     };
   };
+}
+
+export interface FollowersData {
+  followersCount: number;
+  followers: {
+    user: UserData;
+    provider: ProviderData;
+    isActive: boolean;
+    followedAt: Date;
+    unfollowedAt?: Date;
+  }[];
 }

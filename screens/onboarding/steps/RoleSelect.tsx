@@ -48,8 +48,7 @@ interface Props {
 }
 
 export default function RoleSelect({ onNext, onBack }: Props) {
-  const { onboardingData, updateOnboardingData, isAuthenticated } =
-    useGlobalStore();
+  const { onboardingData, updateOnboardingData } = useGlobalStore();
   const [selected, setSelected] = useState<Role | undefined>(
     onboardingData.role
   );

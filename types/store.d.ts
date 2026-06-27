@@ -269,6 +269,7 @@ export interface OnboardingState {
   updateOnboardingData: (data: Partial<OnboardingData>) => void;
   resetOnboarding: () => void;
   submitOnboarding: () => Promise<boolean>;
+  completeOnboarding: () => Promise<void>;
 }
 
 import type { AdminCacheState } from "@/stores/adminCacheState";

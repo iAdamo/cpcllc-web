@@ -5,12 +5,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { MailCheck } from "lucide-react";
 import { verifyEmail, sendCode } from "@/axios/auth";
+import useGlobalStore from "@/stores";
 
 export default function VerifyEmailPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") ?? "";
-
+  const { paramsFrom, setOnboardingStep, updateProfile } = useGlobalStore();
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
@@ -23,12 +24,18 @@ export default function VerifyEmailPage() {
     setLoading(true);
     try {
       await verifyEmail({ email, code });
-      router.replace("/auth/signin");
+      updateProfile({ isEmailVerified: true });
+      if (paramsFrom === "/onboarding") {
+        setOnboardingStep(3);
+        router.replace(paramsFrom);
+      } else {
+        router.replace("/");
+      }
     } catch (err: any) {
       setError(
         err?.response?.data?.message ??
           err?.message ??
-          "That code didn't work. It may be expired — try again.",
+          "That code didn't work. It may be expired — try again."
       );
     } finally {
       setLoading(false);
@@ -44,7 +51,7 @@ export default function VerifyEmailPage() {
       setResentAt(Date.now());
     } catch (err: any) {
       setError(
-        err?.response?.data?.message ?? "Couldn't resend. Try again shortly.",
+        err?.response?.data?.message ?? "Couldn't resend. Try again shortly."
       );
     } finally {
       setResending(false);

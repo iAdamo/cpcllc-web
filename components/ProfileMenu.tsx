@@ -186,37 +186,39 @@ export default function ProfileMenu() {
               </div>
 
               {/* Role switch */}
-              <button
-                type="button"
-                onClick={async () => {
-                  await handleRoleSwitch();
-                }}
-                className="mt-3 w-full flex items-center justify-between px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 hover:border-blue-300 hover:text-blue-700 dark:hover:text-blue-400 transition-all group/sw"
-              >
-                <div className="flex items-center gap-2">
-                  <ArrowLeftRight
-                    size={13}
-                    className="text-gray-400 group-hover/sw:text-blue-500 transition-colors"
-                  />
-                  <span>
-                    Switch to{" "}
-                    <span className="font-black">
-                      {isProvider ? "Client" : "Provider"}
+              {user && user.activeRole !== "Admin" && (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await handleRoleSwitch();
+                  }}
+                  className="mt-3 w-full flex items-center justify-between px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 hover:border-blue-300 hover:text-blue-700 dark:hover:text-blue-400 transition-all group/sw"
+                >
+                  <div className="flex items-center gap-2">
+                    <ArrowLeftRight
+                      size={13}
+                      className="text-gray-400 group-hover/sw:text-blue-500 transition-colors"
+                    />
+                    <span>
+                      Switch to{" "}
+                      <span className="font-black">
+                        {isProvider ? "Client" : "Provider"}
+                      </span>
                     </span>
-                  </span>
-                </div>
-                {!hasProviderProfile && (
-                  <span className="text-[10px] font-bold text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full">
-                    Set up
-                  </span>
-                )}
-                {hasProviderProfile && (
-                  <ChevronRight
-                    size={13}
-                    className="text-gray-300 group-hover/sw:text-blue-400 transition-colors"
-                  />
-                )}
-              </button>
+                  </div>
+                  {!hasProviderProfile && (
+                    <span className="text-[10px] font-bold text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full">
+                      Set up
+                    </span>
+                  )}
+                  {hasProviderProfile && (
+                    <ChevronRight
+                      size={13}
+                      className="text-gray-300 group-hover/sw:text-blue-400 transition-colors"
+                    />
+                  )}
+                </button>
+              )}
             </div>
 
             {/* ── Menu items ── */}

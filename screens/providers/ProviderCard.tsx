@@ -3,7 +3,15 @@
 import { useState, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Star, MapPin, Heart, CheckCircle, Award, Zap, Phone } from "lucide-react";
+import {
+  Star,
+  MapPin,
+  Heart,
+  CheckCircle,
+  Award,
+  Zap,
+  Phone,
+} from "lucide-react";
 import { ProviderData, MediaItem } from "@/types";
 import useGlobalStore from "@/stores";
 
@@ -36,7 +44,8 @@ const ProviderCard = memo(function ProviderCard({
   const imageUrl = getImageUrl(provider);
   const rating = provider.averageRating ?? 0;
   const reviewCount = provider.reviewCount ?? 0;
-  const address = provider.location?.primary?.address?.address ?? "Location not specified";
+  const address =
+    provider.location?.primary?.address?.address ?? "Location not specified";
   const isVerified = provider.isVerified ?? false;
   const isFeatured = provider.isFeatured ?? false;
   const isOnline = provider.availability === "Online";
@@ -111,16 +120,23 @@ const ProviderCard = memo(function ProviderCard({
               ))}
             </div>
             {rating > 0 && (
-              <span className="text-[11px] font-bold text-gray-800">{rating.toFixed(1)}</span>
+              <span className="text-[11px] font-bold text-gray-800">
+                {rating.toFixed(1)}
+              </span>
             )}
             <span className="text-[10px] text-gray-400">({reviewCount})</span>
           </div>
-          <p className="text-xs text-gray-700 line-clamp-2" >{provider.providerDescription}</p>
+          <p className="text-xs text-gray-700 line-clamp-2">
+            {provider.providerDescription}
+          </p>
 
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
             {provider.subcategories?.length > 0 && (
               <span className="text-[10px] text-gray-500 font-medium">
-                {provider.subcategories.slice(0, 2).map((s) => s.name).join(" · ")}
+                {provider.subcategories
+                  .slice(0, 2)
+                  .map((s) => s.name)
+                  .join(" · ")}
               </span>
             )}
             <span className="flex items-center gap-0.5 text-[10px] text-gray-400">
@@ -147,7 +163,7 @@ const ProviderCard = memo(function ProviderCard({
             />
           </button>
           <Link
-            href={`/profile/${provider.owner}`}
+            href={`/c/${provider.slug}`}
             onClick={(e) => e.stopPropagation()}
             className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-colors whitespace-nowrap"
           >
@@ -159,6 +175,7 @@ const ProviderCard = memo(function ProviderCard({
               onClick={(e) => e.stopPropagation()}
               className="w-7 h-7 bg-gray-100 hover:bg-green-50 hover:text-green-600 rounded-lg flex items-center justify-center text-gray-400 transition-colors"
               aria-label="Call"
+              aria-disabled={true}
             >
               <Phone size={11} />
             </a>
