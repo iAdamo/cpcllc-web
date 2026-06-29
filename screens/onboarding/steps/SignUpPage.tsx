@@ -3,10 +3,13 @@
 import { useState, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { UserPlus, Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
-import { register, sendCode } from "@/axios/auth";
+import { Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
 import useGlobalStore from "@/stores";
-import StepShell from "../onboarding/steps/StepShell";
+import PhoneNumberInput, {
+  phoneCountryOptions,
+  type SupportedPhoneCountryCode,
+} from "@/components/auth/PhoneNumberInput";
+import { normalizePhoneNumber, isValidUsOrNgPhoneNumber } from "@/utils/phone";
 
 interface PasswordRequirements {
   length: boolean;
@@ -28,9 +31,22 @@ const validateEmail = (email: string): boolean => {
   return re.test(email);
 };
 
-const validatePhone = (phone: string): boolean => {
-  const re = /^[\d\s\-\+\(\)]{10,}$/;
-  return re.test(phone);
+const getSelectedPhoneCountry = (countryCode: string) =>
+  phoneCountryOptions.find((option) => option.code === countryCode) ??
+  phoneCountryOptions[0];
+
+const validatePhone = (phone: string, countryCode: string): boolean => {
+  const selectedCountry = getSelectedPhoneCountry(countryCode);
+  const digits = phone.replace(/\D/g, "");
+
+  if (!digits || digits.length !== selectedCountry.maxLength) {
+    return false;
+  }
+
+  const normalized = normalizePhoneNumber(
+    `${selectedCountry.dialCode}${digits}`
+  );
+  return isValidUsOrNgPhoneNumber(normalized);
 };
 
 const checkPasswordRequirements = (password: string): PasswordRequirements => ({
@@ -75,10 +91,12 @@ interface Props {
 export default function SignUpPage({ onNext, onBack }: Props) {
   const pathname = usePathname();
   const router = useRouter();
-  const { signUp, setParamsFrom } = useGlobalStore();
+  const { signUp, setParamsFrom, error, clearError } = useGlobalStore();
 
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneCountry, setPhoneCountry] =
+    useState<SupportedPhoneCountryCode>("US");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -91,6 +109,8 @@ export default function SignUpPage({ onNext, onBack }: Props) {
     password: false,
     confirmPassword: false,
   });
+
+  if (error) clearError();
 
   const passwordRequirements = useMemo(
     () => checkPasswordRequirements(password),
@@ -106,7 +126,7 @@ export default function SignUpPage({ onNext, onBack }: Props) {
   // Memoized form validation check (doesn't update state)
   const isFormValid = useMemo(() => {
     const emailValid = email && validateEmail(email);
-    const phoneValid = phoneNumber && validatePhone(phoneNumber);
+    const phoneValid = phoneNumber && validatePhone(phoneNumber, phoneCountry);
     const passwordValid =
       password && Object.values(passwordRequirements).every(Boolean);
     const confirmPasswordValid = confirmPassword && passwordsMatch;
@@ -115,6 +135,7 @@ export default function SignUpPage({ onNext, onBack }: Props) {
   }, [
     email,
     phoneNumber,
+    phoneCountry,
     password,
     confirmPassword,
     passwordRequirements,
@@ -130,7 +151,16 @@ export default function SignUpPage({ onNext, onBack }: Props) {
 
     setLoading(true);
     try {
-      await signUp({ email, phoneNumber, password });
+      const selectedCountry = getSelectedPhoneCountry(phoneCountry);
+      const dialedPhoneNumber = normalizePhoneNumber(
+        `${selectedCountry.dialCode}${phoneNumber.replace(/\D/g, "")}`
+      );
+
+      await signUp({
+        email,
+        phoneNumber: dialedPhoneNumber,
+        password,
+      });
       console.log(pathname);
       pathname === "/onboarding" && setParamsFrom(pathname);
 
@@ -156,7 +186,11 @@ export default function SignUpPage({ onNext, onBack }: Props) {
   return (
     <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 dark:from-slate-950 dark:via-blue-950/20 dark:to-slate-950 ">
       {pathname === "/onboarding" && (
-        <button type="button" className="mt-10 ml-8 font-medium">
+        <button
+          type="button"
+          onClick={() => onBack()}
+          className="mt-10 ml-8 font-medium"
+        >
           Back
         </button>
       )}
@@ -176,6 +210,11 @@ export default function SignUpPage({ onNext, onBack }: Props) {
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-7 shadow-sm">
             <form onSubmit={onSubmit} className="space-y-5">
               {/* General Error Alert */}
+              {error && (
+                <div className="text-sm text-rose-700 bg-rose-50 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-900 rounded-lg px-3 py-2">
+                  {error}
+                </div>
+              )}
               {errors.email && !validateEmail(email) && touched.email && (
                 <div className="flex gap-3 p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-lg">
                   <AlertCircle
@@ -231,40 +270,34 @@ export default function SignUpPage({ onNext, onBack }: Props) {
                 >
                   Phone number
                 </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  required
+                <PhoneNumberInput
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={setPhoneNumber}
+                  countryCode={phoneCountry}
+                  onCountryChange={setPhoneCountry}
                   onBlur={() => handleBlur("phone")}
-                  className={`w-full px-4 py-3 rounded-xl border-2 transition-all outline-none text-sm
-                  ${
-                    touched.phone && phoneNumber && !validatePhone(phoneNumber)
-                      ? "border-rose-300 dark:border-rose-700 bg-rose-50 dark:bg-rose-950/20"
-                      : touched.phone &&
-                        phoneNumber &&
-                        validatePhone(phoneNumber)
-                      ? "border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950/20"
-                      : "border-slate-200 dark:border-slate-700 dark:bg-slate-800"
-                  }
-                  focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
-                  placeholder="+1 (555) 123-4567"
+                  touched={touched.phone}
+                  error={Boolean(
+                    touched.phone &&
+                      phoneNumber &&
+                      !validatePhone(phoneNumber, phoneCountry)
+                  )}
                 />
                 {touched.phone &&
                   phoneNumber &&
-                  !validatePhone(phoneNumber) && (
+                  !validatePhone(phoneNumber, phoneCountry) && (
                     <p className="text-xs text-rose-600 dark:text-rose-400 mt-2">
-                      {errors.phone}
+                      Enter a valid phone number.
                     </p>
                   )}
-                {touched.phone && phoneNumber && validatePhone(phoneNumber) && (
-                  <div className="flex gap-2 mt-2 text-xs text-green-600 dark:text-green-400">
-                    <CheckCircle2 size={14} />
-                    Valid phone number
-                  </div>
-                )}
+                {touched.phone &&
+                  phoneNumber &&
+                  validatePhone(phoneNumber, phoneCountry) && (
+                    <div className="flex gap-2 mt-2 text-xs text-green-600 dark:text-green-400">
+                      <CheckCircle2 size={14} />
+                      Valid phone number
+                    </div>
+                  )}
               </div>
 
               {/* Password Field */}

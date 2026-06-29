@@ -41,7 +41,6 @@ const PUBLIC_EXACT = [
   "/settings/account-control/deletion",
   "/admin",
   "/auth/signin",
-  "/auth/signup",
   "/auth/forgot-password",
   "/auth/reset-password",
   // "/auth/verify-email",

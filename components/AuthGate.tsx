@@ -15,7 +15,6 @@ import useGlobalStore from "@/stores";
 const PUBLIC_PATHS = new Set<string>([
   "/",
   "/auth/signin",
-  "/auth/signup",
   "/auth/forgot-password",
   "/auth/reset-password",
   // "/auth/verify-email",

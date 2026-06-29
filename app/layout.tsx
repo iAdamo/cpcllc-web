@@ -12,6 +12,7 @@ import MobileGate from "@/components/MobileGate";
 import { usePathname } from "next/navigation";
 import { Providers } from "./providers";
 import { SessionProvider } from "@/context/SessionContext";
+import useGlobalStore from "@/stores";
 // import { MapProvider } from "@/context/MapContext";
 
 // const geistSans = Geist({

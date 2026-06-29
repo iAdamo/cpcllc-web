@@ -136,7 +136,7 @@ export default function VerifyEmailPage() {
                 {resending ? "Resending…" : "Resend code"}
               </button>
             </p>
-            <p>
+            {/* <p>
               Wrong email?{" "}
               <Link
                 href="/auth/signup"
@@ -144,7 +144,7 @@ export default function VerifyEmailPage() {
               >
                 Start over
               </Link>
-            </p>
+            </p> */}
           </div>
         </form>
       </div>
