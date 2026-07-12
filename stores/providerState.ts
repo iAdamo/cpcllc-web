@@ -1,19 +1,20 @@
 "use client";
-import { ProviderData, Category, SearchResultData } from "@/types";
 import { StateCreator } from "zustand";
 import { GlobalStore, ProviderState, SortBy, JobData } from "@/types";
 import { setUserFavourites } from "@/axios/user";
 
+/**
+ * Marketplace selection + bookmark state. Categories come from
+ * hooks/useCategories.ts (TanStack Query); search results from
+ * hooks/useGlobalSearch.ts. What remains here is genuinely client-owned:
+ * the user's current subcategory selection, sort choice, and the persisted
+ * saved-companies / saved-jobs mirrors.
+ */
 export const providerState: StateCreator<GlobalStore, [], [], ProviderState> = (
   set,
   get
 ) => ({
-  // ── Searching flag (legacy — new code should use SearchState.isSearching) ──
-  isSearching: false,
-
   sortBy: "Relevance",
-  categories: [],
-  setCategories: (categories: Category[]) => set({ categories }),
   setSortBy: (sortBy: SortBy) => set({ sortBy }),
 
   // ── Saved ──────────────────────────────────────────────────────────────────
@@ -70,19 +71,4 @@ export const providerState: StateCreator<GlobalStore, [], [], ProviderState> = (
     });
   },
   clearSelectedSubcategories: () => set({ selectedSubcategories: [] }),
-
-  // ── Legacy search result slot ───────────────────────────────────────────────
-  // SearchState.providerResults / SearchState.jobResults should be used instead.
-  searchResults: { providers: [], services: [], jobs: [] },
-  setSearchResults: (results: SearchResultData) => set({ searchResults: results }),
-  clearSearchResults: () =>
-    set({ searchResults: { providers: [], services: [], jobs: [] } }),
-
-  // ── Filtered lists (client-side) — now delegated to SearchState ───────────
-  filteredProviders: [],
-  setFilteredProviders: (providers: ProviderData[]) =>
-    set({ filteredProviders: providers }),
-  filteredJobs: [],
-  setFilteredJobs: (jobs: JobData[]) => set({ filteredJobs: jobs }),
-
 });

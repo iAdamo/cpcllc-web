@@ -24,6 +24,7 @@ import useGlobalStore from "@/stores";
 import { Subcategory, Category } from "@/types";
 
 import { useCategories } from "../../hooks/useCategories";
+import { useGlobalSearch } from "../../hooks/useGlobalSearch";
 import FilterBar from "./FilterBar";
 import FilterDrawer from "./FilterDrawer";
 import ProviderCard, { ProviderCardSkeleton } from "./ProviderCard";
@@ -80,19 +81,21 @@ export default function ServiceProvidersPage() {
     currentLocation,
     getCurrentLocation,
     filteredProviders,
-    providerResults,
-    isSearching,
-    isLoadingMore,
-    searchTotalPages,
-    searchPage,
-    searchTotal,
-    executeSearch,
-    loadMore,
     setSearchFilters,
     setSearchModel,
     resetSearchFilters,
     searchFilters,
   } = useGlobalStore();
+
+  // Server state — re-fetches whenever the shared filters change.
+  const {
+    providerResults,
+    isSearching,
+    isLoadingMore,
+    hasNextPage,
+    loadMore,
+    total: totalCount,
+  } = useGlobalSearch("providers");
 
   // ── State ──────────────────────────────────────────────────────────────────
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
@@ -105,7 +108,10 @@ export default function ServiceProvidersPage() {
   const userLocation = useMemo(
     () =>
       currentLocation
-        ? { lat: currentLocation.coords.latitude, lng: currentLocation.coords.longitude }
+        ? {
+            lat: currentLocation.coords.latitude,
+            lng: currentLocation.coords.longitude,
+          }
         : null,
     [currentLocation]
   );
@@ -114,7 +120,8 @@ export default function ServiceProvidersPage() {
   useEffect(() => {
     if (!currentLocation) getCurrentLocation();
     setSearchModel("providers");
-    // Pre-populate filters from URL params on first load
+    // Pre-populate filters from URL params on first load; the query keys on
+    // these filters, so setting them is what kicks off the search.
     const q = searchParams.get("q") ?? "";
     const loc = searchParams.get("location") ?? "";
     setSearchFilters({
@@ -124,7 +131,6 @@ export default function ServiceProvidersPage() {
       lat: currentLocation?.coords?.latitude,
       long: currentLocation?.coords?.longitude,
     });
-    executeSearch({ model: "providers", query: q || undefined, location: loc || undefined });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -140,7 +146,6 @@ export default function ServiceProvidersPage() {
       lat: userLocation?.lat,
       long: userLocation?.lng,
     });
-    executeSearch({ model: "providers" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, filters, selectedSubcategories]);
 
@@ -162,11 +167,10 @@ export default function ServiceProvidersPage() {
 
   const isLoading = isSearching;
   const isFetchingNextPage = isLoadingMore;
-  const hasNextPage = searchPage < searchTotalPages;
-  const totalCount = searchTotal;
 
   // "What" client-side filter takes priority; otherwise show API results
-  const displayedProviders = filteredProviders.length > 0 ? filteredProviders : providerResults;
+  const displayedProviders =
+    filteredProviders.length > 0 ? filteredProviders : providerResults;
 
   const categories: Category[] = categoriesData ?? [];
 
@@ -187,8 +191,7 @@ export default function ServiceProvidersPage() {
     handleFiltersReset();
     resetSearchFilters();
     router.replace("/providers", { scroll: false });
-    executeSearch({ model: "providers" });
-  }, [handleFiltersReset, resetSearchFilters, router, executeSearch]);
+  }, [handleFiltersReset, resetSearchFilters, router]);
 
   const handleLoadMore = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) loadMore();
@@ -197,9 +200,8 @@ export default function ServiceProvidersPage() {
   const handleSearch = useCallback(
     (q: string, loc: string) => {
       setSearchFilters({ query: q || undefined, location: loc || undefined });
-      executeSearch({ model: "providers", query: q || undefined, location: loc || undefined });
     },
-    [setSearchFilters, executeSearch]
+    [setSearchFilters]
   );
 
   const handleToggleSubcat = useCallback(
@@ -246,10 +248,7 @@ export default function ServiceProvidersPage() {
 
         {/* ── Universal Search (non-sticky, inside glass panel) ── */}
         <div className="flex-shrink-0 px-4">
-          <UniversalSearch
-            variant="providers"
-            providers={providerResults}
-          />
+          <UniversalSearch variant="providers" providers={providerResults} />
         </div>
 
         {/* ── Categories sidebar + Provider list ── */}
@@ -395,7 +394,7 @@ export default function ServiceProvidersPage() {
                 Join and grow your business
               </p>
               <Link
-                href="/register"
+                href="/onboarding"
                 className="block text-center py-1.5 bg-white text-blue-600 text-[10px] font-black rounded-lg hover:bg-blue-50 transition-colors"
               >
                 Join now
@@ -405,6 +404,22 @@ export default function ServiceProvidersPage() {
 
           {/* Provider list */}
           <div className="flex-1 overflow-y-auto no-scrollbar">
+            <div className="flex-shrink-0 pl-8">
+              <FilterBar
+                filters={filters}
+                sortBy={sortBy}
+                resultCount={
+                  filteredProviders.length > 0
+                    ? filteredProviders.length
+                    : totalCount
+                }
+                isLoading={isLoading}
+                onFiltersOpen={() => setFiltersOpen(true)}
+                onSortChange={setSortBy}
+                onFiltersChange={handleFiltersChange}
+                activeFiltersCount={activeFiltersCount}
+              />
+            </div>
             {isLoading ? (
               <div className="flex flex-col gap-2 p-3">
                 {Array.from({ length: 6 }).map((_, i) => (
@@ -419,23 +434,6 @@ export default function ServiceProvidersPage() {
               />
             ) : (
               <>
-                {/* ── Filter bar ── */}
-                <div className="flex-shrink-0 px-6">
-                  <FilterBar
-                    filters={filters}
-                    sortBy={sortBy}
-                    resultCount={
-                      filteredProviders.length > 0
-                        ? filteredProviders.length
-                        : totalCount
-                    }
-                    isLoading={isLoading}
-                    onFiltersOpen={() => setFiltersOpen(true)}
-                    onSortChange={setSortBy}
-                    onFiltersChange={handleFiltersChange}
-                    activeFiltersCount={activeFiltersCount}
-                  />
-                </div>
                 <div className="flex flex-col gap-2 pl-8  pt-8">
                   {displayedProviders.map((p, i) => (
                     <ProviderCard

@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import useGlobalStore from "@/stores";
+import { getCachedJobResults } from "@/hooks/useGlobalSearch";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useTranslation } from "@/context/TranslationContext";
 
@@ -64,17 +65,10 @@ function LocationChip({ transparent = false }: { transparent?: boolean }) {
 // ── Jobs nav search ───────────────────────────────────────────────────────────
 
 function JobsNavSearch() {
-  const {
-    setSearchFilters,
-    executeSearch,
-    searchFilters,
-    jobResults,
-    setFilteredJobs,
-  } = useGlobalStore();
+  const { setSearchFilters, searchFilters, setFilteredJobs } =
+    useGlobalStore();
   const [query, setQuery] = useState(searchFilters?.query ?? "");
   const mounted = useRef(false);
-  const jobResultsRef = useRef(jobResults);
-  jobResultsRef.current = jobResults;
 
   useEffect(() => {
     if (!mounted.current) {
@@ -87,7 +81,7 @@ function JobsNavSearch() {
       setFilteredJobs([]);
     } else {
       setFilteredJobs(
-        jobResultsRef.current.filter(
+        getCachedJobResults().filter(
           (j) =>
             j.title?.toLowerCase().includes(q) ||
             j.description?.toLowerCase().includes(q) ||
@@ -98,8 +92,8 @@ function JobsNavSearch() {
   }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const flush = () => {
+    // The jobs page's useGlobalSearch query re-keys on the shared filters.
     setSearchFilters({ query: query || undefined });
-    executeSearch({ model: "jobs", query: query || undefined });
   };
 
   return (
@@ -122,7 +116,6 @@ function JobsNavSearch() {
             setQuery("");
             setFilteredJobs([]);
             setSearchFilters({ query: undefined });
-            executeSearch({ model: "jobs" });
           }}
           aria-label="Clear search"
           className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"

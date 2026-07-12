@@ -2,7 +2,8 @@
  * Shared shapes for the admin marketplace + overview REST surface. These are
  * the response types served by `/admin/marketplace/*` and `/admin/overview`.
  * Kept in `types/` rather than `graphql/` because the data path is plain
- * REST + Zustand — no GraphQL anywhere.
+ * REST — no GraphQL anywhere. Caching lives in TanStack Query under the
+ * key builders in `hooks/admin/adminQueryKeys.ts`.
  */
 
 /** Admin invalidation scope — the keys the websocket bridge dispatches on.
@@ -16,7 +17,9 @@ export type AdminScope =
   | "moderation"
   | "users"
   | "providers"
-  | "tasks";
+  | "clients"
+  | "tasks"
+  | "dashboard";
 
 export interface AdminConnection<T> {
   items: T[];

@@ -296,7 +296,8 @@ export function HeroSearch({
 // ── Providers page search ──────────────────────────────────────────────────────
 // Hero-style two-panel layout (no dropdown).
 // "What" progressively filters the loaded provider list client-side.
-// "Where" + Search button triggers a fresh API fetch via executeSearch.
+// "Where" + Search button updates the shared search filters — the
+// useGlobalSearch query re-keys on them and fetches fresh results.
 
 export function ProvidersSearch({
   providers = [],
@@ -304,7 +305,6 @@ export function ProvidersSearch({
 }: Pick<UniversalSearchProps, "providers" | "onLocationChange">) {
   const {
     setFilteredProviders,
-    executeSearch,
     setSearchFilters,
     searchFilters,
     getCurrentLocation,
@@ -345,7 +345,6 @@ export function ProvidersSearch({
     debounceRef.current = setTimeout(() => {
       setFilteredProviders([]);
       setSearchFilters({ location: l });
-      executeSearch({ model: "providers", location: l });
       onLocationChange?.(l);
     }, 400);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
@@ -355,7 +354,6 @@ export function ProvidersSearch({
     if (debounceRef.current) clearTimeout(debounceRef.current);
     setFilteredProviders([]);
     setSearchFilters({ query: query || undefined, location: location || undefined });
-    executeSearch({ model: "providers", query: query || undefined, location: location || undefined });
   };
 
   const onKey = (e: React.KeyboardEvent) => {
@@ -369,7 +367,6 @@ export function ProvidersSearch({
       if (loc?.formattedAddress) {
         setLocation(loc.formattedAddress);
         setSearchFilters({ location: loc.formattedAddress, lat: loc.coords?.latitude, long: loc.coords?.longitude });
-        executeSearch({ model: "providers", location: loc.formattedAddress });
       }
     } finally {
       setLocLoading(false);
@@ -432,9 +429,17 @@ export function ProvidersSearch({
                   onClick={() => {
                     if (debounceRef.current) clearTimeout(debounceRef.current);
                     setLocation("");
+                    // Fall back to GPS coordinates so the re-keyed query
+                    // stays location-aware after the address is cleared.
                     setSearchFilters({ location: undefined, lat: undefined, long: undefined });
-                    // Re-search by GPS — executeSearch auto-requests location if no coords
-                    executeSearch({ model: "providers", location: undefined });
+                    void getCurrentLocation().then((loc) => {
+                      if (loc?.coords) {
+                        setSearchFilters({
+                          lat: loc.coords.latitude,
+                          long: loc.coords.longitude,
+                        });
+                      }
+                    });
                   }}
                   className="text-gray-300 hover:text-gray-500 transition-colors"
                 >
@@ -475,12 +480,11 @@ export function ProvidersSearch({
 
 // ── Jobs header search ─────────────────────────────────────────────────────────
 // Compact task-focused bar for the /jobs page — different visual language.
-// Dispatches to executeSearch with model: "jobs".
+// Updates the shared filters; the jobs page's useGlobalSearch query refetches.
 
 export function JobsSearch() {
   const {
     setSearchFilters,
-    executeSearch,
     searchFilters,
     currentLocation,
     getCurrentLocation,
@@ -501,7 +505,6 @@ export function JobsSearch() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setSearchFilters({ query: query || undefined });
-      executeSearch({ model: "jobs", query: query || undefined });
     }, 380);
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -511,11 +514,6 @@ export function JobsSearch() {
   const submit = () => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     setSearchFilters({
-      query: query || undefined,
-      location: location || undefined,
-    });
-    executeSearch({
-      model: "jobs",
       query: query || undefined,
       location: location || undefined,
     });
@@ -536,7 +534,6 @@ export function JobsSearch() {
           lat: loc.coords?.latitude,
           long: loc.coords?.longitude,
         });
-        executeSearch({ model: "jobs", location: loc.formattedAddress });
       }
     } finally {
       setLocLoading(false);

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from "react";
 import useGlobalStore from "@/stores";
-import type { AdminScope } from "@/types/admin-marketplace";
+import type { AdminScope, AdminUserRow, AdminUsersBundle } from "@/types/admin-marketplace";
 import {
   PresenceEvents,
   PRESENCE_STATUS,
@@ -10,6 +10,8 @@ import {
 } from "@/lib/socket";
 import { useSubscription } from "@/hooks/useSubscription";
 import type { DomainEventPayload } from "@/types/domain-events";
+import { queryClient } from "@/lib/queryClient";
+import { adminKeys, keysForScope } from "@/hooks/admin/adminQueryKeys";
 
 /**
  * Pulls the server's `ResEventEnvelope.payload` out, falling back to the
@@ -23,26 +25,66 @@ function unwrap<T = any>(envelope: any): T {
 }
 
 /**
- * Wires admin websocket events into the Zustand cache:
+ * Prepend a freshly-registered user into every cached users-list query so
+ * the table updates with zero refetch. We don't try to respect filter
+ * predicates: a fresh row probably matches "all users" anyway, and the
+ * staleness washes out the next time the user paginates or refreshes.
+ */
+function prependAdminUser(user: AdminUserRow) {
+  queryClient.setQueriesData<AdminUsersBundle>(
+    { queryKey: [...adminKeys.users, "list"] },
+    (bundle) => {
+      if (!bundle) return bundle;
+      const exists = bundle.page.items.some(
+        (it) => String(it._id) === String(user._id),
+      );
+      if (exists) return bundle;
+
+      const byRole = { ...bundle.stats.byRole };
+      if (user.activeRole === "Client") {
+        byRole.clients = (byRole.clients ?? 0) + 1;
+      } else if (user.activeRole === "Provider") {
+        byRole.providers = (byRole.providers ?? 0) + 1;
+      } else if (user.activeRole === "Admin") {
+        byRole.admins = (byRole.admins ?? 0) + 1;
+      }
+
+      return {
+        ...bundle,
+        page: {
+          ...bundle.page,
+          items: [user, ...bundle.page.items],
+          total: (bundle.page.total ?? 0) + 1,
+        },
+        stats: {
+          ...bundle.stats,
+          total: (bundle.stats.total ?? 0) + 1,
+          byRole,
+        },
+      };
+    },
+  );
+  // The dashboard KPIs count users too — mark stale, refetch on next focus.
+  void queryClient.invalidateQueries({ queryKey: adminKeys.overview });
+}
+
+/**
+ * Wires admin websocket events into the TanStack Query cache:
  *
- *  - `domain:event` on `scope:admin:stats` (`stats.invalidated`) → wipe
- *    matching slices so the next view mount refetches. Phase 3 moved this
- *    off the raw `admin:stats_invalidated` event onto the unified
- *    domain-event channel.
+ *  - `domain:event` on `scope:admin:stats` (`stats.invalidated`) →
+ *    invalidate the queries the scope dirties; active views refetch
+ *    immediately, inactive ones on next mount.
  *  - `domain:event` on `scope:marketplace:users` (`user.registered`) →
- *    prepend the projected user row into every cached users-list slice
+ *    prepend the projected user row into every cached users-list query
  *    with zero refetch.
  *  - `presence:status_change { userId, status }` → track online/offline in
- *    `adminOnlineUserIds`. Admins are auto-subscribed to `scope:presence:all`
- *    in SubscriptionRegistry on connect, so every user transition arrives
- *    through the existing presence pipeline (Phase 3 retired the parallel
- *    `presence:admin_watchers` Redis set).
+ *    the `adminOnlineUserIds` Zustand slice (live socket state, not server
+ *    cache). Admins are auto-subscribed to `scope:presence:all` in
+ *    SubscriptionRegistry on connect.
  *
  * Mount this once high in the admin tree — the admin shell does that.
  */
 export function useAdminCacheBridge(enabled: boolean) {
-  const invalidate = useGlobalStore((s) => s.invalidateAdminScope);
-  const prependUser = useGlobalStore((s) => s.prependAdminUser);
   const setHeartbeat = useGlobalStore((s) => s.setAdminUserHeartbeat);
 
   /* ─── stats invalidated (Phase 3 — domain events) ─────────────────── */
@@ -54,9 +96,11 @@ export function useAdminCacheBridge(enabled: boolean) {
           if (event.type !== "stats.invalidated") return;
           const scope = event.data?.scope;
           if (!scope) return;
-          invalidate(scope);
+          for (const key of keysForScope(scope)) {
+            void queryClient.invalidateQueries({ queryKey: key });
+          }
         },
-        [invalidate],
+        [],
       ),
     },
   );
@@ -68,10 +112,10 @@ export function useAdminCacheBridge(enabled: boolean) {
       onEvent: useCallback(
         (event: DomainEventPayload<Record<string, any>>) => {
           if (event.type === "user.registered" && event.data) {
-            prependUser(event.data as any);
+            prependAdminUser(event.data as AdminUserRow);
           }
         },
-        [prependUser],
+        [],
       ),
     },
   );

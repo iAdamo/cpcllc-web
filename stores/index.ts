@@ -8,11 +8,10 @@ import { authState } from "./authState";
 import { userState } from "./userState";
 import { globalState } from "./globalState";
 import { providerState } from "./providerState";
-import { serviceState } from "./serviceState";
 import { locationSlice } from "./locationState";
 import { onboardingSlice } from "./onboardingState";
 import { searchSlice } from "./searchState";
-import { adminCacheState } from "./adminCacheState";
+import { adminPresenceState } from "./adminPresenceState";
 import { GlobalStore } from "@/types";
 
 type MyStateCreator = StateCreator<
@@ -26,6 +25,11 @@ type MyStateCreator = StateCreator<
   GlobalStore
 >;
 
+/**
+ * Client state only. Server data (admin views, search results, profiles,
+ * categories, metrics) lives in TanStack Query — see hooks/. Nothing in
+ * here should ever mirror an API response beyond the session user.
+ */
 const useGlobalStore = create<GlobalStore>()(
   devtools(
     immer(
@@ -35,12 +39,11 @@ const useGlobalStore = create<GlobalStore>()(
           ...authState(...a),
           ...userState(...a),
           ...providerState(...a),
-          ...serviceState(...a),
           ...globalState(...a),
           ...locationSlice(...a),
           ...onboardingSlice(...a),
           ...searchSlice(...a),
-          ...adminCacheState(...a),
+          ...adminPresenceState(...a),
         })) as MyStateCreator,
         {
           name: "web-storage",
@@ -53,26 +56,13 @@ const useGlobalStore = create<GlobalStore>()(
             currentLocation: state.currentLocation,
             switchRole: state.switchRole,
             savedProviders: state.savedProviders,
+            savedJobs: state.savedJobs,
             paramsFrom: state.paramsFrom,
-            error: state.error,
-            users: state.users,
-            metricsSummary: state.metricsSummary,
-            timeSeries: state.timeSeries,
             activeView: state.activeView,
             sidebarOpen: state.sidebarOpen,
             granularity: state.granularity,
             selectedYear: state.selectedYear,
             selectedMonth: state.selectedMonth,
-            // ── Admin cache slices (persisted; cleared by logout via clearAdminCache) ──
-            adminDashboard: state.adminDashboard,
-            adminUsersByKey: state.adminUsersByKey,
-            adminProvidersByKey: state.adminProvidersByKey,
-            adminClientsByKey: state.adminClientsByKey,
-            adminTasksByKey: state.adminTasksByKey,
-            adminUserById: state.adminUserById,
-            adminProviderById: state.adminProviderById,
-            adminClientById: state.adminClientById,
-            adminTaskById: state.adminTaskById,
           }),
         }
       )

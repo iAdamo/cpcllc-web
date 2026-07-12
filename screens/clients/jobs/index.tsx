@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import useGlobalStore from "@/stores";
 import { useCategories } from "@/hooks/useCategories";
+import { useGlobalSearch } from "@/hooks/useGlobalSearch";
 import { getMyProposals } from "@/axios/service";
 import { JobData, ProposalData, ProviderData } from "@/types";
 import JobCard from "./JobCard";
@@ -70,19 +71,11 @@ export default function JobsPage() {
   const {
     user,
     savedJobs,
-    jobResults,
     filteredJobs,
     switchRole,
-    executeSearch,
-    loadMore,
     setSearchModel,
     setSearchFilters,
     currentLocation,
-    isSearching,
-    isLoadingMore,
-    searchPage,
-    searchTotalPages,
-    searchTotal,
   } = useGlobalStore();
   const isProvider = switchRole === "Provider";
 
@@ -93,8 +86,6 @@ export default function JobsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [showFilters, setShowFilters] = useState(false);
-  const hasMore = searchPage < searchTotalPages;
-  const fetchingRef = useRef<boolean>(false);
 
   // Filters
   const [activeCategory, setActiveCategory] = useState("");
@@ -105,37 +96,29 @@ export default function JobsPage() {
   const { data: categoriesData } = useCategories();
   const categories = categoriesData ?? [];
 
-  // Bootstrap: set model and kick off initial search
+  // Server state — the query re-runs whenever the filters below change.
+  const {
+    jobResults,
+    isSearching,
+    isLoadingMore,
+    hasNextPage: hasMore,
+    loadMore,
+    total,
+  } = useGlobalSearch("jobs");
+
+  // Keep the shared search filters in sync with this page's controls.
   useEffect(() => {
     setSearchModel("jobs");
-    executeSearch({
-      model: "jobs",
-      sortBy,
-      lat: currentLocation?.coords.latitude,
-      long: currentLocation?.coords.longitude,
-      country: currentLocation?.country || "United States",
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Re-search when filters or location change
-  useEffect(() => {
     setSearchFilters({
       sortBy,
       urgency: urgencyFilter,
       category: activeCategory,
-    });
-    executeSearch({
-      model: "jobs",
-      sortBy,
       lat: currentLocation?.coords.latitude,
       long: currentLocation?.coords.longitude,
       country: currentLocation?.country || "United States",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentLocation, sortBy, urgencyFilter, activeCategory]);
-
-  const total = searchTotal;
 
   const appliedJobIds = useMemo(
     () =>
@@ -159,11 +142,8 @@ export default function JobsPage() {
 
   const sentinelRef = useRef<HTMLDivElement>(null);
   const onEndReached = useCallback(() => {
-    if (isLoadingMore || !hasMore || fetchingRef.current) return;
-    fetchingRef.current = true;
-    loadMore().finally(() => {
-      fetchingRef.current = false;
-    });
+    if (isLoadingMore || !hasMore) return;
+    loadMore();
   }, [isLoadingMore, hasMore, loadMore]);
 
   useEffect(() => {

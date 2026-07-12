@@ -37,7 +37,7 @@ export interface SearchFilters {
   urgency?: string;
 }
 
-// ── Search state ───────────────────────────────────────────────────────────────
+// ── Search state (client side only — results live in TanStack Query) ─────────
 export interface SearchState {
   searchModel: "providers" | "jobs";
   setSearchModel: (model: "providers" | "jobs") => void;
@@ -46,25 +46,11 @@ export interface SearchState {
   setSearchFilters: (f: Partial<SearchFilters>) => void;
   resetSearchFilters: () => void;
 
-  providerResults: ProviderData[];
-  jobResults: JobData[];
   filteredProviders: ProviderData[];
   filteredJobs: JobData[];
   setFilteredProviders: (p: ProviderData[]) => void;
   setFilteredJobs: (j: JobData[]) => void;
-
-  searchPage: number;
-  searchTotalPages: number;
-  searchTotal: number;
-
-  isSearching: boolean;
-  isLoadingMore: boolean;
-
-  executeSearch: (
-    overrides?: Partial<SearchFilters & { model?: string }>
-  ) => Promise<void>;
-  loadMore: () => Promise<void>;
-  clearSearchResults: () => void;
+  clearFiltered: () => void;
 }
 
 export interface GlobalState {
@@ -109,37 +95,20 @@ export interface GlobalState {
   // markNeverShow: () => void;
   // resetRateUsTracking: () => void;
 }
+// ── Dashboard UI state (metrics data lives in hooks/admin/useMetrics.ts) ─────
 export interface DashboardState {
-  // UI State
   activeView: DashboardView;
   sidebarOpen: boolean;
 
-  // Selection State
   granularity: TimeGranularity;
   selectedYear: number;
   selectedMonth: number | null;
 
-  // Data
-  metricsData: MetricsResponse | null;
-
-  // Status
-  isLoading: boolean;
-  error: string | null;
-
-  // Actions
   setActiveView: (view: DashboardView) => void;
   toggleSidebar: () => void;
   setGranularity: (granularity: TimeGranularity) => void;
   setSelectedYear: (year: number) => void;
   setSelectedMonth: (month: number | null) => void;
-  fetchMetrics: () => Promise<void>;
-
-  users: UserData[];
-  metricsSummary: MetricsSummary | null;
-  timeSeries: TimeSeriesData[];
-
-  // fetchUsers: () => Promise<void>;
-  fetchMetrics: (params: MetricsRequest) => Promise<void>;
 }
 
 export interface AuthState {
@@ -150,65 +119,26 @@ export interface AuthState {
   logout: (data?: DeactivateAccountData) => Promise<void>;
 }
 
+// ── Session identity + live presence (profiles: hooks/useUserProfile.ts) ─────
 export interface UserState {
-  availability: Record<string, PresenceResponse>; // otherAvailability: PresenceResponse | null;
-  isFollowing: boolean;
-  otherUser: UserData | null;
-  setOtherUser: (user: UserData | null) => void;
-  setAvailability: (data: Partial<PresenceResponse>) => void; // setOtherAvailability: (availability: PresenceResponse) => void;
+  availability: Record<string, PresenceResponse>;
+  setAvailability: (data: Partial<PresenceResponse>) => void;
   updateProfile: (updates: Partial<UserData>) => void;
   updateUserProfile: (role: ActiveRole, data?: FormData) => Promise<void>;
-  fetchUserProfile: (userId?: string) => Promise<void>;
-  toggleFollow: (providerId: string) => Promise<void>;
 }
 
+// ── Selection + bookmarks (categories: useCategories; results: useGlobalSearch)
 export interface ProviderState {
-  isSearching: boolean;
-  sortBy: sortByType;
-  categories: Category[];
-  setCategories: (categories: Category[]) => void;
+  sortBy: SortBy;
+  setSortBy: (sortBy: SortBy) => void;
   selectedSubcategories: Subcategory[];
   setSelectedSubcategories: (subs: Subcategory[]) => void;
   toggleSubcategory: (sub: Subcategory) => void;
   clearSelectedSubcategories: () => void;
-  setSortBy: (sortBy: SortBy) => void;
-  searchResults: SearchResultData;
-  filteredProviders: ProviderData[];
-  setFilteredProviders: (providers: ProviderData[]) => void;
   savedProviders: ProviderData[];
   savedJobs: JobData[];
-  filteredJobs: JobData[];
-  setFilteredJobs: (jobs: JobData[]) => void;
   setSavedJobs: (job: JobData) => void;
   setSavedProviders: (providerId: string) => Promise<ProviderData[] | void>;
-  setSearchResults: (results: SearchResultData) => void;
-  clearSearchResults: () => void;
-}
-
-export interface ServiceState {
-  availableCategories: ServiceCategory[];
-  setAvailableCategories: (categories: ServiceCategory[]) => void;
-  selectedServices: Subcategory[];
-  setSelectedServices: (services: Subcategory[]) => void;
-  fetchServiceById: (serviceId: string) => Promise<ServiceData | void>;
-  fetchServicesByProvider: (
-    providerId: string
-  ) => Promise<ServiceData[] | void>;
-  MyProjects: ServiceData[];
-  setMyProjects: (projects: ServiceData[]) => void;
-  createService: (data: FormData) => Promise<ServiceData | void>;
-  updateService: (id: string, data: FormData) => Promise<ServiceData | void>;
-  handleToggleActive: (service: ServiceData) => Promise<void>;
-  OtherProjects: ServiceData[];
-  setOtherProjects: (projects: ServiceData[]) => void;
-  draftProjects: ServiceData[];
-  draftJobs: JobData[];
-  setDraftProjects: (projects: ServiceData[]) => void;
-  setDraftJobs: (projects: JobData[]) => void;
-  removeDraftJob: (id: string) => void;
-  cachedJobs: JobData[];
-  setCachedJobs: (jobs: JobData[]) => void;
-  // deleteService: (id: string) => Promise<void>;
 }
 
 export interface LocationState {
@@ -234,6 +164,7 @@ export interface OnboardingData {
   role?: "Client" | "Provider";
   firstName?: string;
   lastName?: string;
+  homeAddress?: string;
   profilePictureFile?: File | null;
   providerName?: string;
   providerTagline?: string;
@@ -272,15 +203,14 @@ export interface OnboardingState {
   completeOnboarding: () => Promise<void>;
 }
 
-import type { AdminCacheState } from "@/stores/adminCacheState";
+import type { AdminPresenceState } from "@/stores/adminPresenceState";
 
 export type GlobalStore = GlobalState &
   DashboardState &
   AuthState &
   UserState &
   ProviderState &
-  ServiceState &
   LocationState &
   OnboardingState &
   SearchState &
-  AdminCacheState;
+  AdminPresenceState;

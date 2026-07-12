@@ -82,7 +82,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 export default function ProfilePage() {
   const { slug } = useParams<{ slug: string }>();
-  const { user, otherUser, fetchUserProfile } = useGlobalStore();
+  const { user } = useGlobalStore();
   const currentUser = user;
 
   const [data, setData] = useState<UserData | null>(null);
