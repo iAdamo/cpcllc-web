@@ -1,27 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Star, MapPin, ArrowRight, Heart, CheckCircle } from "lucide-react";
-import { globalSearch } from "@/axios/search";
+import { Star, MapPin, ArrowRight, CheckCircle, Building2 } from "lucide-react";
+import { getFeaturedProviders } from "@/axios/public";
 import { MediaItem, ProviderData } from "@/types";
 import { useTranslation } from "@/context/TranslationContext";
 
-const filters = ["All", "Top Rated", "Verified", "Open Now"] as const;
+const filters = ["All", "Top Rated", "Verified"] as const;
 type Filter = (typeof filters)[number];
 
-async function fetchProviders() {
-  // const { data } = await globalSearch({
-  //   model: "providers",
-  //   page: 1,
-  //   limit: 8,
-  //   engine: false,
-  // });
-  // return data.providers as unknown as ProviderData[];
-  return [] as ProviderData[];
+/** First usable image for the card: gallery shot, else logo, else none. */
+function cardImage(provider: ProviderData): string | null {
+  const gallery = provider?.providerImages?.[0] as MediaItem | undefined;
+  if (gallery?.thumbnail) return gallery.thumbnail;
+  if (gallery?.url) return gallery.url;
+  const logo = provider?.providerLogo as unknown as MediaItem | undefined;
+  if (typeof logo === "string") return logo;
+  if (logo?.thumbnail) return logo.thumbnail;
+  if (logo?.url) return logo.url;
+  return null;
 }
 
 const ProviderCard = ({
@@ -31,7 +32,12 @@ const ProviderCard = ({
   provider: ProviderData;
   index: number;
 }) => {
-  const [saved, setSaved] = useState(false);
+  const image = cardImage(provider);
+  const rating = provider?.averageRating ?? 0;
+  const location =
+    provider?.location?.primary?.address?.city ||
+    provider?.location?.primary?.address?.address ||
+    "Location not specified";
 
   return (
     <motion.div
@@ -44,60 +50,52 @@ const ProviderCard = ({
         ease: [0.22, 1, 0.36, 1],
       }}
     >
-      <Link href={`/providers/${provider._id}`} className="group block">
+      <Link href={`/c/${provider.slug ?? provider._id}`} className="group block">
         <div className="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-400 hover:-translate-y-2 border border-gray-100 dark:border-gray-800">
           {/* Image */}
-          <div className="relative h-52 overflow-hidden bg-gray-100 dark:bg-gray-800">
-            <Image
-              src={
-                (provider?.providerImages?.[0] as MediaItem).thumbnail ||
-                "/assets/men.jpg"
-              }
-              alt={provider?.providerName || "Provider"}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-700"
-            />
+          <div className="relative h-52 overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-800">
+            {image ? (
+              <Image
+                src={image}
+                alt={provider?.providerName || "Provider"}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Building2 size={44} className="text-white/25" />
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
 
-            {/* Save button */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                setSaved((v) => !v);
-              }}
-              className="absolute top-3 left-3 w-8 h-8 bg-white/90 dark:bg-gray-900/90 rounded-full flex items-center justify-center shadow-md transition-transform active:scale-90"
-              aria-label="Save provider"
-            >
-              <Heart
-                size={14}
-                fill={saved ? "#ef4444" : "none"}
-                color={saved ? "#ef4444" : "#6b7280"}
-              />
-            </button>
-
             {/* Rating badge */}
-            {(provider?.averageRating ?? 0) > 0 && (
+            {rating > 0 && (
               <div className="absolute top-3 right-3 flex items-center gap-1 bg-white dark:bg-gray-900 shadow-md px-2.5 py-1 rounded-full">
                 <Star size={10} fill="#f59e0b" color="#f59e0b" />
                 <span className="text-xs font-black text-gray-900 dark:text-white">
-                  {provider.averageRating.toFixed(1)}
+                  {rating.toFixed(1)}
                 </span>
               </div>
             )}
 
-            {/* Verified badge */}
-            <div className="absolute bottom-3 left-3">
-              <div className="flex items-center gap-1 bg-emerald-500 px-2 py-0.5 rounded-full">
-                <CheckCircle size={9} className="text-white" />
-                <span className="text-[9px] font-black text-white uppercase tracking-wide">
-                  Verified
-                </span>
+            {/* Verified badge — only when actually verified */}
+            {provider?.isVerified && (
+              <div className="absolute bottom-3 left-3">
+                <div className="flex items-center gap-1 bg-emerald-500 px-2 py-0.5 rounded-full">
+                  <CheckCircle size={9} className="text-white" />
+                  <span className="text-[9px] font-black text-white uppercase tracking-wide">
+                    Verified
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Name over image */}
-            <div className="absolute bottom-3 right-3 left-20">
+            <div
+              className={`absolute bottom-3 right-3 ${
+                provider?.isVerified ? "left-20" : "left-3"
+              }`}
+            >
               <h3 className="text-white font-black text-base leading-tight line-clamp-1 drop-shadow-lg">
                 {provider?.providerName}
               </h3>
@@ -108,36 +106,18 @@ const ProviderCard = ({
           <div className="p-4 pb-5">
             <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 mb-3">
               <MapPin size={12} className="text-blue-500 flex-shrink-0" />
-              <span className="text-sm line-clamp-1">
-                {provider?.location?.primary?.address?.address ??
-                  "Location not specified"}
-              </span>
+              <span className="text-sm line-clamp-1">{location}</span>
             </div>
             <div className="flex items-center justify-between">
-              <div className="flex gap-0.5">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star
-                    key={i}
-                    size={12}
-                    fill={
-                      i < Math.floor(provider?.averageRating ?? 0)
-                        ? "#f59e0b"
-                        : "#e5e7eb"
-                    }
-                    color={
-                      i < Math.floor(provider?.averageRating ?? 0)
-                        ? "#f59e0b"
-                        : "#e5e7eb"
-                    }
-                  />
-                ))}
-              </div>
-              <span className="text-xs text-gray-400 dark:text-gray-500">
+              <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 line-clamp-1">
+                {(provider?.subcategories?.[0] as any)?.name ?? "Local services"}
+              </span>
+              <span className="text-xs text-gray-400 dark:text-gray-500 flex-shrink-0">
                 {provider?.reviewCount
                   ? `${provider.reviewCount} review${
                       provider.reviewCount !== 1 ? "s" : ""
                     }`
-                  : "No reviews yet"}
+                  : "New on the platform"}
               </span>
             </div>
           </div>
@@ -165,11 +145,26 @@ export default function ProvidersSection() {
   const [activeFilter, setActiveFilter] = useState<Filter>("All");
   const { t } = useTranslation();
 
-  const { data: providers = [], isLoading } = useQuery({
+  const { data: providers = [], isLoading } = useQuery<ProviderData[]>({
     queryKey: ["homepage-providers"],
-    queryFn: fetchProviders,
+    queryFn: getFeaturedProviders,
     staleTime: 5 * 60 * 1000,
   });
+
+  const displayed = useMemo(() => {
+    switch (activeFilter) {
+      case "Top Rated":
+        return providers.filter((p) => (p.averageRating ?? 0) >= 4);
+      case "Verified":
+        return providers.filter((p) => p.isVerified);
+      default:
+        return providers;
+    }
+  }, [providers, activeFilter]);
+
+  // Nothing to show at all — hide the section rather than render an empty
+  // shell on the landing page.
+  if (!isLoading && providers.length === 0) return null;
 
   return (
     <section className="py-20 md:py-28 bg-gray-50 dark:bg-gray-900">
@@ -183,7 +178,7 @@ export default function ProvidersSection() {
             transition={{ duration: 0.5 }}
           >
             <p className="text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
-              Top Rated
+              Featured Companies
             </p>
             <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white leading-tight">
               {t("connectWithTopCompanies")}
@@ -224,13 +219,28 @@ export default function ProvidersSection() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {isLoading
-            ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
-            : providers.map((p, i) => (
-                <ProviderCard key={p._id ?? i} provider={p} index={i} />
-              ))}
-        </div>
+        {displayed.length === 0 && !isLoading ? (
+          <div className="py-14 text-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              No companies match this filter yet —{" "}
+              <button
+                type="button"
+                onClick={() => setActiveFilter("All")}
+                className="text-blue-600 font-bold hover:underline"
+              >
+                show all
+              </button>
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {isLoading
+              ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
+              : displayed.map((p, i) => (
+                  <ProviderCard key={p._id ?? i} provider={p} index={i} />
+                ))}
+          </div>
+        )}
 
         {/* Mobile CTA */}
         <div className="mt-10 flex justify-center md:hidden">
