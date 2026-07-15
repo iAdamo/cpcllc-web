@@ -186,7 +186,7 @@ const NavBar = () => {
         },
         {
           label: t("how_it_works"),
-          href: "/how-it-works",
+          href: "#howitworks",
           show: !isAuthenticated || pathname !== "/how-it-works",
         },
       ].filter((l) => l.show),
@@ -467,8 +467,8 @@ const NavBar = () => {
                         type="button"
                         onClick={async () => {
                           await logout();
-                          router.replace("/");
-                          setMobileOpen(false);
+                          // Hard navigation resets all in-memory state.
+                          window.location.assign("/");
                         }}
                         className="w-full py-3.5 text-center font-semibold text-red-600 border border-red-100 rounded-xl"
                       >

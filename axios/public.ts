@@ -22,12 +22,17 @@ export const getProviderBySlug = async (slug: string): Promise<any | null> => {
 
 /**
  * Featured providers for the homepage rail. Curated (isFeatured) first,
- * backfilled with verified/top-rated so the rail is never empty. Public,
- * cached 120s server-side.
+ * backfilled with verified/top-rated so the rail is never empty. Scoped to
+ * the visitor's country — the marketplace never shows cross-border
+ * providers. Public, cached 120s per country server-side.
  */
-export const getFeaturedProviders = async (): Promise<any[]> => {
+export const getFeaturedProviders = async (
+  country?: string
+): Promise<any[]> => {
   try {
-    const r = await axiosInstance.get("provider/featured");
+    const r = await axiosInstance.get("provider/featured", {
+      params: country ? { country } : undefined,
+    });
     return Array.isArray(r.data) ? r.data : [];
   } catch {
     return [];

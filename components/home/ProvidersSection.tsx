@@ -9,9 +9,32 @@ import { Star, MapPin, ArrowRight, CheckCircle, Building2 } from "lucide-react";
 import { getFeaturedProviders } from "@/axios/public";
 import { MediaItem, ProviderData } from "@/types";
 import { useTranslation } from "@/context/TranslationContext";
+import useGlobalStore from "@/stores";
 
 const filters = ["All", "Top Rated", "Verified"] as const;
 type Filter = (typeof filters)[number];
+
+/**
+ * Visitor country without a geolocation permission prompt on the landing
+ * page: device location when the user already granted it, otherwise the
+ * browser locale's region ("en-US" → "United States"), otherwise the
+ * launch market. Keeps the rail strictly local — no cross-border listings.
+ */
+function resolveVisitorCountry(
+  currentLocation: { country?: string | null } | null
+): string {
+  if (currentLocation?.country) return currentLocation.country;
+  try {
+    const region = new Intl.Locale(navigator.language).region;
+    if (region) {
+      const name = new Intl.DisplayNames(["en"], { type: "region" }).of(region);
+      if (name) return name;
+    }
+  } catch {
+    /* older browsers — fall through */
+  }
+  return "United States";
+}
 
 /** First usable image for the card: gallery shot, else logo, else none. */
 function cardImage(provider: ProviderData): string | null {
@@ -144,10 +167,12 @@ const SkeletonCard = () => (
 export default function ProvidersSection() {
   const [activeFilter, setActiveFilter] = useState<Filter>("All");
   const { t } = useTranslation();
+  const currentLocation = useGlobalStore((s) => s.currentLocation);
+  const country = resolveVisitorCountry(currentLocation);
 
   const { data: providers = [], isLoading } = useQuery<ProviderData[]>({
-    queryKey: ["homepage-providers"],
-    queryFn: getFeaturedProviders,
+    queryKey: ["homepage-providers", country],
+    queryFn: () => getFeaturedProviders(country),
     staleTime: 5 * 60 * 1000,
   });
 

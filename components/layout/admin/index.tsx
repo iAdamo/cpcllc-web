@@ -151,7 +151,10 @@ const Sidebar = ({
           collapsed={collapsed}
           onClick={() =>
             item.label === "Logout"
-              ? useGlobalStore.getState().logout()
+              ? void useGlobalStore
+                  .getState()
+                  .logout()
+                  .then(() => window.location.assign("/"))
               : setActiveView(item.key)
           }
           Icon={item.icon}

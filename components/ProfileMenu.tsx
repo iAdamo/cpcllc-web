@@ -18,7 +18,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import useGlobalStore from "@/stores";
-import { MediaItem, ProviderData } from "@/types";
+import { ActiveRole, MediaItem, ProviderData } from "@/types";
 
 type AvatarVariant = "sm" | "md";
 
@@ -80,7 +80,15 @@ function Avatar({ variant = "sm" }: { variant?: AvatarVariant }) {
 
 export default function ProfileMenu() {
   const router = useRouter();
-  const { user, logout, switchRole, setSwitchRole } = useGlobalStore();
+  const {
+    user,
+    logout,
+    switchRole,
+    setSwitchRole,
+    updateOnboardingData,
+    setOnboardingStep,
+    setParamsFrom,
+  } = useGlobalStore();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -96,8 +104,8 @@ export default function ProfileMenu() {
   if (!user) return null;
 
   const isProvider = user.activeRole === "Provider";
-  const hasProviderProfile = !!user.activeRoleId?._id;
-  const providerData = isProvider
+  const hasProviderProfile = isProvider && !!user.activeRoleId?._id;
+  const providerData = hasProviderProfile
     ? (user.activeRoleId as Partial<ProviderData> | undefined)
     : undefined;
 
@@ -105,22 +113,56 @@ export default function ProfileMenu() {
     ? providerData?.providerName || "Your Business"
     : `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "Account";
   const displayEmail = isProvider ? providerData?.providerEmail : user.email;
-  const handleRoleSwitch = async () => {
-    if (!hasProviderProfile) {
+
+  //  const handleRoleSwitch = async () => {
+  //     if (!user) return false;
+  //     if (user.activeRoleId?.providerName && switchRole === "Client") {
+  //       setSwitchRole("Provider");
+  //       if (user.activeRole === "Provider") router.replace("/clients");
+  //       return true;
+  //     } else if (user.activeRoleId?.providerName && switchRole === "Provider") {
+  //       setSwitchRole("Client");
+  //       if (user.activeRole === "Client") router.replace("/providers");
+  //       return true;
+  //     } else if (!user.activeRoleId?.providerName && switchRole === "Client") {
+  //       if (currentStep < 7) setCurrentStep(1);
+  //       updateProfile({ isOnboardingComplete: false });
+  //       // await resetOnboarding();
+  //       setCurrentStep(7);
+  //       router.push({
+  //         pathname: "/onboarding",
+  //         params: { from: "/providers" },
+  //       });
+  //       return true;
+  //     }
+  //     return false;
+  //   };
+  const handleRoleSwitch = async (role: ActiveRole) => {
+    if (!user) return;
+    if (hasProviderProfile) {
+      if (role === "Provider") {
+        await setSwitchRole("Provider");
+        if (user.activeRole === "Provider") router.replace("/tasks");
+      }
+      if (role === "Client") {
+        await setSwitchRole("Client");
+        if (user.activeRole === "Client") router.replace("/providers");
+      }
+    } else {
+      updateOnboardingData({ role: "Provider" });
+      !user.firstName ? setOnboardingStep(3) : setOnboardingStep(4);
+      setParamsFrom("/providers");
       router.push("/onboarding");
-      setOpen(false);
-      return;
     }
-    const next = isProvider ? "Client" : "Provider";
-    await setSwitchRole(next);
-    router.replace(next === "Provider" ? "/tasks" : "/providers");
     setOpen(false);
   };
 
   const handleLogout = async () => {
     setOpen(false);
     await logout();
-    router.replace("/");
+    // Hard navigation, not a client-side route: resets every in-memory
+    // store/provider so nothing from the old session survives.
+    window.location.assign("/");
   };
 
   return (
@@ -190,7 +232,7 @@ export default function ProfileMenu() {
                 <button
                   type="button"
                   onClick={async () => {
-                    await handleRoleSwitch();
+                    await handleRoleSwitch(isProvider ? "Client" : "Provider");
                   }}
                   className="mt-3 w-full flex items-center justify-between px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 hover:border-blue-300 hover:text-blue-700 dark:hover:text-blue-400 transition-all group/sw"
                 >

@@ -58,27 +58,36 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
   },
 
   logout: async (data) => {
-    if (data) {
-      await deactivateUser(data);
+    // Server-side sign-out is best-effort: if the API is unreachable the
+    // local session must still be destroyed. Previously a thrown request
+    // here left the persisted user in localStorage — refresh kept the
+    // account signed in and logout looked broken.
+    try {
+      if (data) {
+        await deactivateUser(data);
+      }
+      await logout();
+    } catch (err) {
+      console.warn("Server logout failed; clearing local session anyway", err);
+    } finally {
+      // Server cache must not survive sign-out — the next session may be a
+      // different user (or a non-admin). One clear() drops everything:
+      // admin views, search results, profiles, metrics.
+      queryClient.clear();
+      set({
+        user: null,
+        isAuthenticated: false,
+        error: null,
+        onboardingStep: null,
+        onboardingData: null,
+        switchRole: "Client",
+        savedProviders: null,
+        currentLocation: null,
+        paramsFrom: null,
+        isLoading: false,
+        availability: {},
+        adminOnlineUserIds: {},
+      });
     }
-    await logout();
-    // Server cache must not survive sign-out — the next session may be a
-    // different user (or a non-admin). One clear() drops everything:
-    // admin views, search results, profiles, metrics.
-    queryClient.clear();
-    set({
-      user: null,
-      isAuthenticated: false,
-      error: null,
-      onboardingStep: null,
-      onboardingData: null,
-      switchRole: "Client",
-      savedProviders: null,
-      currentLocation: null,
-      paramsFrom: null,
-      isLoading: false,
-      availability: {},
-      adminOnlineUserIds: {},
-    });
   },
 });
