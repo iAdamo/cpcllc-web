@@ -13,21 +13,21 @@ import {
 } from "@/public/assets/icons";
 
 const categories = [
-  { title: "Plumbing", image: plumbing, bg: "bg-blue-50", accent: "group-hover:bg-blue-600", count: "120+" },
-  { title: "Electrical", image: electrical, bg: "bg-yellow-50", accent: "group-hover:bg-yellow-500", count: "95+" },
-  { title: "Cleaning", image: cleaning, bg: "bg-green-50", accent: "group-hover:bg-green-600", count: "200+" },
-  { title: "HVAC", image: hvac, bg: "bg-cyan-50", accent: "group-hover:bg-cyan-600", count: "80+" },
-  { title: "Painting", image: painting, bg: "bg-purple-50", accent: "group-hover:bg-purple-600", count: "60+" },
-  { title: "Pest Control", image: pestcontrol, bg: "bg-red-50", accent: "group-hover:bg-red-500", count: "45+" },
-  { title: "Roofing", image: roofing, bg: "bg-orange-50", accent: "group-hover:bg-orange-500", count: "70+" },
-  { title: "Pool Service", image: poolservice, bg: "bg-sky-50", accent: "group-hover:bg-sky-500", count: "55+" },
-  { title: "Solar", image: solar, bg: "bg-amber-50", accent: "group-hover:bg-amber-500", count: "30+" },
-  { title: "Moving", image: moving, bg: "bg-indigo-50", accent: "group-hover:bg-indigo-600", count: "85+" },
-  { title: "Security", image: security, bg: "bg-slate-50", accent: "group-hover:bg-slate-700", count: "40+" },
-  { title: "Appliance Repair", image: appliance_repair, bg: "bg-teal-50", accent: "group-hover:bg-teal-600", count: "65+" },
-  { title: "Carpentry", image: capentry, bg: "bg-stone-50", accent: "group-hover:bg-stone-600", count: "50+" },
-  { title: "Flooring", image: flooring, bg: "bg-lime-50", accent: "group-hover:bg-lime-600", count: "55+" },
-  { title: "Handyman", image: handyman, bg: "bg-rose-50", accent: "group-hover:bg-rose-500", count: "110+" },
+  { title: "Plumbing", image: plumbing, bg: "bg-blue-50", accent: "group-hover:bg-blue-600" },
+  { title: "Electrical", image: electrical, bg: "bg-yellow-50", accent: "group-hover:bg-yellow-500" },
+  { title: "Cleaning", image: cleaning, bg: "bg-green-50", accent: "group-hover:bg-green-600" },
+  { title: "HVAC", image: hvac, bg: "bg-cyan-50", accent: "group-hover:bg-cyan-600" },
+  { title: "Painting", image: painting, bg: "bg-purple-50", accent: "group-hover:bg-purple-600" },
+  { title: "Pest Control", image: pestcontrol, bg: "bg-red-50", accent: "group-hover:bg-red-500" },
+  { title: "Roofing", image: roofing, bg: "bg-orange-50", accent: "group-hover:bg-orange-500" },
+  { title: "Pool Service", image: poolservice, bg: "bg-sky-50", accent: "group-hover:bg-sky-500" },
+  { title: "Solar", image: solar, bg: "bg-amber-50", accent: "group-hover:bg-amber-500" },
+  { title: "Moving", image: moving, bg: "bg-indigo-50", accent: "group-hover:bg-indigo-600" },
+  { title: "Security", image: security, bg: "bg-slate-50", accent: "group-hover:bg-slate-700" },
+  { title: "Appliance Repair", image: appliance_repair, bg: "bg-teal-50", accent: "group-hover:bg-teal-600" },
+  { title: "Carpentry", image: capentry, bg: "bg-stone-50", accent: "group-hover:bg-stone-600" },
+  { title: "Flooring", image: flooring, bg: "bg-lime-50", accent: "group-hover:bg-lime-600" },
+  { title: "Handyman", image: handyman, bg: "bg-rose-50", accent: "group-hover:bg-rose-500" },
 ];
 
 const easeOut = [0.22, 1, 0.36, 1] as [number, number, number, number];
@@ -69,7 +69,7 @@ export default function CategoriesSection() {
           </div>
           <button
             type="button"
-            onClick={() => router.push("/companies/home-services")}
+            onClick={() => router.push("/providers")}
             className="hidden md:flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-bold text-sm hover:underline group"
           >
             View all
@@ -85,12 +85,12 @@ export default function CategoriesSection() {
           animate={inView ? "show" : "hidden"}
           className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-8 gap-3"
         >
-          {categories.map(({ title, image, bg, count }) => (
+          {categories.map(({ title, image, bg }) => (
             <motion.button
               key={title}
               variants={itemVariants}
               type="button"
-              onClick={() => router.push(`/providers?category=${encodeURIComponent(title)}`)}
+              onClick={() => router.push(`/providers?q=${encodeURIComponent(title)}`)}
               className="group flex flex-col items-center gap-2 p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1.5 hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-250 cursor-pointer"
             >
               <div className={`w-12 h-12 md:w-14 md:h-14 ${bg} rounded-xl flex items-center justify-center transition-colors duration-200`}>
@@ -99,7 +99,6 @@ export default function CategoriesSection() {
               <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300 text-center leading-tight">
                 {title}
               </span>
-              <span className="text-[9px] text-gray-400 dark:text-gray-500 font-medium">{count}</span>
             </motion.button>
           ))}
 
@@ -107,14 +106,13 @@ export default function CategoriesSection() {
           <motion.button
             variants={itemVariants}
             type="button"
-            onClick={() => router.push("/companies/home-services")}
+            onClick={() => router.push("/providers")}
             className="group flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 rounded-2xl transition-all duration-200 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-blue-500/25"
           >
             <div className="w-12 h-12 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center">
               <ArrowRight size={20} className="text-white group-hover:translate-x-0.5 transition-transform" />
             </div>
             <span className="text-[11px] font-bold text-white">More</span>
-            <span className="text-[9px] text-white/60 font-medium">50+</span>
           </motion.button>
         </motion.div>
 
@@ -122,7 +120,7 @@ export default function CategoriesSection() {
         <div className="mt-8 flex justify-center md:hidden">
           <button
             type="button"
-            onClick={() => router.push("/companies/home-services")}
+            onClick={() => router.push("/providers")}
             className="flex items-center gap-2 px-7 py-3 border border-blue-600 text-blue-600 font-bold rounded-xl text-sm"
           >
             View all categories <ArrowRight size={14} />

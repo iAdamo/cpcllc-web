@@ -1,86 +1,64 @@
-"use client";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import StyledJsxRegistry from "./registry";
-import { TranslationProvider } from "@/context/TranslationContext";
-import NavBar from "@/components/layout/NavBar";
-// import PreFooter from "@/components/layout/PreFooter";
-import Footer from "@/components/layout/Footer";
-import GlobalLoadingOverlay from "@/components/GlobalLoadingOverlay";
-import MobileGate from "@/components/MobileGate";
-import { usePathname } from "next/navigation";
-import { Providers } from "./providers";
-import { SessionProvider } from "@/context/SessionContext";
-import useGlobalStore from "@/stores";
-// import { MapProvider } from "@/context/MapContext";
+import AppChrome from "@/components/layout/AppChrome";
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://companiescenter.com";
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Companies Center — Find Trusted Local Service Providers",
+    template: "%s | Companies Center",
+  },
+  description:
+    "Hire verified plumbers, electricians, cleaners, movers and more near you. Compare reviews, ratings and locations — or grow your business by reaching new clients.",
+  applicationName: "Companies Center",
+  keywords: [
+    "local services",
+    "service providers",
+    "plumbing",
+    "electrical",
+    "cleaning",
+    "moving",
+    "home services",
+    "hire professionals",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "Companies Center",
+    title: "Companies Center — Find Trusted Local Service Providers",
+    description:
+      "Hire verified plumbers, electricians, cleaners, movers and more near you. Compare reviews, ratings and locations.",
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Companies Center — Find Trusted Local Service Providers",
+    description:
+      "Hire verified local service providers near you. Compare reviews, ratings and locations.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#162660",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-
-  const hideNavRoutes = [
-    "/onboarding",
-    "/admin",
-    "/settings/account-control/deletion",
-  ];
-  const hideFooterRoutes = [
-    "/onboarding",
-    "/admin",
-    "/tasks",
-    "/providers",
-    "/privacy-policy",
-    "/terms-of-service",
-    "/settings/account-control/deletion",
-  ];
-  const hideNavBarRoutesRegex = hideNavRoutes.map(
-    (route) => new RegExp(`^${route}(?:/|$)`)
-  );
-  const shouldHideNav = hideNavBarRoutesRegex.some((regex) =>
-    regex.test(pathname)
-  );
-
-  const hideFooterRoutesRegex = hideFooterRoutes.map(
-    (route) => new RegExp(`^${route}(?:/|$)`)
-  );
-  const shouldHideFooter = hideFooterRoutesRegex.some((regex) =>
-    regex.test(pathname)
-  );
-
   return (
     <html lang="en">
-      <body
-        className={`flex-1  antialiased h-screen w-screen overflow-hidden overflow-y-scroll`}
-      >
-        <StyledJsxRegistry>
-          <SessionProvider>
-            <Providers>
-              <GluestackUIProvider mode="light">
-                <TranslationProvider>
-                  <GlobalLoadingOverlay />
-                  <MobileGate />
-                  {!shouldHideNav && <NavBar />}
-                  {children}
-                  {/* {!shouldHideLayout && <PreFooter />} */}
-                  {!shouldHideFooter && <Footer />}
-                </TranslationProvider>
-              </GluestackUIProvider>
-            </Providers>
-          </SessionProvider>
-        </StyledJsxRegistry>
+      <body className="flex-1 antialiased h-screen w-screen overflow-hidden overflow-y-scroll">
+        <AppChrome>{children}</AppChrome>
       </body>
     </html>
   );

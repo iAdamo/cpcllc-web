@@ -127,7 +127,7 @@ export default function ServiceProvidersPage() {
     setSearchFilters({
       query: q || undefined,
       location: loc || undefined,
-      country: currentLocation?.country ?? "Nigeria",
+      country: currentLocation?.country ?? "United States",
       lat: currentLocation?.coords?.latitude,
       long: currentLocation?.coords?.longitude,
     });

@@ -3,19 +3,27 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, ArrowRight, CheckCircle } from "lucide-react";
+import { subscribeNewsletter } from "@/axios/newsletter";
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setSubmitted(true);
-    setLoading(false);
+    setError(null);
+    try {
+      await subscribeNewsletter(email);
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong — please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -85,6 +93,9 @@ export default function NewsletterSection() {
             </form>
           )}
 
+          {error && (
+            <p className="text-red-200 text-sm mt-4 font-semibold">{error}</p>
+          )}
           <p className="text-white/35 text-xs mt-5">
             No spam, ever. Unsubscribe at any time.
           </p>

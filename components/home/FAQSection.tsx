@@ -7,7 +7,7 @@ import { Plus, Minus } from "lucide-react";
 const faqs = [
   {
     q: "How are providers verified?",
-    a: "Every provider goes through a rigorous vetting process including background checks, license verification, insurance confirmation, and reference checks. Only those who pass all criteria are listed on our platform.",
+    a: "Every provider goes through identity and business verification before their profile can accept work. Verified profiles carry a badge, and reviews come only from clients on jobs completed through the platform.",
   },
   {
     q: "Is there a fee to use CompaniesCenterLLC as a homeowner?",
@@ -15,7 +15,7 @@ const faqs = [
   },
   {
     q: "How do I become a listed provider?",
-    a: "Click 'Get Started' and complete our onboarding process. You'll submit your credentials, undergo our verification process, and once approved, your profile goes live to thousands of potential clients.",
+    a: "Click 'Get Started' and complete our onboarding process. You'll submit your credentials, undergo our verification process, and once approved, your profile goes live to clients searching in your area.",
   },
   {
     q: "What areas do you serve?",
@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: "What if I'm not satisfied with a service?",
-    a: "We have a satisfaction guarantee. If you're not happy with the service, contact our support team and we'll work to resolve the issue, including facilitating a return visit or connecting you with an alternative provider.",
+    a: "Contact our support team and we'll work to resolve the issue — from mediating a dispute with the provider to helping you find an alternative. Every case is reviewed by a real person.",
   },
 ];
 

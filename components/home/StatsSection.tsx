@@ -1,37 +1,42 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView, animate } from "framer-motion";
-import { Users, Briefcase, Star, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
+import { ShieldCheck, MessageSquare, Star, MapPin } from "lucide-react";
 
-const stats = [
-  { Icon: Users, end: 500, suffix: "+", label: "Verified Providers", color: "text-blue-400", bg: "bg-blue-500/10" },
-  { Icon: Briefcase, end: 10000, suffix: "+", label: "Jobs Completed", color: "text-violet-400", bg: "bg-violet-500/10" },
-  { Icon: Star, end: 4.9, suffix: "★", label: "Average Rating", color: "text-amber-400", bg: "bg-amber-500/10", decimal: true },
-  { Icon: MapPin, end: 50, suffix: "+", label: "Florida Cities", color: "text-emerald-400", bg: "bg-emerald-500/10" },
+// Honest-by-construction trust tiles. Do NOT put usage numbers here until
+// they're real — fabricated "jobs completed" counters are FTC territory.
+// When real metrics exist, reintroduce the animated counters from git
+// history (StatsSection pre-2026-07 revision).
+const pillars = [
+  {
+    Icon: ShieldCheck,
+    label: "Verified Providers",
+    line: "Every company is identity-checked before it can take jobs.",
+    color: "text-blue-400",
+    bg: "bg-blue-500/10",
+  },
+  {
+    Icon: Star,
+    label: "Reviews You Can Trust",
+    line: "Ratings come only from clients on completed jobs.",
+    color: "text-amber-400",
+    bg: "bg-amber-500/10",
+  },
+  {
+    Icon: MessageSquare,
+    label: "Direct Messaging",
+    line: "Chat with providers in real time — no middlemen, no fees.",
+    color: "text-violet-400",
+    bg: "bg-violet-500/10",
+  },
+  {
+    Icon: MapPin,
+    label: "Local First",
+    line: "Search by neighborhood and hire professionals near you.",
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/10",
+  },
 ];
-
-function Counter({ end, suffix, decimal }: { end: number; suffix: string; decimal?: boolean }) {
-  const [value, setValue] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (!inView) return;
-    const controls = animate(0, end, {
-      duration: 1.8,
-      ease: "easeOut",
-      onUpdate: (v) => setValue(decimal ? parseFloat(v.toFixed(1)) : Math.floor(v)),
-    });
-    return controls.stop;
-  }, [inView, end, decimal]);
-
-  return (
-    <span ref={ref}>
-      {decimal ? value.toFixed(1) : value.toLocaleString()}{suffix}
-    </span>
-  );
-}
 
 export default function StatsSection() {
   return (
@@ -44,33 +49,35 @@ export default function StatsSection() {
           transition={{ duration: 0.5 }}
           className="text-center mb-14"
         >
-          <p className="text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-2">By the Numbers</p>
+          <p className="text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
+            Why Companies Center
+          </p>
           <h2 className="text-3xl md:text-5xl font-black text-white">
-            Florida&apos;s Fastest-Growing
+            A Service Network
             <br />
             <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
-              Service Network
+              Built on Trust
             </span>
           </h2>
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map(({ Icon, end, suffix, label, color, bg, decimal }, i) => (
+          {pillars.map(({ Icon, label, line, color, bg }, i) => (
             <motion.div
               key={label}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="text-center p-7 rounded-3xl bg-white/[0.03] border border-white/8 hover:bg-white/[0.06] transition-colors group"
+              transition={{ duration: 0.45, delay: i * 0.08 }}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center"
             >
-              <div className={`w-12 h-12 ${bg} rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform`}>
+              <div
+                className={`w-12 h-12 ${bg} rounded-xl flex items-center justify-center mx-auto mb-4`}
+              >
                 <Icon size={22} className={color} />
               </div>
-              <div className={`text-4xl md:text-5xl font-black ${color} mb-2`}>
-                <Counter end={end} suffix={suffix} decimal={decimal} />
-              </div>
-              <p className="text-white/40 text-sm font-medium">{label}</p>
+              <p className="text-white font-black text-lg mb-1.5">{label}</p>
+              <p className="text-white/50 text-sm leading-relaxed">{line}</p>
             </motion.div>
           ))}
         </div>

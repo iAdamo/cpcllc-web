@@ -20,8 +20,8 @@ const fadeUp = {
 };
 
 const trustBadges = [
-  { Icon: Shield, label: "Background Checked" },
-  { Icon: CheckCircle, label: "Licensed & Insured" },
+  { Icon: Shield, label: "Verified Providers" },
+  { Icon: CheckCircle, label: "Real Reviews" },
   { Icon: Clock, label: "Fast Response" },
 ];
 
@@ -55,7 +55,7 @@ export default function HeroSection() {
                 transition={{ repeat: Infinity, duration: 2 }}
               />
               <span className="text-white/85 text-sm font-medium">
-                Your&apos;s #1 Home Service Network
+                Your Home Service Network
               </span>
             </motion.div>
 
@@ -83,8 +83,8 @@ export default function HeroSection() {
               custom={0.3}
               className="text-white/55 text-lg max-w-lg leading-relaxed mb-10"
             >
-              Connect with 500+ background-checked professionals across your location.
-              Fast quotes, real reviews, verified credentials.
+              Connect with verified professionals near you.
+              Fast quotes, real reviews from completed jobs, direct messaging.
             </motion.p>
 
             {/* Universal search — hero variant (includes popular tags) */}

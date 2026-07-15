@@ -44,7 +44,7 @@ export function useProviderSearch(filters: ProviderFilters) {
         categories: filters.categoryIds?.length ? filters.categoryIds : undefined,
         address: hasLocation ? filters.location : undefined,
         state: "",
-        country: filters.country || "Nigeria",
+        country: filters.country || "United States",
         radius: filters.radius,
       });
       return {

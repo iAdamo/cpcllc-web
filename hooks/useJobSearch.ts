@@ -35,7 +35,7 @@ export function useJobSearch(filters: JobFilters) {
         engine: hasLocation,
         searchInput: filters.query || (hasLocation ? "pass" : undefined),
         address: hasLocation ? filters.location : undefined,
-        country: filters.country || "Nigeria",
+        country: filters.country || "United States",
         lat: filters.lat?.toString(),
         long: filters.long?.toString(),
         sortBy: filters.sortBy,

@@ -184,7 +184,7 @@ export default function ProfilePage() {
 
   const addr = provider.location?.primary?.address;
   const locationStr =
-    [addr?.city, addr?.country].filter(Boolean).join(", ") || "Lagos, Nigeria";
+    [addr?.city, addr?.country].filter(Boolean).join(", ") || "Location not set";
   const memberSince = provider.createdAt
     ? fmtDate(provider.createdAt)
     : "Jan 2022";
