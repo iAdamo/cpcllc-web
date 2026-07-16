@@ -38,7 +38,7 @@ function resolveVisitorCountry(
 
 /** First usable image for the card: gallery shot, else logo, else none. */
 function cardImage(provider: ProviderData): string | null {
-  const gallery = provider?.providerImages?.[0] as MediaItem | undefined;
+  const gallery = provider?.gallery?.[0] as MediaItem | undefined;
   if (gallery?.thumbnail) return gallery.thumbnail;
   if (gallery?.url) return gallery.url;
   const logo = provider?.providerLogo as unknown as MediaItem | undefined;

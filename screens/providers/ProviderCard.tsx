@@ -23,7 +23,7 @@ interface ProviderCardProps {
 }
 
 function getImageUrl(provider: ProviderData): string {
-  const first = provider.providerImages?.[0];
+  const first = provider.gallery?.[0];
   if (!first) return "/assets/men.jpg";
   if (typeof first === "object" && "thumbnail" in first) {
     return (first as MediaItem).thumbnail || "/assets/men.jpg";

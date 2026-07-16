@@ -70,7 +70,7 @@ export interface ProviderData {
   };
   reviewCount: number;
   averageRating: number;
-  providerImages: MediaItem[] | FileType[];
+  gallery: MediaItem[] | FileType[];
   services: any[];
   clients: any[];
   latitude: number;

@@ -71,7 +71,7 @@ export const onboardingSlice: StateCreator<
     })),
 
   resetOnboarding: () => set({ onboardingStep: 0, onboardingData: {} }),
-  
+
   completeOnboarding: async () => {
     if (get().user?.isOnboardingComplete) return;
     const form = new FormData();
@@ -98,10 +98,14 @@ export const onboardingSlice: StateCreator<
         profileFd.append("firstName", onboardingData.firstName);
       if (onboardingData.lastName)
         profileFd.append("lastName", onboardingData.lastName);
+      if (onboardingData.homeAddress)
+        profileFd.append("homeAddress", onboardingData.homeAddress);
       if (onboardingData.profilePictureFile)
         profileFd.append("profilePicture", onboardingData.profilePictureFile);
 
-      await updateUserProfile(profileFd);
+      await get().updateUserProfile("Client", profileFd);
+
+      // await updateUserProfile(profileFd);
 
       if (onboardingData.role === "Provider") {
         const fd = new FormData();
@@ -149,7 +153,7 @@ export const onboardingSlice: StateCreator<
 
         // Gallery images
         onboardingData.providerImageFiles?.forEach((file) => {
-          fd.append("providerImages", file);
+          fd.append("gallery", file);
         });
 
         const data = await createProviderProfile(fd);

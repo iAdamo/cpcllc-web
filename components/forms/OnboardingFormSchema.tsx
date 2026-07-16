@@ -55,7 +55,7 @@ export const onboardingFormSchema = z.object({
       }
     )
     .optional(),
-  providerImages: z
+  gallery: z
     .array(z.instanceof(File))
     .min(1, "Images are required")
     .refine(

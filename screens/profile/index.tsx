@@ -44,8 +44,8 @@ import { resolveUrl, fmtNum, fmtDate } from "./helpers";
 type Tab = "services" | "gallery" | "reviews" | "about" | "certifications";
 
 // Services = the provider's actual work offerings (from the services API).
-// Gallery = providerImages, the media the provider uploaded — never present
-// gallery shots as portfolio work.
+// Gallery = provider.gallery, the media showcase the provider uploaded —
+// never present gallery shots as portfolio work.
 const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: "services", label: "Services", icon: Briefcase },
   { id: "gallery", label: "Gallery", icon: Eye },
@@ -204,9 +204,9 @@ export default function ProfilePage() {
   if (!provider) return <ProfileSkeleton />;
 
   const logoUrl = resolveUrl(provider.providerLogo);
-  // Gallery = providerImages. First shot doubles as the cover; the page must
-  // survive a provider with an empty gallery (previously crashed here).
-  const gallery = (provider.providerImages ?? []) as unknown as MediaItem[];
+  // First gallery shot doubles as the cover; the page must survive a
+  // provider with an empty gallery (previously crashed here).
+  const gallery = (provider.gallery ?? []) as unknown as MediaItem[];
   const coverUrl = gallery[0]?.url ?? gallery[0]?.thumbnail ?? null;
 
   const addr = provider.location?.primary?.address;
