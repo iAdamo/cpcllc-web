@@ -1,31 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import {
-  Clock, DollarSign, ChevronRight, Plus, Tag, Star,
-  Loader2, AlertCircle, Package,
+  Clock,
+  DollarSign,
+  ChevronRight,
+  Tag,
+  AlertCircle,
+  Package,
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { getServicesByProvider } from "@/axios/service";
 import { ServiceData, ProviderData, MediaItem } from "@/types";
+import useGlobalStore from "@/stores";
 
 function resolveMedia(media: ServiceData["media"]): string | null {
   const first = (media ?? [])[0];
   if (!first) return null;
   if (typeof first === "string") return first;
   const m = first as MediaItem;
-  return m.url || m.thumbnail || null;
+  return m.thumbnail || m.url || null;
 }
 
 function ServiceCard({
   service,
   index,
-  isCurrentUser,
+  onBook,
 }: {
   service: ServiceData;
   index: number;
-  isCurrentUser: boolean;
+  onBook: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const imgSrc = resolveMedia(service.media);
@@ -53,37 +60,30 @@ function ServiceCard({
 
         {/* Content */}
         <div className="flex-1 p-4 min-w-0">
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex-1 min-w-0">
-              {service.subcategoryId?.name && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full mb-1 border border-blue-100">
-                  <Tag size={8} />
-                  {service.subcategoryId.name}
-                </span>
-              )}
-              <h3 className="text-sm font-black text-gray-900 leading-snug line-clamp-1">
-                {service.title}
-              </h3>
-              <p className={`text-xs text-gray-500 leading-relaxed mt-0.5 ${expanded ? "" : "line-clamp-2"}`}>
-                {service.description}
-              </p>
-              {service.description?.length > 100 && (
-                <button
-                  type="button"
-                  onClick={() => setExpanded(!expanded)}
-                  className="text-[11px] text-blue-600 font-semibold mt-0.5 hover:underline"
-                >
-                  {expanded ? "Show less" : "Read more"}
-                </button>
-              )}
-            </div>
-
-            {isCurrentUser && (
+          <div className="flex-1 min-w-0">
+            {service.subcategoryId?.name && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full mb-1 border border-blue-100">
+                <Tag size={8} />
+                {service.subcategoryId.name}
+              </span>
+            )}
+            <h3 className="text-sm font-black text-gray-900 leading-snug line-clamp-1">
+              {service.title}
+            </h3>
+            <p
+              className={`text-xs text-gray-500 leading-relaxed mt-0.5 ${
+                expanded ? "" : "line-clamp-2"
+              }`}
+            >
+              {service.description}
+            </p>
+            {service.description?.length > 100 && (
               <button
                 type="button"
-                className="flex-shrink-0 text-[10px] font-bold text-gray-400 hover:text-blue-600 border border-gray-200 hover:border-blue-300 px-2 py-1 rounded-lg transition-all"
+                onClick={() => setExpanded(!expanded)}
+                className="text-[11px] text-blue-600 font-semibold mt-0.5 hover:underline"
               >
-                Edit
+                {expanded ? "Show less" : "Read more"}
               </button>
             )}
           </div>
@@ -100,8 +100,8 @@ function ServiceCard({
             )}
             {service.duration > 0 && (
               <span className="flex items-center gap-1 text-xs text-gray-500 font-medium">
-                <Clock size={11} className="text-blue-400" />
-                {service.duration} hr{service.duration !== 1 ? "s" : ""}
+                <Clock size={11} className="text-blue-400" />~{service.duration}{" "}
+                day{service.duration !== 1 ? "s" : ""}
               </span>
             )}
             {!service.isActive && (
@@ -111,9 +111,10 @@ function ServiceCard({
             )}
             <button
               type="button"
+              onClick={onBook}
               className="ml-auto flex items-center gap-1 text-xs font-bold text-blue-600 hover:underline"
             >
-              Book <ChevronRight size={11} />
+              Post a task <ChevronRight size={11} />
             </button>
           </div>
         </div>
@@ -132,21 +133,30 @@ export default function ServiceSection({
   provider,
   isCurrentUser,
 }: ServiceSectionProps) {
-  const [services, setServices] = useState<ServiceData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const router = useRouter();
+  const isAuthenticated = useGlobalStore((s) => s.isAuthenticated);
 
-  useEffect(() => {
-    if (!provider._id) return;
-    setLoading(true);
-    setError(false);
-    getServicesByProvider(provider._id)
-      .then(setServices)
-      .catch(() => setError(true))
-      .finally(() => setLoading(false));
-  }, [provider._id]);
+  const {
+    data: services = [],
+    isLoading,
+    isError,
+  } = useQuery<ServiceData[]>({
+    queryKey: ["provider-services", provider._id],
+    queryFn: () => getServicesByProvider(provider._id),
+    enabled: !!provider._id,
+    staleTime: 60 * 1000,
+  });
 
-  if (loading) {
+  // Hiring flows through tasks — the provider bids like everywhere else.
+  const handleBook = () => {
+    if (!isAuthenticated) {
+      router.push(`/auth/signin?next=/tasks/create`);
+      return;
+    }
+    router.push("/tasks/create");
+  };
+
+  if (isLoading) {
     return (
       <div className="p-6 space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -156,11 +166,13 @@ export default function ServiceSection({
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="p-10 text-center">
         <AlertCircle size={28} className="text-red-400 mx-auto mb-2" />
-        <p className="text-sm text-gray-500 font-semibold">Failed to load services</p>
+        <p className="text-sm text-gray-500 font-semibold">
+          Failed to load services
+        </p>
       </div>
     );
   }
@@ -171,40 +183,32 @@ export default function ServiceSection({
         <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
           <Package size={22} className="text-blue-400" />
         </div>
-        <p className="text-sm font-bold text-gray-700">No services listed yet</p>
-        <p className="text-xs text-gray-400 mt-1">Services offered will appear here</p>
-        {isCurrentUser && (
-          <button
-            type="button"
-            className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-colors"
-          >
-            <Plus size={13} /> Add service
-          </button>
-        )}
+        <p className="text-sm font-bold text-gray-700">
+          No services listed yet
+        </p>
+        <p className="text-xs text-gray-400 mt-1">
+          {isCurrentUser
+            ? "Add services from the CompaniesCenter app — tap the + button."
+            : "Services offered will appear here"}
+        </p>
       </div>
     );
   }
 
   return (
     <div className="p-3 space-y-2">
-      {isCurrentUser && (
-        <div className="flex items-center justify-between px-1 pb-1">
-          <span className="text-xs text-gray-400 font-medium">{services.length} service{services.length !== 1 ? "s" : ""}</span>
-          <button
-            type="button"
-            className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:underline"
-          >
-            <Plus size={12} /> Add service
-          </button>
-        </div>
-      )}
+      <div className="flex items-center justify-between px-1 pb-1">
+        <span className="text-xs text-gray-400 font-medium">
+          {services.length} service{services.length !== 1 ? "s" : ""}
+        </span>
+        {isCurrentUser && (
+          <span className="text-xs text-gray-400">
+            Manage services in the app
+          </span>
+        )}
+      </div>
       {services.map((svc, i) => (
-        <ServiceCard
-          key={svc._id}
-          service={svc}
-          index={i}
-          isCurrentUser={isCurrentUser}
-        />
+        <ServiceCard key={svc._id} service={svc} index={i} onBook={handleBook} />
       ))}
     </div>
   );
