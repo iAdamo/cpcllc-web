@@ -10,8 +10,8 @@ import { useCallback } from "react";
  * web page directly — the OS doesn't re-intercept. That's what this
  * button is for: an explicit "Open in App" click.
  *
- * Custom scheme path mirrors the web path (`/p/slug`, `/t/id`) so the
- * Expo Router consumes it identically regardless of entry vector.
+ * Custom scheme path mirrors the web path (`/c/slug`, `/t/id`, `/post/id`)
+ * so Expo Router consumes it identically regardless of entry vector.
  */
 export function OpenInAppButton({ path }: { path: string }) {
   const handleClick = useCallback(() => {

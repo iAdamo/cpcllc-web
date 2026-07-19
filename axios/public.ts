@@ -51,3 +51,16 @@ export const getPublicTaskById = async (id: string): Promise<any | null> => {
     return null;
   }
 };
+
+/**
+ * Public provider feed post for the /post/<id> share landing. Returns null
+ * for missing / soft-deleted posts (rendered as a gated "Open in App" CTA).
+ */
+export const getPublicPostById = async (id: string): Promise<any | null> => {
+  try {
+    const r = await axiosInstance.get(`posts/public/${id}`);
+    return r.data ?? null;
+  } catch {
+    return null;
+  }
+};

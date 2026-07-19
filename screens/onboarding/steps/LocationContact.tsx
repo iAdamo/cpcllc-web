@@ -1,15 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Navigation,
-  Check,
-  ChevronDown,
-  Loader2,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Check, ChevronDown, Loader2 } from "lucide-react";
 import useGlobalStore from "@/stores";
 import StepShell from "./StepShell";
 
@@ -55,11 +47,9 @@ export default function LocationContact({ onNext, onBack }: Props) {
   const {
     onboardingData,
     updateOnboardingData,
-    getCurrentLocation,
     searchPlaces,
     getPlaceDetails,
     places,
-    isLoading: storeLoading,
   } = useGlobalStore();
 
   const [email, setEmail] = useState(onboardingData.providerEmail ?? "");
@@ -85,7 +75,6 @@ export default function LocationContact({ onNext, onBack }: Props) {
       ? (onboardingData.location as any)
       : null
   );
-  const [loadingLocation, setLoadingLocation] = useState(false);
   const [loadingPlace, setLoadingPlace] = useState(false);
 
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -140,23 +129,6 @@ export default function LocationContact({ onNext, onBack }: Props) {
         ...parsed,
       });
       setAddressQuery("");
-    }
-  };
-
-  const handleDetectLocation = async () => {
-    setLoadingLocation(true);
-    const loc = await getCurrentLocation();
-    setLoadingLocation(false);
-    if (loc) {
-      setConfirmedAddress({
-        address: loc.formattedAddress ?? "",
-        city: loc.city ?? undefined,
-        state: loc.region ?? undefined,
-        country: loc.country ?? undefined,
-        zip: loc.postalCode ?? undefined,
-        latitude: loc.coords.latitude,
-        longitude: loc.coords.longitude,
-      });
     }
   };
 
@@ -332,19 +304,14 @@ export default function LocationContact({ onNext, onBack }: Props) {
                 </div>
               )}
 
-              <button
-                type="button"
-                onClick={handleDetectLocation}
-                disabled={loadingLocation || storeLoading}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-gray-900 hover:bg-gray-800 active:bg-gray-950 disabled:opacity-50 text-white text-sm font-semibold rounded-xl transition-colors"
-              >
-                {loadingLocation ? (
-                  <Loader2 size={15} className="animate-spin" />
-                ) : (
-                  <Navigation size={15} />
-                )}
-                Use my current location
-              </button>
+              {/* Address is autocomplete-only. Device/browser geolocation is
+                  deliberately not offered here: on mobile browsers without
+                  GPS permission it falls back to coarse network-provider
+                  coordinates, which put providers in the wrong place. */}
+              <p className="text-xs text-gray-400 leading-snug px-1">
+                Start typing to pick your exact business address from the
+                suggestions.
+              </p>
             </div>
           )}
         </div>
