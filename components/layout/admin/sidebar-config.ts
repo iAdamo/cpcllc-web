@@ -64,7 +64,6 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
       { key: "bookings", label: "Bookings", icon: CalendarCheck },
       { key: "projects", label: "Projects", icon: FolderKanban },
       { key: "reviews", label: "Reviews", icon: Star },
-      { key: "messages", label: "Messages", icon: MessageSquare },
     ],
   },
   {
@@ -111,6 +110,7 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
         icon: LifeBuoy,
         badgeKey: "openTickets",
       },
+      { key: "messages", label: "Support Chat", icon: MessageSquare },
       { key: "notifications", label: "Notifications", icon: BellRing },
     ],
   },
