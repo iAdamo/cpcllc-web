@@ -64,7 +64,7 @@ export const getServices = async (
 };
 
 export const createJob = async (data: FormData): Promise<JobData> => {
-  const response = await axiosInstance.post("services/jobs", data, {
+  const response = await axiosInstance.post("services/tasks", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -73,7 +73,7 @@ export const createJob = async (data: FormData): Promise<JobData> => {
 };
 
 export const getJobsByUser = async (): Promise<JobData[]> => {
-  const response = await axiosInstance.get("services/jobs/me");
+  const response = await axiosInstance.get("services/tasks/me");
   return response.data;
 };
 
@@ -81,7 +81,7 @@ export const updateJob = async (
   jobId: string,
   data: FormData
 ): Promise<JobData> => {
-  const response = await axiosInstance.patch(`services/jobs/${jobId}`, data, {
+  const response = await axiosInstance.patch(`services/tasks/${jobId}`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -91,12 +91,12 @@ export const updateJob = async (
 };
 
 export const deleteJob = async (jobId: string): Promise<JobData[]> => {
-  const response = await axiosInstance.delete(`services/jobs/${jobId}`);
+  const response = await axiosInstance.delete(`services/tasks/${jobId}`);
   return response.data;
 };
 
 export const getJobById = async (jobId: string): Promise<JobData> => {
-  const response = await axiosInstance.get(`services/jobs/${jobId}`);
+  const response = await axiosInstance.get(`services/tasks/${jobId}`);
   return response.data;
 };
 
@@ -105,7 +105,7 @@ export const createProposal = async (
   data: FormData
 ): Promise<void> => {
   try {
-    await axiosInstance.post(`services/jobs/${jobId}/proposals`, data, {
+    await axiosInstance.post(`services/tasks/${jobId}/proposals`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -127,7 +127,7 @@ export const updateProposal = async (
   data: FormData
 ): Promise<void> => {
   await axiosInstance.patch(
-    `services/jobs/${jobId}/proposals/${proposalId}`,
+    `services/tasks/${jobId}/proposals/${proposalId}`,
     data,
     {
       headers: {
@@ -138,12 +138,12 @@ export const updateProposal = async (
 };
 
 export const getProposalsByJob = async (jobId: string): Promise<any[]> => {
-  const response = await axiosInstance.get(`services/jobs/${jobId}/proposals`);
+  const response = await axiosInstance.get(`services/tasks/${jobId}/proposals`);
   return response.data;
 };
 
 export const getMyProposals = async (): Promise<ProposalData[]> => {
-  const response = await axiosInstance.get(`services/jobs/proposals/me`);
+  const response = await axiosInstance.get(`services/tasks/proposals/me`);
   return response.data;
 };
 
@@ -152,7 +152,7 @@ export const updateProposalStatus = async (
   status: string
 ): Promise<any> => {
   const response = await axiosInstance.patch(
-    `services/jobs/proposals/${proposalId}`,
+    `services/tasks/proposals/${proposalId}`,
     { status }
   );
   return response.data;

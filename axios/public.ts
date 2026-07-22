@@ -45,7 +45,7 @@ export const getFeaturedProviders = async (
  */
 export const getPublicTaskById = async (id: string): Promise<any | null> => {
   try {
-    const r = await axiosInstance.get(`services/jobs/public/${id}`);
+    const r = await axiosInstance.get(`services/tasks/public/${id}`);
     return r.data ?? null;
   } catch {
     return null;
