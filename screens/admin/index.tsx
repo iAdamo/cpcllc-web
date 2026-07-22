@@ -12,7 +12,6 @@ import { ProvidersView } from "@/screens/admin/views/ProvidersView";
 import { ClientsView } from "@/screens/admin/views/ClientsView";
 import { TasksView } from "@/screens/admin/views/TasksView";
 import { SupportView } from "@/screens/admin/views/SupportView";
-import { SupportChatView } from "@/screens/admin/views/SupportChatView";
 import { DisputesView } from "@/screens/admin/views/DisputesView";
 import { FraudView } from "@/screens/admin/views/FraudView";
 import { FeatureFlagsView } from "@/screens/admin/views/FeatureFlagsView";
@@ -170,8 +169,6 @@ function renderView(view: string) {
           icon={FolderKanban}
         />
       );
-    case "messages":
-      return <SupportChatView />;
     case "payments":
       return (
         <PlaceholderView

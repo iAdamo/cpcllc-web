@@ -201,6 +201,18 @@ export const assignTicket = async (id: string, assigneeUserId: string) =>
       assigneeUserId,
     })
   ).data;
+export const escalateTicket = async (
+  id: string,
+  body: { target: string; reason: string; notes?: string }
+) =>
+  (await axiosInstance.post(`admin/support/tickets/${id}/escalate`, body)).data;
+export const createTicket = async (body: {
+  subject: string;
+  description?: string;
+  category?: string;
+  priority?: string;
+  requester: string;
+}) => (await axiosInstance.post(`admin/support/tickets`, body)).data;
 
 /* ───────── Disputes ───────── */
 export const getDisputeStats = async (): Promise<DisputeStats> =>
