@@ -143,6 +143,9 @@ export enum SupportEvents {
   MESSAGE = "support:message",
   TICKET_UPDATED = "support:ticket_updated",
   TYPING = "support:typing",
+  /** Support-queue activity fanned out to all agents on
+   *  scope:support:activity (new ticket / customer reply). */
+  ACTIVITY = "support:activity",
 }
 
 const SOCKET_URL =

@@ -11,7 +11,6 @@ import {
   setTicketStatus,
   assignTicket,
   unassignTicket,
-  sendTicketTyping,
   escalateTicket,
   listAdminUsers,
 } from "@/axios/admin";
@@ -73,12 +72,16 @@ export function TicketDrawer({
   const lastTypingSentRef = useRef(0);
 
   // Throttle typing pings to one every 2.5s while the agent is typing.
+  // Pure socket emit — no REST round-trip per keystroke burst.
   const notifyTyping = () => {
     if (!ticketId) return;
     const now = Date.now();
     if (now - lastTypingSentRef.current < 2500) return;
     lastTypingSentRef.current = now;
-    void sendTicketTyping(ticketId, true).catch(() => {});
+    void socketService.emitEvent(SupportEvents.TYPING, {
+      ticketId,
+      isTyping: true,
+    });
   };
 
   const load = async () => {

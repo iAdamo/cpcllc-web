@@ -6,6 +6,7 @@ import useGlobalStore from "@/stores";
 import {
   socketService,
   NotificationEvents,
+  SupportEvents,
 } from "@/lib/socket";
 import { getNotifications, type AdminNotification } from "@/axios/notifications";
 
@@ -49,15 +50,43 @@ export function NotificationBell() {
         prev.some((x) => x.id === n.id) ? prev : [n, ...prev]
       );
     };
+    // Support-queue activity: fanned out to every agent on
+    // scope:support:activity (auto-subscribed server-side at connect), so a
+    // new ticket / customer reply surfaces in the bell even when this admin
+    // isn't the assignee and has no drawer open.
+    const onActivity = (envelope: any) => {
+      const a = envelope?.payload ?? envelope;
+      if (!a?.ticketId) return;
+      const synthetic: AdminNotification = {
+        id: `support-activity-${a.ticketId}-${a.kind}`,
+        title:
+          a.kind === "new_ticket"
+            ? `New ticket ${a.ticketNumber ?? ""}`.trim()
+            : `New reply on ${a.ticketNumber ?? ""}`.trim(),
+        body: a.subject ? `${a.subject} — ${a.preview ?? ""}` : a.preview ?? "",
+        category: "SUPPORT",
+        actionUrl: `/support/tickets/${a.ticketId}`,
+        createdAt: a.createdAt ?? new Date().toISOString(),
+        readAt: null,
+      };
+      // Collapse repeats for the same ticket+kind into one fresh unread item.
+      setItems((prev) => [
+        synthetic,
+        ...prev.filter((x) => x.id !== synthetic.id),
+      ]);
+    };
     socketService.onEvent(
       NotificationEvents.NOTIFICATION_RECEIVED,
       onPush as any
     );
-    return () =>
+    socketService.onEvent(SupportEvents.ACTIVITY, onActivity as any);
+    return () => {
       socketService.offEvent(
         NotificationEvents.NOTIFICATION_RECEIVED,
         onPush as any
       );
+      socketService.offEvent(SupportEvents.ACTIVITY, onActivity as any);
+    };
   }, [load]);
 
   // Close on outside click
