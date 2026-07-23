@@ -11,6 +11,7 @@ import {
 import { Bell, ChevronsLeft, ChevronsRight, Moon, Sun } from "lucide-react";
 import type { AdminView } from "@/types";
 import ProfileMenu from "@/components/ProfileMenu";
+import { NotificationBell } from "@/components/admin/NotificationBell";
 
 interface Props {
   children: React.ReactNode;
@@ -203,18 +204,7 @@ const TopBar = ({
         >
           {dark ? <Sun size={16} /> : <Moon size={16} />}
         </button>
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative w-9 h-9 rounded-md flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
-        >
-          <Bell size={16} />
-          {notifications !== undefined && notifications > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-semibold flex items-center justify-center">
-              {notifications > 9 ? "9+" : notifications}
-            </span>
-          )}
-        </button>
+        <NotificationBell />
         <div className="ml-3 flex items-center gap-2 pl-3 border-l border-slate-200 dark:border-slate-700">
           <ProfileMenu />
         </div>
