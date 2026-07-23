@@ -65,8 +65,7 @@ function LocationChip({ transparent = false }: { transparent?: boolean }) {
 // ── Jobs nav search ───────────────────────────────────────────────────────────
 
 function JobsNavSearch() {
-  const { setSearchFilters, searchFilters, setFilteredJobs } =
-    useGlobalStore();
+  const { setSearchFilters, searchFilters, setFilteredJobs } = useGlobalStore();
   const [query, setQuery] = useState(searchFilters?.query ?? "");
   const mounted = useRef(false);
 
@@ -85,8 +84,8 @@ function JobsNavSearch() {
           (j) =>
             j.title?.toLowerCase().includes(q) ||
             j.description?.toLowerCase().includes(q) ||
-            (j.subcategoryId as any)?.name?.toLowerCase().includes(q)
-        )
+            (j.subcategoryId as any)?.name?.toLowerCase().includes(q),
+        ),
       );
     }
   }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -187,10 +186,10 @@ const NavBar = () => {
         {
           label: t("how_it_works"),
           href: "#howitworks",
-          show: !isAuthenticated || pathname !== "/how-it-works",
+          show: pathname === "/",
         },
       ].filter((l) => l.show),
-    [t, isAuthenticated, pathname, user, isProviders, isTasks]
+    [t, isAuthenticated, pathname, user, isProviders, isTasks],
   );
 
   return (

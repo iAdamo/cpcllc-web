@@ -40,7 +40,7 @@ const steps = [
 
 export default function HowItWorksSection() {
   return (
-    <section className="py-24 bg-[#03071a] relative overflow-hidden">
+    <section id="howitworks" className="py-24 bg-[#03071a] relative overflow-hidden">
       {/* Dot pattern */}
       <div className="absolute inset-0 dot-pattern opacity-[0.03]" />
 

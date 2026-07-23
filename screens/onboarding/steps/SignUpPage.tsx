@@ -84,11 +84,10 @@ const calculatePasswordStrength = (
 };
 
 interface Props {
-  onNext?: () => void;
-  onBack?: () => void;
+  onBack: () => void;
 }
 
-export default function SignUpPage({ onNext, onBack }: Props) {
+export default function SignUpPage({ onBack }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const { signUp, setParamsFrom, error, clearError } = useGlobalStore();
@@ -109,8 +108,6 @@ export default function SignUpPage({ onNext, onBack }: Props) {
     password: false,
     confirmPassword: false,
   });
-
-  if (error) clearError();
 
   const passwordRequirements = useMemo(
     () => checkPasswordRequirements(password),
@@ -184,37 +181,22 @@ export default function SignUpPage({ onNext, onBack }: Props) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 dark:from-slate-950 dark:via-blue-950/20 dark:to-slate-950 ">
+    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 dark:from-slate-950 dark:via-blue-950/20 dark:to-slate-950">
       {pathname === "/onboarding" && (
         <button
           type="button"
-          onClick={() => onBack()}
+          onClick={onBack}
           className="mt-10 ml-8 font-medium"
         >
           Back
         </button>
       )}
-      <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="flex items-center justify-center py-12">
         <div className="w-full max-w-md">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-              Create account
-            </h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Join our platform and start connecting with services
-            </p>
-          </div>
-
           {/* Main Form Card */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-7 shadow-sm">
             <form onSubmit={onSubmit} className="space-y-5">
               {/* General Error Alert */}
-              {error && (
-                <div className="text-sm text-rose-700 bg-rose-50 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-900 rounded-lg px-3 py-2">
-                  {error}
-                </div>
-              )}
               {errors.email && !validateEmail(email) && touched.email && (
                 <div className="flex gap-3 p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-lg">
                   <AlertCircle
@@ -530,6 +512,11 @@ export default function SignUpPage({ onNext, onBack }: Props) {
                       Passwords match
                     </div>
                   )}
+                </div>
+              )}
+              {error && (
+                <div className="text-sm text-rose-700 bg-rose-50 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-900 rounded-lg px-3 py-2">
+                  {error}
                 </div>
               )}
 

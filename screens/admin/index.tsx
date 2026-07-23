@@ -47,7 +47,7 @@ const AdminDashboard = () => {
   const router = useRouter();
   const { activeView, user } = useGlobalStore();
   const [authState, setAuthState] = useState<"checking" | "ok" | "denied">(
-    "checking"
+    "checking",
   );
 
   useEffect(() => {
@@ -59,18 +59,20 @@ const AdminDashboard = () => {
           (user &&
             (user.activeRole !== "Admin" ||
               (user.activeRoleId as AdminUserMe).user !== user._id))
-        )
+        ) {
+          setAuthState("denied");
           return;
+        }
         if ((user.activeRoleId as AdminUserMe)._id) {
           setAuthState("ok");
         } else {
           setAuthState("denied");
-          router.replace("/");
+          // router.replace("/");
         }
       } catch {
         if (cancelled) return;
         setAuthState("denied");
-        router.replace("/");
+        // router.replace("/");
       }
     })();
     return () => {
@@ -108,6 +110,7 @@ const AdminDashboard = () => {
   }
 
   if (authState === "denied") {
+    router.replace("auth/signin");
     return (
       <div className="min-h-screen flex items-center justify-center text-slate-400 text-sm">
         Redirecting to sign in…

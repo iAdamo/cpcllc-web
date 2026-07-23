@@ -4,6 +4,7 @@ import {
   PresenceEvents,
   NotificationEvents,
   AdminEvents,
+  SupportEvents,
 } from "@/lib/socket";
 
 export interface EventEnvelope<T = any> {
@@ -13,7 +14,8 @@ export interface EventEnvelope<T = any> {
     | ChatEvents
     | PresenceEvents
     | NotificationEvents
-    | AdminEvents;
+    | AdminEvents
+    | SupportEvents;
   timestamp: number;
   payload: T;
   metadata?: {

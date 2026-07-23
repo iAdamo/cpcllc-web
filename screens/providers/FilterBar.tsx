@@ -61,7 +61,7 @@ export default function FilterBar({
   const activeSort = SORT_OPTIONS.find((o) => o.value === sortBy);
 
   return (
-    <div className="flex items-center gap-3 overflow-x-auto no-scrollbar">
+    <div className="flex items-center gap-3 justify-start py-2">
       {/* Filters button */}
       <button
         type="button"

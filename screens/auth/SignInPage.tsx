@@ -36,6 +36,7 @@ export default function SignInPage() {
         router.replace("/admin/mfa/verify");
         return;
       }
+      if (err) return;
 
       // Successful login → navigate to next
       router.replace(nextPath);
@@ -147,8 +148,21 @@ export default function SignInPage() {
           </p>
         </form>
 
-        <p className="text-[11px] text-slate-400 text-center mt-4">
-          By signing in you agree to the Terms of Service and Privacy Policy.
+        <p className="text-[11px] text-slate-500 dark:text-slate-500 text-center mt-5 leading-relaxed">
+          By signing up you agree to our{" "}
+          <Link
+            href="/terms-of-service"
+            className="text-slate-700 dark:text-slate-400 hover:underline"
+          >
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="/privacy-policy"
+            className="text-slate-700 dark:text-slate-400 hover:underline"
+          >
+            Privacy Policy
+          </Link>
         </p>
       </div>
     </div>

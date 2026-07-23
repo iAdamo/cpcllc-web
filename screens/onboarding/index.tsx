@@ -45,9 +45,14 @@ const LEFT_CONTENT: Record<
   number,
   { headline: string; sub: string; badge?: string }
 > = {
-  2: {
+  1: {
     headline: "Join 500+ verified\nprofessionals.",
     sub: "Whether you're looking for help or ready to offer your skills, CompaniesCenterLLC connects the right people.",
+    badge: "Trusted across many countries",
+  },
+  2: {
+    headline: "Create account",
+    sub: "Join our platform and start connecting with services, CompaniesCenterLLC connects the right people.",
     badge: "Trusted across many countries",
   },
   3: {
@@ -78,8 +83,14 @@ const LEFT_CONTENT: Record<
 };
 
 export default function Onboarding() {
-  const { onboardingStep, onboardingData, setOnboardingStep } =
-    useGlobalStore();
+  const {
+    user,
+    onboardingStep,
+    onboardingData,
+    setOnboardingStep,
+    paramsFrom,
+    isAuthenticated,
+  } = useGlobalStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -102,6 +113,21 @@ export default function Onboarding() {
   };
   const goBack = () => {
     const r = useGlobalStore.getState().onboardingData.role;
+    if (isAuthenticated && onboardingStep > 2) return;
+    if (paramsFrom === "/providers" && !user?.firstName) {
+      if (onboardingStep === 3) {
+        router.replace(paramsFrom);
+        return;
+      }
+      setOnboardingStep(getPrevStep(onboardingStep, r));
+    } else if (
+      paramsFrom === "/providers" &&
+      user?.firstName &&
+      onboardingStep === 4
+    ) {
+      router.replace(paramsFrom);
+      return;
+    }
     setOnboardingStep(getPrevStep(onboardingStep, r));
   };
 
@@ -129,11 +155,11 @@ export default function Onboarding() {
         animate="center"
         exit="exit"
         transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
-        className="w-full h-full"
+        className="w-full h-full bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50"
       >
         {onboardingStep === 0 && <Welcome onNext={goNext} />}
         {onboardingStep === 1 && <RoleSelect onNext={goNext} onBack={goBack} />}
-        {onboardingStep === 2 && <SignUpPage onNext={goBack} />}
+        {onboardingStep === 2 && <SignUpPage onBack={goBack} />}
 
         {onboardingStep === 3 && (
           <ProfileBasics onNext={goNext} onBack={goBack} />

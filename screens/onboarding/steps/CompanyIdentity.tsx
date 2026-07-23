@@ -160,7 +160,7 @@ function FloatInput({
         className={`absolute left-0 text-xs font-bold uppercase tracking-wider transition-all duration-200 pointer-events-none ${
           hasValue
             ? "top-0 text-blue-600"
-            : "top-4 text-gray-400 text-sm normal-case tracking-normal font-normal"
+            : "top-12 text-gray-400 text-sm normal-case tracking-normal font-normal"
         } peer-focus:top-0 peer-focus:text-blue-600 peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider`}
       >
         {label}

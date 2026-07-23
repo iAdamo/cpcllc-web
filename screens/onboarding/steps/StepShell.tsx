@@ -5,15 +5,16 @@ import { ReactNode } from "react";
 
 interface StepShellProps {
   step?: string;
-  title: string;
+  title?: string;
   subtitle?: string;
   children: ReactNode;
-  onNext: () => void;
+  onNext?: () => void;
   onBack?: () => void;
   nextDisabled?: boolean;
   nextLabel?: string;
   nextLoading?: boolean;
   hidePrev?: boolean;
+  hideNext?: boolean;
 }
 
 export default function StepShell({
@@ -27,9 +28,10 @@ export default function StepShell({
   nextLabel = "Continue",
   nextLoading,
   hidePrev,
+  hideNext,
 }: StepShellProps) {
   return (
-    <div className="flex flex-col min-h-full px-6 sm:px-10 py-8 max-w-xl mx-auto w-full">
+    <div className="flex flex-col min-h-full px-6 sm:px-10 py-8 max-w-xl mx-auto w-full bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
       {/* Header */}
       <div className="mb-8 space-y-1">
         {step && (
@@ -60,22 +62,25 @@ export default function StepShell({
         ) : (
           <div />
         )}
-
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={nextDisabled || nextLoading}
-          className="flex items-center gap-2 px-7 py-3 bg-blue-600 hover:bg-blue-700 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100 text-white font-black rounded-xl text-sm transition-all shadow-lg shadow-blue-500/25"
-        >
-          {nextLoading ? (
-            <Loader2 size={15} className="animate-spin" />
-          ) : (
-            <>
-              {nextLabel}
-              <ArrowRight size={15} />
-            </>
-          )}
-        </button>
+        {!hideNext && onNext ? (
+          <button
+            type="button"
+            onClick={onNext}
+            disabled={nextDisabled || nextLoading}
+            className="flex items-center gap-2 px-7 py-3 bg-blue-600 hover:bg-blue-700 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100 text-white font-black rounded-xl text-sm transition-all shadow-lg shadow-blue-500/25"
+          >
+            {nextLoading ? (
+              <Loader2 size={15} className="animate-spin" />
+            ) : (
+              <>
+                {nextLabel}
+                <ArrowRight size={15} />
+              </>
+            )}
+          </button>
+        ) : (
+          <div />
+        )}
       </div>
     </div>
   );
