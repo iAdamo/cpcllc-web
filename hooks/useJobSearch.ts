@@ -29,7 +29,7 @@ export function useJobSearch(filters: JobFilters) {
       const page = (pageParam as number) ?? 1;
       const hasLocation = !!filters.location;
       const result = await globalSearch({
-        model: "jobs",
+        model: "tasks",
         page,
         limit: 15,
         engine: hasLocation,
@@ -42,7 +42,7 @@ export function useJobSearch(filters: JobFilters) {
         categories: filters.category ? [filters.category] : undefined,
       });
       return {
-        jobs: result.data.jobs ?? [],
+        jobs: result.data.tasks ?? [],
         totalPages: result.totalPages ?? 1,
         page,
         total: (result as any).total,

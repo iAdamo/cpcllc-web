@@ -39,8 +39,8 @@ export interface SearchFilters {
 
 // ── Search state (client side only — results live in TanStack Query) ─────────
 export interface SearchState {
-  searchModel: "providers" | "jobs";
-  setSearchModel: (model: "providers" | "jobs") => void;
+  searchModel: "providers" | "tasks";
+  setSearchModel: (model: "providers" | "tasks") => void;
 
   searchFilters: SearchFilters;
   setSearchFilters: (f: Partial<SearchFilters>) => void;

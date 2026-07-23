@@ -201,6 +201,14 @@ export const assignTicket = async (id: string, assigneeUserId: string) =>
       assigneeUserId,
     })
   ).data;
+
+export const unassignTicket = async (id: string) =>
+  (await axiosInstance.patch(`admin/support/tickets/${id}/unassign`)).data;
+
+export const sendTicketTyping = async (id: string, isTyping: boolean) =>
+  (
+    await axiosInstance.post(`admin/support/tickets/${id}/typing`, { isTyping })
+  ).data;
 export const escalateTicket = async (
   id: string,
   body: { target: string; reason: string; notes?: string }

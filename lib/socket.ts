@@ -138,6 +138,13 @@ export enum AdminEvents {
   TASK_CREATED = "admin:task_created",
 }
 
+/** Live support-ticket thread events (mirror backend SupportEvents). */
+export enum SupportEvents {
+  MESSAGE = "support:message",
+  TICKET_UPDATED = "support:ticket_updated",
+  TYPING = "support:typing",
+}
+
 const SOCKET_URL =
   process.env.NEXT_PUBLIC_API_URL ??
   "https://9qc99pwv-3333.uks1.devtunnels.ms/";
@@ -228,7 +235,8 @@ class SocketService {
       | ChatEvents
       | PresenceEvents
       | NotificationEvents
-      | AdminEvents,
+      | AdminEvents
+      | SupportEvents,
     payload: T
   ): Promise<void> {
     const deviceId = getDeviceId();
@@ -263,7 +271,8 @@ class SocketService {
       | ChatEvents
       | PresenceEvents
       | NotificationEvents
-      | AdminEvents,
+      | AdminEvents
+      | SupportEvents,
     callback: (envelope: EventEnvelope<T>) => void
   ): void {
     this.socket?.on(event, callback);
@@ -275,7 +284,8 @@ class SocketService {
       | ChatEvents
       | PresenceEvents
       | NotificationEvents
-      | AdminEvents,
+      | AdminEvents
+      | SupportEvents,
     callback?: (data: any) => void
   ): void {
     this.socket?.off(event, callback);

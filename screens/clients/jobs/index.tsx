@@ -104,11 +104,11 @@ export default function JobsPage() {
     hasNextPage: hasMore,
     loadMore,
     total,
-  } = useGlobalSearch("jobs");
+  } = useGlobalSearch("tasks");
 
   // Keep the shared search filters in sync with this page's controls.
   useEffect(() => {
-    setSearchModel("jobs");
+    setSearchModel("tasks");
     setSearchFilters({
       sortBy,
       urgency: urgencyFilter,

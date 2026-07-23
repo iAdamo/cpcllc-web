@@ -18,7 +18,7 @@ interface SearchPage {
 }
 
 function buildSearchParams(
-  model: "providers" | "jobs",
+  model: "providers" | "tasks",
   filters: SearchFilters,
   page: number,
 ) {
@@ -52,7 +52,7 @@ function buildSearchParams(
  */
 export function getCachedJobResults(): JobData[] {
   const entries = queryClient.getQueriesData<InfiniteData<SearchPage>>({
-    queryKey: ["search", "jobs"],
+    queryKey: ["search", "tasks"],
   });
   for (let i = entries.length - 1; i >= 0; i--) {
     const data = entries[i][1];
@@ -70,7 +70,7 @@ export function getCachedJobResults(): JobData[] {
  * `setSearchFilters` / `setSearchModel` changes the query key, which
  * re-runs the search — there is no imperative `executeSearch` anymore.
  */
-export function useGlobalSearch(model?: "providers" | "jobs") {
+export function useGlobalSearch(model?: "providers" | "tasks") {
   const storeModel = useGlobalStore((s) => s.searchModel);
   const filters = useGlobalStore((s) => s.searchFilters);
   const setSearchFilters = useGlobalStore((s) => s.setSearchFilters);
@@ -111,7 +111,7 @@ export function useGlobalSearch(model?: "providers" | "jobs") {
       );
       return {
         providers: result.data.providers ?? [],
-        jobs: result.data.jobs ?? [],
+        jobs: result.data.tasks ?? [],
         totalPages: result.totalPages ?? 1,
         total: (result as any).total,
         page,

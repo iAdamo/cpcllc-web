@@ -10,9 +10,12 @@ import {
   replyTicket,
   setTicketStatus,
   assignTicket,
+  unassignTicket,
+  sendTicketTyping,
   escalateTicket,
   listAdminUsers,
 } from "@/axios/admin";
+import { socketService, SocketEvents, SupportEvents } from "@/lib/socket";
 
 const STATUSES = [
   "new",
@@ -64,7 +67,19 @@ export function TicketDrawer({
   const [sending, setSending] = useState(false);
   const [busy, setBusy] = useState(false);
   const [agents, setAgents] = useState<any[]>([]);
+  const [peerTyping, setPeerTyping] = useState(false);
   const threadRef = useRef<HTMLDivElement>(null);
+  const typingClearRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastTypingSentRef = useRef(0);
+
+  // Throttle typing pings to one every 2.5s while the agent is typing.
+  const notifyTyping = () => {
+    if (!ticketId) return;
+    const now = Date.now();
+    if (now - lastTypingSentRef.current < 2500) return;
+    lastTypingSentRef.current = now;
+    void sendTicketTyping(ticketId, true).catch(() => {});
+  };
 
   const load = async () => {
     if (!ticketId) return;
@@ -92,6 +107,65 @@ export function TicketDrawer({
   useEffect(() => {
     threadRef.current?.scrollTo({ top: threadRef.current.scrollHeight });
   }, [data?.messages?.length]);
+
+  // Live thread: subscribe to the ticket channels, append inbound messages
+  // and reflect status/assignee changes without a refetch.
+  useEffect(() => {
+    if (!ticketId) return;
+    void socketService.connect();
+    const pub = `ticket:${ticketId}`;
+    const staff = `ticket:${ticketId}:staff`;
+    void socketService.emitEvent(SocketEvents.SUBSCRIPTION_SUBSCRIBE, {
+      channel: pub,
+    });
+    void socketService.emitEvent(SocketEvents.SUBSCRIPTION_SUBSCRIBE, {
+      channel: staff,
+    });
+
+    const onMsg = (env: any) => {
+      const p = env?.payload ?? env;
+      if (p?.ticketId !== ticketId || !p?.message) return;
+      setData((prev) =>
+        prev
+          ? {
+              ...prev,
+              messages: prev.messages.some((m) => m._id === p.message._id)
+                ? prev.messages
+                : [...prev.messages, p.message],
+            }
+          : prev
+      );
+    };
+    const onUpd = () => {
+      void load();
+      onChanged();
+    };
+    const onTyping = (env: any) => {
+      const p = env?.payload ?? env;
+      if (p?.ticketId !== ticketId || !p?.isTyping || p?.userId === meId) return;
+      setPeerTyping(true);
+      if (typingClearRef.current) clearTimeout(typingClearRef.current);
+      typingClearRef.current = setTimeout(() => setPeerTyping(false), 4000);
+    };
+    socketService.onEvent(SupportEvents.MESSAGE, onMsg as any);
+    socketService.onEvent(SupportEvents.TICKET_UPDATED, onUpd as any);
+    socketService.onEvent(SupportEvents.TYPING, onTyping as any);
+
+    return () => {
+      void socketService.emitEvent(SocketEvents.SUBSCRIPTION_UNSUBSCRIBE, {
+        channel: pub,
+      });
+      void socketService.emitEvent(SocketEvents.SUBSCRIPTION_UNSUBSCRIBE, {
+        channel: staff,
+      });
+      socketService.offEvent(SupportEvents.MESSAGE, onMsg as any);
+      socketService.offEvent(SupportEvents.TICKET_UPDATED, onUpd as any);
+      socketService.offEvent(SupportEvents.TYPING, onTyping as any);
+      if (typingClearRef.current) clearTimeout(typingClearRef.current);
+      setPeerTyping(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ticketId]);
 
   const ticket = data?.ticket;
   const assigneeId = useMemo(
@@ -169,13 +243,15 @@ export function TicketDrawer({
                     disabled={busy}
                     value={assigneeId ?? ""}
                     onChange={(e) =>
-                      runAction(() => assignTicket(ticket._id, e.target.value))
+                      runAction(() =>
+                        e.target.value
+                          ? assignTicket(ticket._id, e.target.value)
+                          : unassignTicket(ticket._id)
+                      )
                     }
                     className="flex-1 text-xs rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1.5"
                   >
-                    <option value="" disabled>
-                      Unassigned
-                    </option>
+                    <option value="">Unassigned</option>
                     {agents.map((a) => {
                       const uid = a.user?._id ?? a.user ?? a._id;
                       return (
@@ -274,6 +350,16 @@ export function TicketDrawer({
 
           {/* Composer */}
           <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+            {peerTyping && (
+              <div className="text-[11px] text-slate-400 mb-1 flex items-center gap-1">
+                <span className="inline-flex gap-0.5">
+                  <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" />
+                  <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce [animation-delay:120ms]" />
+                  <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce [animation-delay:240ms]" />
+                </span>
+                {name(ticket.requester)} is typing…
+              </div>
+            )}
             <div className="flex items-center gap-2 mb-2">
               <button
                 onClick={() => setInternal(false)}
@@ -299,7 +385,10 @@ export function TicketDrawer({
             <div className="flex items-end gap-2">
               <textarea
                 value={reply}
-                onChange={(e) => setReply(e.target.value)}
+                onChange={(e) => {
+                  setReply(e.target.value);
+                  if (!internal && e.target.value.trim()) notifyTyping();
+                }}
                 placeholder={
                   internal
                     ? "Add an internal note (customer can't see this)…"
