@@ -580,16 +580,19 @@ function BroadcastBuilder({
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-2">
-              <input
+              <select
                 className={input}
-                placeholder="Country (optional)"
                 value={audience.filters?.country ?? ""}
                 onChange={(e) =>
                   setAud({
                     filters: { ...audience.filters, country: e.target.value },
                   })
                 }
-              />
+              >
+                <option value="">Any country</option>
+                <option value="US">United States</option>
+                <option value="NG">Nigeria</option>
+              </select>
               <label className="flex items-center gap-2 text-xs text-slate-500">
                 <input
                   type="checkbox"
@@ -763,11 +766,54 @@ function BroadcastDetail({
 
           <div className="text-xs text-slate-500 space-y-1">
             <p>Channels: {b.channels?.join(", ")}</p>
-            <p>Audience: {b.audience?.type?.toLowerCase()}</p>
+            <p>
+              Audience:{" "}
+              {b.audience?.type === "SELECTED_USERS"
+                ? `${b.audienceUsers?.length ?? 0} selected user${
+                    (b.audienceUsers?.length ?? 0) === 1 ? "" : "s"
+                  }`
+                : b.audience?.type?.toLowerCase().replace(/_/g, " ")}
+              {b.audience?.filters?.country
+                ? ` · ${
+                    b.audience.filters.country === "NG"
+                      ? "Nigeria"
+                      : "United States"
+                  }`
+                : ""}
+            </p>
             <p>Created by {name(b.createdBy)}</p>
             {b.approvedBy && <p>Approved by {name(b.approvedBy)}</p>}
             {b.publishedBy && <p>Published by {name(b.publishedBy)}</p>}
           </div>
+
+          {/* Exact recipients — an approver must see who a hand-picked send
+              goes to (other audience types are describable by their filters). */}
+          {b.audience?.type === "SELECTED_USERS" && (
+            <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
+              <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                Recipients ({b.audienceUsers?.length ?? 0})
+              </p>
+              {b.audienceUsers && b.audienceUsers.length ? (
+                <div className="space-y-1 max-h-48 overflow-y-auto">
+                  {b.audienceUsers.map((u) => (
+                    <div
+                      key={u._id}
+                      className="flex items-center justify-between gap-2"
+                    >
+                      <span className="text-sm text-slate-800 dark:text-slate-100">
+                        {name(u)}
+                      </span>
+                      <span className="text-[11px] text-slate-400 truncate">
+                        {u.email}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-slate-400">No recipients selected.</p>
+              )}
+            </div>
+          )}
 
           {b.status === "PUBLISHED" && a && (
             <div className="grid grid-cols-3 gap-2">

@@ -85,6 +85,8 @@ export interface Broadcast {
   publishedBy?: any;
   submittedBy?: any;
   analytics?: BroadcastAnalytics;
+  /** Resolved hand-picked recipients (only on getById, SELECTED_USERS). */
+  audienceUsers?: PickableUser[];
   createdAt: string;
   updatedAt: string;
 }
