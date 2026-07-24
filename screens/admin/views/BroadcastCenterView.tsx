@@ -73,7 +73,9 @@ const CATEGORIES = [
   "POLICY",
 ] as const;
 const PRIORITIES = ["LOW", "NORMAL", "HIGH", "URGENT"] as const;
-const CHANNELS: BroadcastChannel[] = ["PUSH", "IN_APP", "EMAIL", "WEB"];
+// In-app is implicit (every broadcast is delivered to the Updates feed +
+// notification center automatically) — only the opt-in channels are toggles.
+const CHANNELS: BroadcastChannel[] = ["PUSH", "EMAIL"];
 const AUDIENCES = [
   "EVERYONE",
   "CLIENTS",
@@ -100,7 +102,7 @@ const EMPTY: Partial<Broadcast> = {
   template: "CUSTOM",
   category: "PRODUCT",
   priority: "NORMAL",
-  channels: ["IN_APP", "PUSH"],
+  channels: ["PUSH"],
   audience: { type: "EVERYONE" },
 };
 
@@ -487,6 +489,9 @@ function BroadcastBuilder({
 
         <Field label="Delivery channels">
           <div className="flex flex-wrap gap-2">
+            <span className="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
+              In-app · always on
+            </span>
             {CHANNELS.map((c) => {
               const on = form.channels?.includes(c);
               return (
