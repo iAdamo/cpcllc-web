@@ -17,6 +17,7 @@ import { FraudView } from "@/screens/admin/views/FraudView";
 import { FeatureFlagsView } from "@/screens/admin/views/FeatureFlagsView";
 import { AuditView } from "@/screens/admin/views/AuditView";
 import { RolesView } from "@/screens/admin/views/RolesView";
+import { BroadcastCenterView } from "@/screens/admin/views/BroadcastCenterView";
 import { SubscriptionsView } from "@/screens/admin/views/SubscriptionsView";
 import { SystemHealthView } from "@/screens/admin/views/SystemHealthView";
 import { ModerationView } from "@/screens/admin/views/ModerationView";
@@ -143,6 +144,8 @@ function renderView(view: string) {
       return <AuditView />;
     case "roles":
       return <RolesView />;
+    case "broadcasts":
+      return <BroadcastCenterView />;
     case "subscriptions":
       return <SubscriptionsView />;
     case "system_health":
