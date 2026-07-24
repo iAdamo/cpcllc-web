@@ -103,6 +103,24 @@ export interface BroadcastAnalytics {
 
 const base = "admin/broadcasts";
 
+export interface PickableUser {
+  _id: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  activeRole?: string;
+}
+
+/** Search marketplace users for the "Selected users" audience picker. */
+export const searchUsersForBroadcast = async (
+  search: string
+): Promise<PickableUser[]> => {
+  const res = await axiosInstance.get("admin/marketplace/users", {
+    params: { search, limit: 12 },
+  });
+  return res.data?.page?.items ?? res.data?.items ?? [];
+};
+
 export const getBroadcastStats = async () =>
   (await axiosInstance.get(`${base}/stats`)).data as {
     byStatus: Record<string, number>;

@@ -30,11 +30,12 @@ import {
   archiveBroadcast,
   deleteBroadcast,
   estimateAudience,
-  getBroadcastAnalytics,
+  searchUsersForBroadcast,
   type Broadcast,
   type BroadcastStatus,
   type BroadcastChannel,
   type Audience,
+  type PickableUser,
 } from "@/axios/broadcast";
 
 const TABS: { key: BroadcastStatus | "ALL"; label: string }[] = [
@@ -260,10 +261,24 @@ function BroadcastBuilder({
   const [estimate, setEstimate] = useState<number | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
+  // "Selected users" picker.
+  const [picked, setPicked] = useState<PickableUser[]>([]);
+  const [userQuery, setUserQuery] = useState("");
+  const [userResults, setUserResults] = useState<PickableUser[]>([]);
+  const [searching, setSearching] = useState(false);
+
   useEffect(() => {
     if (id !== "new") {
       import("@/axios/broadcast").then(({ getBroadcast }) =>
-        getBroadcast(id).then((b) => setForm(b)).catch(() => {})
+        getBroadcast(id)
+          .then((b) => {
+            setForm(b);
+            // Preserve an existing hand-picked set so adding more doesn't drop
+            // it (names fill in as the admin re-searches; ids are kept).
+            const ids = b.audience?.userIds ?? [];
+            if (ids.length) setPicked(ids.map((uid) => ({ _id: uid })));
+          })
+          .catch(() => {})
       );
     }
   }, [id]);
@@ -293,6 +308,37 @@ function BroadcastBuilder({
       cur.has(c) ? cur.delete(c) : cur.add(c);
       return { ...f, channels: Array.from(cur) };
     });
+
+  // Debounced marketplace-user search for the "Selected users" audience.
+  useEffect(() => {
+    if (audience.type !== "SELECTED_USERS" || userQuery.trim().length < 2) {
+      setUserResults([]);
+      return;
+    }
+    setSearching(true);
+    const t = setTimeout(() => {
+      searchUsersForBroadcast(userQuery.trim())
+        .then(setUserResults)
+        .catch(() => setUserResults([]))
+        .finally(() => setSearching(false));
+    }, 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userQuery, audience.type]);
+
+  const addUser = (u: PickableUser) => {
+    if (picked.some((p) => p._id === u._id)) return;
+    const next = [...picked, u];
+    setPicked(next);
+    setAud({ userIds: next.map((p) => p._id) });
+    setUserQuery("");
+    setUserResults([]);
+  };
+  const removeUser = (id: string) => {
+    const next = picked.filter((p) => p._id !== id);
+    setPicked(next);
+    setAud({ userIds: next.map((p) => p._id) });
+  };
 
   const save = async (thenSubmit = false) => {
     if (!form.title?.trim()) {
@@ -479,30 +525,88 @@ function BroadcastBuilder({
               </option>
             ))}
           </select>
-          <div className="grid grid-cols-2 gap-2">
-            <input
-              className={input}
-              placeholder="Country (optional)"
-              value={audience.filters?.country ?? ""}
-              onChange={(e) =>
-                setAud({
-                  filters: { ...audience.filters, country: e.target.value },
-                })
-              }
-            />
-            <label className="flex items-center gap-2 text-xs text-slate-500">
+          {audience.type === "SELECTED_USERS" ? (
+            <div className="space-y-2">
+              {/* Selected chips */}
+              {picked.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {picked.map((u) => (
+                    <span
+                      key={u._id}
+                      className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-fuchsia-100 dark:bg-fuchsia-950/40 text-fuchsia-800 dark:text-fuchsia-200"
+                    >
+                      {name(u)}
+                      <button onClick={() => removeUser(u._id)}>
+                        <X size={11} />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="relative">
+                <input
+                  className={input}
+                  placeholder="Search users by name, email or phone…"
+                  value={userQuery}
+                  onChange={(e) => setUserQuery(e.target.value)}
+                />
+                {(userResults.length > 0 || searching) && (
+                  <div className="absolute z-10 mt-1 w-full max-h-56 overflow-y-auto rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg">
+                    {searching && (
+                      <div className="px-3 py-2 text-xs text-slate-400">
+                        Searching…
+                      </div>
+                    )}
+                    {userResults.map((u) => (
+                      <button
+                        key={u._id}
+                        onClick={() => addUser(u)}
+                        className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                      >
+                        <p className="text-sm text-slate-800 dark:text-slate-100">
+                          {name(u)}
+                        </p>
+                        <p className="text-[11px] text-slate-400">
+                          {u.email} {u.activeRole ? `· ${u.activeRole}` : ""}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <p className="text-[11px] text-slate-400">
+                {picked.length} user{picked.length === 1 ? "" : "s"} selected.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
               <input
-                type="checkbox"
-                checked={!!audience.filters?.verified}
+                className={input}
+                placeholder="Country (optional)"
+                value={audience.filters?.country ?? ""}
                 onChange={(e) =>
                   setAud({
-                    filters: { ...audience.filters, verified: e.target.checked },
+                    filters: { ...audience.filters, country: e.target.value },
                   })
                 }
               />
-              Verified only
-            </label>
-          </div>
+              <label className="flex items-center gap-2 text-xs text-slate-500">
+                <input
+                  type="checkbox"
+                  checked={!!audience.filters?.verified}
+                  onChange={(e) =>
+                    setAud({
+                      filters: {
+                        ...audience.filters,
+                        verified: e.target.checked,
+                      },
+                    })
+                  }
+                />
+                Verified only
+              </label>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3">
