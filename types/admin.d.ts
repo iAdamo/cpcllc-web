@@ -148,14 +148,21 @@ export interface SystemHealthSnapshot {
 }
 
 export interface AdminUserMe {
-  _id: string;
-  user: string;
-  role: string;
-  extraPermissions: string[];
-  deniedPermissions: string[];
-  department?: string;
-  isActive: boolean;
+  adminUser: {
+    _id: string;
+    user: string;
+    role: string;
+    extraPermissions: string[];
+    deniedPermissions: string[];
+    department?: string;
+    isActive: boolean;
+  };
   permissions: string[];
+  rank: number;
+  /** Sensitive user-detail sections this admin may see (contact, private,
+   *  security, login_history, device_sessions, audit). */
+  sensitiveSections: string[];
+  manageableRoles: string[];
 }
 
 export interface TicketStats {

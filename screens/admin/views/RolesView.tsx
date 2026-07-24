@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { UserCog, UserPlus, Loader2 } from "lucide-react";
 import { listAdminUsers, listRoles, createAdminUser } from "@/axios/admin";
 import { StatusPill } from "@/components/admin/StatusPill";
+import { usePermissions } from "@/hooks/admin/usePermissions";
 
 const EMPTY = {
   email: "",
@@ -22,6 +23,17 @@ export function RolesView() {
   const [form, setForm] = useState({ ...EMPTY });
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
+  const { has, manageableRoles } = usePermissions();
+  const canCreateAdmin = has("admin:create") || has("admin_user:write");
+  // You can only create an admin whose role you're allowed to manage.
+  const assignableRoles = useMemo(
+    () =>
+      roles.filter(
+        (r: any) => !manageableRoles.length || manageableRoles.includes(r.name),
+      ),
+    [roles, manageableRoles],
+  );
 
   const loadAdmins = useCallback(async () => {
     const a = await listAdminUsers({ limit: 50 });
@@ -97,7 +109,8 @@ export function RolesView() {
         </div>
       </div>
 
-      {/* Create admin — fresh email only */}
+      {/* Create admin — fresh email only. Hidden unless the admin may create. */}
+      {canCreateAdmin && (
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
         <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
           <UserPlus size={16} className="text-indigo-600" />
@@ -143,7 +156,7 @@ export function RolesView() {
               onChange={set("password")}
             />
             <select className={input} value={form.role} onChange={set("role")}>
-              {roles.map((r: any) => (
+              {assignableRoles.map((r: any) => (
                 <option key={r._id ?? r.name} value={r.name}>
                   {r.displayName ?? r.name}
                 </option>
@@ -173,6 +186,7 @@ export function RolesView() {
           </button>
         </form>
       </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
