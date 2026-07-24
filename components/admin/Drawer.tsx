@@ -1,7 +1,12 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { X } from "lucide-react";
+import {
+  Drawer as GluestackDrawer,
+  DrawerBackdrop,
+  DrawerContent,
+} from "@/components/ui/drawer";
 
 interface DrawerProps {
   open: boolean;
@@ -12,35 +17,34 @@ interface DrawerProps {
   footer?: ReactNode;
 }
 
-export function Drawer({ open, onClose, title, subtitle, children, footer }: DrawerProps) {
-  useEffect(() => {
-    if (!open) return;
-    const onEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onEsc);
-    return () => window.removeEventListener("keydown", onEsc);
-  }, [open, onClose]);
-
+/**
+ * Admin side drawer, now built on the gluestack Drawer primitive (backdrop,
+ * slide-in animation, focus trap, ESC + overlay-click close all handled by
+ * gluestack). The header/body/footer keep the admin's Tailwind look — the
+ * gluestack shell only provides the container + behaviour. Props are
+ * unchanged so every consumer (TicketDrawer, Users/Providers/etc.) works as
+ * before.
+ */
+export function Drawer({
+  open,
+  onClose,
+  title,
+  subtitle,
+  children,
+  footer,
+}: DrawerProps) {
   return (
-    <>
-      <div
-        onClick={onClose}
-        className={`fixed inset-0 z-40 bg-slate-900/30 backdrop-blur-sm transition-opacity ${
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      />
-      <aside
-        className={`fixed top-0 right-0 z-50 h-full w-full max-w-xl bg-white dark:bg-slate-900 shadow-2xl border-l border-slate-100 dark:border-slate-800 transition-transform ${
-          open ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="flex flex-col h-full">
-          <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between">
+    <GluestackDrawer isOpen={open} onClose={onClose} size="md" anchor="right">
+      <DrawerBackdrop />
+      <DrawerContent className="h-full border-l border-slate-100 bg-white p-0 dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex h-full w-full flex-col">
+          <header className="flex items-start justify-between border-b border-slate-100 px-5 py-4 dark:border-slate-800">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{title}</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                {title}
+              </h3>
               {subtitle && (
-                <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>
+                <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>
               )}
             </div>
             <button
@@ -51,14 +55,16 @@ export function Drawer({ open, onClose, title, subtitle, children, footer }: Dra
               <X size={18} />
             </button>
           </header>
-          <div className="flex-1 overflow-y-auto px-5 py-4">{children}</div>
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+            {children}
+          </div>
           {footer && (
-            <footer className="px-5 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+            <footer className="border-t border-slate-100 bg-slate-50/50 px-5 py-3 dark:border-slate-800 dark:bg-slate-900/50">
               {footer}
             </footer>
           )}
         </div>
-      </aside>
-    </>
+      </DrawerContent>
+    </GluestackDrawer>
   );
 }
