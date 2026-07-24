@@ -36,6 +36,7 @@ import {
   type BroadcastChannel,
   type Audience,
   type PickableUser,
+  type BroadcastSlide,
 } from "@/axios/broadcast";
 
 const TABS: { key: BroadcastStatus | "ALL"; label: string }[] = [
@@ -104,6 +105,8 @@ const EMPTY: Partial<Broadcast> = {
   priority: "NORMAL",
   channels: ["PUSH"],
   audience: { type: "EVERYONE" },
+  placement: "NOTIFICATION_CENTER",
+  slides: [],
 };
 
 export function BroadcastCenterView() {
@@ -342,6 +345,19 @@ function BroadcastBuilder({
     setAud({ userIds: next.map((p) => p._id) });
   };
 
+  // Home-banner carousel slides.
+  const slides = form.slides ?? [];
+  const isBanner = form.placement === "HOME_BANNER";
+  const addSlide = () =>
+    set("slides", [...slides, { backgroundColor: "#7c3aed" } as BroadcastSlide]);
+  const updateSlide = (i: number, patch: Partial<BroadcastSlide>) =>
+    set(
+      "slides",
+      slides.map((s, idx) => (idx === i ? { ...s, ...patch } : s))
+    );
+  const removeSlide = (i: number) =>
+    set("slides", slides.filter((_, idx) => idx !== i));
+
   const save = async (thenSubmit = false) => {
     if (!form.title?.trim()) {
       setErr("A title is required");
@@ -401,19 +417,130 @@ function BroadcastBuilder({
           </div>
         </div>
 
-        <Field label="Template">
-          <select
-            className={input}
-            value={form.template}
-            onChange={(e) => set("template", e.target.value)}
-          >
-            {TEMPLATES.map((t) => (
-              <option key={t} value={t}>
-                {t.replace(/_/g, " ")}
-              </option>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Template">
+            <select
+              className={input}
+              value={form.template}
+              onChange={(e) => set("template", e.target.value)}
+            >
+              {TEMPLATES.map((t) => (
+                <option key={t} value={t}>
+                  {t.replace(/_/g, " ")}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Placement">
+            <select
+              className={input}
+              value={form.placement}
+              onChange={(e) => set("placement", e.target.value)}
+            >
+              <option value="NOTIFICATION_CENTER">Notification Center</option>
+              <option value="HOME_BANNER">Home banner</option>
+            </select>
+          </Field>
+        </div>
+
+        {isBanner && (
+          <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                Home banner {slides.length > 1 ? "carousel" : ""}
+              </span>
+              <button
+                onClick={addSlide}
+                className="text-xs px-2.5 py-1 rounded-md bg-fuchsia-600 text-white"
+              >
+                + Slide
+              </button>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Each slide needs an image OR a background colour. Multiple slides
+              render as a swipeable carousel under the search bar.
+            </p>
+            {slides.length === 0 && (
+              <p className="text-xs text-rose-500">
+                Add at least one slide (image or colour required).
+              </p>
+            )}
+            {slides.map((s, i) => (
+              <div
+                key={i}
+                className="rounded-lg border border-slate-200 dark:border-slate-700 p-2.5 space-y-2"
+              >
+                {/* Live banner preview */}
+                <div
+                  className="rounded-lg overflow-hidden h-24 flex items-end p-3 text-white"
+                  style={{
+                    backgroundColor: s.backgroundColor || "#7c3aed",
+                    backgroundImage: s.image ? `url(${s.image})` : undefined,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                >
+                  <div>
+                    <p className="text-sm font-semibold drop-shadow">
+                      {s.title || "Slide title"}
+                    </p>
+                    {s.subtitle && (
+                      <p className="text-xs opacity-90 drop-shadow">
+                        {s.subtitle}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    className={input}
+                    placeholder="Image URL"
+                    value={s.image ?? ""}
+                    onChange={(e) => updateSlide(i, { image: e.target.value })}
+                  />
+                  <input
+                    className={input}
+                    type="color"
+                    value={s.backgroundColor ?? "#7c3aed"}
+                    onChange={(e) =>
+                      updateSlide(i, { backgroundColor: e.target.value })
+                    }
+                  />
+                  <input
+                    className={input}
+                    placeholder="Slide title"
+                    value={s.title ?? ""}
+                    onChange={(e) => updateSlide(i, { title: e.target.value })}
+                  />
+                  <input
+                    className={input}
+                    placeholder="Slide subtitle"
+                    value={s.subtitle ?? ""}
+                    onChange={(e) => updateSlide(i, { subtitle: e.target.value })}
+                  />
+                  <input
+                    className={input}
+                    placeholder="CTA label"
+                    value={s.ctaLabel ?? ""}
+                    onChange={(e) => updateSlide(i, { ctaLabel: e.target.value })}
+                  />
+                  <input
+                    className={input}
+                    placeholder="CTA link"
+                    value={s.ctaUrl ?? ""}
+                    onChange={(e) => updateSlide(i, { ctaUrl: e.target.value })}
+                  />
+                </div>
+                <button
+                  onClick={() => removeSlide(i)}
+                  className="text-xs text-rose-600"
+                >
+                  Remove slide
+                </button>
+              </div>
             ))}
-          </select>
-        </Field>
+          </div>
+        )}
 
         <Field label="Title">
           <input

@@ -40,6 +40,16 @@ export type BroadcastCategory =
 
 export type BroadcastPriority = "LOW" | "NORMAL" | "HIGH" | "URGENT";
 export type BroadcastChannel = "PUSH" | "IN_APP" | "EMAIL" | "WEB";
+export type BroadcastPlacement = "NOTIFICATION_CENTER" | "HOME_BANNER";
+
+export interface BroadcastSlide {
+  image?: string;
+  backgroundColor?: string;
+  title?: string;
+  subtitle?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+}
 
 export type AudienceType =
   | "EVERYONE"
@@ -74,6 +84,8 @@ export interface Broadcast {
   priority: BroadcastPriority;
   channels: BroadcastChannel[];
   audience: Audience;
+  placement?: BroadcastPlacement;
+  slides?: BroadcastSlide[];
   scheduledAt?: string;
   expiresAt?: string;
   pinned?: boolean;
