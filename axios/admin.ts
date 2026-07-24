@@ -181,6 +181,16 @@ export const listAdminUsers = async (params: any = {}) =>
 export const assignAdminRole = async (userId: string, role: string) =>
   (await axiosInstance.post(`admin/rbac/admin-users`, { userId, role })).data;
 
+export const createAdminUser = async (payload: {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  password: string;
+  role: string;
+}) =>
+  (await axiosInstance.post(`admin/rbac/admin-users/create`, payload)).data;
+
 /* ───────── Support ───────── */
 export const getTicketStats = async (): Promise<TicketStats> =>
   (await axiosInstance.get(`admin/support/tickets/stats`)).data;
