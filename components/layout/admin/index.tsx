@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import Image from "next/image";
 import useGlobalStore from "@/stores";
 import {
   SIDEBAR_GROUPS,
@@ -25,26 +26,28 @@ const SidebarHeader = ({
   collapsed: boolean;
   toggle: () => void;
 }) => (
-  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
-    {!collapsed && (
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-bold text-sm">
-          C
-        </div>
+  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+    <div className="p-3 flex items-center gap-2">
+      <Image
+        src="/assets/logo-color.png"
+        alt="CPC Logo"
+        width={36}
+        height={36}
+        className="w-9 h-9"
+      />
+      {!collapsed && (
         <div className="flex flex-col leading-tight">
-          <span className="text-sm font-bold text-slate-900 dark:text-white">
-            CompaniesCenter
-          </span>
           <span className="text-[10px] uppercase tracking-wider text-blue-600 dark:text-blue-400 font-medium">
             Admin Console
           </span>
         </div>
-      </div>
-    )}
+      )}
+    </div>
+
     <button
       type="button"
       onClick={toggle}
-      className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"
+      className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"
       aria-label="Toggle sidebar"
     >
       {collapsed ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
@@ -75,17 +78,31 @@ const SidebarItem = ({
   const state = active
     ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-medium"
     : danger
-    ? "text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
-    : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60";
+      ? "text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
+      : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60";
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`${base} ${sizing} ${state}`}
+      className={`${base} ${
+        collapsed
+          ? "flex flex-col items-center justify-center gap-1 py-2"
+          : `${sizing}`
+      } ${state}`}
       title={collapsed ? label : undefined}
     >
       <Icon size={collapsed ? 18 : 16} className="shrink-0" />
-      {!collapsed && <span className="flex-1 truncate">{label}</span>}
+
+      <span
+        className={`${
+          collapsed
+            ? "text-[10px] leading-tight text-center"
+            : "flex-1 truncate"
+        }`}
+      >
+        {label}
+      </span>
+
       {!collapsed && badge !== undefined && badge > 0 && (
         <span
           className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
@@ -116,7 +133,7 @@ const Sidebar = ({
 }) => (
   <aside
     className={`shrink-0 transition-all duration-200 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col h-full ${
-      collapsed ? "w-16" : "w-64"
+      collapsed ? "w-20" : "w-56"
     }`}
   >
     <SidebarHeader collapsed={collapsed} toggle={toggle} />
@@ -227,7 +244,7 @@ export default function AdminDashboardLayout({ children, badges }: Props) {
 
   const totalNotifications = useMemo(
     () => Object.values(badges ?? {}).reduce((a: number, b) => a + (b ?? 0), 0),
-    [badges]
+    [badges],
   );
 
   return (

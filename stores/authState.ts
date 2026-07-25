@@ -4,7 +4,8 @@ import { register, login, deactivateUser, logout } from "@/axios/auth";
 import { queryClient } from "@/lib/queryClient";
 
 export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
-  set
+  set,
+  get
 ) => ({
   user: null,
   isAuthenticated: false,
@@ -74,20 +75,7 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
       // different user (or a non-admin). One clear() drops everything:
       // admin views, search results, profiles, metrics.
       queryClient.clear();
-      set({
-        user: null,
-        isAuthenticated: false,
-        error: null,
-        onboardingStep: null,
-        onboardingData: null,
-        switchRole: "Client",
-        savedProviders: null,
-        currentLocation: null,
-        paramsFrom: null,
-        isLoading: false,
-        availability: {},
-        adminOnlineUserIds: {},
-      });
+      localStorage.removeItem("web-storage");
     }
   },
 });

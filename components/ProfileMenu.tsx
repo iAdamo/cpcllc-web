@@ -50,8 +50,8 @@ function Avatar({ variant = "sm" }: { variant?: AvatarVariant }) {
       ? (provider?.providerLogo as MediaItem).thumbnail
       : null
     : typeof user.profilePicture?.thumbnail === "string"
-    ? user.profilePicture.thumbnail
-    : null;
+      ? user.profilePicture.thumbnail
+      : null;
 
   const initials = isProvider
     ? (provider?.providerName ?? "P").charAt(0).toUpperCase()
@@ -158,7 +158,6 @@ export default function ProfileMenu() {
   };
 
   const handleLogout = async () => {
-    setOpen(false);
     await logout();
     // Hard navigation, not a client-side route: resets every in-memory
     // store/provider so nothing from the old session survives.
@@ -221,8 +220,8 @@ export default function ProfileMenu() {
                     {user.activeRole === "Admin"
                       ? "Admin"
                       : isProvider
-                      ? "Provider"
-                      : "Client"}
+                        ? "Provider"
+                        : "Client"}
                   </span>
                 </div>
               </div>
@@ -295,7 +294,10 @@ export default function ProfileMenu() {
             <div className="border-t border-gray-100 dark:border-gray-800 p-2">
               <button
                 type="button"
-                onClick={handleLogout}
+                onClick={async () => {
+                  await handleLogout();
+                  setOpen(false);
+                }}
                 className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors group/lg"
               >
                 <LogOut

@@ -85,6 +85,8 @@ export interface Broadcast {
   channels: BroadcastChannel[];
   audience: Audience;
   placement?: BroadcastPlacement;
+  bannerSize?: "SM" | "MD" | "LG";
+  dismissible?: boolean;
   slides?: BroadcastSlide[];
   scheduledAt?: string;
   expiresAt?: string;

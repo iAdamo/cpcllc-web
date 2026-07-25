@@ -460,6 +460,27 @@ function BroadcastBuilder({
               Each slide needs an image OR a background colour. Multiple slides
               render as a swipeable carousel under the search bar.
             </p>
+            <div className="grid grid-cols-2 gap-2">
+              <Field label="Banner size">
+                <select
+                  className={input}
+                  value={form.bannerSize ?? "LG"}
+                  onChange={(e) => set("bannerSize", e.target.value)}
+                >
+                  <option value="SM">Small (compact strip)</option>
+                  <option value="MD">Medium</option>
+                  <option value="LG">Large (hero)</option>
+                </select>
+              </Field>
+              <label className="flex items-center gap-2 text-xs text-slate-500 mt-6">
+                <input
+                  type="checkbox"
+                  checked={form.dismissible !== false}
+                  onChange={(e) => set("dismissible", e.target.checked)}
+                />
+                Users can dismiss it
+              </label>
+            </div>
             {slides.length === 0 && (
               <p className="text-xs text-rose-500">
                 Add at least one slide (image or colour required).
