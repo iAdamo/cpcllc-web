@@ -146,6 +146,40 @@ export interface SystemHealthSnapshot {
     externalMb: number;
   };
   uptime: { seconds: number; formatted: string };
+  diagnostics?: {
+    errors?: AdminErrorStats;
+    recovery?: {
+      retryableErrors?: number;
+      recommendedAction?: string;
+    };
+  };
+}
+
+export interface AdminErrorItem {
+  errorId: string;
+  code: string;
+  category: string;
+  severity: string;
+  message: string;
+  technicalMessage?: string;
+  userMessage?: string;
+  source?: string;
+  module?: string;
+  service?: string;
+  endpoint?: string;
+  route?: string;
+  feature?: string;
+  timestamp?: string;
+  environment?: string;
+  retryable?: boolean;
+  resolved?: boolean;
+}
+
+export interface AdminErrorStats {
+  total: number;
+  unresolved: number;
+  bySeverity: Record<string, number>;
+  latest: AdminErrorItem | null;
 }
 
 export interface AdminUserMe {

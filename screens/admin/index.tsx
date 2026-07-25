@@ -60,12 +60,12 @@ const AdminDashboard = () => {
           !user ||
           (user &&
             (user.activeRole !== "Admin" ||
-              (user.activeRoleId as AdminUserMe).user !== user._id))
+              (user.activeRoleId as AdminUserMe["adminUser"]).user !== user._id))
         ) {
           setAuthState("denied");
           return;
         }
-        if ((user.activeRoleId as AdminUserMe)._id) {
+        if ((user.activeRoleId as AdminUserMe["adminUser"])._id) {
           setAuthState("ok");
         } else {
           setAuthState("denied");

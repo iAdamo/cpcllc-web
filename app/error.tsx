@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { AppErrorService } from "@/lib/errorService";
 
 export default function ErrorPage({
   error,
@@ -11,7 +12,20 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    AppErrorService.log(error, {
+      code: "UNEXPECTED_ERROR",
+      category: "unexpected_system_error",
+      severity: "critical",
+      message: "The web app encountered an unexpected error.",
+      technicalMessage: error.message,
+      userMessage: "Something unexpected happened. We recorded the issue.",
+      source: "web",
+      module: "app-shell",
+      service: "global-error",
+      route: "/",
+      feature: "global-error-boundary",
+      context: { digest: error.digest },
+    });
   }, [error]);
 
   return (
@@ -21,8 +35,8 @@ export default function ErrorPage({
         Something went wrong
       </h1>
       <p className="text-sm text-gray-500 text-center max-w-md mb-8">
-        An unexpected error occurred on our side. Please try again — if it
-        keeps happening, we&apos;re already looking into it.
+        We recorded the issue and can help if it continues. Please try again or
+        return home.
       </p>
       <div className="flex flex-col sm:flex-row gap-3">
         <button

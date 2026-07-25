@@ -8,6 +8,8 @@ import type {
   DisputeStats,
   FraudStats,
   SubscriptionStats,
+  AdminErrorItem,
+  AdminErrorStats,
 } from "@/types";
 import type {
   AdminClientsBundle,
@@ -30,77 +32,77 @@ export const getAdminOverview = async (): Promise<AdminOverviewShape> => {
 
 /* ───────── Admin marketplace — bundled list reads ───────── */
 export const getAdminUsersView = async (
-  params: Record<string, unknown>
+  params: Record<string, unknown>,
 ): Promise<AdminUsersBundle> => {
   const r = await axiosInstance.get<AdminUsersBundle>(
     `admin/marketplace/users`,
-    { params }
+    { params },
   );
   return r.data;
 };
 
 export const getAdminUserDetail = async (
-  id: string
+  id: string,
 ): Promise<AdminUserDetail> => {
   const r = await axiosInstance.get<AdminUserDetail>(
-    `admin/marketplace/users/${id}`
+    `admin/marketplace/users/${id}`,
   );
   return r.data;
 };
 
 export const getAdminProvidersView = async (
-  params: Record<string, unknown>
+  params: Record<string, unknown>,
 ): Promise<AdminProvidersBundle> => {
   const r = await axiosInstance.get<AdminProvidersBundle>(
     `admin/marketplace/providers`,
-    { params }
+    { params },
   );
   return r.data;
 };
 
 export const getAdminProviderDetail = async (
-  id: string
+  id: string,
 ): Promise<AdminProviderDetail> => {
   const r = await axiosInstance.get<AdminProviderDetail>(
-    `admin/marketplace/providers/${id}`
+    `admin/marketplace/providers/${id}`,
   );
   return r.data;
 };
 
 export const getAdminClientsView = async (
-  params: Record<string, unknown>
+  params: Record<string, unknown>,
 ): Promise<AdminClientsBundle> => {
   const r = await axiosInstance.get<AdminClientsBundle>(
     `admin/marketplace/clients`,
-    { params }
+    { params },
   );
   return r.data;
 };
 
 export const getAdminClientDetail = async (
-  id: string
+  id: string,
 ): Promise<AdminUserDetail> => {
   const r = await axiosInstance.get<AdminUserDetail>(
-    `admin/marketplace/clients/${id}`
+    `admin/marketplace/clients/${id}`,
   );
   return r.data;
 };
 
 export const getAdminTasksView = async (
-  params: Record<string, unknown>
+  params: Record<string, unknown>,
 ): Promise<AdminTasksBundle> => {
   const r = await axiosInstance.get<AdminTasksBundle>(
     `admin/marketplace/tasks`,
-    { params }
+    { params },
   );
   return r.data;
 };
 
 export const getAdminTaskDetail = async (
-  id: string
+  id: string,
 ): Promise<AdminTaskDetail> => {
   const r = await axiosInstance.get<AdminTaskDetail>(
-    `admin/marketplace/tasks/${id}`
+    `admin/marketplace/tasks/${id}`,
   );
   return r.data;
 };
@@ -153,7 +155,7 @@ export const restoreAdminTask = async (id: string) =>
 
 /* ───────── Legacy metrics ───────── */
 export const getMetrics = async (
-  params: MetricsRequest
+  params: MetricsRequest,
 ): Promise<MetricsResponse> => {
   const response = await axiosInstance.get<MetricsResponse>(`admin/metrics`, {
     params,
@@ -164,8 +166,20 @@ export const getMetrics = async (
 /* ───────── System health (standalone — overview bundle also includes it) ───────── */
 export const getSystemHealth = async (): Promise<SystemHealthSnapshot> => {
   const r = await axiosInstance.get<SystemHealthSnapshot>(
-    `admin/overview/health`
+    `admin/overview/health`,
   );
+  return r.data;
+};
+
+export const getAdminErrors = async (limit = 10): Promise<AdminErrorItem[]> => {
+  const r = await axiosInstance.get<AdminErrorItem[]>(`admin/errors`, {
+    params: { limit },
+  });
+  return r.data;
+};
+
+export const getAdminErrorsStats = async (): Promise<AdminErrorStats> => {
+  const r = await axiosInstance.get<AdminErrorStats>(`admin/errors/stats`);
   return r.data;
 };
 
@@ -188,8 +202,7 @@ export const createAdminUser = async (payload: {
   phoneNumber: string;
   password: string;
   role: string;
-}) =>
-  (await axiosInstance.post(`admin/rbac/admin-users/create`, payload)).data;
+}) => (await axiosInstance.post(`admin/rbac/admin-users/create`, payload)).data;
 
 /* ───────── Support ───────── */
 export const getTicketStats = async (): Promise<TicketStats> =>
@@ -200,7 +213,7 @@ export const getTicket = async (id: string) =>
   (await axiosInstance.get(`admin/support/tickets/${id}`)).data;
 export const replyTicket = async (
   id: string,
-  body: { body: string; isInternalNote?: boolean }
+  body: { body: string; isInternalNote?: boolean },
 ) => (await axiosInstance.post(`admin/support/tickets/${id}/reply`, body)).data;
 export const setTicketStatus = async (id: string, status: string) =>
   (await axiosInstance.patch(`admin/support/tickets/${id}/status`, { status }))
@@ -216,12 +229,11 @@ export const unassignTicket = async (id: string) =>
   (await axiosInstance.patch(`admin/support/tickets/${id}/unassign`)).data;
 
 export const sendTicketTyping = async (id: string, isTyping: boolean) =>
-  (
-    await axiosInstance.post(`admin/support/tickets/${id}/typing`, { isTyping })
-  ).data;
+  (await axiosInstance.post(`admin/support/tickets/${id}/typing`, { isTyping }))
+    .data;
 export const escalateTicket = async (
   id: string,
-  body: { target: string; reason: string; notes?: string }
+  body: { target: string; reason: string; notes?: string },
 ) =>
   (await axiosInstance.post(`admin/support/tickets/${id}/escalate`, body)).data;
 export const createTicket = async (body: {
@@ -339,4 +351,6 @@ export const getAdminReviewsView = async (
 export const moderateAdminReview = async (
   id: string,
   action: "approve" | "reject" | "remove",
-) => (await axiosInstance.post(`admin/trust/reviews/${id}/moderate`, { action })).data;
+) =>
+  (await axiosInstance.post(`admin/trust/reviews/${id}/moderate`, { action }))
+    .data;
