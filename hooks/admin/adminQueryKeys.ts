@@ -28,6 +28,17 @@ export const adminKeys = {
   tasksView: (filter: Record<string, unknown>) =>
     ["admin", "tasks", "list", filter] as const,
   taskDetail: (id: string) => ["admin", "tasks", "detail", id] as const,
+
+  // Trust & Safety — service lifecycle oversight + review moderation.
+  engagements: ["admin", "engagements"] as const,
+  engagementsView: (filter: Record<string, unknown>) =>
+    ["admin", "engagements", "list", filter] as const,
+  engagementDetail: (id: string) =>
+    ["admin", "engagements", "detail", id] as const,
+
+  reviewsMod: ["admin", "reviews-mod"] as const,
+  reviewsModView: (filter: Record<string, unknown>) =>
+    ["admin", "reviews-mod", "list", filter] as const,
 };
 
 /** Maps a websocket invalidation scope to the query keys it dirties. */

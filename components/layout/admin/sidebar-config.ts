@@ -61,6 +61,7 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
       { key: "providers", label: "Service Providers", icon: Building2 },
       { key: "clients", label: "Clients", icon: UserCog },
       { key: "tasks", label: "Tasks", icon: ListTodo, badgeKey: "openTasks" },
+      { key: "engagements", label: "Service Lifecycle", icon: Activity },
       { key: "bookings", label: "Bookings", icon: CalendarCheck },
       { key: "projects", label: "Projects", icon: FolderKanban },
       { key: "reviews", label: "Reviews", icon: Star },

@@ -291,3 +291,52 @@ export const createNote = async (payload: {
   tags?: string[];
   isPinned?: boolean;
 }) => (await axiosInstance.post(`admin/notes`, payload)).data;
+
+/* ───────── Trust & Safety (service lifecycle + review moderation) ───────── */
+
+export interface AdminLifecycleStats {
+  accepted: number;
+  in_progress: number;
+  awaiting_confirmation: number;
+  completed: number;
+  disputed: number;
+  cancelled: number;
+  total: number;
+  certificates: number;
+}
+
+export interface AdminEngagementsBundle {
+  stats: AdminLifecycleStats;
+  page: { data: any[]; total: number; page: number; limit: number };
+}
+
+export interface AdminReviewStats {
+  total: number;
+  verified: number;
+  flagged: number;
+  pending: number;
+  removed: number;
+}
+
+export interface AdminReviewsBundle {
+  stats: AdminReviewStats;
+  page: { data: any[]; total: number; page: number; limit: number };
+}
+
+export const getAdminEngagementsView = async (
+  params: Record<string, unknown> = {},
+): Promise<AdminEngagementsBundle> =>
+  (await axiosInstance.get(`admin/trust/engagements`, { params })).data;
+
+export const getAdminEngagementDetail = async (id: string) =>
+  (await axiosInstance.get(`admin/trust/engagements/${id}`)).data;
+
+export const getAdminReviewsView = async (
+  params: Record<string, unknown> = {},
+): Promise<AdminReviewsBundle> =>
+  (await axiosInstance.get(`admin/trust/reviews`, { params })).data;
+
+export const moderateAdminReview = async (
+  id: string,
+  action: "approve" | "reject" | "remove",
+) => (await axiosInstance.post(`admin/trust/reviews/${id}/moderate`, { action })).data;

@@ -11,6 +11,8 @@ import { UsersView } from "@/screens/admin/views/UsersView";
 import { ProvidersView } from "@/screens/admin/views/ProvidersView";
 import { ClientsView } from "@/screens/admin/views/ClientsView";
 import { TasksView } from "@/screens/admin/views/TasksView";
+import { EngagementsView } from "@/screens/admin/views/EngagementsView";
+import { ReviewModerationView } from "@/screens/admin/views/ReviewModerationView";
 import { SupportView } from "@/screens/admin/views/SupportView";
 import { DisputesView } from "@/screens/admin/views/DisputesView";
 import { FraudView } from "@/screens/admin/views/FraudView";
@@ -31,7 +33,6 @@ import {
   Wallet,
   Banknote,
   ShieldCheck,
-  Star,
   FileBarChart2,
   BellRing,
   Megaphone,
@@ -159,6 +160,10 @@ function renderView(view: string) {
       return <ClientsView />;
     case "tasks":
       return <TasksView />;
+    case "engagements":
+      return <EngagementsView />;
+    case "reviews":
+      return <ReviewModerationView />;
     case "bookings":
       return (
         <PlaceholderView
@@ -205,14 +210,6 @@ function renderView(view: string) {
           title="Escrow"
           description="Monitor escrow balances and release of milestone funds."
           icon={ShieldCheck}
-        />
-      );
-    case "reviews":
-      return (
-        <PlaceholderView
-          title="Reviews"
-          description="Moderate platform reviews."
-          icon={Star}
         />
       );
     case "reports":

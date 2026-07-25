@@ -74,6 +74,7 @@ export type AdminView =
   | "providers"
   | "clients"
   | "tasks"
+  | "engagements"
   | "bookings"
   | "projects"
   | "messages"

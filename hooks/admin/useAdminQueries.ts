@@ -11,6 +11,11 @@ import {
   getAdminClientDetail,
   getAdminTasksView,
   getAdminTaskDetail,
+  getAdminEngagementsView,
+  getAdminEngagementDetail,
+  getAdminReviewsView,
+  type AdminEngagementsBundle,
+  type AdminReviewsBundle,
 } from "@/axios/admin";
 import type {
   AdminClientsBundle,
@@ -151,6 +156,41 @@ export function useAdminTaskDetail(id: string | null) {
       queryFn: () => getAdminTaskDetail(id ?? ""),
       enabled: !!id,
       staleTime: ADMIN_STALE_TIME,
+    }),
+  );
+}
+
+/* ─── Trust & Safety ───────────────────────────────────────────────────── */
+
+export function useAdminEngagementsView(filter: Record<string, unknown>) {
+  return shape(
+    useQuery<AdminEngagementsBundle>({
+      queryKey: adminKeys.engagementsView(filter),
+      queryFn: () => getAdminEngagementsView(filter),
+      staleTime: ADMIN_STALE_TIME,
+      placeholderData: (prev) => prev,
+    }),
+  );
+}
+
+export function useAdminEngagementDetail(id: string | null) {
+  return shape(
+    useQuery<{ task: any; certificate: any }>({
+      queryKey: adminKeys.engagementDetail(id ?? ""),
+      queryFn: () => getAdminEngagementDetail(id ?? ""),
+      enabled: !!id,
+      staleTime: ADMIN_STALE_TIME,
+    }),
+  );
+}
+
+export function useAdminReviewsView(filter: Record<string, unknown>) {
+  return shape(
+    useQuery<AdminReviewsBundle>({
+      queryKey: adminKeys.reviewsModView(filter),
+      queryFn: () => getAdminReviewsView(filter),
+      staleTime: ADMIN_STALE_TIME,
+      placeholderData: (prev) => prev,
     }),
   );
 }
