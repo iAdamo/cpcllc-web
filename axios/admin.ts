@@ -10,6 +10,8 @@ import type {
   SubscriptionStats,
   AdminErrorItem,
   AdminErrorStats,
+  AdminErrorPage,
+  AdminErrorFilters,
 } from "@/types";
 import type {
   AdminClientsBundle,
@@ -171,10 +173,28 @@ export const getSystemHealth = async (): Promise<SystemHealthSnapshot> => {
   return r.data;
 };
 
-export const getAdminErrors = async (limit = 10): Promise<AdminErrorItem[]> => {
-  const r = await axiosInstance.get<AdminErrorItem[]>(`admin/errors`, {
-    params: { limit },
+export const getAdminErrors = async (
+  filters: AdminErrorFilters = {},
+): Promise<AdminErrorPage> => {
+  const r = await axiosInstance.get<AdminErrorPage>(`admin/errors`, {
+    params: filters,
   });
+  return r.data;
+};
+
+export const getAdminError = async (
+  errorId: string,
+): Promise<AdminErrorItem> => {
+  const r = await axiosInstance.get<AdminErrorItem>(`admin/errors/${errorId}`);
+  return r.data;
+};
+
+export const resolveAdminError = async (
+  errorId: string,
+): Promise<{ errorId: string; resolved: boolean }> => {
+  const r = await axiosInstance.patch<{ errorId: string; resolved: boolean }>(
+    `admin/errors/${errorId}/resolve`,
+  );
   return r.data;
 };
 

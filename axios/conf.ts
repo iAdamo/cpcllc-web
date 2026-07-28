@@ -1,5 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { getDeviceId, getSessionId } from "@/utils/Device";
+import { AppErrorService } from "@/lib/errorService";
 
 const PROD_FALLBACK_WARNING =
   "NEXT_PUBLIC_API_URL is not set — API requests will fail. Set it in the deployment environment.";
@@ -41,6 +42,24 @@ const createClient = () => {
     async (error) => {
       const status = error.response?.status;
 
+      // Normalize once, centrally. Callers read error.appError for the
+      // specific backend message (no screen re-interprets status codes).
+      const normalized = AppErrorService.fromApiError(error);
+      error.appError = normalized;
+
+      // Report server/network failures automatically. 4xx business errors are
+      // reported by the caller's notify.error so we don't double-count expected
+      // validation/permission responses. Never report the /errors/report call.
+      const isReportCall = (error.config?.url ?? "").includes("errors/report");
+      if (
+        !isReportCall &&
+        (normalized.category === "server" ||
+          normalized.category === "network" ||
+          normalized.severity === "critical")
+      ) {
+        AppErrorService.report(normalized);
+      }
+
       // Session expired on a protected page — send the user to sign-in.
       // Public pages (home, search) may fire unauthenticated calls for
       // guests; those must never bounce the visitor to a login wall.
@@ -50,12 +69,6 @@ const createClient = () => {
         if (protectedPrefixes.some((p) => path.startsWith(p))) {
           window.location.href = `/auth/signin?next=${encodeURIComponent(path)}`;
         }
-      }
-
-      // 403 means signed in but not allowed (RBAC, terms) — surface the
-      // error to the caller instead of yanking the user to the homepage.
-      if (error.message === "Network Error") {
-        console.warn("Network error — check the internet connection.");
       }
 
       return Promise.reject(error);

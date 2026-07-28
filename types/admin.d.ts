@@ -169,16 +169,52 @@ export interface AdminErrorItem {
   endpoint?: string;
   route?: string;
   feature?: string;
+  userId?: string;
+  adminId?: string;
+  sessionId?: string;
+  correlationId?: string;
+  requestId?: string;
+  deviceInfo?: string;
+  platform?: string;
+  appVersion?: string;
+  buildNumber?: string;
+  browser?: string;
+  operatingSystem?: string;
+  ipAddress?: string;
+  stack?: string;
   timestamp?: string;
   environment?: string;
   retryable?: boolean;
   resolved?: boolean;
+  resolvedBy?: string;
+  resolvedAt?: string;
+}
+
+export interface AdminErrorPage {
+  items: AdminErrorItem[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface AdminErrorFilters {
+  severity?: string;
+  category?: string;
+  source?: string;
+  code?: string;
+  resolved?: boolean;
+  search?: string;
+  page?: number;
+  limit?: number;
 }
 
 export interface AdminErrorStats {
   total: number;
   unresolved: number;
   bySeverity: Record<string, number>;
+  byCategory?: Record<string, number>;
+  bySource?: Record<string, number>;
+  critical?: number;
   latest: AdminErrorItem | null;
 }
 
