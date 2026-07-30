@@ -5,15 +5,22 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Play, Heart, MessageSquare, Bookmark, X, Plus } from "lucide-react";
 import { MediaItem } from "@/types";
-import { resolveUrl } from "./helpers";
+import VideoPlayer from "@/components/media/VideoPlayer";
+import { mediaSource, isVideoItem } from "./helpers";
 
 interface Props {
   items: unknown[];
   isCurrentUser: boolean;
 }
 
+interface LightboxItem {
+  src: string;
+  poster?: string;
+  isVideo: boolean;
+}
+
 export default function PortfolioGrid({ items, isCurrentUser }: Props) {
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<LightboxItem | null>(null);
 
   if (items.length === 0) {
     return (
@@ -39,8 +46,9 @@ export default function PortfolioGrid({ items, isCurrentUser }: Props) {
     <>
       <div className="columns-2 md:columns-3 gap-3 space-y-3">
         {items.map((item, i) => {
-          const isVideo = (item as MediaItem)?.type === "video";
-          const src = resolveUrl(item);
+          const isVideo = isVideoItem(item);
+          const src = mediaSource(item); // real file (video or image)
+          const poster = (item as MediaItem)?.thumbnail || (isVideo ? "" : src);
           return (
             <motion.div
               key={i}
@@ -48,15 +56,26 @@ export default function PortfolioGrid({ items, isCurrentUser }: Props) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06 }}
               className="break-inside-avoid bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group cursor-pointer hover:shadow-lg transition-all duration-300"
-              onClick={() => setLightbox(src)}
+              onClick={() =>
+                setLightbox({
+                  src,
+                  poster: (item as MediaItem)?.thumbnail || undefined,
+                  isVideo,
+                })
+              }
             >
               <div className="relative aspect-square">
-                <Image
-                  src={src}
-                  alt={`Portfolio ${i + 1}`}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                {poster ? (
+                  <Image
+                    src={poster}
+                    alt={`Portfolio ${i + 1}`}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  // Video with no generated thumbnail — dark tile + play badge.
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900" />
+                )}
                 {isVideo && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-11 h-11 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center">
@@ -108,7 +127,21 @@ export default function PortfolioGrid({ items, isCurrentUser }: Props) {
               className="relative max-w-3xl max-h-[80vh] w-full h-full rounded-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image src={lightbox} alt="Preview" fill className="object-contain" />
+              {lightbox.isVideo ? (
+                <VideoPlayer
+                  src={lightbox.src}
+                  poster={lightbox.poster}
+                  autoPlay
+                  className="w-full h-full object-contain bg-black"
+                />
+              ) : (
+                <Image
+                  src={lightbox.src}
+                  alt="Preview"
+                  fill
+                  className="object-contain"
+                />
+              )}
             </motion.div>
           </motion.div>
         )}
