@@ -12,6 +12,7 @@ import type {
   AdminErrorStats,
   AdminErrorPage,
   AdminErrorFilters,
+  MonitoringSnapshot,
 } from "@/types";
 import type {
   AdminClientsBundle,
@@ -28,85 +29,85 @@ const { axiosInstance } = ApiClientSingleton.getInstance();
 
 /* ───────── Admin overview (bundled dashboard) ───────── */
 export const getAdminOverview = async (): Promise<AdminOverviewShape> => {
-  const r = await axiosInstance.get<AdminOverviewShape>(`admin/overview`);
-  return r.data;
+  const response = await axiosInstance.get<AdminOverviewShape>(`admin/overview`);
+  return response.data;
 };
 
 /* ───────── Admin marketplace — bundled list reads ───────── */
 export const getAdminUsersView = async (
   params: Record<string, unknown>,
 ): Promise<AdminUsersBundle> => {
-  const r = await axiosInstance.get<AdminUsersBundle>(
+  const response = await axiosInstance.get<AdminUsersBundle>(
     `admin/marketplace/users`,
     { params },
   );
-  return r.data;
+  return response.data;
 };
 
 export const getAdminUserDetail = async (
   id: string,
 ): Promise<AdminUserDetail> => {
-  const r = await axiosInstance.get<AdminUserDetail>(
+  const response = await axiosInstance.get<AdminUserDetail>(
     `admin/marketplace/users/${id}`,
   );
-  return r.data;
+  return response.data;
 };
 
 export const getAdminProvidersView = async (
   params: Record<string, unknown>,
 ): Promise<AdminProvidersBundle> => {
-  const r = await axiosInstance.get<AdminProvidersBundle>(
+  const response = await axiosInstance.get<AdminProvidersBundle>(
     `admin/marketplace/providers`,
     { params },
   );
-  return r.data;
+  return response.data;
 };
 
 export const getAdminProviderDetail = async (
   id: string,
 ): Promise<AdminProviderDetail> => {
-  const r = await axiosInstance.get<AdminProviderDetail>(
+  const response = await axiosInstance.get<AdminProviderDetail>(
     `admin/marketplace/providers/${id}`,
   );
-  return r.data;
+  return response.data;
 };
 
 export const getAdminClientsView = async (
   params: Record<string, unknown>,
 ): Promise<AdminClientsBundle> => {
-  const r = await axiosInstance.get<AdminClientsBundle>(
+  const response = await axiosInstance.get<AdminClientsBundle>(
     `admin/marketplace/clients`,
     { params },
   );
-  return r.data;
+  return response.data;
 };
 
 export const getAdminClientDetail = async (
   id: string,
 ): Promise<AdminUserDetail> => {
-  const r = await axiosInstance.get<AdminUserDetail>(
+  const response = await axiosInstance.get<AdminUserDetail>(
     `admin/marketplace/clients/${id}`,
   );
-  return r.data;
+  return response.data;
 };
 
 export const getAdminTasksView = async (
   params: Record<string, unknown>,
 ): Promise<AdminTasksBundle> => {
-  const r = await axiosInstance.get<AdminTasksBundle>(
+  const response = await axiosInstance.get<AdminTasksBundle>(
     `admin/marketplace/tasks`,
     { params },
   );
-  return r.data;
+  return response.data;
 };
 
 export const getAdminTaskDetail = async (
   id: string,
 ): Promise<AdminTaskDetail> => {
-  const r = await axiosInstance.get<AdminTaskDetail>(
+  const response = await axiosInstance.get<AdminTaskDetail>(
     `admin/marketplace/tasks/${id}`,
   );
-  return r.data;
+  return response.data;
 };
 
 /* ───────── Admin marketplace — mutations ───────── */
@@ -167,46 +168,51 @@ export const getMetrics = async (
 
 /* ───────── System health (standalone — overview bundle also includes it) ───────── */
 export const getSystemHealth = async (): Promise<SystemHealthSnapshot> => {
-  const r = await axiosInstance.get<SystemHealthSnapshot>(
+  const response = await axiosInstance.get<SystemHealthSnapshot>(
     `admin/overview/health`,
   );
-  return r.data;
+  return response.data;
 };
 
 export const getAdminErrors = async (
   filters: AdminErrorFilters = {},
 ): Promise<AdminErrorPage> => {
-  const r = await axiosInstance.get<AdminErrorPage>(`admin/errors`, {
+  const response = await axiosInstance.get<AdminErrorPage>(`admin/errors`, {
     params: filters,
   });
-  return r.data;
+  return response.data;
 };
 
 export const getAdminError = async (
   errorId: string,
 ): Promise<AdminErrorItem> => {
-  const r = await axiosInstance.get<AdminErrorItem>(`admin/errors/${errorId}`);
-  return r.data;
+  const response = await axiosInstance.get<AdminErrorItem>(`admin/errors/${errorId}`);
+  return response.data;
 };
 
 export const resolveAdminError = async (
   errorId: string,
 ): Promise<{ errorId: string; resolved: boolean }> => {
-  const r = await axiosInstance.patch<{ errorId: string; resolved: boolean }>(
+  const response = await axiosInstance.patch<{ errorId: string; resolved: boolean }>(
     `admin/errors/${errorId}/resolve`,
   );
-  return r.data;
+  return response.data;
 };
 
 export const getAdminErrorsStats = async (): Promise<AdminErrorStats> => {
-  const r = await axiosInstance.get<AdminErrorStats>(`admin/errors/stats`);
-  return r.data;
+  const response = await axiosInstance.get<AdminErrorStats>(`admin/errors/stats`);
+  return response.data;
+};
+
+export const getAdminMonitoring = async (): Promise<MonitoringSnapshot> => {
+  const response = await axiosInstance.get<MonitoringSnapshot>(`admin/monitoring`);
+  return response.data;
 };
 
 /* ───────── RBAC ───────── */
 export const getMyAdminUser = async (): Promise<AdminUserMe> => {
-  const r = await axiosInstance.get<AdminUserMe>(`admin/rbac/me`);
-  return r.data;
+  const response = await axiosInstance.get<AdminUserMe>(`admin/rbac/me`);
+  return response.data;
 };
 export const listRoles = async () =>
   (await axiosInstance.get(`admin/rbac/roles`)).data;

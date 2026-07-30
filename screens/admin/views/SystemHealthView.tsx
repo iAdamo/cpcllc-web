@@ -6,6 +6,7 @@ import { getSystemHealth } from "@/axios/admin";
 import { PanelCard } from "@/components/admin/PanelCard";
 import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
 import { ErrorCenter } from "@/components/admin/ErrorCenter";
+import { MonitoringPanels } from "@/components/admin/MonitoringPanels";
 import type { SystemHealthSnapshot } from "@/types";
 
 export function SystemHealthView() {
@@ -119,6 +120,8 @@ export function SystemHealthView() {
           )}
         </PanelCard>
       </div>
+
+      <MonitoringPanels />
 
       <ErrorCenter />
     </div>

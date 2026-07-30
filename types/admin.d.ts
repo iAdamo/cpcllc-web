@@ -208,6 +208,54 @@ export interface AdminErrorFilters {
   limit?: number;
 }
 
+export interface MonitoringAlert {
+  id: string;
+  severity: "warning" | "critical";
+  category: "queue" | "socket" | "notification" | "error" | "system";
+  title: string;
+  detail: string;
+  at: string;
+}
+
+export interface MonitoringQueue {
+  key: string;
+  name?: string;
+  waiting?: number;
+  active?: number;
+  completed?: number;
+  failed?: number;
+  delayed?: number;
+  paused?: boolean;
+  rate?: number;
+}
+
+export interface MonitoringSnapshot {
+  generatedAt: string;
+  queues: {
+    available: boolean;
+    queues: MonitoringQueue[];
+    totalFailed?: number;
+    totalWaiting?: number;
+    error?: string;
+  };
+  sockets: {
+    available: boolean;
+    connectedSockets?: number;
+    connectedUsers?: number;
+    error?: string;
+  };
+  notifications: {
+    available: boolean;
+    windowHours?: number;
+    byAction?: Record<string, number>;
+    byChannel?: Record<string, number>;
+    failed?: number;
+    deliveryRate?: number;
+    error?: string;
+  };
+  alerts: MonitoringAlert[];
+}
+
 export interface AdminErrorStats {
   total: number;
   unresolved: number;
