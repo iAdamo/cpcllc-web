@@ -1,6 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { getDeviceId, getSessionId } from "@/utils/Device";
 import { AppErrorService } from "@/lib/errorService";
+import { createSingleFlight } from "@/lib/singleFlight";
 
 const PROD_FALLBACK_WARNING =
   "NEXT_PUBLIC_API_URL is not set — API requests will fail. Set it in the deployment environment.";
@@ -37,10 +38,32 @@ const createClient = () => {
     (error) => Promise.reject(error)
   );
 
+  // Trade the (httpOnly) refresh cookie for a fresh access cookie. Single-flight
+  // so concurrent 401s fire it once.
+  const runRefresh = createSingleFlight(() =>
+    apiClient.post("/auth/refresh", {}, { withCredentials: true }),
+  );
+
   apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
       const status = error.response?.status;
+      const original = error.config;
+      // Auth endpoints (login/register/refresh/logout/verify): a 401 is a real
+      // credential/session error, not an expired access token — never refresh-retry.
+      const isAuthCall = (original?.url ?? "").includes("/auth/");
+
+      // Access token expired → refresh once and replay the original request.
+      // A dead refresh token rejects here and falls through to the redirect.
+      if (status === 401 && original && !original._retry && !isAuthCall) {
+        original._retry = true;
+        try {
+          await runRefresh();
+          return apiClient(original);
+        } catch {
+          // fall through — refresh failed, treat as a real session expiry
+        }
+      }
 
       // Normalize once, centrally. Callers read error.appError for the
       // specific backend message (no screen re-interprets status codes).
