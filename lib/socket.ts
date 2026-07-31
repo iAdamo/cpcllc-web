@@ -148,7 +148,10 @@ export enum SupportEvents {
   ACTIVITY = "support:activity",
 }
 
+// Prefer a dedicated socket host (socket.companiescenter.com) when set, else
+// fall back to the API host, then the dev devtunnel.
 const SOCKET_URL =
+  process.env.NEXT_PUBLIC_SOCKET_URL ??
   process.env.NEXT_PUBLIC_API_URL ??
   "https://9qc99pwv-3333.uks1.devtunnels.ms/";
 
