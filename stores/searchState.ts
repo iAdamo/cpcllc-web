@@ -10,7 +10,9 @@ import {
 const DEFAULT_FILTERS: SearchFilters = {
   query: undefined,
   location: undefined,
-  country: "United States",
+  // Resolved at query time from the user's account country / geolocation
+  // (see useGlobalSearch). No blind "United States" default.
+  country: undefined,
   lat: undefined,
   long: undefined,
   sortBy: undefined,

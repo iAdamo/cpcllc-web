@@ -9,7 +9,7 @@ import { getAiStatus, aiChatStream, type AiChatMessage } from "@/axios/ai";
 const GREETING: AiChatMessage = {
   role: "assistant",
   content:
-    "Hi! I'm the CompaniesCenter assistant. Ask me how to find a provider, post a task, or how the platform works.",
+    "Hi! I'm Herman, CompaniesCenter assistant. Ask me how to find a provider, post a task, or how the platform works.",
 };
 
 const SUGGESTIONS = [
@@ -115,8 +115,8 @@ export default function AiAssistantFab() {
                 <Sparkles size={16} />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-bold leading-tight">CompaniesCenter Assistant</p>
-                <p className="text-[11px] text-white/80 leading-tight">Answers about the platform</p>
+                <p className="text-sm font-bold leading-tight">Herman</p>
+                <p className="text-[11px] text-white/80 leading-tight">CompaniesCenter assistant</p>
               </div>
               <button type="button" aria-label="Close" onClick={() => setOpen(false)}>
                 <X size={18} />

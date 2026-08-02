@@ -18,6 +18,7 @@ import {
 import useGlobalStore from "@/stores";
 import { ProviderData } from "@/types";
 import { globalSearch } from "@/axios/search";
+import { resolveSearchCountry, LAST_RESORT_COUNTRY } from "@/lib/country";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -46,7 +47,7 @@ export function HeroSearch({
   onSearch,
 }: Pick<UniversalSearchProps, "initialQuery" | "initialLocation" | "onSearch">) {
   const router = useRouter();
-  const { currentLocation, getCurrentLocation } = useGlobalStore();
+  const { currentLocation, getCurrentLocation, user } = useGlobalStore();
 
   const [query, setQuery] = useState(initialQuery);
   const [location, setLocation] = useState(initialLocation);
@@ -83,7 +84,9 @@ export function HeroSearch({
           engine: true,
           searchInput: q || "pass",
           address: l || undefined,
-          country: currentLocation?.country || "United States",
+          country:
+            resolveSearchCountry(user, currentLocation?.country) ||
+            LAST_RESORT_COUNTRY,
         });
         const list = res.data.providers ?? [];
         setSuggestions(list);
