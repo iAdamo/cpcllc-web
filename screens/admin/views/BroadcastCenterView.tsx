@@ -481,6 +481,51 @@ function BroadcastBuilder({
                 Users can dismiss it
               </label>
             </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <Field label="Display as">
+                <select
+                  className={input}
+                  value={form.displayMode ?? "INLINE"}
+                  onChange={(e) => set("displayMode", e.target.value)}
+                >
+                  <option value="INLINE">Inline (home feed)</option>
+                  <option value="OVERLAY">Overlay modal (blocking)</option>
+                </select>
+              </Field>
+              <label className="flex items-center gap-2 text-xs text-slate-500 mt-6">
+                <input
+                  type="checkbox"
+                  checked={form.autoSlide === true}
+                  onChange={(e) => set("autoSlide", e.target.checked)}
+                />
+                Auto-slide carousel
+              </label>
+            </div>
+            {form.autoSlide && (
+              <Field label="Auto-slide every (seconds)">
+                <input
+                  type="number"
+                  min={2}
+                  className={input}
+                  value={Math.round((form.autoSlideInterval ?? 5000) / 1000)}
+                  onChange={(e) =>
+                    set(
+                      "autoSlideInterval",
+                      Math.max(2, Number(e.target.value) || 5) * 1000,
+                    )
+                  }
+                />
+              </Field>
+            )}
+            {form.displayMode === "OVERLAY" && (
+              <p className="text-[11px] text-amber-600">
+                Overlay shows as a blocking modal with a compulsory close. The
+                whole card is tappable (opens the CTA), and the CTA button shows
+                when a label is set.
+              </p>
+            )}
+
             {slides.length === 0 && (
               <p className="text-xs text-rose-500">
                 Add at least one slide (image or colour required).

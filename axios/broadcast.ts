@@ -86,7 +86,11 @@ export interface Broadcast {
   audience: Audience;
   placement?: BroadcastPlacement;
   bannerSize?: "SM" | "MD" | "LG";
+  /** INLINE = in the home feed; OVERLAY = a blocking modal on top of the app. */
+  displayMode?: "INLINE" | "OVERLAY";
   dismissible?: boolean;
+  autoSlide?: boolean;
+  autoSlideInterval?: number;
   slides?: BroadcastSlide[];
   scheduledAt?: string;
   expiresAt?: string;
