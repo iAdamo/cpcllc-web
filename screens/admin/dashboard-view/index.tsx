@@ -71,7 +71,7 @@ export default function DashboardView() {
         Tasks: 120 + i * 5,
         Bookings: 80 + i * 3,
       })),
-    []
+    [],
   );
 
   const donut = (overview?.taskStatusBreakdown ?? []).map((s: any) => ({
@@ -158,7 +158,7 @@ export default function DashboardView() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <KpiCard
           label="Open Tickets"
-          value={loading ? "—" : tickets?.openTickets ?? 0}
+          value={loading ? "—" : (tickets?.openTickets ?? 0)}
           icon={LifeBuoy}
           tone="blue"
         />
@@ -172,7 +172,7 @@ export default function DashboardView() {
         />
         <KpiCard
           label="Fraud Alerts"
-          value={loading ? "—" : fraud?.openAlerts ?? 0}
+          value={loading ? "—" : (fraud?.openAlerts ?? 0)}
           icon={ShieldAlert}
           tone="orange"
         />
