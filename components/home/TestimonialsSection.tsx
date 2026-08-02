@@ -12,12 +12,12 @@ import {
   Star,
   FileCheck2,
 } from "lucide-react";
+import { getFeaturedReviews, type FeaturedReview } from "@/axios/stats";
 
-// Honest launch content. This section previously carried fabricated
-// customer testimonials — fake named reviews are prohibited (FTC 16 CFR
-// Part 465) and torch credibility. When real reviews accumulate, replace
-// these commitment cards with quotes pulled from the reviews API, each
-// tied to a verified completed job.
+// Honest launch content. This section shows REAL verified reviews (from the
+// reviews API, each tied to a completed job) as soon as at least three exist.
+// Until then it falls back to these commitment cards — never fabricated named
+// testimonials (FTC 16 CFR Part 465).
 const commitments = [
   {
     Icon: BadgeCheck,
@@ -57,31 +57,57 @@ const commitments = [
   },
 ];
 
+const REVIEW_COLORS = [
+  "from-blue-600 to-blue-700",
+  "from-amber-500 to-orange-600",
+  "from-violet-600 to-violet-700",
+  "from-emerald-600 to-emerald-700",
+  "from-rose-600 to-rose-700",
+  "from-indigo-600 to-indigo-700",
+];
+
 export default function TestimonialsSection() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [reviews, setReviews] = useState<FeaturedReview[]>([]);
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  // Show real reviews once there are enough to fill the carousel; else fall
+  // back to the honest commitment cards.
+  useEffect(() => {
+    let cancelled = false;
+    getFeaturedReviews()
+      .then((r) => !cancelled && setReviews(r))
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const useReviews = reviews.length >= 3;
+  const count = useReviews ? reviews.length : commitments.length;
 
   const goTo = (idx: number, dir: number) => {
     setDirection(dir);
     setCurrent(idx);
   };
 
-  const prev = () =>
-    goTo((current - 1 + commitments.length) % commitments.length, -1);
-  const next = () => goTo((current + 1) % commitments.length, 1);
+  const prev = () => goTo((current - 1 + count) % count, -1);
+  const next = () => goTo((current + 1) % count, 1);
 
   useEffect(() => {
     timerRef.current = setTimeout(next, 5000);
     return () => clearTimeout(timerRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current]);
+  }, [current, count]);
 
-  const visible = [
-    commitments[current],
-    commitments[(current + 1) % commitments.length],
-    commitments[(current + 2) % commitments.length],
-  ];
+  // Keep the index in range if the data source flips (commitments <-> reviews).
+  useEffect(() => {
+    if (current >= count) setCurrent(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count]);
+
+  const visibleIdx = [current, (current + 1) % count, (current + 2) % count];
 
   return (
     <section className="py-24 bg-white dark:bg-gray-950 overflow-hidden">
@@ -95,63 +121,101 @@ export default function TestimonialsSection() {
           className="text-center mb-16"
         >
           <p className="text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
-            Our Commitments
+            {useReviews ? "What Clients Say" : "Our Commitments"}
           </p>
           <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white">
-            What You Can Expect
-            <br />
-            <span className="text-gray-400 dark:text-gray-500">
-              From Every Hire
-            </span>
+            {useReviews ? (
+              <>
+                Real Reviews From
+                <br />
+                <span className="text-gray-400 dark:text-gray-500">
+                  Completed Jobs
+                </span>
+              </>
+            ) : (
+              <>
+                What You Can Expect
+                <br />
+                <span className="text-gray-400 dark:text-gray-500">
+                  From Every Hire
+                </span>
+              </>
+            )}
           </h2>
         </motion.div>
 
         {/* Cards */}
         <div className="relative">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {visible.map((c, i) => (
-              <motion.div
-                key={`${c.title}-${current}-${i}`}
-                initial={{ opacity: 0, x: direction * 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{
-                  duration: 0.45,
-                  delay: i * 0.07,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className={`relative p-7 rounded-3xl border transition-all duration-200 ${
-                  i === 0
-                    ? "bg-gray-900 dark:bg-white border-transparent shadow-2xl"
-                    : "bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 shadow-sm"
-                }`}
-              >
-                <div
-                  className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${c.color} flex items-center justify-center mb-5`}
-                >
-                  <c.Icon size={22} className="text-white" />
-                </div>
+            {visibleIdx.map((idx, i) => {
+              const highlight = i === 0;
+              const cardClass = `relative p-7 rounded-3xl border transition-all duration-200 ${
+                highlight
+                  ? "bg-gray-900 dark:bg-white border-transparent shadow-2xl"
+                  : "bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 shadow-sm"
+              }`;
+              const titleClass = `font-black text-lg mb-3 ${
+                highlight ? "text-white dark:text-gray-900" : "text-gray-900 dark:text-white"
+              }`;
+              const bodyClass = `text-sm leading-relaxed ${
+                highlight ? "text-white/80 dark:text-gray-600" : "text-gray-600 dark:text-gray-300"
+              }`;
 
-                <p
-                  className={`font-black text-lg mb-3 ${
-                    i === 0
-                      ? "text-white dark:text-gray-900"
-                      : "text-gray-900 dark:text-white"
-                  }`}
-                >
-                  {c.title}
-                </p>
+              const motionProps = {
+                initial: { opacity: 0, x: direction * 40 },
+                animate: { opacity: 1, x: 0 },
+                transition: { duration: 0.45, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] as const },
+                className: cardClass,
+              };
 
-                <p
-                  className={`text-sm leading-relaxed ${
-                    i === 0
-                      ? "text-white/80 dark:text-gray-600"
-                      : "text-gray-600 dark:text-gray-300"
-                  }`}
-                >
-                  {c.text}
-                </p>
-              </motion.div>
-            ))}
+              if (useReviews) {
+                const r = reviews[idx];
+                return (
+                  <motion.div key={`${r.id}-${i}`} {...motionProps}>
+                    <div className="flex gap-0.5 mb-4">
+                      {Array.from({ length: 5 }).map((_, s) => (
+                        <Star
+                          key={s}
+                          size={16}
+                          className={
+                            s < r.rating
+                              ? "text-amber-400 fill-amber-400"
+                              : highlight
+                              ? "text-white/25 dark:text-gray-300"
+                              : "text-gray-200 dark:text-gray-700"
+                          }
+                        />
+                      ))}
+                    </div>
+                    <p className={`${bodyClass} mb-5 line-clamp-5`}>“{r.text}”</p>
+                    <p className={titleClass.replace("text-lg mb-3", "text-sm mb-0")}>
+                      {r.reviewerName}
+                      {r.providerName ? (
+                        <span
+                          className={highlight ? "text-white/60 dark:text-gray-500" : "text-gray-400"}
+                        >
+                          {" "}
+                          · {r.providerName}
+                        </span>
+                      ) : null}
+                    </p>
+                  </motion.div>
+                );
+              }
+
+              const c = commitments[idx];
+              return (
+                <motion.div key={`${c.title}-${i}`} {...motionProps}>
+                  <div
+                    className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${c.color} flex items-center justify-center mb-5`}
+                  >
+                    <c.Icon size={22} className="text-white" />
+                  </div>
+                  <p className={titleClass}>{c.title}</p>
+                  <p className={bodyClass}>{c.text}</p>
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* Controls */}
@@ -166,7 +230,7 @@ export default function TestimonialsSection() {
             </button>
 
             <div className="flex gap-2">
-              {commitments.map((_, i) => (
+              {Array.from({ length: count }).map((_, i) => (
                 <button
                   key={i}
                   type="button"

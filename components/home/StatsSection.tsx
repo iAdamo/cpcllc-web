@@ -1,7 +1,21 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, MessageSquare, Star, MapPin } from "lucide-react";
+import { getPlatformStats, type PublicStatItem } from "@/axios/stats";
+
+// How each real stat is labelled + formatted when it clears the display floor.
+const STAT_META: Record<
+  PublicStatItem["key"],
+  { label: string; format: (v: number) => string }
+> = {
+  verifiedProviders: { label: "Verified providers", format: (v) => `${v.toLocaleString()}+` },
+  servicesCompleted: { label: "Services completed", format: (v) => `${v.toLocaleString()}+` },
+  reviews: { label: "Verified reviews", format: (v) => `${v.toLocaleString()}+` },
+  avgRating: { label: "Average rating", format: (v) => v.toFixed(1) },
+  countriesCovered: { label: "Countries served", format: (v) => String(v) },
+};
 
 // Honest-by-construction trust tiles. Do NOT put usage numbers here until
 // they're real — fabricated "jobs completed" counters are FTC territory.
@@ -39,6 +53,19 @@ const pillars = [
 ];
 
 export default function StatsSection() {
+  // Real, floor-filtered platform numbers. Empty until they're worth showing.
+  const [stats, setStats] = useState<PublicStatItem[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    getPlatformStats()
+      .then((s) => !cancelled && setStats(s.meaningful ?? []))
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section className="py-20 bg-[#040c24] border-t border-white/5">
       <div className="max-w-6xl mx-auto px-6 md:px-14">
@@ -60,6 +87,22 @@ export default function StatsSection() {
             </span>
           </h2>
         </motion.div>
+
+        {/* Real numbers — shown only when they clear the display floor. */}
+        {stats.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-x-12 gap-y-6 mb-14">
+            {stats.map((s) => (
+              <div key={s.key} className="text-center">
+                <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+                  {STAT_META[s.key].format(s.value)}
+                </p>
+                <p className="text-white/50 text-xs font-bold uppercase tracking-wider mt-1">
+                  {STAT_META[s.key].label}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {pillars.map(({ Icon, label, line, color, bg }, i) => (
