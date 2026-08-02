@@ -61,17 +61,22 @@ export default function DashboardView() {
   const subs = dashboard?.subscriptionStats;
 
   const kpis = overview?.kpis ?? {};
+  const deltas = overview?.deltas ?? {};
 
-  // Mock time series for the overview chart — replace with real fetched series when available.
-  const mockSeries = useMemo(
+  // Real cumulative daily totals from the backend. Format the date for the axis.
+  const series = useMemo(
     () =>
-      Array.from({ length: 30 }, (_, i) => ({
-        label: `Day ${i + 1}`,
-        Users: 200 + i * 8,
-        Tasks: 120 + i * 5,
-        Bookings: 80 + i * 3,
+      (overview?.series ?? []).map((p) => ({
+        label: new Date(`${p.date}T00:00:00Z`).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          timeZone: "UTC",
+        }),
+        Users: p.users,
+        Tasks: p.tasks,
+        Providers: p.providers,
       })),
-    [],
+    [overview?.series],
   );
 
   const donut = (overview?.taskStatusBreakdown ?? []).map((s: any) => ({
@@ -107,14 +112,16 @@ export default function DashboardView() {
         <KpiCard
           label="Total Users"
           value={loading ? "—" : (kpis.totalUsers ?? 0).toLocaleString("en-US")}
-          delta={12.5}
+          delta={loading ? undefined : deltas.totalUsers}
+          deltaLabel="last 30 days"
           icon={Users}
           tone="blue"
         />
         <KpiCard
           label="Service Providers"
           value={loading ? "—" : (kpis.providers ?? 0).toLocaleString("en-US")}
-          delta={8.4}
+          delta={loading ? undefined : deltas.providers}
+          deltaLabel="last 30 days"
           icon={Building2}
           tone="green"
         />
@@ -123,21 +130,22 @@ export default function DashboardView() {
           value={
             loading ? "—" : (kpis.tasksPosted ?? 0).toLocaleString("en-US")
           }
-          delta={15.2}
+          delta={loading ? undefined : deltas.tasksPosted}
+          deltaLabel="last 30 days"
           icon={ListTodo}
           tone="orange"
         />
+        {/* Snapshot metrics below have no historical series to measure against,
+            so they carry no growth chip rather than a fabricated one. */}
         <KpiCard
           label="Open Tasks"
           value={loading ? "—" : (kpis.openTasks ?? 0).toLocaleString("en-US")}
-          delta={10.6}
           icon={CalendarCheck}
           tone="indigo"
         />
         <KpiCard
           label="Active Subscriptions"
           value={loading ? "—" : (subs?.active ?? 0).toLocaleString("en-US")}
-          delta={18.7}
           icon={Receipt}
           tone="purple"
         />
@@ -148,7 +156,6 @@ export default function DashboardView() {
               ? "—"
               : `₦${((subs?.mrrCents ?? 0) / 100 || 0).toLocaleString("en-US")}`
           }
-          delta={20.1}
           icon={TrendingUp}
           tone="rose"
         />
@@ -190,20 +197,19 @@ export default function DashboardView() {
           title="Platform Overview"
           className="lg:col-span-2"
           action={
-            <select
-              aria-label="Time range"
-              title="Time range"
-              className="text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-2 py-1 text-slate-600 dark:text-slate-300"
-            >
-              <option>This Month</option>
-              <option>Last Month</option>
-              <option>Last 90 Days</option>
-            </select>
+            <span className="text-xs text-slate-500 dark:text-slate-400 px-2 py-1">
+              Last 30 days
+            </span>
           }
         >
           <div className="h-64">
+            {series.length === 0 ? (
+              <div className="h-full flex items-center justify-center text-sm text-slate-400">
+                {loading ? "Loading…" : "No data"}
+              </div>
+            ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={mockSeries}>
+              <AreaChart data={series}>
                 <defs>
                   <linearGradient id="u" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.4} />
@@ -231,9 +237,10 @@ export default function DashboardView() {
                 <Tooltip />
                 <Area dataKey="Users" stroke="#3B82F6" fill="url(#u)" />
                 <Area dataKey="Tasks" stroke="#10B981" fill="url(#t)" />
-                <Area dataKey="Bookings" stroke="#8B5CF6" fill="url(#b)" />
+                <Area dataKey="Providers" stroke="#8B5CF6" fill="url(#b)" />
               </AreaChart>
             </ResponsiveContainer>
+            )}
           </div>
         </PanelCard>
 

@@ -36,6 +36,8 @@ export interface AdminUserRow {
   email?: string;
   phoneNumber?: string;
   activeRole?: string;
+  /** Derived from the phone prefix (+1 → United States, +234 → Nigeria). */
+  country?: "United States" | "Nigeria" | null;
   isActive: boolean;
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
@@ -195,6 +197,19 @@ export interface AdminOverviewShape {
       openTasks?: number;
       avgRating?: number;
     };
+    /** Real 30-day growth rates (%), only for metrics with history. */
+    deltas?: {
+      totalUsers?: number;
+      providers?: number;
+      tasksPosted?: number;
+    };
+    /** Real cumulative daily totals for the Platform Overview chart. */
+    series?: {
+      date: string;
+      users: number;
+      tasks: number;
+      providers: number;
+    }[];
     taskStatusBreakdown: { status?: string; count: number }[];
   };
   ticketStats: {
