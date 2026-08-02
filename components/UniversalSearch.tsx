@@ -18,7 +18,7 @@ import {
 import useGlobalStore from "@/stores";
 import { ProviderData } from "@/types";
 import { globalSearch } from "@/axios/search";
-import { resolveSearchCountry, LAST_RESORT_COUNTRY } from "@/lib/country";
+import { resolveSearchCountry } from "@/lib/country";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -84,9 +84,8 @@ export function HeroSearch({
           engine: true,
           searchInput: q || "pass",
           address: l || undefined,
-          country:
-            resolveSearchCountry(user, currentLocation?.country) ||
-            LAST_RESORT_COUNTRY,
+          // Undefined when unknown → the backend infers country from the IP.
+          country: resolveSearchCountry(user, currentLocation?.country),
         });
         const list = res.data.providers ?? [];
         setSuggestions(list);

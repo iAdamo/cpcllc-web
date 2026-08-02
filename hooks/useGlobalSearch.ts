@@ -5,7 +5,7 @@ import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import useGlobalStore from "@/stores";
 import { globalSearch } from "@/axios/search";
 import { queryClient } from "@/lib/queryClient";
-import { getUserCountry, LAST_RESORT_COUNTRY } from "@/lib/country";
+import { getUserCountry } from "@/lib/country";
 import type { SearchFilters, ProviderData, JobData } from "@/types";
 
 const LIMIT = 15;
@@ -31,7 +31,8 @@ function buildSearchParams(
     engine: hasLocation,
     searchInput: filters.query || (hasLocation ? "pass" : undefined),
     address: hasLocation ? filters.location : undefined,
-    country: filters.country ?? LAST_RESORT_COUNTRY,
+    // Undefined when unknown → the backend infers country from the request IP.
+    country: filters.country,
     lat: filters.lat?.toString(),
     long: filters.long?.toString(),
     sortBy: filters.sortBy,
