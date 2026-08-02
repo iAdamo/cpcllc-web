@@ -8,6 +8,7 @@ import NavBar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
 import GlobalLoadingOverlay from "@/components/GlobalLoadingOverlay";
 import MobileGate from "@/components/MobileGate";
+import AiAssistantFab from "@/components/AiAssistantFab";
 import { Providers } from "@/app/providers";
 import { SessionProvider } from "@/context/SessionContext";
 
@@ -55,6 +56,7 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
               {!shouldHideNav && <NavBar />}
               {children}
               {!shouldHideFooter && <Footer />}
+              <AiAssistantFab />
             </TranslationProvider>
           </GluestackUIProvider>
         </Providers>

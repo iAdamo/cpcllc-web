@@ -13,19 +13,5 @@ export { default as star } from "./star.svg";
 export { default as message } from "./message.svg";
 export { default as sentarrow } from "./sentarrow.svg";
 export { default as phone } from "./phone.svg";
-export { default as plumbing } from "./plumbing.svg";
-export { default as electrical } from "./electrical.svg";
-export { default as cleaning } from "./cleaning.svg";
-export { default as hvac } from "./hvac.svg";
-export { default as painting } from "./painting.svg";
-export { default as pestcontrol } from "./pestcontrol.svg";
-export { default as roofing } from "./roofing.svg";
-export { default as poolservice } from "./poolservice.svg";
-export { default as solar } from "./solar.svg";
-export { default as moving } from "./moving.svg";
-export { default as security } from "./security.svg";
-export { default as appliance_repair } from "./appliance-repair.svg";
-export { default as capentry } from "./capentry.svg";
-export { default as flooring } from "./flooring.svg";
-export { default as handyman } from "./handyman.svg";
-
+// Service-category SVGs removed — the homepage now renders real backend
+// categories with lucide icons via lib/categoryIcon.tsx.
