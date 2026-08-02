@@ -8,6 +8,8 @@ import type { AdminScope } from "@/types/admin-marketplace";
 export const adminKeys = {
   all: ["admin"] as const,
   overview: ["admin", "overview"] as const,
+  overviewSeries: (range: string) =>
+    ["admin", "overview", "series", range] as const,
 
   users: ["admin", "users"] as const,
   usersView: (filter: Record<string, unknown>) =>

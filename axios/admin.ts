@@ -33,6 +33,25 @@ export const getAdminOverview = async (): Promise<AdminOverviewShape> => {
   return response.data;
 };
 
+export type OverviewRange = "1D" | "7D" | "1M" | "1Y";
+export interface OverviewSeriesPoint {
+  date: string;
+  users: number;
+  tasks: number;
+  providers: number;
+}
+
+/** Range-selectable Platform Overview chart series (1D / 7D / 1M / 1Y). */
+export const getAdminOverviewSeries = async (
+  range: OverviewRange,
+): Promise<OverviewSeriesPoint[]> => {
+  const response = await axiosInstance.get<OverviewSeriesPoint[]>(
+    `admin/overview/series`,
+    { params: { range } },
+  );
+  return response.data ?? [];
+};
+
 /* ───────── Admin marketplace — bundled list reads ───────── */
 export const getAdminUsersView = async (
   params: Record<string, unknown>,

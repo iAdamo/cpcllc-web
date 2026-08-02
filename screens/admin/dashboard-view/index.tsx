@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import useGlobalStore from "@/stores";
 import {
   Users,
@@ -17,7 +17,11 @@ import {
   CheckCircle2,
   RefreshCw,
 } from "lucide-react";
-import { useAdminDashboard } from "@/hooks/admin/useAdminQueries";
+import {
+  useAdminDashboard,
+  useAdminOverviewSeries,
+} from "@/hooks/admin/useAdminQueries";
+import type { OverviewRange } from "@/axios/admin";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { PanelCard } from "@/components/admin/PanelCard";
 import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
@@ -44,9 +48,41 @@ const TASK_STATUS_COLORS: Record<string, string> = {
   Open: "#3B82F6",
 };
 
+const RANGES: { key: OverviewRange; label: string }[] = [
+  { key: "1D", label: "24 hours" },
+  { key: "7D", label: "7 days" },
+  { key: "1M", label: "30 days" },
+  { key: "1Y", label: "1 year" },
+];
+
+/** Format a bucket key ('YYYY-MM-DDTHH' | 'YYYY-MM-DD' | 'YYYY-MM') for the axis. */
+function formatBucketLabel(dateKey: string, range: OverviewRange): string {
+  if (range === "1D") {
+    const hour = Number(dateKey.slice(11, 13));
+    return new Date(Date.UTC(2000, 0, 1, hour)).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      timeZone: "UTC",
+    });
+  }
+  if (range === "1Y") {
+    return new Date(`${dateKey}-01T00:00:00Z`).toLocaleDateString("en-US", {
+      month: "short",
+      timeZone: "UTC",
+    });
+  }
+  return new Date(`${dateKey}T00:00:00Z`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
 export default function DashboardView() {
   const { data: dashboard, loading, refresh } = useAdminDashboard();
   const { user } = useGlobalStore();
+  const [range, setRange] = useState<OverviewRange>("1M");
+  const { data: rangeSeries, loading: seriesLoading } =
+    useAdminOverviewSeries(range);
 
   // System health is part of the bundled overview now — no extra fetch.
   const health = dashboard?.systemHealth as any;
@@ -63,21 +99,19 @@ export default function DashboardView() {
   const kpis = overview?.kpis ?? {};
   const deltas = overview?.deltas ?? {};
 
-  // Real cumulative daily totals from the backend. Format the date for the axis.
-  const series = useMemo(
-    () =>
-      (overview?.series ?? []).map((p) => ({
-        label: new Date(`${p.date}T00:00:00Z`).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          timeZone: "UTC",
-        }),
-        Users: p.users,
-        Tasks: p.tasks,
-        Providers: p.providers,
-      })),
-    [overview?.series],
-  );
+  // Real cumulative totals from the backend for the selected range. The
+  // bundled overview already carries the 1M series, so use it as the seed
+  // while the range query loads (and whenever range is 1M) to avoid a flash.
+  const series = useMemo(() => {
+    const raw =
+      rangeSeries ?? (range === "1M" ? overview?.series : undefined) ?? [];
+    return raw.map((p) => ({
+      label: formatBucketLabel(p.date, range),
+      Users: p.users,
+      Tasks: p.tasks,
+      Providers: p.providers,
+    }));
+  }, [rangeSeries, overview?.series, range]);
 
   const donut = (overview?.taskStatusBreakdown ?? []).map((s: any) => ({
     name: s.status,
@@ -197,15 +231,25 @@ export default function DashboardView() {
           title="Platform Overview"
           className="lg:col-span-2"
           action={
-            <span className="text-xs text-slate-500 dark:text-slate-400 px-2 py-1">
-              Last 30 days
-            </span>
+            <select
+              aria-label="Chart time range"
+              title="Chart time range"
+              value={range}
+              onChange={(e) => setRange(e.target.value as OverviewRange)}
+              className="text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-2 py-1 text-slate-600 dark:text-slate-300"
+            >
+              {RANGES.map((r) => (
+                <option key={r.key} value={r.key}>
+                  {r.label}
+                </option>
+              ))}
+            </select>
           }
         >
           <div className="h-64">
             {series.length === 0 ? (
               <div className="h-full flex items-center justify-center text-sm text-slate-400">
-                {loading ? "Loading…" : "No data"}
+                {loading || seriesLoading ? "Loading…" : "No data"}
               </div>
             ) : (
             <ResponsiveContainer width="100%" height="100%">

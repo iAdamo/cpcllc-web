@@ -3,6 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   getAdminOverview,
+  getAdminOverviewSeries,
+  type OverviewRange,
+  type OverviewSeriesPoint,
   getAdminUsersView,
   getAdminUserDetail,
   getAdminProvidersView,
@@ -67,6 +70,18 @@ export function useAdminOverview(opts: { skip?: boolean } = {}) {
 
 /** Kept as an alias so the dashboard view keeps working without rename. */
 export const useAdminDashboard = useAdminOverview;
+
+/** Range-selectable Platform Overview chart series. Each range is its own
+ *  cache key, so switching ranges is instant after the first fetch. */
+export function useAdminOverviewSeries(range: OverviewRange) {
+  return shape(
+    useQuery<OverviewSeriesPoint[]>({
+      queryKey: adminKeys.overviewSeries(range),
+      queryFn: () => getAdminOverviewSeries(range),
+      staleTime: ADMIN_STALE_TIME,
+    }),
+  );
+}
 
 /* ─── Marketplace list views ───────────────────────────────────────────── */
 
