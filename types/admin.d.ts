@@ -96,6 +96,7 @@ export type AdminView =
   | "system_health"
   | "feature_flags"
   | "cms"
+  | "catalogue"
   | "settings"
   | "roles"
   | "audit"
