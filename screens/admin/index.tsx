@@ -24,6 +24,7 @@ import { SubscriptionsView } from "@/screens/admin/views/SubscriptionsView";
 import { SystemHealthView } from "@/screens/admin/views/SystemHealthView";
 import { ModerationView } from "@/screens/admin/views/ModerationView";
 import { CatalogueView } from "@/screens/admin/views/CatalogueView";
+import { AdsView } from "@/screens/admin/views/AdsView";
 import { SettingsView } from "@/screens/admin/views/SettingsView";
 import { PlaceholderView } from "@/screens/admin/views/PlaceholderView";
 import {
@@ -156,6 +157,8 @@ function renderView(view: string) {
       return <ModerationView />;
     case "catalogue":
       return <CatalogueView />;
+    case "marketing":
+      return <AdsView />;
 
     case "providers":
       return <ProvidersView />;

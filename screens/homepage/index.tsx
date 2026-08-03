@@ -22,6 +22,7 @@ const ForBusinessSection = dynamic(
   () => import("@/components/home/ForBusinessSection")
 );
 const FAQSection = dynamic(() => import("@/components/home/FAQSection"));
+const AdSlot = dynamic(() => import("@/components/home/AdSlot"));
 const NewsletterSection = dynamic(
   () => import("@/components/home/NewsletterSection")
 );
@@ -32,6 +33,7 @@ const HomePage = () => {
       <HeroSection />
       <StatsSection />
       <CategoriesSection />
+      <AdSlot placement="home_banner" />
       <ProvidersSection />
       <HowItWorksSection />
       <TestimonialsSection />
