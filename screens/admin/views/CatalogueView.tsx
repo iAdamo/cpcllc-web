@@ -22,6 +22,10 @@ import {
   type AdminCategory,
   type AdminSubcategory,
 } from "@/axios/catalogue";
+import {
+  CATALOGUE_ICON_NAMES,
+  resolveCatalogueIcon,
+} from "@/lib/lucideIcons";
 
 // Pull the human-readable backend message off a normalized axios error.
 function errMsg(e: any, fallback: string): string {
@@ -276,11 +280,20 @@ export function CatalogueView() {
                       className="group flex items-start gap-2.5 p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-slate-200"
                     >
                       <span
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white flex-shrink-0"
                         style={{ backgroundColor: s.iconColor || "#64748b" }}
                         title={s.icon || ""}
                       >
-                        {(s.icon || s.name).slice(0, 2).toUpperCase()}
+                        {(() => {
+                          const Ic = resolveCatalogueIcon(s.icon);
+                          return Ic ? (
+                            <Ic size={16} />
+                          ) : (
+                            <span className="text-xs font-bold">
+                              {s.name.slice(0, 2).toUpperCase()}
+                            </span>
+                          );
+                        })()}
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
@@ -387,38 +400,33 @@ export function CatalogueView() {
               className={`${inputClass} resize-none h-16`}
             />
           </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Icon (name or URL)">
+          <Field label="Icon color">
+            <div className="flex items-center gap-2">
               <input
-                value={subForm.icon}
+                type="color"
+                value={/^#[0-9a-fA-F]{6}$/.test(subForm.iconColor) ? subForm.iconColor : "#2563eb"}
                 onChange={(e) =>
-                  setSubForm({ ...subForm, icon: e.target.value })
+                  setSubForm({ ...subForm, iconColor: e.target.value })
+                }
+                className="w-9 h-9 rounded border border-slate-200 dark:border-slate-700 bg-transparent p-0.5 cursor-pointer"
+              />
+              <input
+                value={subForm.iconColor}
+                onChange={(e) =>
+                  setSubForm({ ...subForm, iconColor: e.target.value })
                 }
                 className={inputClass}
-                placeholder="wrench"
+                placeholder="#2563eb"
               />
-            </Field>
-            <Field label="Icon color">
-              <div className="flex items-center gap-2">
-                <input
-                  type="color"
-                  value={/^#[0-9a-fA-F]{6}$/.test(subForm.iconColor) ? subForm.iconColor : "#2563eb"}
-                  onChange={(e) =>
-                    setSubForm({ ...subForm, iconColor: e.target.value })
-                  }
-                  className="w-9 h-9 rounded border border-slate-200 dark:border-slate-700 bg-transparent p-0.5 cursor-pointer"
-                />
-                <input
-                  value={subForm.iconColor}
-                  onChange={(e) =>
-                    setSubForm({ ...subForm, iconColor: e.target.value })
-                  }
-                  className={inputClass}
-                  placeholder="#2563eb"
-                />
-              </div>
-            </Field>
-          </div>
+            </div>
+          </Field>
+          <Field label="Icon">
+            <IconPicker
+              value={subForm.icon}
+              color={/^#[0-9a-fA-F]{6}$/.test(subForm.iconColor) ? subForm.iconColor : "#2563eb"}
+              onPick={(name) => setSubForm({ ...subForm, icon: name })}
+            />
+          </Field>
           <Field label="Tags (comma-separated)">
             <input
               value={subForm.tags}
@@ -487,6 +495,53 @@ function Modal({
           </button>
         </div>
         <div className="p-5 space-y-4">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+function IconPicker({
+  value,
+  color,
+  onPick,
+}: {
+  value: string;
+  color: string;
+  onPick: (name: string) => void;
+}) {
+  return (
+    <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-2 max-h-40 overflow-y-auto">
+      <div className="grid grid-cols-8 gap-1.5">
+        {value && (
+          <button
+            type="button"
+            onClick={() => onPick("")}
+            title="No icon"
+            className="w-8 h-8 rounded-md flex items-center justify-center text-[10px] text-slate-400 border border-dashed border-slate-300 dark:border-slate-600 hover:border-red-400 hover:text-red-500"
+          >
+            ✕
+          </button>
+        )}
+        {CATALOGUE_ICON_NAMES.map((name) => {
+          const Ic = resolveCatalogueIcon(name)!;
+          const selected = value === name;
+          return (
+            <button
+              key={name}
+              type="button"
+              title={name}
+              onClick={() => onPick(name)}
+              className={`w-8 h-8 rounded-md flex items-center justify-center transition-colors ${
+                selected
+                  ? "ring-2 ring-blue-500 text-white"
+                  : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+              }`}
+              style={selected ? { backgroundColor: color } : undefined}
+            >
+              <Ic size={16} />
+            </button>
+          );
+        })}
       </div>
     </div>
   );
