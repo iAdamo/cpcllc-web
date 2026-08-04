@@ -103,7 +103,9 @@ export function AdsView() {
       <p className="text-xs text-slate-400">
         In Demo mode the app uses Google's test ad unit ids automatically, so
         these fields are only required for Live. The app reads this config on
-        launch — changes take effect without shipping an update.
+        launch — changes take effect without shipping an update. (The AdMob
+        <span className="font-medium"> app ID</span> is baked into the app build,
+        not set here.)
       </p>
     </div>
   );
@@ -121,7 +123,6 @@ function PlatformCard({
   onSet: (os: "android" | "ios", k: keyof PlatformUnits, v: string) => void;
 }) {
   const fields: { k: keyof PlatformUnits; label: string; ph: string }[] = [
-    { k: "appId", label: "App ID", ph: "ca-app-pub-…~…" },
     { k: "banner", label: "Banner unit", ph: "ca-app-pub-…/…" },
     { k: "interstitial", label: "Interstitial unit", ph: "ca-app-pub-…/…" },
     { k: "rewarded", label: "Rewarded unit", ph: "ca-app-pub-…/…" },

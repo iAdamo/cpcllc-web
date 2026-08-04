@@ -3,7 +3,6 @@ import { ApiClientSingleton } from "@/axios/conf";
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
 export interface PlatformUnits {
-  appId?: string;
   banner?: string;
   interstitial?: string;
   rewarded?: string;
