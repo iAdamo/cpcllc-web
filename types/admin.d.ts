@@ -97,6 +97,7 @@ export type AdminView =
   | "feature_flags"
   | "cms"
   | "catalogue"
+  | "ads"
   | "settings"
   | "roles"
   | "audit"

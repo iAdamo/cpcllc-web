@@ -98,6 +98,7 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
     title: "Finance",
     items: [
       { key: "subscriptions", label: "Subscriptions", icon: Receipt },
+      { key: "ads", label: "Ads (AdMob)", icon: Megaphone },
       { key: "payments", label: "Payments", icon: CreditCard },
       { key: "wallets", label: "Wallets", icon: Wallet },
       { key: "withdrawals", label: "Withdrawals", icon: Banknote },

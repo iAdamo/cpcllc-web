@@ -157,7 +157,7 @@ function renderView(view: string) {
       return <ModerationView />;
     case "catalogue":
       return <CatalogueView />;
-    case "marketing":
+    case "ads":
       return <AdsView />;
 
     case "providers":
