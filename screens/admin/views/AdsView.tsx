@@ -21,7 +21,7 @@ function errMsg(e: any, f: string) {
 }
 
 export function AdsView() {
-  const [cfg, setCfg] = useState<AdMobConfig>(empty);
+  const [cfg, setConfig] = useState<AdMobConfig>(empty);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +29,7 @@ export function AdsView() {
 
   useEffect(() => {
     getAdConfig()
-      .then((c) => setCfg({ ...empty, ...c, android: c.android ?? {}, ios: c.ios ?? {} }))
+      .then((c) => setConfig({ ...empty, ...c, android: c.android ?? {}, ios: c.ios ?? {} }))
       .catch((e) => setError(errMsg(e, "Failed to load AdMob config")))
       .finally(() => setLoading(false));
   }, []);
@@ -40,7 +40,7 @@ export function AdsView() {
     setSaved(false);
     try {
       const next = await updateAdConfig(cfg);
-      setCfg({ ...empty, ...next, android: next.android ?? {}, ios: next.ios ?? {} });
+      setConfig({ ...empty, ...next, android: next.android ?? {}, ios: next.ios ?? {} });
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (e) {
@@ -51,7 +51,7 @@ export function AdsView() {
   };
 
   const setPlat = (os: "android" | "ios", k: keyof PlatformUnits, v: string) =>
-    setCfg((c) => ({ ...c, [os]: { ...c[os], [k]: v } }));
+    setConfig((config) => ({ ...config, [os]: { ...config[os], [k]: v } }));
 
   if (loading) return <p className="px-5 py-10 text-center text-slate-400 text-sm">Loading…</p>;
 
@@ -75,13 +75,13 @@ export function AdsView() {
           label="Ads enabled"
           hint="Master switch. Off = no ads shown in the app."
           value={cfg.enabled}
-          onChange={(v) => setCfg((c) => ({ ...c, enabled: v }))}
+          onChange={(value) => setConfig((config) => ({ ...config, enabled: value }))}
         />
         <Toggle
           label={`Mode: ${cfg.testMode ? "Demo (test ads)" : "Live"}`}
           hint="Demo shows Google's test ads (safe, no revenue). Turn off for live units."
           value={cfg.testMode}
-          onChange={(v) => setCfg((c) => ({ ...c, testMode: v }))}
+          onChange={(v) => setConfig((c) => ({ ...c, testMode: v }))}
         />
       </div>
 
