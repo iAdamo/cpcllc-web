@@ -163,6 +163,15 @@ export const setProviderBookable = async (id: string, bookable: boolean) =>
       bookable,
     })
   ).data;
+/** Sell a time-bound featured boost: ranks the provider first in search for
+ *  `days` days, then it auto-expires. Grant after off-platform payment. */
+export const grantProviderFeatureBoost = async (id: string, days: number) =>
+  (
+    await axiosInstance.patch(
+      `admin/marketplace/providers/${id}/feature-boost`,
+      { days },
+    )
+  ).data;
 
 export const setAdminTaskStatus = async (id: string, status: string) =>
   (

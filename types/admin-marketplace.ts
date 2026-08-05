@@ -85,6 +85,8 @@ export interface AdminProviderRow {
   providerPhoneNumber?: string;
   isVerified: boolean;
   isFeatured: boolean;
+  /** When a paid featured boost expires. Null/absent = manual/permanent feature. */
+  featuredUntil?: string | null;
   isBookable: boolean;
   followersCount: number;
   reviewCount: number;

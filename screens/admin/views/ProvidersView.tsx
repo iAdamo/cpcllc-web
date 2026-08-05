@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Briefcase, Star, ShieldCheck, ShieldX, RefreshCw } from "lucide-react";
+import { Briefcase, Star, ShieldCheck, ShieldX, RefreshCw, Rocket } from "lucide-react";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
@@ -10,6 +10,7 @@ import {
   rejectProviderKyc,
   setProviderBookable,
   setProviderFeatured,
+  grantProviderFeatureBoost,
 } from "@/axios/admin";
 import {
   useAdminProvidersView,
@@ -260,6 +261,35 @@ function ProviderDetailDrawer({
           <Row label="Phone" value={p.providerPhoneNumber ?? "—"} />
           <Row label="Verified" value={p.isVerified ? "Yes" : "No"} />
           <Row label="Featured" value={p.isFeatured ? "Yes" : "No"} />
+          <Row
+            label="Featured until"
+            value={
+              p.featuredUntil
+                ? new Date(p.featuredUntil).toLocaleDateString()
+                : p.isFeatured
+                  ? "Permanent"
+                  : "—"
+            }
+          />
+          <div className="rounded-md border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 p-3">
+            <p className="text-xs font-medium text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+              <Rocket size={13} /> Sell a featured boost
+            </p>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              Ranks first in search for the chosen window, then auto-expires. Grant after off-platform payment.
+            </p>
+            <div className="flex gap-2 mt-2.5">
+              {[7, 30, 90].map((days) => (
+                <button
+                  key={days}
+                  onClick={() => run(() => grantProviderFeatureBoost(id!, days))}
+                  className="text-xs px-3 py-1.5 rounded-md bg-purple-600 text-white hover:bg-purple-700"
+                >
+                  {days} days
+                </button>
+              ))}
+            </div>
+          </div>
           <Row label="Bookable" value={p.isBookable ? "Yes" : "No"} />
           <Row label="Live trackable" value={p.isLiveTrackable ? "Yes" : "No"} />
           <Row label="Rating" value={`${p.stats?.rating ?? 0} (${p.reviewCount ?? 0} reviews)`} />
