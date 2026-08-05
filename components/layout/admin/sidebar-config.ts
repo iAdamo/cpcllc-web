@@ -33,6 +33,7 @@ import {
   LogOut,
   Receipt,
   Gift,
+  BadgeCheck,
 } from "lucide-react";
 import type { AdminView } from "@/types";
 
@@ -85,6 +86,7 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
         icon: ShieldCheck,
         badgeKey: "moderationQueue",
       },
+      { key: "verification", label: "Verification", icon: BadgeCheck },
       { key: "reports", label: "Reports", icon: FileBarChart2 },
       {
         key: "fraud",

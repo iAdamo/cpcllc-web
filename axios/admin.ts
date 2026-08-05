@@ -148,9 +148,42 @@ export const verifyAdminUserPhone = async (id: string) =>
 export const approveProviderKyc = async (id: string) =>
   (await axiosInstance.patch(`admin/marketplace/providers/${id}/kyc-approve`))
     .data;
-export const rejectProviderKyc = async (id: string) =>
-  (await axiosInstance.patch(`admin/marketplace/providers/${id}/kyc-reject`))
-    .data;
+export const rejectProviderKyc = async (id: string, reason?: string) =>
+  (
+    await axiosInstance.patch(`admin/marketplace/providers/${id}/kyc-reject`, {
+      reason,
+    })
+  ).data;
+
+export interface VerificationQueueRow {
+  _id: string;
+  providerName: string;
+  providerEmail?: string;
+  kycStatus: "unverified" | "pending" | "approved" | "rejected";
+  kycDocuments?: { type: string; url: string; uploadedAt?: string }[];
+  kycSubmittedAt?: string;
+  kycReviewedAt?: string;
+  kycRejectionReason?: string;
+  isVerified: boolean;
+}
+
+/** Verification review queue (defaults to pending). PROVIDER_KYC_REVIEW. */
+export const getVerificationQueue = async (params?: {
+  status?: string;
+  page?: number;
+  limit?: number;
+}): Promise<{
+  items: VerificationQueueRow[];
+  total: number;
+  page: number;
+  totalPages: number;
+}> =>
+  (
+    await axiosInstance.get(
+      "admin/marketplace/providers/verification-queue",
+      { params },
+    )
+  ).data;
 export const setProviderFeatured = async (id: string, featured: boolean) =>
   (
     await axiosInstance.patch(`admin/marketplace/providers/${id}/feature`, {

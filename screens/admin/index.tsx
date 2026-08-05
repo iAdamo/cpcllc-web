@@ -21,6 +21,7 @@ import { AuditView } from "@/screens/admin/views/AuditView";
 import { RolesView } from "@/screens/admin/views/RolesView";
 import { BroadcastCenterView } from "@/screens/admin/views/BroadcastCenterView";
 import { ReferralsView } from "@/screens/admin/views/ReferralsView";
+import { VerificationView } from "@/screens/admin/views/VerificationView";
 import { SubscriptionsView } from "@/screens/admin/views/SubscriptionsView";
 import { SystemHealthView } from "@/screens/admin/views/SystemHealthView";
 import { ModerationView } from "@/screens/admin/views/ModerationView";
@@ -158,6 +159,8 @@ function renderView(view: string) {
       return <SystemHealthView />;
     case "moderation":
       return <ModerationView />;
+    case "verification":
+      return <VerificationView />;
     case "catalogue":
       return <CatalogueView />;
     case "ads":

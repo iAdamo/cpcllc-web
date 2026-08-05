@@ -86,6 +86,7 @@ export type AdminView =
   | "reviews"
   | "reports"
   | "moderation"
+  | "verification"
   | "support"
   | "notifications"
   | "broadcasts"
