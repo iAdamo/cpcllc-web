@@ -23,15 +23,15 @@ export interface AdMobConfig {
  * unit-testable without the `@/` alias or a browser environment.
  */
 export function toAdConfigUpdate(input: AdMobConfig): AdMobConfig {
-  const units = (u?: PlatformUnits): PlatformUnits => ({
-    banner: u?.banner ?? "",
-    interstitial: u?.interstitial ?? "",
-    rewarded: u?.rewarded ?? "",
+  const pickUnits = (units?: PlatformUnits): PlatformUnits => ({
+    banner: units?.banner ?? "",
+    interstitial: units?.interstitial ?? "",
+    rewarded: units?.rewarded ?? "",
   });
   return {
     enabled: input.enabled,
     testMode: input.testMode,
-    android: units(input.android),
-    ios: units(input.ios),
+    android: pickUnits(input.android),
+    ios: pickUnits(input.ios),
   };
 }
