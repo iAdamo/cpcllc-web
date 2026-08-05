@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Star, MapPin, ArrowRight, CheckCircle, Building2 } from "lucide-react";
+import { Star, MapPin, ArrowRight, CheckCircle, Building2, Sparkles } from "lucide-react";
 import { getFeaturedProviders } from "@/axios/public";
 import { MediaItem, ProviderData } from "@/types";
 import { useTranslation } from "@/context/TranslationContext";
@@ -97,6 +97,16 @@ const ProviderCard = ({
                 <Star size={10} fill="#f59e0b" color="#f59e0b" />
                 <span className="text-xs font-black text-gray-900 dark:text-white">
                   {rating.toFixed(1)}
+                </span>
+              </div>
+            )}
+
+            {/* Featured badge — paid placement */}
+            {provider?.isFeatured && (
+              <div className="absolute top-3 left-3 flex items-center gap-1 bg-amber-500 shadow-md px-2 py-0.5 rounded-full">
+                <Sparkles size={9} className="text-white" />
+                <span className="text-[9px] font-black text-white uppercase tracking-wide">
+                  Featured
                 </span>
               </div>
             )}
