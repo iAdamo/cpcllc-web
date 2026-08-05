@@ -190,7 +190,7 @@ export default function AiAssistantFab() {
                 </button>
               </div>
               <p className="text-[10px] text-gray-400 text-center mt-1.5">
-                AI can make mistakes. Verify important details.
+                Herman can make mistakes. Verify important details.
               </p>
             </div>
           </motion.div>
