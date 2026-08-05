@@ -20,6 +20,7 @@ import { FeatureFlagsView } from "@/screens/admin/views/FeatureFlagsView";
 import { AuditView } from "@/screens/admin/views/AuditView";
 import { RolesView } from "@/screens/admin/views/RolesView";
 import { BroadcastCenterView } from "@/screens/admin/views/BroadcastCenterView";
+import { ReferralsView } from "@/screens/admin/views/ReferralsView";
 import { SubscriptionsView } from "@/screens/admin/views/SubscriptionsView";
 import { SystemHealthView } from "@/screens/admin/views/SystemHealthView";
 import { ModerationView } from "@/screens/admin/views/ModerationView";
@@ -149,6 +150,8 @@ function renderView(view: string) {
       return <RolesView />;
     case "broadcasts":
       return <BroadcastCenterView />;
+    case "referrals":
+      return <ReferralsView />;
     case "subscriptions":
       return <SubscriptionsView />;
     case "system_health":

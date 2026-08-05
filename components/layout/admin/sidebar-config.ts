@@ -32,6 +32,7 @@ import {
   type LucideIcon,
   LogOut,
   Receipt,
+  Gift,
 } from "lucide-react";
 import type { AdminView } from "@/types";
 
@@ -121,6 +122,7 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
     title: "Growth",
     items: [
       { key: "broadcasts", label: "Broadcast Center", icon: Radio },
+      { key: "referrals", label: "Referrals", icon: Gift },
       { key: "marketing", label: "Marketing", icon: Megaphone },
       { key: "cms", label: "CMS", icon: FileText },
     ],

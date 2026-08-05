@@ -173,6 +173,44 @@ export const grantProviderFeatureBoost = async (id: string, days: number) =>
     )
   ).data;
 
+export interface AdminReferralStats {
+  total: number;
+  joined: number;
+  qualified: number;
+  rewarded: number;
+  pendingRewards: number;
+  rewardDaysGranted: number;
+}
+
+export interface AdminReferralRow {
+  _id: string;
+  status: "joined" | "qualified" | "rewarded";
+  code: string;
+  referrerRewardDays: number;
+  inviteeRewardDays: number;
+  referrerRewardPending: boolean;
+  inviteeRewardPending: boolean;
+  createdAt: string;
+  qualifiedAt?: string;
+  referrer?: { firstName?: string; lastName?: string; email?: string };
+  invitee?: { firstName?: string; lastName?: string; email?: string };
+}
+
+/** Admin oversight of the provider referral program (read-only). */
+export const getAdminReferrals = async (params?: {
+  status?: string;
+  page?: number;
+  limit?: number;
+}): Promise<{
+  stats: AdminReferralStats;
+  page: {
+    items: AdminReferralRow[];
+    total: number;
+    page: number;
+    totalPages: number;
+  };
+}> => (await axiosInstance.get("admin/referrals", { params })).data;
+
 export const setAdminTaskStatus = async (id: string, status: string) =>
   (
     await axiosInstance.patch(`admin/marketplace/tasks/${id}/status`, {
