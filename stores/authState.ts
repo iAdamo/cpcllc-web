@@ -1,6 +1,7 @@
 import { StateCreator } from "zustand";
 import { GlobalStore, AuthState, RegisterUser, LoginUser } from "@/types";
 import { register, login, deactivateUser, logout } from "@/axios/auth";
+import { redeemStoredReferralCode } from "@/axios/referral";
 import { queryClient } from "@/lib/queryClient";
 
 export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
@@ -22,6 +23,8 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
           switchRole: "Client",
           isLoading: false,
         });
+        // Redeem a referral code carried in from a shared ?ref link (best-effort).
+        void redeemStoredReferralCode();
       }
     } catch (error: any) {
       set({
@@ -45,6 +48,8 @@ export const authState: StateCreator<GlobalStore, [], [], AuthState> = (
           isLoading: false,
           error: null,
         });
+        // Retry any pending ?ref redemption now that the session is valid.
+        void redeemStoredReferralCode();
       }
       if (response.mfaRequired) {
         set({ error: response.message, isLoading: false });

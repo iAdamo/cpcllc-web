@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { storeReferralCodeFromUrl } from "@/axios/referral";
 import Link from "next/link";
 import { Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
 import useGlobalStore from "@/stores";
@@ -102,6 +103,12 @@ export default function SignUpPage({ onBack }: Props) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
+
+  // Keep a ?ref=CODE from a shared invite link so it survives signup and email
+  // verification; it's redeemed after the session is valid (see authState).
+  useEffect(() => {
+    storeReferralCodeFromUrl();
+  }, []);
   const [touched, setTouched] = useState({
     email: false,
     phone: false,
