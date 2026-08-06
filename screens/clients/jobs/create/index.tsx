@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -209,6 +209,9 @@ function PreviewCard({
 
 export default function CreateTaskPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // Directed task: launched from a provider's profile ("Request Service").
+  const targetProviderId = searchParams.get("provider");
   const { data: categoriesData } = useCategories();
   const categories: Category[] = categoriesData ?? [];
 
@@ -316,6 +319,7 @@ export default function CreateTaskPage() {
       }
       fd.append("anonymous", String(anonymous));
       fd.append("subcategoryId", selectedSubcategoryId);
+      if (targetProviderId) fd.append("targetProviderId", targetProviderId);
       imageFiles.forEach((file) => fd.append("media", file));
 
       await createJob(fd);
@@ -421,6 +425,14 @@ export default function CreateTaskPage() {
             Describe what you need and get matched with the right providers.
           </p>
         </motion.div>
+
+        {targetProviderId && (
+          <div className="mb-5 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/30 px-4 py-3 text-sm text-amber-800 dark:text-amber-200">
+            <Shield size={15} />
+            You&apos;re requesting a service directly from this provider — only
+            they&apos;ll see this task.
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="grid lg:grid-cols-3 gap-6 items-start">

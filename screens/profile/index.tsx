@@ -194,11 +194,14 @@ export default function ProfilePage() {
   };
 
   const handleHire = () => {
+    if (!provider) return;
+    // Directed request: pre-target this provider so the task is private to them.
+    const target = `/tasks/create?provider=${provider._id}`;
     if (!isAuthenticated) {
-      router.push(`/auth/signin?next=/tasks/create`);
+      router.push(`/auth/signin?next=${encodeURIComponent(target)}`);
       return;
     }
-    router.push("/tasks/create");
+    router.push(target);
   };
 
   if (!provider) return <ProfileSkeleton />;
@@ -403,7 +406,7 @@ export default function ProfilePage() {
                       onClick={handleHire}
                       className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-black rounded-2xl transition-all active:scale-95 shadow-md shadow-blue-200 text-sm flex items-center justify-center gap-2"
                     >
-                      <Briefcase size={14} /> Post a Task
+                      <Briefcase size={14} /> Request Service
                     </button>
                     <div className="flex gap-2">
                       {providerEmail && (
@@ -592,7 +595,7 @@ export default function ProfilePage() {
                 onClick={handleHire}
                 className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-black rounded-2xl text-sm flex items-center justify-center gap-2 shadow-md shadow-blue-200 active:scale-95 transition-all"
               >
-                <Briefcase size={14} /> Post a Task
+                <Briefcase size={14} /> Request Service
               </button>
               {providerPhone && (
                 <a
