@@ -406,6 +406,12 @@ export const listSubscriptions = async (params: any = {}) =>
   (await axiosInstance.get(`admin/subscriptions`, { params })).data;
 export const listSubscriptionPlans = async () =>
   (await axiosInstance.get(`admin/subscriptions/plans`)).data;
+export const createSubscriptionPlan = async (body: Record<string, unknown>) =>
+  (await axiosInstance.post(`admin/subscriptions/plans`, body)).data;
+export const updateSubscriptionPlan = async (
+  id: string,
+  body: Record<string, unknown>,
+) => (await axiosInstance.patch(`admin/subscriptions/plans/${id}`, body)).data;
 
 /* ───────── Feature flags ───────── */
 export const listFeatureFlags = async () =>
