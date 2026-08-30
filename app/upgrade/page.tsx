@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Loader2, ShieldCheck, Sparkles } from "lucide-react";
 import { getCurrentUser } from "@/axios/auth";
-import { getProviderPlans, startCheckout, type BillingPlan } from "@/axios/billing";
+import {
+  getProviderPlans,
+  startCheckout,
+  type BillingPlan,
+} from "@/axios/billing";
 
 const money = (cents: number, currency: string) => {
   const symbol = currency === "NGN" ? "₦" : currency === "USD" ? "$" : "";
@@ -14,7 +18,7 @@ const money = (cents: number, currency: string) => {
 export default function UpgradePage() {
   const router = useRouter();
   const [plans, setPlans] = useState<BillingPlan[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [checkingId, setCheckingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -92,18 +96,29 @@ export default function UpgradePage() {
                     <span className="text-2xl font-extrabold text-slate-900 dark:text-white">
                       {money(plan.priceCents, plan.currency)}
                     </span>
-                    <span className="text-xs text-slate-400"> / {plan.interval}</span>
+                    <span className="text-xs text-slate-400">
+                      {" "}
+                      / {plan.interval}
+                    </span>
                   </div>
                 </div>
                 {plan.description && (
-                  <p className="text-sm text-slate-500 mt-1">{plan.description}</p>
+                  <p className="text-sm text-slate-500 mt-1">
+                    {plan.description}
+                  </p>
                 )}
 
                 {plan.features && plan.features.length > 0 && (
                   <ul className="mt-4 space-y-2">
                     {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300">
-                        <Check size={15} className="text-emerald-500 mt-0.5 shrink-0" />
+                      <li
+                        key={f}
+                        className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300"
+                      >
+                        <Check
+                          size={15}
+                          className="text-emerald-500 mt-0.5 shrink-0"
+                        />
                         {f}
                       </li>
                     ))}
@@ -125,11 +140,13 @@ export default function UpgradePage() {
           </div>
         )}
 
-        {error && <p className="text-sm text-red-500 text-center mt-6">{error}</p>}
+        {error && (
+          <p className="text-sm text-red-500 text-center mt-6">{error}</p>
+        )}
 
         <p className="flex items-center justify-center gap-1.5 text-xs text-slate-400 mt-10">
-          <ShieldCheck size={13} /> Secure checkout by Stripe / Paystack. You'll see the
-          exact amount and currency before you pay.
+          <ShieldCheck size={13} /> Secure checkout by Stripe / Paystack. You'll
+          see the exact amount and currency before you pay.
         </p>
       </div>
     </div>

@@ -104,7 +104,7 @@ export default function ProfileMenu() {
   if (!user) return null;
 
   const isProvider = user.activeRole === "Provider";
-  const hasProviderProfile = isProvider && !!user.activeRoleId?._id;
+  const hasProviderProfile = !!(user.activeRoleId as ProviderData)._id;
   const providerData = hasProviderProfile
     ? (user.activeRoleId as Partial<ProviderData> | undefined)
     : undefined;
@@ -114,29 +114,6 @@ export default function ProfileMenu() {
     : `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "Account";
   const displayEmail = isProvider ? providerData?.providerEmail : user.email;
 
-  //  const handleRoleSwitch = async () => {
-  //     if (!user) return false;
-  //     if (user.activeRoleId?.providerName && switchRole === "Client") {
-  //       setSwitchRole("Provider");
-  //       if (user.activeRole === "Provider") router.replace("/clients");
-  //       return true;
-  //     } else if (user.activeRoleId?.providerName && switchRole === "Provider") {
-  //       setSwitchRole("Client");
-  //       if (user.activeRole === "Client") router.replace("/providers");
-  //       return true;
-  //     } else if (!user.activeRoleId?.providerName && switchRole === "Client") {
-  //       if (currentStep < 7) setCurrentStep(1);
-  //       updateProfile({ isOnboardingComplete: false });
-  //       // await resetOnboarding();
-  //       setCurrentStep(7);
-  //       router.push({
-  //         pathname: "/onboarding",
-  //         params: { from: "/providers" },
-  //       });
-  //       return true;
-  //     }
-  //     return false;
-  //   };
   const handleRoleSwitch = async (role: ActiveRole) => {
     if (!user) return;
     if (hasProviderProfile) {
