@@ -21,6 +21,19 @@ export const getProviderBySlug = async (slug: string): Promise<any | null> => {
 };
 
 /**
+ * Fetch a shared invoice/estimate by its opaque token (companiescenter.com/i/
+ * <token>). Returns `null` for an unknown/expired token so the page 404s.
+ */
+export const getPublicInvoice = async (token: string): Promise<any | null> => {
+  try {
+    const r = await axiosInstance.get(`invoicing/public/${token}`);
+    return r.data ?? null;
+  } catch {
+    return null;
+  }
+};
+
+/**
  * Featured providers for the homepage rail. Curated (isFeatured) first,
  * backfilled with verified/top-rated so the rail is never empty. Scoped to
  * the visitor's country — the marketplace never shows cross-border
