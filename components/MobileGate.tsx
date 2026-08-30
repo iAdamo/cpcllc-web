@@ -19,11 +19,12 @@ const PUBLIC_PATHS = [
   "/auth/forgot-password",
   "/auth/verify-email",
   "/admin/mfa/verify",
+  "/i",
 ];
 
 function isPublic(pathname: string) {
   return PUBLIC_PATHS.some(
-    (p) => pathname === p || pathname.startsWith(p + "/")
+    (p) => pathname === p || pathname.startsWith(p + "/"),
   );
 }
 

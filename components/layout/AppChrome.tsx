@@ -16,6 +16,7 @@ const hideNavRoutes = [
   "/onboarding",
   "/admin",
   "/settings/account-control/deletion",
+  "/i",
 ];
 const hideFooterRoutes = [
   "/onboarding",
@@ -28,10 +29,10 @@ const hideFooterRoutes = [
 ];
 
 const hideNavBarRoutesRegex = hideNavRoutes.map(
-  (route) => new RegExp(`^${route}(?:/|$)`)
+  (route) => new RegExp(`^${route}(?:/|$)`),
 );
 const hideFooterRoutesRegex = hideFooterRoutes.map(
-  (route) => new RegExp(`^${route}(?:/|$)`)
+  (route) => new RegExp(`^${route}(?:/|$)`),
 );
 
 /**

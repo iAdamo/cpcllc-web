@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPublicInvoice } from "@/axios/public";
+import Image from "next/image";
 
 // Next.js 15 — params is a Promise.
 type Params = Promise<{ token: string }>;
@@ -113,11 +114,12 @@ export default async function PublicInvoicePage({
           >
             <div className="flex flex-col gap-4">
               {b.logo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={b.logo}
                   alt={`${b.name} logo`}
-                  className="h-14 max-w-[180px] object-contain object-left"
+                  width={180}
+                  height={180}
+                  className="h-20 max-w-[180px] object-contain object-left"
                 />
               ) : null}
               <div>

@@ -21,6 +21,7 @@ const PUBLIC_PATHS = new Set<string>([
   "/admin/mfa/verify",
   "/terms-of-service",
   "/privacy-policy",
+  "/i",
 ]);
 
 function isPublicPath(pathname: string): boolean {

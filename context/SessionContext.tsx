@@ -2,7 +2,6 @@
 
 import {
   createContext,
-  use,
   useContext,
   useEffect,
   useRef,
@@ -22,7 +21,7 @@ interface SessionContextValue {
 }
 
 const SessionContext = createContext<SessionContextValue | undefined>(
-  undefined
+  undefined,
 );
 
 export function useSession() {
@@ -46,7 +45,7 @@ const PUBLIC_EXACT = [
   // "/auth/verify-email",
   "/admin/mfa/verify",
 ];
-const PUBLIC_PREFIX = ["/providers", "/admin", "/profile"];
+const PUBLIC_PREFIX = ["/providers", "/admin", "/profile", "/i"];
 
 function isPublic(path: string) {
   if (PUBLIC_EXACT.includes(path)) return true;
@@ -81,7 +80,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
       return;
     }
     const unsub = useGlobalStore.persist.onFinishHydration(() =>
-      setHydrated(true)
+      setHydrated(true),
     );
     return () => unsub();
   }, []);
