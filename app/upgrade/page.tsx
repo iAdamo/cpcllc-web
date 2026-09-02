@@ -105,25 +105,27 @@ export default function UpgradePage() {
   const router = useRouter();
   const [plans, setPlans] = useState<BillingPlan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [authed, setAuthed] = useState(false);
   const [checkingId, setCheckingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Plans are public catalogue data, so render them for everyone. Auth is
+    // only needed at the Subscribe step — no hard redirect that would make the
+    // page look empty when a session is slow or missing.
     (async () => {
-      const user = await getCurrentUser();
-      if (!user) {
-        router.replace("/auth/signin?next=/upgrade");
-        return;
-      }
-      try {
-        setPlans(await getProviderPlans());
-      } catch {
-        setError("Couldn't load plans. Please try again.");
-      } finally {
-        setLoading(false);
-      }
+      const [user, list] = await Promise.all([
+        getCurrentUser().catch(() => null),
+        getProviderPlans().catch(() => {
+          setError("Couldn't load plans. Please try again.");
+          return [] as BillingPlan[];
+        }),
+      ]);
+      setAuthed(!!user);
+      setPlans(list);
+      setLoading(false);
     })();
-  }, [router]);
+  }, []);
 
   // No "popular" flag on the plan schema — recommend the mid-tier (or the
   // priciest when there are only two). Plans arrive sorted cheapest-first.
@@ -133,6 +135,10 @@ export default function UpgradePage() {
   );
 
   const subscribe = async (planId: string) => {
+    if (!authed) {
+      router.push("/auth/signin?next=/upgrade");
+      return;
+    }
     setCheckingId(planId);
     setError(null);
     try {
