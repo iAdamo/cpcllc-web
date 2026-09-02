@@ -234,7 +234,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-slate-50 pb-24 lg:pb-8">
       {/* ── Cover ──────────────────────────────────────────── */}
-      <div className="relative h-44 lg:h-56 w-full overflow-hidden mt-20">
+      <div className="relative h-44 lg:h-56 w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900" />
         {coverUrl && (
           <Image

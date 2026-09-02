@@ -3,7 +3,7 @@ import { Camera } from "lucide-react";
 export default function ProfileSkeleton() {
   return (
     <div className="min-h-screen bg-slate-50 animate-pulse pb-24 lg:pb-8">
-      <div className="h-48 lg:h-56 bg-gradient-to-br from-blue-200 to-indigo-300 mt-20" />
+      <div className="h-48 lg:h-56 bg-gradient-to-br from-blue-200 to-indigo-300" />
       <div className="max-w-7xl mx-auto px-4 lg:px-6">
         <div className="lg:flex gap-5">
           <div className="lg:w-72 xl:w-80 -mt-14 relative z-10 flex-shrink-0">

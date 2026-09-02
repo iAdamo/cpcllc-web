@@ -375,7 +375,7 @@ export default function CreateTaskPage() {
 
   if (submitted) {
     return (
-      <div className="pt-20 min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -410,7 +410,7 @@ export default function CreateTaskPage() {
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div className="pt-20 min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Page header */}
         <motion.div

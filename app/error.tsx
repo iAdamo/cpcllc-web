@@ -29,7 +29,7 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 pt-20 bg-gray-50">
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 bg-gray-50">
       <p className="text-7xl font-black text-blue-600 mb-4">500</p>
       <h1 className="text-2xl font-bold text-gray-900 mb-2 text-center">
         Something went wrong

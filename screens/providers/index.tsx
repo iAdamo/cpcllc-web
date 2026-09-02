@@ -215,7 +215,7 @@ export default function ServiceProvidersPage() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="relative h-[calc(100vh-5rem)] mt-20 overflow-hidden m-4">
+    <div className="relative h-[calc(100vh-5rem)] overflow-hidden m-4">
       {/* ══════════════════════════════════════════════════════
           LAYER 1 — Full-width Google Map (background)
       ══════════════════════════════════════════════════════ */}

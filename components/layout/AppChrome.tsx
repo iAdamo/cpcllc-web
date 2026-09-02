@@ -46,6 +46,13 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
   const shouldHideNav = hideNavBarRoutesRegex.some((r) => r.test(pathname));
   const shouldHideFooter = hideFooterRoutesRegex.some((r) => r.test(pathname));
 
+  // The NavBar is `fixed`, so it sits out of flow. On the home page it is a
+  // transparent overlay on top of the hero (no spacer wanted). Everywhere else
+  // it is solid, so the shell reserves its exact height once here — pages never
+  // add their own top padding to clear it. Height must match NavBar (h-16 md:h-20).
+  const isHome = pathname === "/";
+  const reserveNavSpace = !shouldHideNav && !isHome;
+
   return (
     <StyledJsxRegistry>
       <SessionProvider>
@@ -55,6 +62,9 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
               <GlobalLoadingOverlay />
               <MobileGate />
               {!shouldHideNav && <NavBar />}
+              {reserveNavSpace && (
+                <div aria-hidden className="h-16 md:h-20 flex-shrink-0" />
+              )}
               {children}
               {!shouldHideFooter && <Footer />}
               <AiAssistantFab />

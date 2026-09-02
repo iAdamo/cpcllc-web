@@ -184,7 +184,7 @@ export default function JobsPage() {
       : "Explore Tasks";
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Mobile sidebar overlay */}
       <AnimatePresence>
         {sidebarOpen && (
