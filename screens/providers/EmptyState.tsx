@@ -16,8 +16,8 @@ interface EmptyStateProps {
 const configs = {
   "no-results": {
     Icon: SearchX,
-    bg: "bg-blue-50",
-    iconColor: "text-blue-500",
+    bg: "bg-brand-50",
+    iconColor: "text-brand-500",
     title: "No providers found",
     desc: "Try adjusting your filters or search a different area.",
     suggestions: ["Plumbing", "HVAC", "Electrical", "Cleaning"],
@@ -32,8 +32,8 @@ const configs = {
   },
   initial: {
     Icon: Building2,
-    bg: "bg-violet-50",
-    iconColor: "text-violet-500",
+    bg: "bg-brand-50",
+    iconColor: "text-brand-700",
     title: "Discover providers",
     desc: "Search for a service or browse by category to find the best professionals near you.",
     suggestions: ["Plumbing", "HVAC", "Electrical", "Cleaning", "Roofing"],
@@ -56,7 +56,7 @@ export default function EmptyState({ variant, query, onReset, onRetry }: EmptySt
       <h3 className="text-xl font-black text-gray-900 mb-2">
         {title}
         {query && (
-          <span className="text-blue-600 font-black"> &ldquo;{query}&rdquo;</span>
+          <span className="text-brand-700 font-black"> &ldquo;{query}&rdquo;</span>
         )}
       </h3>
       <p className="text-gray-500 text-sm max-w-sm mb-8 leading-relaxed">{desc}</p>
@@ -66,7 +66,7 @@ export default function EmptyState({ variant, query, onReset, onRetry }: EmptySt
           <button
             type="button"
             onClick={onReset}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors text-sm"
+            className="px-6 py-3 bg-brand-900 hover:bg-brand-800 text-white font-bold rounded-xl transition-colors text-sm"
           >
             Clear all filters
           </button>
@@ -91,7 +91,7 @@ export default function EmptyState({ variant, query, onReset, onRetry }: EmptySt
               <Link
                 key={s}
                 href={`/providers?q=${encodeURIComponent(s)}`}
-                className="px-4 py-2 bg-gray-100 hover:bg-blue-50 hover:text-blue-600 text-gray-600 text-sm font-medium rounded-full transition-colors"
+                className="px-4 py-2 bg-gray-100 hover:bg-brand-50 hover:text-brand-700 text-gray-600 text-sm font-medium rounded-full transition-colors"
               >
                 {s}
               </Link>

@@ -63,15 +63,15 @@ const ProviderCard = memo(function ProviderCard({
     <div
       onMouseEnter={() => onHover?.(provider._id)}
       onMouseLeave={() => onHover?.(null)}
-      className={`relative bg-white border rounded-xl transition-all duration-150 cursor-pointer group ${
+      className={`relative bg-white dark:bg-gray-900 border rounded-xl transition-all duration-150 cursor-pointer group ${
         isHovered
-          ? "border-blue-400 shadow-md shadow-blue-100/60"
-          : "border-gray-100 hover:border-gray-200 hover:shadow-sm"
+          ? "border-brand-400 dark:border-brand-500 shadow-md shadow-brand-100/60 dark:shadow-black/30"
+          : "border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 hover:shadow-sm"
       }`}
     >
       <div className="flex items-center gap-3">
         {/* Thumbnail */}
-        <div className="relative w-40 h-28 flex-shrink-0 rounded-l-lg overflow-hidden bg-gray-100">
+        <div className="relative w-40 h-28 flex-shrink-0 rounded-l-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
           <Image
             src={imageUrl}
             alt={provider.providerName}
@@ -93,18 +93,18 @@ const ProviderCard = memo(function ProviderCard({
               </span>
             )}
             {isFeatured && (
-              <span className="inline-flex items-center gap-0.5 text-amber-600 text-[10px] font-bold">
+              <span className="inline-flex items-center gap-0.5 text-gold-600 dark:text-gold-400 text-[10px] font-bold">
                 <Award size={9} /> Featured
               </span>
             )}
             {rating >= 4.8 && (
-              <span className="inline-flex items-center gap-0.5 text-blue-600 text-[10px] font-bold">
+              <span className="inline-flex items-center gap-0.5 text-brand-600 dark:text-brand-300 text-[10px] font-bold">
                 <Zap size={9} /> Top Rated
               </span>
             )}
           </div>
 
-          <h3 className="font-bold text-gray-900 text-sm leading-snug line-clamp-1">
+          <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-snug line-clamp-1">
             {provider.providerName}
           </h3>
 
@@ -120,19 +120,19 @@ const ProviderCard = memo(function ProviderCard({
               ))}
             </div>
             {rating > 0 && (
-              <span className="text-[11px] font-bold text-gray-800">
+              <span className="text-[11px] font-bold text-gray-800 dark:text-gray-100">
                 {rating.toFixed(1)}
               </span>
             )}
-            <span className="text-[10px] text-gray-400">({reviewCount})</span>
+            <span className="text-[10px] text-gray-400 dark:text-gray-500">({reviewCount})</span>
           </div>
-          <p className="text-xs text-gray-700 line-clamp-2">
+          <p className="text-xs text-gray-700 dark:text-gray-300 line-clamp-2">
             {provider.providerDescription}
           </p>
 
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
             {provider.subcategories?.length > 0 && (
-              <span className="text-[10px] text-gray-500 font-medium">
+              <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium">
                 {provider.subcategories
                   .slice(0, 2)
                   .map((s) => s.name)
@@ -140,7 +140,7 @@ const ProviderCard = memo(function ProviderCard({
               </span>
             )}
             <span className="flex items-center gap-0.5 text-[10px] text-gray-400">
-              <MapPin size={8} className="text-blue-400 flex-shrink-0" />
+              <MapPin size={8} className="text-brand-400 flex-shrink-0" />
               <span className="line-clamp-1 max-w-[110px]">{address}</span>
             </span>
           </div>
@@ -165,7 +165,7 @@ const ProviderCard = memo(function ProviderCard({
           <Link
             href={`/c/${provider.slug}`}
             onClick={(e) => e.stopPropagation()}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-colors whitespace-nowrap"
+            className="px-3 py-1.5 bg-brand-900 hover:bg-brand-800 dark:bg-brand-600 dark:hover:bg-brand-500 text-white text-[10px] font-bold rounded-lg transition-colors whitespace-nowrap"
           >
             View Profile
           </Link>
@@ -173,7 +173,7 @@ const ProviderCard = memo(function ProviderCard({
             <a
               href={`tel:${provider.providerPhoneNumber}`}
               onClick={(e) => e.stopPropagation()}
-              className="w-7 h-7 bg-gray-100 hover:bg-green-50 hover:text-green-600 rounded-lg flex items-center justify-center text-gray-400 transition-colors"
+              className="w-7 h-7 bg-gray-100 dark:bg-gray-800 hover:bg-green-50 hover:text-green-600 rounded-lg flex items-center justify-center text-gray-400 transition-colors"
               aria-label="Call"
               aria-disabled={true}
             >
@@ -189,18 +189,18 @@ const ProviderCard = memo(function ProviderCard({
 export default ProviderCard;
 
 export const ProviderCardSkeleton = () => (
-  <div className="bg-white rounded-xl border border-gray-100 p-3 animate-pulse">
+  <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-3 animate-pulse">
     <div className="flex items-center gap-3">
-      <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0" />
+      <div className="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded-lg flex-shrink-0" />
       <div className="flex-1 space-y-1.5">
-        <div className="h-2.5 w-16 bg-gray-200 rounded-full" />
-        <div className="h-3.5 w-36 bg-gray-200 rounded" />
-        <div className="h-2 w-20 bg-gray-200 rounded-full" />
-        <div className="h-2 w-28 bg-gray-200 rounded-full" />
+        <div className="h-2.5 w-16 bg-gray-200 dark:bg-gray-800 rounded-full" />
+        <div className="h-3.5 w-36 bg-gray-200 dark:bg-gray-800 rounded" />
+        <div className="h-2 w-20 bg-gray-200 dark:bg-gray-800 rounded-full" />
+        <div className="h-2 w-28 bg-gray-200 dark:bg-gray-800 rounded-full" />
       </div>
       <div className="flex flex-col items-end gap-2">
-        <div className="w-7 h-7 bg-gray-200 rounded-full" />
-        <div className="w-20 h-6 bg-gray-200 rounded-lg" />
+        <div className="w-7 h-7 bg-gray-200 dark:bg-gray-800 rounded-full" />
+        <div className="w-20 h-6 bg-gray-200 dark:bg-gray-800 rounded-lg" />
       </div>
     </div>
   </div>

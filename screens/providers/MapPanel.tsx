@@ -211,7 +211,7 @@ export default function MapPanel({
               onClick={() => onViewModeChange(mode)}
               className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold transition-all ${
                 viewMode === mode
-                  ? "bg-blue-600 text-white"
+                  ? "bg-brand-900 text-white"
                   : "text-gray-600 hover:bg-gray-50"
               }`}
             >
@@ -244,7 +244,7 @@ export default function MapPanel({
           type="button"
           onClick={handleMyLocation}
           aria-label="My location"
-          className="flex items-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-bold rounded-xl shadow-md transition-all whitespace-nowrap"
+          className="flex items-center gap-1.5 px-3 py-2 bg-brand-900 hover:bg-brand-800 active:scale-95 text-white text-xs font-bold rounded-xl shadow-md transition-all whitespace-nowrap"
         >
           <Navigation size={12} />
         </button>
@@ -356,7 +356,7 @@ export default function MapPanel({
                 </div>
                 <Link
                   href={`/providers/${selectedProvider._id}`}
-                  className="mt-2.5 block text-center py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg transition-colors"
+                  className="mt-2.5 block text-center py-1.5 bg-brand-900 hover:bg-brand-800 text-white text-[11px] font-bold rounded-lg transition-colors"
                 >
                   View Profile
                 </Link>
@@ -371,7 +371,7 @@ export default function MapPanel({
         <motion.button
           type="button"
           whileTap={{ scale: 0.96 }}
-          className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-blue-600 hover:text-white text-gray-800 text-xs font-bold rounded-full shadow-xl border border-gray-200 hover:border-blue-600 transition-all"
+          className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-brand-900 hover:text-white text-gray-800 text-xs font-bold rounded-full shadow-xl border border-gray-200 hover:border-brand-900 transition-all"
         >
           <Search size={12} />
           Search this area

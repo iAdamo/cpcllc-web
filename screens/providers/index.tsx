@@ -237,11 +237,14 @@ export default function ServiceProvidersPage() {
       <div className="absolute gap-4 left-0 top-0 bottom-0 w-full lg:w-2/3 flex flex-col overflow-hidden">
         {/* ── Page heading ── */}
         <div className="flex-shrink-0 px-4 pt-4 pb-2 space-y-3">
-          <h1 className="text-3xl font-bold text-gray-900 leading-tight">
-            Find trusted <span className="text-brand-primary">business</span>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight">
+            Find trusted{" "}
+            <span className="bg-gradient-to-r from-brand-700 to-gold-500 bg-clip-text text-transparent dark:from-brand-300 dark:to-gold-400">
+              business
+            </span>
             <br /> near you
           </h1>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
             Quality services from verified professionals.
           </p>
         </div>
@@ -285,32 +288,37 @@ export default function ServiceProvidersPage() {
                         onClick={() => handleCategoryClick(cat)}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-left transition-colors group ${
                           isExpanded || activeSubCount > 0
-                            ? "bg-blue-50/80 text-blue-700"
-                            : "bg-white text-gray-600 hover:bg-white/60 hover:text-gray-900"
+                            ? "bg-brand-50/80 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300"
+                            : "bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
                         }`}
                       >
                         <div
-                          className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
-                            isExpanded || activeSubCount > 0
-                              ? "bg-blue-100"
-                              : "bg-gray-100/80 group-hover:bg-gray-200"
-                          }`}
+                          className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0"
+                          style={
+                            cat.iconColor
+                              ? { backgroundColor: `${cat.iconColor}1A` }
+                              : undefined
+                          }
                         >
-                          <Icon
-                            size={12}
-                            className={
-                              isExpanded || activeSubCount > 0
-                                ? "text-blue-600"
-                                : "text-gray-500"
-                            }
-                          />
+                          {cat.icon ? (
+                            <span
+                              className="w-3.5 h-3.5 [&_svg]:w-full [&_svg]:h-full"
+                              style={{ color: cat.iconColor }}
+                              dangerouslySetInnerHTML={{ __html: cat.icon }}
+                            />
+                          ) : (
+                            <Icon
+                              size={12}
+                              className="text-gray-500 dark:text-gray-400"
+                            />
+                          )}
                         </div>
                         <span className="flex-1 text-xs font-semibold line-clamp-1">
                           {cat.name}
                         </span>
                         <div className="flex items-center gap-1 flex-shrink-0">
                           {activeSubCount > 0 && (
-                            <span className="w-4 h-4 bg-blue-600 text-white text-[9px] font-black rounded-full flex items-center justify-center">
+                            <span className="w-4 h-4 bg-brand-900 text-white text-[9px] font-black rounded-full flex items-center justify-center">
                               {activeSubCount}
                             </span>
                           )}
@@ -351,8 +359,8 @@ export default function ServiceProvidersPage() {
                                     onClick={() => handleToggleSubcat(sub)}
                                     className={`flex flex-row gap-2 text-left px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
                                       isActive
-                                        ? "bg-blue-600 text-white shadow-sm shadow-blue-200"
-                                        : "bg-white/70 text-gray-600 hover:bg-blue-50 hover:text-blue-700 border border-gray-100"
+                                        ? "bg-brand-900 dark:bg-brand-600 text-white shadow-sm shadow-brand-200 dark:shadow-none"
+                                        : "bg-white/70 dark:bg-gray-800/70 text-gray-600 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-700 hover:text-brand-800 dark:hover:text-white border border-gray-100 dark:border-gray-700"
                                     }`}
                                   >
                                     {sub.icon && (
@@ -379,23 +387,23 @@ export default function ServiceProvidersPage() {
               <button
                 type="button"
                 onClick={handleFiltersReset}
-                className="flex items-center gap-1 px-4 py-2.5 text-xs font-semibold text-blue-600 hover:underline"
+                className="flex items-center gap-1 px-4 py-2.5 text-xs font-semibold text-brand-700 hover:underline"
               >
                 Clear all filters
               </button>
             )}
 
             {/* Provider CTA */}
-            <div className="mx-3 mt-4 mb-3 rounded-xl bg-blue-600 p-3 text-white flex-shrink-0">
+            <div className="mx-3 mt-4 mb-3 rounded-xl bg-brand-900 p-3 text-white flex-shrink-0">
               <p className="text-xs font-black leading-snug mb-1">
                 Are you a provider?
               </p>
-              <p className="text-[10px] text-blue-100 mb-2.5">
+              <p className="text-[10px] text-brand-100 mb-2.5">
                 Join and grow your business
               </p>
               <Link
                 href="/onboarding"
-                className="block text-center py-1.5 bg-white text-blue-600 text-[10px] font-black rounded-lg hover:bg-blue-50 transition-colors"
+                className="block text-center py-1.5 bg-white text-brand-700 text-[10px] font-black rounded-lg hover:bg-brand-50 transition-colors"
               >
                 Join now
               </Link>
@@ -451,7 +459,7 @@ export default function ServiceProvidersPage() {
                     <div className="flex items-center gap-2 text-gray-400 text-sm">
                       <Loader2
                         size={15}
-                        className="animate-spin text-blue-500"
+                        className="animate-spin text-brand-500"
                       />
                       Loading more...
                     </div>
@@ -459,7 +467,7 @@ export default function ServiceProvidersPage() {
                     <button
                       type="button"
                       onClick={handleLoadMore}
-                      className="px-6 py-2.5 border-2 border-blue-600 text-blue-600 font-bold rounded-xl hover:bg-blue-50 transition-colors text-sm"
+                      className="px-6 py-2.5 border-2 border-brand-900 dark:border-brand-500 text-brand-700 dark:text-brand-300 font-bold rounded-xl hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors text-sm"
                     >
                       Load more
                     </button>

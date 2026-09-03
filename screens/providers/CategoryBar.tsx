@@ -74,8 +74,8 @@ export default function CategoryBar({
                 }
                 className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border whitespace-nowrap ${
                   isActive || hasSelected
-                    ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-600"
+                    ? "bg-brand-900 text-white border-brand-900 shadow-sm"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-brand-300 hover:text-brand-700"
                 }`}
               >
                 {cat.name}
@@ -122,8 +122,8 @@ export default function CategoryBar({
                   onClick={() => onToggle(sub)}
                   className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
                     selected
-                      ? "bg-blue-600 text-white border-blue-600"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-600"
+                      ? "bg-brand-900 text-white border-brand-900"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-brand-300 hover:text-brand-700"
                   }`}
                 >
                   {sub.name}

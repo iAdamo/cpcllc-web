@@ -76,7 +76,7 @@ const ToggleRow = ({
       type="button"
       onClick={() => onChange(!value)}
       className={`relative w-11 h-6 rounded-full transition-all duration-200 flex-shrink-0 ${
-        value ? "bg-blue-600" : "bg-gray-200"
+        value ? "bg-brand-900" : "bg-gray-200"
       }`}
       aria-label={label}
     >
@@ -122,7 +122,7 @@ export default function FilterSidebar({
               <button
                 type="button"
                 onClick={onReset}
-                className="flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700"
+                className="flex items-center gap-1 text-xs font-bold text-brand-700 hover:text-brand-800"
               >
                 <RotateCcw size={12} />
                 Reset
@@ -144,8 +144,8 @@ export default function FilterSidebar({
                     onClick={() => onChange({ minRating: value })}
                     className={`py-2 px-3 rounded-xl text-xs font-semibold transition-all border text-center ${
                       filters.minRating === value
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-gray-50 text-gray-600 border-gray-100 hover:border-blue-200"
+                        ? "bg-brand-900 text-white border-brand-900"
+                        : "bg-gray-50 text-gray-600 border-gray-100 hover:border-brand-200"
                     }`}
                   >
                     {value > 0 && <Star size={10} className="inline mr-1" fill="currentColor" />}
@@ -208,8 +208,8 @@ export default function FilterSidebar({
                     onClick={() => onChange({ radius: value })}
                     className={`py-2 rounded-xl text-xs font-semibold transition-all border text-center ${
                       filters.radius === value
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-gray-50 text-gray-600 border-gray-100 hover:border-blue-200"
+                        ? "bg-brand-900 text-white border-brand-900"
+                        : "bg-gray-50 text-gray-600 border-gray-100 hover:border-brand-200"
                     }`}
                   >
                     {label}
@@ -239,8 +239,8 @@ export default function FilterSidebar({
                             onClick={() => onToggleSubcategory(sub)}
                             className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all border ${
                               selected
-                                ? "bg-blue-600 text-white border-blue-600"
-                                : "bg-gray-50 text-gray-500 border-gray-100 hover:border-blue-200 hover:text-blue-600"
+                                ? "bg-brand-900 text-white border-brand-900"
+                                : "bg-gray-50 text-gray-500 border-gray-100 hover:border-brand-200 hover:text-brand-700"
                             }`}
                           >
                             {sub.name}
@@ -255,7 +255,7 @@ export default function FilterSidebar({
           </div>
 
           {/* Provider CTA */}
-          <div className="mx-5 mb-5 p-4 bg-gradient-to-br from-blue-600 to-violet-600 rounded-2xl">
+          <div className="mx-5 mb-5 p-4 bg-gradient-to-br from-brand-800 to-brand-950 rounded-2xl">
             <p className="font-black text-white text-sm mb-1">
               Are you a provider?
             </p>
@@ -264,7 +264,7 @@ export default function FilterSidebar({
             </p>
             <a
               href="/onboarding"
-              className="block text-center py-2 bg-white text-blue-600 font-black text-xs rounded-xl hover:bg-blue-50 transition-colors"
+              className="block text-center py-2 bg-white text-brand-700 font-black text-xs rounded-xl hover:bg-brand-50 transition-colors"
             >
               Join Now →
             </a>

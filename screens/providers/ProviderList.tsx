@@ -53,7 +53,7 @@ export default function ProviderList({
       return (
         <div className="flex justify-center py-8">
           <div className="flex items-center gap-2 text-gray-500 text-sm">
-            <Loader2 size={16} className="animate-spin text-blue-500" />
+            <Loader2 size={16} className="animate-spin text-brand-500" />
             Loading more providers...
           </div>
         </div>
@@ -137,7 +137,7 @@ export default function ProviderList({
               <button
                 type="button"
                 onClick={onLoadMore}
-                className="px-8 py-3 border-2 border-blue-600 text-blue-600 font-bold rounded-xl hover:bg-blue-50 transition-colors text-sm"
+                className="px-8 py-3 border-2 border-brand-900 text-brand-700 font-bold rounded-xl hover:bg-brand-50 transition-colors text-sm"
               >
                 Load more providers
               </button>

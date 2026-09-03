@@ -68,8 +68,8 @@ export default function FilterBar({
         onClick={onFiltersOpen}
         className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold flex-shrink-0 transition-all ${
           activeFiltersCount > 0
-            ? "bg-blue-600 text-white border-blue-600"
-            : "bg-white text-gray-700 border-gray-200 hover:border-blue-300"
+            ? "bg-brand-900 text-white border-brand-900"
+            : "bg-white text-gray-700 border-gray-200 hover:border-brand-300"
         }`}
       >
         <SlidersHorizontal size={12} />
@@ -86,7 +86,7 @@ export default function FilterBar({
         <button
           type="button"
           onClick={() => setSortOpen((v) => !v)}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-semibold text-gray-700 hover:border-blue-300 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-semibold text-gray-700 hover:border-brand-300 transition-colors"
         >
           <ArrowUpDown size={11} className="text-gray-400" />
           Sort: {activeSort?.label ?? "Relevance"}
@@ -114,15 +114,15 @@ export default function FilterBar({
                     onSortChange(opt.value);
                     setSortOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs transition-colors hover:bg-blue-50 ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs transition-colors hover:bg-brand-50 ${
                     sortBy === opt.value
-                      ? "text-blue-600 font-bold bg-blue-50/60"
+                      ? "text-brand-700 font-bold bg-brand-50/60"
                       : "text-gray-700 font-medium"
                   }`}
                 >
                   {opt.label}
                   {sortBy === opt.value && (
-                    <Check size={11} className="text-blue-600" />
+                    <Check size={11} className="text-brand-700" />
                   )}
                 </button>
               ))}
@@ -139,7 +139,7 @@ export default function FilterBar({
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
             filters.minRating > 0
               ? "bg-amber-50 text-amber-700 border-amber-200"
-              : "bg-white text-gray-700 border-gray-200 hover:border-blue-300"
+              : "bg-white text-gray-700 border-gray-200 hover:border-brand-300"
           }`}
         >
           <Star
@@ -165,15 +165,15 @@ export default function FilterBar({
                   onFiltersChange({ minRating: 0 });
                   setRatingOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs transition-colors hover:bg-blue-50 ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs transition-colors hover:bg-brand-50 ${
                   filters.minRating === 0
-                    ? "text-blue-600 font-bold"
+                    ? "text-brand-700 font-bold"
                     : "text-gray-700 font-medium"
                 }`}
               >
                 Any rating
                 {filters.minRating === 0 && (
-                  <Check size={11} className="text-blue-600" />
+                  <Check size={11} className="text-brand-700" />
                 )}
               </button>
               {RATING_OPTIONS.map((r) => (
@@ -184,9 +184,9 @@ export default function FilterBar({
                     onFiltersChange({ minRating: r });
                     setRatingOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs transition-colors hover:bg-blue-50 ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs transition-colors hover:bg-brand-50 ${
                     filters.minRating === r
-                      ? "text-blue-600 font-bold"
+                      ? "text-brand-700 font-bold"
                       : "text-gray-700 font-medium"
                   }`}
                 >
@@ -195,7 +195,7 @@ export default function FilterBar({
                     {r}+
                   </span>
                   {filters.minRating === r && (
-                    <Check size={11} className="text-blue-600" />
+                    <Check size={11} className="text-brand-700" />
                   )}
                 </button>
               ))}
@@ -211,7 +211,7 @@ export default function FilterBar({
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold flex-shrink-0 transition-all ${
           filters.openNow
             ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-            : "bg-white text-gray-700 border-gray-200 hover:border-blue-300"
+            : "bg-white text-gray-700 border-gray-200 hover:border-brand-300"
         }`}
       >
         <span
@@ -226,7 +226,7 @@ export default function FilterBar({
       <button
         type="button"
         onClick={onFiltersOpen}
-        className="flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-semibold text-gray-700 hover:border-blue-300 flex-shrink-0 transition-colors"
+        className="flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-semibold text-gray-700 hover:border-brand-300 flex-shrink-0 transition-colors"
       >
         More filters
         <ChevronDown size={11} className="text-gray-400" />

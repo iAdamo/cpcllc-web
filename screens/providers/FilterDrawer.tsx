@@ -98,7 +98,7 @@ export default function FilterDrawer({
                 <button
                   type="button"
                   onClick={onReset}
-                  className="flex items-center gap-1 text-sm font-bold text-blue-600"
+                  className="flex items-center gap-1 text-sm font-bold text-brand-700"
                 >
                   <RotateCcw size={13} />
                   Reset
@@ -131,7 +131,7 @@ export default function FilterDrawer({
                         onClick={() => onChange({ [key]: !active })}
                         className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-bold border transition-all ${
                           active
-                            ? "bg-blue-600 text-white border-blue-600"
+                            ? "bg-brand-900 text-white border-brand-900"
                             : "bg-gray-50 text-gray-600 border-gray-200"
                         }`}
                       >
@@ -156,7 +156,7 @@ export default function FilterDrawer({
                       onClick={() => onChange({ minRating: value })}
                       className={`py-3 rounded-xl text-sm font-semibold border transition-all text-center ${
                         filters.minRating === value
-                          ? "bg-blue-600 text-white border-blue-600"
+                          ? "bg-brand-900 text-white border-brand-900"
                           : "bg-gray-50 text-gray-600 border-gray-100"
                       }`}
                     >
@@ -196,7 +196,7 @@ export default function FilterDrawer({
                               onClick={() => onToggleSubcategory(sub)}
                               className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                                 selected
-                                  ? "bg-blue-600 text-white border-blue-600"
+                                  ? "bg-brand-900 text-white border-brand-900"
                                   : "bg-gray-50 text-gray-600 border-gray-100"
                               }`}
                             >
@@ -216,7 +216,7 @@ export default function FilterDrawer({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl text-base transition-colors"
+                className="w-full py-4 bg-brand-900 hover:bg-brand-800 text-white font-black rounded-2xl text-base transition-colors"
               >
                 Show {resultCount} Results
               </button>

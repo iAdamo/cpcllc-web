@@ -60,7 +60,7 @@ export default function SortBar({
             {resultCount === 1 ? "provider" : "providers"}
             {query ? (
               <span className="text-gray-400">
-                {" "}for <span className="text-blue-600 font-bold">&ldquo;{query}&rdquo;</span>
+                {" "}for <span className="text-brand-700 font-bold">&ldquo;{query}&rdquo;</span>
               </span>
             ) : null}
           </p>
@@ -102,7 +102,7 @@ export default function SortBar({
           <button
             type="button"
             onClick={() => setDropdownOpen((v) => !v)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:border-blue-300 transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:border-brand-300 transition-colors"
           >
             <ArrowUpDown size={13} className="text-gray-400" />
             <span>{activeLabel}</span>
@@ -129,15 +129,15 @@ export default function SortBar({
                       onSortChange(opt.value);
                       setDropdownOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-blue-50 ${
+                    className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-brand-50 ${
                       sortBy === opt.value
-                        ? "text-blue-600 font-bold bg-blue-50/60"
+                        ? "text-brand-700 font-bold bg-brand-50/60"
                         : "text-gray-700 font-medium"
                     }`}
                   >
                     {opt.label}
                     {sortBy === opt.value && (
-                      <Check size={13} className="text-blue-600" />
+                      <Check size={13} className="text-brand-700" />
                     )}
                   </button>
                 ))}
