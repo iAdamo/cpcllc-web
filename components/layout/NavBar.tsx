@@ -23,6 +23,7 @@ import useGlobalStore from "@/stores";
 import { getCachedJobResults } from "@/hooks/useGlobalSearch";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useTranslation } from "@/context/TranslationContext";
+import { ProviderData } from "@/types";
 
 // ── Location chip (authenticated users only) ──────────────────────────────────
 
@@ -182,7 +183,7 @@ const NavBar = () => {
         {
           label: "Register your business",
           href: "/onboarding",
-          show: !user?.activeRoleId?._id && !isTasks,
+          show: !(user?.activeRoleId as ProviderData)?._id && !isTasks,
         },
         {
           label: t("how_it_works"),
@@ -205,17 +206,27 @@ const NavBar = () => {
         <div className="flex flex-row justify-between gap-12 h-16 md:h-20 w-full items-center px-5 md:px-10">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-end gap-2">
-            <Image
-              src={
-                transparent
-                  ? "/assets/logo-white.png"
-                  : "/assets/logo-color.png"
-              }
-              alt="CompaniesCenter"
-              width={56}
-              height={56}
-              priority
-            />
+            {isDark ? (
+              <Image
+                src="/assets/logo-white.png"
+                alt="CompaniesCenter"
+                width={56}
+                height={56}
+                priority
+              />
+            ) : (
+              <Image
+                src={
+                  transparent
+                    ? "/assets/logo-white.png"
+                    : "/assets/logo-color.png"
+                }
+                alt="CompaniesCenter"
+                width={56}
+                height={56}
+                priority
+              />
+            )}
           </Link>
           {/* <div className="flex w-full gap-3 h-16 md:h-20 justify-between bg-red-500"> */}
           {/* Location chip — left side, authenticated only */}
@@ -536,17 +547,11 @@ const NavBar = () => {
                     {mounted && (
                       <button
                         type="button"
-                        onClick={() =>
-                          setTheme(isDark ? "light" : "dark")
-                        }
+                        onClick={() => setTheme(isDark ? "light" : "dark")}
                         aria-label="Toggle theme"
                         className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300"
                       >
-                        {isDark ? (
-                          <Sun size={16} />
-                        ) : (
-                          <Moon size={16} />
-                        )}
+                        {isDark ? <Sun size={16} /> : <Moon size={16} />}
                       </button>
                     )}
                   </div>
