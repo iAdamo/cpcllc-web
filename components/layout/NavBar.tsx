@@ -137,7 +137,8 @@ const NavBar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { t, language, setLanguage } = useTranslation();
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const [mounted, setMounted] = useState(false);
 
   const isHome = pathname === "/";
@@ -255,7 +256,7 @@ const NavBar = () => {
             {mounted && (
               <button
                 type="button"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                onClick={() => setTheme(isDark ? "light" : "dark")}
                 aria-label="Toggle theme"
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
                   transparent
@@ -263,7 +264,7 @@ const NavBar = () => {
                     : "text-gray-500 hover:text-gray-800 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
-                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                {isDark ? <Sun size={16} /> : <Moon size={16} />}
               </button>
             )}
 
@@ -536,12 +537,12 @@ const NavBar = () => {
                       <button
                         type="button"
                         onClick={() =>
-                          setTheme(theme === "dark" ? "light" : "dark")
+                          setTheme(isDark ? "light" : "dark")
                         }
                         aria-label="Toggle theme"
                         className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300"
                       >
-                        {theme === "dark" ? (
+                        {isDark ? (
                           <Sun size={16} />
                         ) : (
                           <Moon size={16} />

@@ -56,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="flex-1 antialiased h-screen w-screen overflow-hidden overflow-y-scroll">
         <AppChrome>{children}</AppChrome>
       </body>
