@@ -27,7 +27,7 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section className="relative py-24 overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-violet-700">
+    <section className="relative py-24 overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950">
       {/* Dot pattern overlay */}
       <div className="absolute inset-0 dot-pattern opacity-[0.05]" />
 
@@ -80,10 +80,10 @@ export default function NewsletterSection() {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-8 py-4 bg-white hover:bg-gray-100 disabled:opacity-70 text-blue-700 font-black rounded-2xl transition-all hover:-translate-y-0.5 shadow-xl flex items-center justify-center gap-2 whitespace-nowrap"
+                className="px-8 py-4 bg-white hover:bg-gray-100 disabled:opacity-70 text-brand-800 font-black rounded-2xl transition-all hover:-translate-y-0.5 shadow-xl flex items-center justify-center gap-2 whitespace-nowrap"
               >
                 {loading ? (
-                  <div className="w-5 h-5 border-2 border-blue-600/30 border-t-blue-600 rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-brand-900/30 border-t-gold-400 rounded-full animate-spin" />
                 ) : (
                   <>
                     Subscribe <ArrowRight size={16} />

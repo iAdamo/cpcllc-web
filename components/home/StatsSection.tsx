@@ -26,8 +26,8 @@ const pillars = [
     Icon: ShieldCheck,
     label: "Verified Providers",
     line: "Every company is identity-checked before it can take jobs.",
-    color: "text-blue-400",
-    bg: "bg-blue-500/10",
+    color: "text-gold-400",
+    bg: "bg-brand-500/15",
   },
   {
     Icon: Star,
@@ -40,8 +40,8 @@ const pillars = [
     Icon: MessageSquare,
     label: "Direct Messaging",
     line: "Chat with providers in real time — no middlemen, no fees.",
-    color: "text-violet-400",
-    bg: "bg-violet-500/10",
+    color: "text-gold-400",
+    bg: "bg-brand-500/15",
   },
   {
     Icon: MapPin,
@@ -67,7 +67,7 @@ export default function StatsSection() {
   }, []);
 
   return (
-    <section className="py-20 bg-[#040c24] border-t border-white/5">
+    <section className="py-20 bg-[#0a0f28] border-t border-white/5">
       <div className="max-w-6xl mx-auto px-6 md:px-14">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -76,13 +76,13 @@ export default function StatsSection() {
           transition={{ duration: 0.5 }}
           className="text-center mb-14"
         >
-          <p className="text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
+          <p className="text-gold-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
             Why Companies Center
           </p>
           <h2 className="text-3xl md:text-5xl font-black text-white">
             A Service Network
             <br />
-            <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-gold-300 to-gold-500 bg-clip-text text-transparent">
               Built on Trust
             </span>
           </h2>
@@ -93,7 +93,7 @@ export default function StatsSection() {
           <div className="flex flex-wrap justify-center gap-x-12 gap-y-6 mb-14">
             {stats.map((s) => (
               <div key={s.key} className="text-center">
-                <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+                <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-gold-300 to-gold-500 bg-clip-text text-transparent">
                   {STAT_META[s.key].format(s.value)}
                 </p>
                 <p className="text-white/50 text-xs font-bold uppercase tracking-wider mt-1">

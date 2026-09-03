@@ -82,12 +82,12 @@ export default function MapPreview() {
           >
             {/* Pulse ring */}
             <motion.div
-              className="absolute inset-0 -m-3 rounded-full bg-blue-500/20"
+              className="absolute inset-0 -m-3 rounded-full bg-brand-500/25"
               animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
               transition={{ repeat: Infinity, duration: 2.5, delay: pin.delay }}
             />
             <div className="relative group cursor-pointer">
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/40 border-2 border-white">
+              <div className="w-8 h-8 bg-brand-900 rounded-full flex items-center justify-center shadow-lg shadow-brand-900/50 border-2 border-white">
                 <MapPin size={14} className="text-white" fill="white" />
               </div>
               {/* Tooltip */}
@@ -114,7 +114,7 @@ export default function MapPreview() {
         >
           <button
             type="button"
-            className="px-5 py-2.5 bg-white text-gray-900 text-xs font-bold rounded-full shadow-xl hover:bg-blue-600 hover:text-white transition-all flex items-center gap-2 border border-gray-200"
+            className="px-5 py-2.5 bg-white text-gray-900 text-xs font-bold rounded-full shadow-xl hover:bg-brand-900 hover:text-white transition-all flex items-center gap-2 border border-gray-200"
           >
             <MapPin size={12} />
             Search this area
@@ -137,7 +137,7 @@ export default function MapPreview() {
         >
           <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-3.5 shadow-2xl border border-gray-100 w-44">
             <div className="flex items-center justify-between mb-1.5">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-brand-900 rounded-lg flex items-center justify-center">
                 <CheckCircle size={14} className="text-white" />
               </div>
               <span className="text-[9px] font-black px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full uppercase tracking-wide">

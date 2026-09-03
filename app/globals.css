@@ -3,13 +3,16 @@
 @tailwind utilities;
 
 body {
-  background: #F3F5FE;
+  background: #f3f5fe;
+}
+html.dark body {
+  background: #0a0f28;
 }
 
-/* Hero section grid overlay */
+/* Hero section grid overlay — brand navy tint */
 .hero-grid {
-  background-image: linear-gradient(#3b82f6 1px, transparent 1px),
-    linear-gradient(90deg, #3b82f6 1px, transparent 1px);
+  background-image: linear-gradient(#556ec2 1px, transparent 1px),
+    linear-gradient(90deg, #556ec2 1px, transparent 1px);
   background-size: 64px 64px;
 }
 

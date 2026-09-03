@@ -22,6 +22,34 @@ module.exports = {
     extend: {
       colors: {
         ...colors,
+        // Brand navy (#162660) and gold (#DEAE60). One brand, used everywhere:
+        // navy carries the app, gold is the premium accent. Do not reintroduce
+        // blue/violet as brand accents — those were the old off-brand palette.
+        brand: {
+          50: "#eef1fa",
+          100: "#d9e0f4",
+          200: "#b3c1e9",
+          300: "#8499d8",
+          400: "#556ec2",
+          500: "#3a51a6",
+          600: "#2c3f89",
+          700: "#24336e",
+          800: "#1c2a5c",
+          900: "#162660",
+          950: "#0c1330",
+        },
+        gold: {
+          50: "#fdf9f0",
+          100: "#f8ecd0",
+          200: "#f0d79e",
+          300: "#e8c07a",
+          400: "#e2b063",
+          500: "#deae60",
+          600: "#c28f3e",
+          700: "#9c6f30",
+          800: "#7d5829",
+          900: "#674827",
+        },
         primary: {
           0: "rgb(var(--color-primary-0)/<alpha-value>)",
           50: "rgb(var(--color-primary-50)/<alpha-value>)",

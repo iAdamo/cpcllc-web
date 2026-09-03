@@ -23,7 +23,7 @@ const commitments = [
     Icon: BadgeCheck,
     title: "Verified before they're visible",
     text: "Every provider on the platform goes through identity and business verification before their profile can accept work. What you see is who shows up.",
-    color: "from-blue-600 to-blue-700",
+    color: "from-brand-700 to-brand-900",
   },
   {
     Icon: Star,
@@ -35,7 +35,7 @@ const commitments = [
     Icon: MessagesSquare,
     title: "Talk directly, decide freely",
     text: "Message providers in real time, compare offers side by side, and hire on your terms. We never insert ourselves into your negotiation.",
-    color: "from-violet-600 to-violet-700",
+    color: "from-brand-600 to-brand-800",
   },
   {
     Icon: CalendarClock,
@@ -53,17 +53,17 @@ const commitments = [
     Icon: FileCheck2,
     title: "Clear records, no surprises",
     text: "Proposals, agreements and conversations live in one place, so both sides always know what was promised.",
-    color: "from-indigo-600 to-indigo-700",
+    color: "from-brand-700 to-brand-900",
   },
 ];
 
 const REVIEW_COLORS = [
-  "from-blue-600 to-blue-700",
+  "from-brand-700 to-brand-900",
   "from-amber-500 to-orange-600",
-  "from-violet-600 to-violet-700",
+  "from-brand-600 to-brand-800",
   "from-emerald-600 to-emerald-700",
   "from-rose-600 to-rose-700",
-  "from-indigo-600 to-indigo-700",
+  "from-brand-700 to-brand-900",
 ];
 
 export default function TestimonialsSection() {
@@ -120,7 +120,7 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <p className="text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
+          <p className="text-brand-700 dark:text-gold-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
             {useReviews ? "What Clients Say" : "Our Commitments"}
           </p>
           <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white">
@@ -223,7 +223,7 @@ export default function TestimonialsSection() {
             <button
               type="button"
               onClick={prev}
-              className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
+              className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-900 hover:text-white hover:border-brand-900 transition-all"
               aria-label="Previous"
             >
               <ChevronLeft size={18} />
@@ -238,7 +238,7 @@ export default function TestimonialsSection() {
                   onClick={() => goTo(i, i > current ? 1 : -1)}
                   className={`rounded-full transition-all duration-300 ${
                     i === current
-                      ? "w-6 h-2.5 bg-blue-600"
+                      ? "w-6 h-2.5 bg-brand-900"
                       : "w-2.5 h-2.5 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400"
                   }`}
                 />
@@ -248,7 +248,7 @@ export default function TestimonialsSection() {
             <button
               type="button"
               onClick={next}
-              className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
+              className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-brand-900 hover:text-white hover:border-brand-900 transition-all"
               aria-label="Next"
             >
               <ChevronRight size={18} />

@@ -62,7 +62,7 @@ export default function CategoriesSection() {
           className="flex items-end justify-between mb-12"
         >
           <div>
-            <p className="text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
+            <p className="text-brand-700 dark:text-gold-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
               Browse by Category
             </p>
             <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white leading-tight">
@@ -73,7 +73,7 @@ export default function CategoriesSection() {
           <button
             type="button"
             onClick={() => router.push("/providers")}
-            className="hidden md:flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-bold text-sm hover:underline group"
+            className="hidden md:flex items-center gap-1.5 text-brand-700 dark:text-gold-400 font-bold text-sm hover:underline group"
           >
             View all
             <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
@@ -97,7 +97,7 @@ export default function CategoriesSection() {
                 variants={itemVariants}
                 type="button"
                 onClick={() => router.push(`/providers?q=${encodeURIComponent(title)}`)}
-                className="group flex flex-col items-center gap-2 p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1.5 hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-250 cursor-pointer"
+                className="group flex flex-col items-center gap-2 p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1.5 hover:border-brand-200 dark:hover:border-brand-800 transition-all duration-250 cursor-pointer"
               >
                 <div className={`w-12 h-12 md:w-14 md:h-14 ${tone} dark:bg-gray-800 rounded-xl flex items-center justify-center transition-colors duration-200`}>
                   <Icon className="w-6 h-6" />
@@ -114,7 +114,7 @@ export default function CategoriesSection() {
             variants={itemVariants}
             type="button"
             onClick={() => router.push("/providers")}
-            className="group flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 rounded-2xl transition-all duration-200 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-blue-500/25"
+            className="group flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-brand-800 to-brand-950 hover:from-brand-900 hover:to-brand-950 rounded-2xl transition-all duration-200 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-brand-900/40"
           >
             <div className="w-12 h-12 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center">
               <ArrowRight size={20} className="text-white group-hover:translate-x-0.5 transition-transform" />
@@ -128,7 +128,7 @@ export default function CategoriesSection() {
           <button
             type="button"
             onClick={() => router.push("/providers")}
-            className="flex items-center gap-2 px-7 py-3 border border-blue-600 text-blue-600 font-bold rounded-xl text-sm"
+            className="flex items-center gap-2 px-7 py-3 border border-brand-900 text-brand-700 font-bold rounded-xl text-sm"
           >
             View all categories <ArrowRight size={14} />
           </button>

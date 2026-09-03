@@ -29,13 +29,13 @@ export default function HeroSection() {
   const router = useRouter();
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
+    <section className="relative min-h-[100dvh] flex items-center overflow-hidden bg-gradient-to-br from-[#0a0f28] via-brand-900 to-[#0a0f28]">
       {/* Grid background */}
-      <div className="absolute inset-0 opacity-[0.04] hero-grid" />
+      <div className="absolute inset-0 opacity-[0.05] hero-grid" />
 
-      {/* Gradient blobs */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/4" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[100px] translate-x-1/3 translate-y-1/3" />
+      {/* Ambient glows — navy depth + a single warm gold accent */}
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-brand-500/20 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/4" />
+      <div className="absolute bottom-0 right-0 w-[520px] h-[520px] bg-gold-500/10 rounded-full blur-[110px] translate-x-1/3 translate-y-1/3" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-14 w-full pt-28 md:pt-24 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -47,14 +47,14 @@ export default function HeroSection() {
               initial="hidden"
               animate="show"
               custom={0.1}
-              className="inline-flex items-center gap-2.5 bg-white/8 backdrop-blur-sm border border-white/15 px-4 py-2 rounded-full mb-8 w-fit"
+              className="inline-flex items-center gap-2.5 bg-white/[0.06] backdrop-blur-sm border border-gold-500/25 px-4 py-2 rounded-full mb-8 w-fit"
             >
               <motion.div
-                className="w-2 h-2 bg-emerald-400 rounded-full"
+                className="w-2 h-2 bg-gold-400 rounded-full"
                 animate={{ scale: [1, 1.4, 1] }}
                 transition={{ repeat: Infinity, duration: 2 }}
               />
-              <span className="text-white/85 text-sm font-medium">
+              <span className="text-white/85 text-sm font-medium tracking-wide">
                 Your Home Service Network
               </span>
             </motion.div>
@@ -71,7 +71,7 @@ export default function HeroSection() {
               <br />
               Home Service
               <br />
-              <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-gold-300 to-gold-500 bg-clip-text text-transparent">
                 Pros Near You.
               </span>
             </motion.h1>
@@ -81,10 +81,10 @@ export default function HeroSection() {
               initial="hidden"
               animate="show"
               custom={0.3}
-              className="text-white/55 text-lg max-w-lg leading-relaxed mb-10"
+              className="text-white/60 text-lg max-w-lg leading-relaxed mb-10"
             >
-              Connect with verified professionals near you.
-              Fast quotes, real reviews from completed jobs, direct messaging.
+              Connect with verified professionals near you. Fast quotes, real
+              reviews from completed jobs, direct messaging.
             </motion.p>
 
             {/* Universal search — hero variant (includes popular tags) */}
@@ -107,10 +107,10 @@ export default function HeroSection() {
             >
               {trustBadges.map(({ Icon, label }) => (
                 <div key={label} className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                    <Icon size={13} className="text-emerald-400" />
+                  <div className="w-6 h-6 bg-gold-500/15 rounded-lg flex items-center justify-center">
+                    <Icon size={13} className="text-gold-400" />
                   </div>
-                  <span className="text-white/55 text-sm font-medium">
+                  <span className="text-white/60 text-sm font-medium">
                     {label}
                   </span>
                 </div>
@@ -128,7 +128,7 @@ export default function HeroSection() {
               <button
                 type="button"
                 onClick={() => router.push("/providers")}
-                className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm font-semibold transition-colors group"
+                className="inline-flex items-center gap-2 text-white/65 hover:text-gold-300 text-sm font-semibold transition-colors group"
               >
                 Browse all providers
                 <ArrowRight
@@ -152,7 +152,7 @@ export default function HeroSection() {
       </div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950/60 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0f28]/70 to-transparent pointer-events-none" />
     </section>
   );
 }

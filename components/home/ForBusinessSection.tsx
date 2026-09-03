@@ -15,7 +15,7 @@ const perks = [
 ];
 
 const dashboardStats = [
-  { label: "New Leads", value: "24", trend: "+12%", color: "text-blue-600" },
+  { label: "New Leads", value: "24", trend: "+12%", color: "text-brand-700" },
   { label: "Rating", value: "4.9★", trend: "+0.2", color: "text-amber-500" },
   { label: "Revenue", value: "$8.4k", trend: "+18%", color: "text-emerald-600" },
 ];
@@ -24,10 +24,10 @@ export default function ForBusinessSection() {
   const { t } = useTranslation();
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-0 md:min-h-[640px] flex items-center bg-[#03071a]">
+    <section className="relative overflow-hidden py-20 md:py-0 md:min-h-[640px] flex items-center bg-[#080d24]">
       {/* Background image */}
       <Image src={HomeCompany} alt="For Companies" fill className="object-cover opacity-20" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#03071a]/98 via-[#0C1445]/95 to-[#0C1445]/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#080d24]/98 via-[#162660]/95 to-[#162660]/60" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-14 py-20 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
@@ -38,13 +38,13 @@ export default function ForBusinessSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-4">
+            <p className="text-gold-400 text-xs font-black uppercase tracking-[0.15em] mb-4">
               {t("for_companies")}
             </p>
             <h2 className="text-5xl md:text-6xl font-black text-white leading-tight mb-6">
               Grow Your
               <br />
-              <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-gold-300 to-gold-500 bg-clip-text text-transparent">
                 Business
               </span>
               <br />
@@ -57,8 +57,8 @@ export default function ForBusinessSection() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-12">
               {perks.map(({ Icon, label }) => (
                 <div key={label} className="flex items-center gap-3 p-3.5 bg-white/5 rounded-xl border border-white/8">
-                  <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Icon size={16} className="text-blue-400" />
+                  <div className="w-8 h-8 bg-brand-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Icon size={16} className="text-gold-400" />
                   </div>
                   <span className="text-white/75 text-sm font-medium leading-tight">{label}</span>
                 </div>
@@ -68,7 +68,7 @@ export default function ForBusinessSection() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center justify-center gap-3 px-9 py-4 bg-white hover:bg-blue-50 text-[#0C1445] font-black text-base rounded-2xl transition-all hover:-translate-y-0.5 shadow-xl group"
+                className="inline-flex items-center justify-center gap-3 px-9 py-4 bg-white hover:bg-blue-50 text-[#162660] font-black text-base rounded-2xl transition-all hover:-translate-y-0.5 shadow-xl group"
               >
                 {t("find_opportunities")}
                 <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
@@ -124,8 +124,8 @@ export default function ForBusinessSection() {
                 ].map((lead) => (
                   <div key={lead.name} className="flex items-center justify-between bg-white/5 rounded-xl px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-7 h-7 bg-blue-600/30 rounded-full flex items-center justify-center">
-                        <span className="text-blue-400 text-[10px] font-black">{lead.name[0]}</span>
+                      <div className="w-7 h-7 bg-brand-500/25 rounded-full flex items-center justify-center">
+                        <span className="text-gold-400 text-[10px] font-black">{lead.name[0]}</span>
                       </div>
                       <div>
                         <p className="text-white text-xs font-bold">{lead.name}</p>
@@ -134,7 +134,7 @@ export default function ForBusinessSection() {
                     </div>
                     <div className="text-right">
                       <span className={`text-[9px] font-black px-2 py-0.5 rounded-full ${
-                        lead.status === "New" ? "bg-blue-500/20 text-blue-400" :
+                        lead.status === "New" ? "bg-brand-500/25 text-gold-400" :
                         lead.status === "Quoted" ? "bg-emerald-500/20 text-emerald-400" :
                         "bg-white/10 text-white/50"
                       }`}>{lead.status}</span>

@@ -44,7 +44,7 @@ export default function FAQSection() {
           transition={{ duration: 0.5 }}
           className="text-center mb-14"
         >
-          <p className="text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
+          <p className="text-brand-700 dark:text-gold-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
             FAQ
           </p>
           <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white">
@@ -65,7 +65,7 @@ export default function FAQSection() {
               transition={{ duration: 0.4, delay: i * 0.06 }}
               className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
                 open === i
-                  ? "bg-white dark:bg-gray-800 border-blue-200 dark:border-blue-800 shadow-md"
+                  ? "bg-white dark:bg-gray-800 border-brand-200 dark:border-brand-800 shadow-md"
                   : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600"
               }`}
             >
@@ -74,11 +74,11 @@ export default function FAQSection() {
                 onClick={() => setOpen(open === i ? null : i)}
                 className="w-full flex items-center justify-between px-6 py-5 text-left"
               >
-                <span className={`font-bold text-base ${open === i ? "text-blue-600 dark:text-blue-400" : "text-gray-900 dark:text-white"}`}>
+                <span className={`font-bold text-base ${open === i ? "text-brand-700 dark:text-gold-400" : "text-gray-900 dark:text-white"}`}>
                   {q}
                 </span>
                 <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ml-4 transition-colors ${
-                  open === i ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  open === i ? "bg-brand-900 text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
                 }`}>
                   {open === i ? <Minus size={14} /> : <Plus size={14} />}
                 </div>

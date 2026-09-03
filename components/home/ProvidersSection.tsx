@@ -76,7 +76,7 @@ const ProviderCard = ({
       <Link href={`/c/${provider.slug ?? provider._id}`} className="group block">
         <div className="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-400 hover:-translate-y-2 border border-gray-100 dark:border-gray-800">
           {/* Image */}
-          <div className="relative h-52 overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-800">
+          <div className="relative h-52 overflow-hidden bg-gradient-to-br from-brand-700 to-brand-950">
             {image ? (
               <Image
                 src={image}
@@ -138,7 +138,7 @@ const ProviderCard = ({
           {/* Details */}
           <div className="p-4 pb-5">
             <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 mb-3">
-              <MapPin size={12} className="text-blue-500 flex-shrink-0" />
+              <MapPin size={12} className="text-brand-500 flex-shrink-0" />
               <span className="text-sm line-clamp-1">{location}</span>
             </div>
             <div className="flex items-center justify-between">
@@ -212,7 +212,7 @@ export default function ProvidersSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
+            <p className="text-brand-700 dark:text-gold-400 text-xs font-black uppercase tracking-[0.15em] mb-2">
               Featured Companies
             </p>
             <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white leading-tight">
@@ -225,7 +225,7 @@ export default function ProvidersSection() {
 
           <Link
             href="/providers"
-            className="hidden md:flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-bold text-sm hover:underline group flex-shrink-0"
+            className="hidden md:flex items-center gap-1.5 text-brand-700 dark:text-gold-400 font-bold text-sm hover:underline group flex-shrink-0"
           >
             {t("browseCompanies")}
             <ArrowRight
@@ -244,8 +244,8 @@ export default function ProvidersSection() {
               onClick={() => setActiveFilter(f)}
               className={`flex-shrink-0 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
                 activeFilter === f
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
-                  : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700"
+                  ? "bg-brand-900 text-white shadow-lg shadow-brand-900/30"
+                  : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-brand-300 dark:hover:border-brand-700"
               }`}
             >
               {f}
@@ -261,7 +261,7 @@ export default function ProvidersSection() {
               <button
                 type="button"
                 onClick={() => setActiveFilter("All")}
-                className="text-blue-600 font-bold hover:underline"
+                className="text-brand-700 font-bold hover:underline"
               >
                 show all
               </button>
@@ -281,7 +281,7 @@ export default function ProvidersSection() {
         <div className="mt-10 flex justify-center md:hidden">
           <Link
             href="/providers"
-            className="flex items-center gap-2 px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors"
+            className="flex items-center gap-2 px-8 py-3.5 bg-brand-900 hover:bg-brand-800 text-white font-bold rounded-xl transition-colors"
           >
             {t("browseCompanies")} <ArrowRight size={16} />
           </Link>

@@ -9,43 +9,43 @@ const steps = [
     step: "01",
     title: "Search & Discover",
     desc: "Enter your service type and city to instantly browse hundreds of verified professionals in your area.",
-    color: "from-blue-600 to-blue-700",
-    glow: "shadow-blue-500/30",
+    color: "from-brand-700 to-brand-900",
+    glow: "shadow-brand-900/40",
   },
   {
     Icon: Star,
     step: "02",
     title: "Compare & Choose",
     desc: "Read real reviews, compare ratings, view portfolios, and check credentials to find your perfect match.",
-    color: "from-violet-600 to-violet-700",
-    glow: "shadow-violet-500/30",
+    color: "from-brand-600 to-brand-800",
+    glow: "shadow-brand-900/40",
   },
   {
     Icon: MessageCircle,
     step: "03",
     title: "Connect Directly",
     desc: "Contact your chosen provider directly through our platform. No middlemen, no hidden fees.",
-    color: "from-emerald-600 to-emerald-700",
-    glow: "shadow-emerald-500/30",
+    color: "from-gold-500 to-gold-600",
+    glow: "shadow-gold-500/30",
   },
   {
     Icon: CheckCircle,
     step: "04",
     title: "Job Done Right",
     desc: "Get the job done with confidence. Every provider is verified before they can take jobs, and reviews come from real completed work.",
-    color: "from-orange-500 to-orange-600",
-    glow: "shadow-orange-500/30",
+    color: "from-gold-400 to-gold-500",
+    glow: "shadow-gold-500/30",
   },
 ];
 
 export default function HowItWorksSection() {
   return (
-    <section id="howitworks" className="py-24 bg-[#03071a] relative overflow-hidden">
+    <section id="howitworks" className="py-24 bg-[#080d24] relative overflow-hidden">
       {/* Dot pattern */}
       <div className="absolute inset-0 dot-pattern opacity-[0.03]" />
 
       {/* Glow orb */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-blue-600/8 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-brand-900/8 rounded-full blur-3xl" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-14">
         {/* Header */}
@@ -56,7 +56,7 @@ export default function HowItWorksSection() {
           transition={{ duration: 0.55 }}
           className="text-center mb-20"
         >
-          <p className="text-blue-400 text-xs font-black uppercase tracking-[0.15em] mb-3">
+          <p className="text-gold-400 text-xs font-black uppercase tracking-[0.15em] mb-3">
             How It Works
           </p>
           <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
@@ -71,9 +71,9 @@ export default function HowItWorksSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
           {/* Connecting line (desktop) */}
           <div className="hidden lg:block absolute top-[52px] left-[calc(12.5%+48px)] right-[calc(12.5%+48px)] h-px">
-            <div className="w-full h-full bg-gradient-to-r from-blue-600 via-violet-600 via-emerald-600 to-orange-500 opacity-30" />
+            <div className="w-full h-full bg-gradient-to-r from-brand-700 via-brand-500 via-gold-500 to-gold-400 opacity-30" />
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-blue-400 via-violet-400 via-emerald-400 to-orange-400"
+              className="absolute inset-0 bg-gradient-to-r from-brand-400 via-brand-300 via-gold-300 to-gold-400"
               initial={{ scaleX: 0, originX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
