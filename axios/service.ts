@@ -16,7 +16,7 @@ export const createService = async (data: FormData): Promise<ServiceData> => {
 
 export const updateService = async (
   id: string,
-  data: FormData
+  data: FormData,
 ): Promise<ServiceData> => {
   const response = await axiosInstance.patch(`services/${id}`, data, {
     headers: {
@@ -39,6 +39,11 @@ export const getAllCategoriesWithSubcategories = async (): Promise<
   return response.data;
 };
 
+export const getAllCategories = async (): Promise<Category[]> => {
+  const response = await axiosInstance.get("services/category");
+  return response.data;
+};
+
 export const getServiceById = async (id: string): Promise<ServiceData> => {
   const response = await axiosInstance.get(`services/${id}`);
 
@@ -46,7 +51,7 @@ export const getServiceById = async (id: string): Promise<ServiceData> => {
 };
 
 export const getServicesByProvider = async (
-  id: string
+  id: string,
 ): Promise<ServiceData[]> => {
   const response = await axiosInstance.get(`services/provider/${id}`);
 
@@ -55,10 +60,10 @@ export const getServicesByProvider = async (
 
 export const getServices = async (
   page: number,
-  limit: number
+  limit: number,
 ): Promise<{ services: ServiceData[]; totalPages: number }> => {
   const response = await axiosInstance.get(
-    `services?page=${page}&limit=${limit}`
+    `services?page=${page}&limit=${limit}`,
   );
   return response.data;
 };
@@ -79,7 +84,7 @@ export const getJobsByUser = async (): Promise<JobData[]> => {
 
 export const updateJob = async (
   jobId: string,
-  data: FormData
+  data: FormData,
 ): Promise<JobData> => {
   const response = await axiosInstance.patch(`services/tasks/${jobId}`, data, {
     headers: {
@@ -102,7 +107,7 @@ export const getJobById = async (jobId: string): Promise<JobData> => {
 
 export const createProposal = async (
   jobId: string,
-  data: FormData
+  data: FormData,
 ): Promise<void> => {
   try {
     await axiosInstance.post(`services/tasks/${jobId}/proposals`, data, {
@@ -124,7 +129,7 @@ export const createProposal = async (
 export const updateProposal = async (
   jobId: string,
   proposalId: string,
-  data: FormData
+  data: FormData,
 ): Promise<void> => {
   await axiosInstance.patch(
     `services/tasks/${jobId}/proposals/${proposalId}`,
@@ -133,7 +138,7 @@ export const updateProposal = async (
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    }
+    },
   );
 };
 
@@ -149,11 +154,11 @@ export const getMyProposals = async (): Promise<ProposalData[]> => {
 
 export const updateProposalStatus = async (
   proposalId: string,
-  status: string
+  status: string,
 ): Promise<any> => {
   const response = await axiosInstance.patch(
     `services/tasks/proposals/${proposalId}`,
-    { status }
+    { status },
   );
   return response.data;
 };

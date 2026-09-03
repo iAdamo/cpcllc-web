@@ -4,41 +4,50 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { getAllCategoriesWithSubcategories } from "@/axios/service";
+import { getAllCategories } from "@/axios/service";
 import { getCategoryIcon, CATEGORY_TONES } from "@/lib/categoryIcon";
-
-// Shown only if the API returns nothing (or errors), so the section never
-// renders empty. These mirror the platform's core taxonomy.
-const FALLBACK_CATEGORIES = [
-  "Plumbing", "Electrical", "Cleaning", "HVAC", "Painting", "Pest Control",
-  "Roofing", "Pool Service", "Solar", "Moving", "Security", "Appliance Repair",
-  "Carpentry", "Flooring", "Handyman",
-];
+import { Category } from "@/types";
 
 const easeOut = [0.22, 1, 0.36, 1] as [number, number, number, number];
-const containerVariants = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.04 } },
+};
 const itemVariants = {
   hidden: { opacity: 0, y: 16 },
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOut } },
 };
+
+// Shown only if the API returns nothing (or errors), so the section never
+// renders empty. Real categories carry their own icon + colour from the backend.
+const FALLBACK: Pick<Category, "name">[] = [
+  "Home & Property",
+  "Repairs & Technical",
+  "Personal Services",
+  "Beauty & Care",
+  "Family & Kids",
+  "Business & Professional",
+  "Creative & Digital",
+  "Moving & Logistics",
+].map((name) => ({ name }));
 
 export default function CategoriesSection() {
   const router = useRouter();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const [categories, setCategories] = useState<string[]>(FALLBACK_CATEGORIES);
+  // Categories only (no subcategories) from the public catalogue. Each carries
+  // its own icon (SVG) + iconColor; falls back to a static list on empty/error.
+  const [categories, setCategories] = useState<Pick<
+    Category,
+    "_id" | "name" | "icon" | "iconColor"
+  >[]>(FALLBACK as any);
 
-  // Real categories from the (now public) backend catalogue. Falls back to the
-  // static list on empty/error so the homepage is never blank.
   useEffect(() => {
     let cancelled = false;
-    getAllCategoriesWithSubcategories()
+    getAllCategories()
       .then((cats) => {
-        const names = (cats ?? [])
-          .map((c) => c?.name)
-          .filter((n): n is string => !!n);
-        if (!cancelled && names.length) setCategories(names);
+        if (!cancelled && cats?.length) setCategories(cats);
       })
       .catch(() => {
         /* keep the fallback list */
@@ -76,7 +85,10 @@ export default function CategoriesSection() {
             className="hidden md:flex items-center gap-1.5 text-brand-700 dark:text-gold-400 font-bold text-sm hover:underline group"
           >
             View all
-            <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight
+              size={15}
+              className="group-hover:translate-x-0.5 transition-transform"
+            />
           </button>
         </motion.div>
 
@@ -88,22 +100,41 @@ export default function CategoriesSection() {
           animate={inView ? "show" : "hidden"}
           className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-8 gap-3"
         >
-          {shown.map((title, i) => {
-            const Icon = getCategoryIcon(title);
+          {shown.map((cat, i) => {
+            const FallbackIcon = getCategoryIcon(cat.name);
             const tone = CATEGORY_TONES[i % CATEGORY_TONES.length];
             return (
               <motion.button
-                key={title}
+                key={cat._id ?? cat.name}
                 variants={itemVariants}
                 type="button"
-                onClick={() => router.push(`/providers?q=${encodeURIComponent(title)}`)}
+                onClick={() =>
+                  router.push(`/providers?q=${encodeURIComponent(cat.name)}`)
+                }
                 className="group flex flex-col items-center gap-2 p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1.5 hover:border-brand-200 dark:hover:border-brand-800 transition-all duration-250 cursor-pointer"
               >
-                <div className={`w-12 h-12 md:w-14 md:h-14 ${tone} dark:bg-gray-800 rounded-xl flex items-center justify-center transition-colors duration-200`}>
-                  <Icon className="w-6 h-6" />
+                <div
+                  className={`w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+                    cat.icon ? "" : `${tone} dark:bg-gray-800`
+                  }`}
+                  style={
+                    cat.icon && cat.iconColor
+                      ? { backgroundColor: `${cat.iconColor}1A` }
+                      : undefined
+                  }
+                >
+                  {cat.icon ? (
+                    <span
+                      className="w-6 h-6 [&_svg]:w-full [&_svg]:h-full"
+                      style={{ color: cat.iconColor }}
+                      dangerouslySetInnerHTML={{ __html: cat.icon }}
+                    />
+                  ) : (
+                    <FallbackIcon className="w-6 h-6" />
+                  )}
                 </div>
                 <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300 text-center leading-tight">
-                  {title}
+                  {cat.name}
                 </span>
               </motion.button>
             );
@@ -117,7 +148,10 @@ export default function CategoriesSection() {
             className="group flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-brand-800 to-brand-950 hover:from-brand-900 hover:to-brand-950 rounded-2xl transition-all duration-200 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-brand-900/40"
           >
             <div className="w-12 h-12 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center">
-              <ArrowRight size={20} className="text-white group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight
+                size={20}
+                className="text-white group-hover:translate-x-0.5 transition-transform"
+              />
             </div>
             <span className="text-[11px] font-bold text-white">More</span>
           </motion.button>
@@ -128,7 +162,7 @@ export default function CategoriesSection() {
           <button
             type="button"
             onClick={() => router.push("/providers")}
-            className="flex items-center gap-2 px-7 py-3 border border-brand-900 text-brand-700 font-bold rounded-xl text-sm"
+            className="flex items-center gap-2 px-7 py-3 border border-brand-900 text-brand-700 dark:text-brand-300 dark:border-brand-500 font-bold rounded-xl text-sm"
           >
             View all categories <ArrowRight size={14} />
           </button>

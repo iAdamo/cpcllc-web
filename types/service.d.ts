@@ -19,6 +19,7 @@ export interface SubcategoryData {
   name: string;
   description?: string;
   icon?: any;
+  iconColor?: string;
   categoryId: {
     _id: string;
     name: string;
@@ -38,6 +39,8 @@ export interface Category {
   _id: string;
   name: string;
   description?: string;
+  icon?: string;
+  iconColor?: string;
   subcategories: Subcategory[];
 }
 
