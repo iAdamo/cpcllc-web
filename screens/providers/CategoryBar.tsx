@@ -23,7 +23,10 @@ export default function CategoryBar({
 
   const scroll = (dir: "left" | "right") => {
     if (!scrollRef.current) return;
-    scrollRef.current.scrollBy({ left: dir === "left" ? -240 : 240, behavior: "smooth" });
+    scrollRef.current.scrollBy({
+      left: dir === "left" ? -240 : 240,
+      behavior: "smooth",
+    });
   };
 
   const activeCategory = categories.find((c) => c._id === activeCategoryId);
@@ -49,7 +52,10 @@ export default function CategoryBar({
           {/* All tab */}
           <button
             type="button"
-            onClick={() => { setActiveCategoryId(null); onClear(); }}
+            onClick={() => {
+              setActiveCategoryId(null);
+              onClear();
+            }}
             className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold transition-all border ${
               !activeCategoryId && selectedSubcategoryIds.length === 0
                 ? "bg-gray-900 text-white border-gray-900"
@@ -62,16 +68,14 @@ export default function CategoryBar({
           {categories.map((cat) => {
             const isActive = activeCategoryId === cat._id;
             const hasSelected = cat.subcategories.some((s) =>
-              selectedSubcategoryIds.includes(s._id)
+              selectedSubcategoryIds.includes(s._id),
             );
 
             return (
               <button
                 key={cat._id}
                 type="button"
-                onClick={() =>
-                  setActiveCategoryId(isActive ? null : cat._id)
-                }
+                onClick={() => setActiveCategoryId(isActive ? null : cat._id)}
                 className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border whitespace-nowrap ${
                   isActive || hasSelected
                     ? "bg-brand-900 text-white border-brand-900 shadow-sm"

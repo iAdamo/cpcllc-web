@@ -84,7 +84,7 @@ export default function JobsPage() {
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [proposalJob, setProposalJob] = useState<JobData | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+  const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
   const [showFilters, setShowFilters] = useState(false);
 
   // Filters
@@ -123,18 +123,18 @@ export default function JobsPage() {
   const appliedJobIds = useMemo(
     () =>
       new Set(
-        myProposals.map((p) => ((p.jobId as any)?._id ?? p.jobId) as string)
+        myProposals.map((p) => ((p.jobId as any)?._id ?? p.jobId) as string),
       ),
-    [myProposals]
+    [myProposals],
   );
 
   const fetchProposals = useCallback(() => {
-    const id = user?.activeRoleId?._id;
+    const id = (user?.activeRoleId as ProviderData)?._id;
     if (!isProvider || !id) return;
     getMyProposals()
       .then((d) => setMyProposals(d as ProposalData[]))
       .catch(() => {});
-  }, [isProvider, user?.activeRoleId?._id]);
+  }, [isProvider, user]);
 
   useEffect(() => {
     fetchProposals();
@@ -154,7 +154,7 @@ export default function JobsPage() {
         if (entry.isIntersecting && hasMore && !isSearching && !isLoadingMore)
           onEndReached();
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -178,10 +178,10 @@ export default function JobsPage() {
     activeView === "proposals"
       ? "My Proposals"
       : activeView === "saved"
-      ? "Saved Tasks"
-      : activeView === "analytics"
-      ? "Analytics"
-      : "Explore Tasks";
+        ? "Saved Tasks"
+        : activeView === "analytics"
+          ? "Analytics"
+          : "Explore Tasks";
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -236,8 +236,8 @@ export default function JobsPage() {
               id === "proposals"
                 ? myProposals.length
                 : id === "saved"
-                ? savedJobs.length
-                : 0;
+                  ? savedJobs.length
+                  : 0;
             const active = activeView === id;
             return (
               <button
@@ -327,7 +327,7 @@ export default function JobsPage() {
               </button>
 
               <div className="hidden sm:flex items-center border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden flex-shrink-0">
-                {(["list", "grid"] as const).map((m) => (
+                {(["grid", "list"] as const).map((m) => (
                   <button
                     key={m}
                     type="button"
@@ -519,8 +519,8 @@ export default function JobsPage() {
                   {activeView === "saved"
                     ? "Tasks you bookmark will appear here."
                     : activeView === "proposals"
-                    ? "You haven't submitted any proposals yet."
-                    : "Try adjusting your search or filters."}
+                      ? "You haven't submitted any proposals yet."
+                      : "Try adjusting your search or filters."}
                 </p>
               </div>
             )}

@@ -26,7 +26,7 @@ const SidebarHeader = ({
   collapsed: boolean;
   toggle: () => void;
 }) => (
-  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 scrollbar-none">
     <div className="p-3 flex items-center gap-2">
       <Image
         src="/assets/logo-color.png"
@@ -132,7 +132,7 @@ const Sidebar = ({
   badges?: Record<string, number | undefined>;
 }) => (
   <aside
-    className={`shrink-0 transition-all duration-200 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col h-full ${
+    className={`shrink-0 transition-all duration-200 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col h-full scrollbar-none ${
       collapsed ? "w-20" : "w-56"
     }`}
   >

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -147,7 +148,7 @@ export default function JobDetailPanel({
               {/* Cover image */}
               {allImages[0] && (
                 <div className="relative aspect-video w-full overflow-hidden">
-                  <img
+                  <Image
                     src={allImages[0]}
                     alt={job.title}
                     className="w-full h-full object-cover"
@@ -272,10 +273,12 @@ export default function JobDetailPanel({
                 {/* Client info */}
                 <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-2xl">
                   {clientAvatar ? (
-                    <img
+                    <Image
                       src={clientAvatar}
                       alt={clientName}
-                      className="w-9 h-9 rounded-full object-cover flex-shrink-0"
+                      width={36}
+                      height={36}
+                      className="rounded-full object-cover flex-shrink-0"
                     />
                   ) : (
                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-[13px] text-white font-black flex-shrink-0">
@@ -303,11 +306,13 @@ export default function JobDetailPanel({
                     </h4>
                     <div className="flex gap-2 overflow-x-auto pb-1">
                       {allImages.map((src, i) => (
-                        <img
+                        <Image
                           key={i}
                           src={src}
                           alt={`Attachment ${i + 1}`}
-                          className="w-20 h-20 rounded-xl object-cover flex-shrink-0 border border-gray-100 dark:border-gray-800"
+                          width={80}
+                          height={80}
+                          className="rounded-xl object-cover flex-shrink-0 border border-gray-100 dark:border-gray-800"
                         />
                       ))}
                     </div>
