@@ -24,16 +24,16 @@ export default function PortfolioGrid({ items, isCurrentUser }: Props) {
 
   if (items.length === 0) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-16 text-center">
-        <div className="w-16 h-16 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-          <Camera size={22} className="text-blue-400" />
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-16 text-center">
+        <div className="w-16 h-16 bg-gradient-to-br from-brand-50 to-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+          <Camera size={22} className="text-brand-400" />
         </div>
-        <p className="text-gray-600 font-semibold">No portfolio items yet</p>
-        <p className="text-gray-400 text-sm mt-1">Portfolio showcases will appear here</p>
+        <p className="text-gray-600 dark:text-gray-300 font-semibold">No portfolio items yet</p>
+        <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Portfolio showcases will appear here</p>
         {isCurrentUser && (
           <button
             type="button"
-            className="mt-4 flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-xl mx-auto hover:bg-blue-700 transition-colors"
+            className="mt-4 flex items-center gap-2 px-4 py-2 bg-brand-900 text-white text-sm font-bold rounded-xl mx-auto hover:bg-brand-800 transition-colors"
           >
             <Plus size={14} /> Add portfolio
           </button>
@@ -55,7 +55,7 @@ export default function PortfolioGrid({ items, isCurrentUser }: Props) {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06 }}
-              className="break-inside-avoid bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group cursor-pointer hover:shadow-lg transition-all duration-300"
+              className="break-inside-avoid bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 group cursor-pointer hover:shadow-lg transition-all duration-300"
               onClick={() =>
                 setLightbox({
                   src,

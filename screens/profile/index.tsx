@@ -232,10 +232,10 @@ export default function ProfilePage() {
   ].filter((s) => s.value !== undefined && s.value !== null);
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24 lg:pb-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 pb-24 lg:pb-8">
       {/* ── Cover ──────────────────────────────────────────── */}
       <div className="relative h-44 lg:h-56 w-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-800 via-brand-800 to-brand-950" />
         {coverUrl && (
           <Image
             src={coverUrl}
@@ -246,7 +246,7 @@ export default function ProfilePage() {
         )}
         <div className="absolute -top-12 -right-12 w-64 h-64 bg-white/5 rounded-full pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/5 rounded-full pointer-events-none" />
-        <div className="absolute top-1/3 right-1/3 w-40 h-40 bg-violet-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 right-1/3 w-40 h-40 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* ── Main grid ──────────────────────────────────────── */}
@@ -254,14 +254,14 @@ export default function ProfilePage() {
         <div className="lg:flex gap-5 lg:items-start">
           {/* ══ LEFT SIDEBAR ══════════════════════════════════ */}
           <aside className="lg:w-72 xl:w-80 lg:sticky lg:top-24 flex-shrink-0 -mt-12 lg:-mt-14 relative z-10 space-y-3">
-            <div className="bg-white rounded-3xl shadow-md border border-gray-100 overflow-hidden">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-md border border-gray-100 dark:border-gray-800 overflow-hidden">
               {/* Avatar */}
               <div className="flex justify-center pt-5">
                 <div className="relative">
-                  <div className="relative w-24 h-24 rounded-2xl overflow-hidden ring-4 ring-white shadow-xl bg-gray-100">
+                  <div className="relative w-24 h-24 rounded-2xl overflow-hidden ring-4 ring-white dark:ring-gray-900 shadow-xl bg-gray-100 dark:bg-gray-800">
                     {isUploading ? (
-                      <div className="w-full h-full bg-gray-200 animate-pulse flex items-center justify-center">
-                        <Camera size={20} className="text-gray-400" />
+                      <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
+                        <Camera size={20} className="text-gray-400 dark:text-gray-500" />
                       </div>
                     ) : logoUrl ? (
                       <Image
@@ -271,7 +271,7 @@ export default function ProfilePage() {
                         className="object-cover rounded-2xl"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-700 text-white text-2xl font-black">
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-brand-800 to-brand-950 text-white text-2xl font-black">
                         {provider.providerName?.[0]?.toUpperCase() ?? "C"}
                       </div>
                     )}
@@ -282,7 +282,7 @@ export default function ProfilePage() {
                       aria-label="Change profile photo"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isUploading}
-                      className="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center shadow-lg transition-colors"
+                      className="absolute -bottom-1 -right-1 w-7 h-7 bg-brand-900 hover:bg-brand-800 rounded-full flex items-center justify-center shadow-lg transition-colors"
                     >
                       <Camera size={11} className="text-white" />
                     </button>
@@ -302,15 +302,15 @@ export default function ProfilePage() {
                 {/* Name */}
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-1.5 flex-wrap">
-                    <h1 className="text-lg font-black text-gray-900">
+                    <h1 className="text-lg font-black text-gray-900 dark:text-white">
                       {provider.providerName}
                     </h1>
                     {provider.isVerified && (
-                      <CheckCircle size={17} className="text-blue-600" />
+                      <CheckCircle size={17} className="text-brand-700" />
                     )}
                   </div>
                   {(provider.subcategories?.length ?? 0) > 0 && (
-                    <p className="text-xs text-blue-600 font-semibold mt-0.5">
+                    <p className="text-xs text-brand-700 font-semibold mt-0.5">
                       {provider.subcategories[0]?.name}
                     </p>
                   )}
@@ -318,12 +318,12 @@ export default function ProfilePage() {
                   {/* Badges — every one of these is earned, not decorative */}
                   <div className="flex items-center justify-center gap-1.5 mt-2 flex-wrap">
                     {provider.isVerified && (
-                      <span className="flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black rounded-full border border-blue-200">
+                      <span className="flex items-center gap-1 px-2 py-0.5 bg-brand-50 text-brand-700 text-[10px] font-black rounded-full border border-brand-200">
                         <Shield size={8} /> Verified
                       </span>
                     )}
                     {provider.isFeatured && (
-                      <span className="flex items-center gap-1 px-2 py-0.5 bg-violet-50 text-violet-600 text-[10px] font-black rounded-full border border-violet-200">
+                      <span className="flex items-center gap-1 px-2 py-0.5 bg-gold-50 dark:bg-gold-500/15 text-gold-700 dark:text-gold-400 text-[10px] font-black rounded-full border border-gold-200 dark:border-gold-500/30">
                         <TrendingUp size={8} /> Featured
                       </span>
                     )}
@@ -331,7 +331,7 @@ export default function ProfilePage() {
                       className={`flex items-center gap-1 px-2 py-0.5 text-[10px] font-black rounded-full ${
                         provider.isOnline
                           ? "bg-emerald-50 text-emerald-600 border border-emerald-200"
-                          : "bg-gray-100 text-gray-500 border border-gray-200"
+                          : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700"
                       }`}
                     >
                       <span
@@ -347,15 +347,15 @@ export default function ProfilePage() {
                   {reviewCount > 0 ? (
                     <div className="flex items-center justify-center gap-1 mt-2.5">
                       <Stars rating={rating} size={13} />
-                      <span className="text-sm font-black text-gray-900 ml-1">
+                      <span className="text-sm font-black text-gray-900 dark:text-white ml-1">
                         {rating.toFixed(1)}
                       </span>
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-gray-400 dark:text-gray-500">
                         ({reviewCount})
                       </span>
                     </div>
                   ) : (
-                    <p className="text-xs text-gray-400 mt-2.5">
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-2.5">
                       No reviews yet
                     </p>
                   )}
@@ -363,15 +363,15 @@ export default function ProfilePage() {
 
                 {/* Meta */}
                 <div className="mt-3.5 space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
-                    <MapPin size={12} className="text-blue-500 flex-shrink-0" />
+                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                    <MapPin size={12} className="text-brand-500 flex-shrink-0" />
                     {locationStr}
                   </div>
                   {memberSince && (
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                       <Calendar
                         size={12}
-                        className="text-blue-500 flex-shrink-0"
+                        className="text-brand-500 flex-shrink-0"
                       />
                       Member since {memberSince}
                     </div>
@@ -381,16 +381,16 @@ export default function ProfilePage() {
                 {/* Stats */}
                 {STATS.length > 0 && (
                   <div
-                    className={`grid gap-0.5 mt-4 py-3.5 border-t border-b border-gray-100 ${
+                    className={`grid gap-0.5 mt-4 py-3.5 border-t border-b border-gray-100 dark:border-gray-800 ${
                       STATS.length === 3 ? "grid-cols-3" : "grid-cols-2"
                     }`}
                   >
                     {STATS.map(({ label, value }) => (
                       <div key={label} className="text-center">
-                        <p className="text-sm font-black text-gray-900">
+                        <p className="text-sm font-black text-gray-900 dark:text-white">
                           {value}
                         </p>
-                        <p className="text-[9px] text-gray-400 font-medium mt-0.5">
+                        <p className="text-[9px] text-gray-400 dark:text-gray-500 font-medium mt-0.5">
                           {label}
                         </p>
                       </div>
@@ -404,7 +404,7 @@ export default function ProfilePage() {
                     <button
                       type="button"
                       onClick={handleHire}
-                      className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-black rounded-2xl transition-all active:scale-95 shadow-md shadow-blue-200 text-sm flex items-center justify-center gap-2"
+                      className="w-full py-3 bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white font-black rounded-2xl transition-all active:scale-95 shadow-md shadow-brand-200/50 text-sm flex items-center justify-center gap-2"
                     >
                       <Briefcase size={14} /> Request Service
                     </button>
@@ -412,7 +412,7 @@ export default function ProfilePage() {
                       {providerEmail && (
                         <a
                           href={`mailto:${providerEmail}`}
-                          className="flex-1 py-2.5 border-2 border-gray-200 hover:border-blue-300 hover:text-blue-600 text-gray-700 font-bold rounded-2xl text-xs flex items-center justify-center gap-1.5 transition-all"
+                          className="flex-1 py-2.5 border-2 border-gray-200 dark:border-gray-700 hover:border-brand-300 hover:text-brand-700 text-gray-700 dark:text-gray-200 font-bold rounded-2xl text-xs flex items-center justify-center gap-1.5 transition-all"
                         >
                           <MessageCircle size={13} /> Message
                         </a>
@@ -420,7 +420,7 @@ export default function ProfilePage() {
                       {providerPhone && (
                         <a
                           href={`tel:${providerPhone}`}
-                          className="flex-1 py-2.5 border-2 border-gray-200 hover:border-emerald-300 hover:text-emerald-600 text-gray-700 font-bold rounded-2xl text-xs flex items-center justify-center gap-1.5 transition-all"
+                          className="flex-1 py-2.5 border-2 border-gray-200 dark:border-gray-700 hover:border-emerald-300 hover:text-emerald-600 text-gray-700 dark:text-gray-200 font-bold rounded-2xl text-xs flex items-center justify-center gap-1.5 transition-all"
                         >
                           <Phone size={13} /> Call
                         </a>
@@ -430,7 +430,7 @@ export default function ProfilePage() {
                       <button
                         type="button"
                         onClick={handleShare}
-                        className="flex-1 py-2.5 border border-gray-200 hover:bg-gray-50 text-gray-500 font-semibold rounded-2xl text-xs flex items-center justify-center gap-1.5 transition-all"
+                        className="flex-1 py-2.5 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 text-gray-500 dark:text-gray-400 font-semibold rounded-2xl text-xs flex items-center justify-center gap-1.5 transition-all"
                       >
                         <Share2 size={12} />
                         {shareCopied ? "Link copied!" : "Share"}
@@ -442,7 +442,7 @@ export default function ProfilePage() {
                         className={`flex-1 py-2.5 border font-semibold rounded-2xl text-xs flex items-center justify-center gap-1.5 transition-all ${
                           isSaved
                             ? "border-red-200 bg-red-50 text-red-500"
-                            : "border-gray-200 hover:bg-gray-50 text-gray-500"
+                            : "border-gray-200 dark:border-gray-700 hover:bg-gray-50 text-gray-500 dark:text-gray-400"
                         }`}
                       >
                         <Heart
@@ -458,7 +458,7 @@ export default function ProfilePage() {
                     <button
                       type="button"
                       onClick={() => router.push("/settings")}
-                      className="w-full py-2.5 border-2 border-blue-200 hover:bg-blue-50 text-blue-600 font-bold rounded-2xl text-sm flex items-center justify-center gap-2 transition-all"
+                      className="w-full py-2.5 border-2 border-brand-200 hover:bg-brand-50 text-brand-700 font-bold rounded-2xl text-sm flex items-center justify-center gap-2 transition-all"
                     >
                       <Edit3 size={13} /> Edit Profile
                     </button>
@@ -471,7 +471,7 @@ export default function ProfilePage() {
           {/* ══ RIGHT CONTENT ═════════════════════════════════ */}
           <main className="flex-1 min-w-0 mt-4 lg:mt-5">
             {/* Tab bar */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 mb-4 overflow-hidden">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 mb-4 overflow-hidden">
               <div className="flex overflow-x-auto no-scrollbar">
                 {TABS.map((tab) => {
                   const Icon = tab.icon;
@@ -483,8 +483,8 @@ export default function ProfilePage() {
                       onClick={() => setActiveTab(tab.id)}
                       className={`relative flex-1 min-w-max flex items-center justify-center gap-1.5 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors ${
                         active
-                          ? "text-blue-600"
-                          : "text-gray-400 hover:text-gray-700"
+                          ? "text-brand-700"
+                          : "text-gray-400 dark:text-gray-500 hover:text-gray-700"
                       }`}
                     >
                       <Icon size={13} />
@@ -492,7 +492,7 @@ export default function ProfilePage() {
                       {active && (
                         <motion.div
                           layoutId="tab-line"
-                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-full"
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-900 rounded-full"
                         />
                       )}
                     </button>
@@ -511,7 +511,7 @@ export default function ProfilePage() {
                 transition={{ duration: 0.18 }}
               >
                 {activeTab === "services" && provider._id && (
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
                     <ServiceSection
                       provider={provider}
                       isCurrentUser={isCurrentUser}
@@ -529,13 +529,13 @@ export default function ProfilePage() {
 
                 {activeTab === "reviews" && provider._id && (
                   <div>
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 p-5 mb-4 flex items-center gap-5">
+                    <div className="bg-gradient-to-br from-brand-50 to-brand-50 rounded-2xl border border-brand-100 p-5 mb-4 flex items-center gap-5">
                       <div className="text-center flex-shrink-0">
-                        <p className="text-5xl font-black text-gray-900">
+                        <p className="text-5xl font-black text-gray-900 dark:text-white">
                           {reviewCount > 0 ? rating.toFixed(1) : "—"}
                         </p>
                         <Stars rating={rating} size={14} />
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                           {reviewCount > 0
                             ? `${reviewCount} review${
                                 reviewCount !== 1 ? "s" : ""
@@ -543,13 +543,13 @@ export default function ProfilePage() {
                             : "No reviews yet"}
                         </p>
                       </div>
-                      <p className="text-xs text-gray-500 leading-relaxed">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
                         Reviews come only from clients on jobs completed
                         through Companies Center — no imported or anonymous
                         ratings.
                       </p>
                     </div>
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
                       <ReviewSection
                         providerId={provider.owner}
                         newReviews={newReviews}
@@ -588,12 +588,12 @@ export default function ProfilePage() {
       {/* ── Mobile sticky bar ──────────────────────────────── */}
       {!isCurrentUser && (
         <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
-          <div className="bg-white/95 backdrop-blur-xl border-t border-gray-100 px-4 py-3">
+          <div className="bg-white/95 backdrop-blur-xl border-t border-gray-100 dark:border-gray-800 px-4 py-3">
             <div className="flex gap-2 max-w-sm mx-auto">
               <button
                 type="button"
                 onClick={handleHire}
-                className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-black rounded-2xl text-sm flex items-center justify-center gap-2 shadow-md shadow-blue-200 active:scale-95 transition-all"
+                className="flex-1 py-3 bg-gradient-to-r from-brand-800 to-brand-900 text-white font-black rounded-2xl text-sm flex items-center justify-center gap-2 shadow-md shadow-brand-200/50 active:scale-95 transition-all"
               >
                 <Briefcase size={14} /> Request Service
               </button>
@@ -601,7 +601,7 @@ export default function ProfilePage() {
                 <a
                   href={`tel:${providerPhone}`}
                   aria-label="Call"
-                  className="w-12 h-12 border-2 border-gray-200 hover:border-blue-300 rounded-2xl flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors"
+                  className="w-12 h-12 border-2 border-gray-200 dark:border-gray-700 hover:border-brand-300 rounded-2xl flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-brand-700 transition-colors"
                 >
                   <Phone size={17} />
                 </a>
@@ -610,7 +610,7 @@ export default function ProfilePage() {
                 type="button"
                 onClick={handleShare}
                 aria-label="Share"
-                className="w-12 h-12 border-2 border-gray-200 hover:border-blue-300 rounded-2xl flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors"
+                className="w-12 h-12 border-2 border-gray-200 dark:border-gray-700 hover:border-brand-300 rounded-2xl flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-brand-700 transition-colors"
               >
                 <Share2 size={17} />
               </button>

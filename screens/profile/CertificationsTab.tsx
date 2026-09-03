@@ -26,13 +26,13 @@ export default function CertificationsTab({
   if (certifications.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-4">
-          <Award size={28} className="text-gray-400" />
+        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center mb-4">
+          <Award size={28} className="text-gray-400 dark:text-gray-500" />
         </div>
-        <h3 className="text-sm font-black text-gray-900 mb-1">
+        <h3 className="text-sm font-black text-gray-900 dark:text-white mb-1">
           No certifications listed
         </h3>
-        <p className="text-xs text-gray-500 max-w-xs leading-relaxed">
+        <p className="text-xs text-gray-500 dark:text-gray-400 max-w-xs leading-relaxed">
           This provider hasn&apos;t added any certifications yet. Check their
           reviews and completed projects to evaluate their work.
         </p>
@@ -45,7 +45,7 @@ export default function CertificationsTab({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between px-1">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           {certifications.length} certification
           {certifications.length === 1 ? "" : "s"}
         </p>
@@ -62,24 +62,24 @@ export default function CertificationsTab({
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: i * 0.1 }}
-          className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow"
+          className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 hover:shadow-md transition-shadow"
         >
           <div className="flex gap-4">
             <div
               className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${
                 cert.verified
-                  ? "bg-gradient-to-br from-blue-500 to-indigo-600 shadow-md shadow-blue-200"
-                  : "bg-gray-100"
+                  ? "bg-gradient-to-br from-brand-700 to-brand-900 shadow-md shadow-brand-200/50"
+                  : "bg-gray-100 dark:bg-gray-800"
               }`}
             >
               <BadgeCheck
                 size={26}
-                className={cert.verified ? "text-white" : "text-gray-400"}
+                className={cert.verified ? "text-white" : "text-gray-400 dark:text-gray-500"}
               />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="text-sm font-black text-gray-900 leading-snug">
+                <h3 className="text-sm font-black text-gray-900 dark:text-white leading-snug">
                   {cert.title}
                 </h3>
                 {cert.verified && (
@@ -88,9 +88,9 @@ export default function CertificationsTab({
                   </span>
                 )}
               </div>
-              <p className="text-xs text-gray-500 mt-0.5">{cert.org}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{cert.org}</p>
               {cert.date && (
-                <span className="text-[11px] text-gray-400 flex items-center gap-1 mt-2.5">
+                <span className="text-[11px] text-gray-400 dark:text-gray-500 flex items-center gap-1 mt-2.5">
                   <Calendar size={10} /> Issued {cert.date}
                 </span>
               )}

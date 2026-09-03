@@ -42,12 +42,12 @@ export default function AboutTab({
   return (
     <div className="space-y-4">
       {/* Bio */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-black text-gray-900">About Me</h2>
+          <h2 className="text-base font-black text-gray-900 dark:text-white">About Me</h2>
           {isCurrentUser && !editingBio && (
             <button type="button" onClick={onBioEdit}
-              className="flex items-center gap-1 text-blue-600 text-sm font-semibold hover:underline">
+              className="flex items-center gap-1 text-brand-700 text-sm font-semibold hover:underline">
               <Edit3 size={13} /> Edit
             </button>
           )}
@@ -60,21 +60,21 @@ export default function AboutTab({
               rows={5}
               aria-label="Bio"
               placeholder="Tell clients about yourself…"
-              className="w-full text-sm text-gray-700 border border-gray-200 rounded-xl p-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 resize-none transition-all"
+              className="w-full text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl p-3 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 resize-none transition-all"
             />
             <div className="flex gap-2 mt-2">
               <button type="button" onClick={onBioSave}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-colors">
+                className="px-4 py-2 bg-brand-900 hover:bg-brand-800 text-white text-sm font-bold rounded-xl transition-colors">
                 Save
               </button>
               <button type="button" onClick={onBioCancel}
-                className="px-4 py-2 border border-gray-200 text-gray-600 text-sm font-semibold rounded-xl hover:bg-gray-50 transition-colors">
+                className="px-4 py-2 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 text-sm font-semibold rounded-xl hover:bg-gray-50 transition-colors">
                 Cancel
               </button>
             </div>
           </div>
         ) : (
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
             {provider.providerDescription || "No bio added yet. Professional service provider ready to help you."}
           </p>
         )}
@@ -82,12 +82,12 @@ export default function AboutTab({
 
       {/* Skills */}
       {(provider.subcategories?.length ?? 0) > 0 && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-base font-black text-gray-900 mb-3">Skills & Expertise</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+          <h2 className="text-base font-black text-gray-900 dark:text-white mb-3">Skills & Expertise</h2>
           <div className="flex flex-wrap gap-2">
             {provider.subcategories.map((sub) => (
               <span key={sub._id}
-                className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-bold rounded-full border border-blue-100 hover:bg-blue-100 transition-colors cursor-default">
+                className="px-3 py-1.5 bg-brand-50 text-brand-800 text-xs font-bold rounded-full border border-brand-100 hover:bg-brand-100 transition-colors cursor-default">
                 {sub.name}
               </span>
             ))}
@@ -96,17 +96,17 @@ export default function AboutTab({
       )}
 
       {/* Experience */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-base font-black text-gray-900 mb-4">Experience</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+        <h2 className="text-base font-black text-gray-900 dark:text-white mb-4">Experience</h2>
         <div className="relative pl-5 space-y-5">
-          <div className="absolute left-1.5 top-2 bottom-2 w-px bg-gray-200" />
+          <div className="absolute left-1.5 top-2 bottom-2 w-px bg-gray-200 dark:bg-gray-700" />
           {TIMELINE.map((item, i) => (
             <div key={i} className="relative">
-              <div className={`absolute -left-4 w-3 h-3 rounded-full border-2 border-white ring-2 ${item.current ? "bg-blue-600 ring-blue-300" : "bg-gray-300 ring-gray-200"}`} />
+              <div className={`absolute -left-4 w-3 h-3 rounded-full border-2 border-white ring-2 ${item.current ? "bg-brand-900 ring-brand-300" : "bg-gray-300 ring-gray-200"}`} />
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-bold text-gray-900">{item.role}</p>
-                  <p className="text-xs text-gray-500">{item.company}</p>
+                  <p className="text-sm font-bold text-gray-900 dark:text-white">{item.role}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{item.company}</p>
                 </div>
                 <div className="flex items-center gap-1.5">
                   {item.current && (
@@ -114,7 +114,7 @@ export default function AboutTab({
                       Current
                     </span>
                   )}
-                  <span className="text-xs text-gray-400">{item.year}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">{item.year}</span>
                 </div>
               </div>
             </div>
@@ -123,30 +123,30 @@ export default function AboutTab({
       </div>
 
       {/* Credentials */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-base font-black text-gray-900 mb-3">Credentials</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+        <h2 className="text-base font-black text-gray-900 dark:text-white mb-3">Credentials</h2>
         <div className="divide-y divide-gray-100">
           {[
             {
               icon: Shield, label: "Verification",
               value: provider.isVerified
                 ? <span className="flex items-center gap-1 text-emerald-600 font-semibold text-xs"><CheckCircle size={12} /> Verified ID</span>
-                : <span className="text-xs text-gray-400">Not verified</span>,
+                : <span className="text-xs text-gray-400 dark:text-gray-500">Not verified</span>,
             },
-            { icon: Globe, label: "Languages", value: <span className="text-xs font-medium text-gray-700">English, Yoruba</span> },
-            { icon: Clock, label: "Working hours", value: <span className="text-xs font-medium text-gray-700">Mon–Sat, 8am–6pm</span> },
+            { icon: Globe, label: "Languages", value: <span className="text-xs font-medium text-gray-700 dark:text-gray-200">English, Yoruba</span> },
+            { icon: Clock, label: "Working hours", value: <span className="text-xs font-medium text-gray-700 dark:text-gray-200">Mon–Sat, 8am–6pm</span> },
             ...(addr?.city ? [{
               icon: MapPin, label: "Location",
-              value: <span className="text-xs font-medium text-gray-700">{[addr.city, addr.country].filter(Boolean).join(", ")}</span>,
+              value: <span className="text-xs font-medium text-gray-700 dark:text-gray-200">{[addr.city, addr.country].filter(Boolean).join(", ")}</span>,
             }] : []),
             ...(sm?.website ? [{
               icon: Globe, label: "Website",
-              value: <a href={sm.website} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 font-semibold hover:underline flex items-center gap-1">Visit <ExternalLink size={10} /></a>,
+              value: <a href={sm.website} target="_blank" rel="noopener noreferrer" className="text-xs text-brand-700 font-semibold hover:underline flex items-center gap-1">Visit <ExternalLink size={10} /></a>,
             }] : []),
           ].map((row, i) => (
             <div key={i} className="flex items-center justify-between py-2.5">
-              <span className="flex items-center gap-2 text-xs text-gray-500">
-                <row.icon size={13} className="text-blue-500" />
+              <span className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                <row.icon size={13} className="text-brand-500" />
                 {row.label}
               </span>
               {row.value}
@@ -156,16 +156,16 @@ export default function AboutTab({
       </div>
 
       {/* FAQ */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-base font-black text-gray-900 mb-3">FAQ</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+        <h2 className="text-base font-black text-gray-900 dark:text-white mb-3">FAQ</h2>
         <div className="space-y-2">
           {FAQS.map((faq, i) => (
-            <div key={i} className="border border-gray-100 rounded-xl overflow-hidden">
+            <div key={i} className="border border-gray-100 dark:border-gray-800 rounded-xl overflow-hidden">
               <button type="button"
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors">
-                <span className="text-sm font-semibold text-gray-800">{faq.q}</span>
-                <ChevronDown size={14} className={`text-gray-400 transition-transform flex-shrink-0 ml-2 ${openFaq === i ? "rotate-180" : ""}`} />
+                <span className="text-sm font-semibold text-gray-800 dark:text-gray-100">{faq.q}</span>
+                <ChevronDown size={14} className={`text-gray-400 dark:text-gray-500 transition-transform flex-shrink-0 ml-2 ${openFaq === i ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence initial={false}>
                 {openFaq === i && (
@@ -176,7 +176,7 @@ export default function AboutTab({
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <p className="px-4 pb-3 text-sm text-gray-500 leading-relaxed">{faq.a}</p>
+                    <p className="px-4 pb-3 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{faq.a}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -187,14 +187,14 @@ export default function AboutTab({
 
       {/* Social links */}
       {sm && Object.values(sm).some(Boolean) && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-base font-black text-gray-900 mb-3">Social Links</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+          <h2 className="text-base font-black text-gray-900 dark:text-white mb-3">Social Links</h2>
           <div className="flex flex-wrap gap-2.5">
             {([
               sm.instagram && { label: "Instagram", url: sm.instagram, bg: "bg-gradient-to-br from-pink-500 to-purple-600" },
               sm.twitter && { label: "Twitter / X", url: sm.twitter, bg: "bg-sky-500" },
-              sm.linkedin && { label: "LinkedIn", url: sm.linkedin, bg: "bg-blue-700" },
-              sm.facebook && { label: "Facebook", url: sm.facebook, bg: "bg-blue-600" },
+              sm.linkedin && { label: "LinkedIn", url: sm.linkedin, bg: "bg-brand-950" },
+              sm.facebook && { label: "Facebook", url: sm.facebook, bg: "bg-brand-900" },
               sm.website && { label: "Website", url: sm.website, bg: "bg-gray-800" },
             ].filter(Boolean) as { label: string; url: string; bg: string }[]).map((item) => (
               <a key={item.label} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={item.label}

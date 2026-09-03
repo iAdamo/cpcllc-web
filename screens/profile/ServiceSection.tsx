@@ -43,12 +43,12 @@ function ServiceCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06 }}
-      className="group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md hover:border-blue-100 transition-all duration-300"
+      className="group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden hover:shadow-md hover:border-brand-100 transition-all duration-300"
     >
       <div className="flex gap-0">
         {/* Thumbnail */}
         {imgSrc && (
-          <div className="relative w-24 sm:w-32 flex-shrink-0 bg-gray-100">
+          <div className="relative w-24 sm:w-32 flex-shrink-0 bg-gray-100 dark:bg-gray-800">
             <Image
               src={imgSrc}
               alt={service.title}
@@ -62,16 +62,16 @@ function ServiceCard({
         <div className="flex-1 p-4 min-w-0">
           <div className="flex-1 min-w-0">
             {service.subcategoryId?.name && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full mb-1 border border-blue-100">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full mb-1 border border-brand-100">
                 <Tag size={8} />
                 {service.subcategoryId.name}
               </span>
             )}
-            <h3 className="text-sm font-black text-gray-900 leading-snug line-clamp-1">
+            <h3 className="text-sm font-black text-gray-900 dark:text-white leading-snug line-clamp-1">
               {service.title}
             </h3>
             <p
-              className={`text-xs text-gray-500 leading-relaxed mt-0.5 ${
+              className={`text-xs text-gray-500 dark:text-gray-400 leading-relaxed mt-0.5 ${
                 expanded ? "" : "line-clamp-2"
               }`}
             >
@@ -81,7 +81,7 @@ function ServiceCard({
               <button
                 type="button"
                 onClick={() => setExpanded(!expanded)}
-                className="text-[11px] text-blue-600 font-semibold mt-0.5 hover:underline"
+                className="text-[11px] text-brand-700 font-semibold mt-0.5 hover:underline"
               >
                 {expanded ? "Show less" : "Read more"}
               </button>
@@ -91,7 +91,7 @@ function ServiceCard({
           {/* Footer */}
           <div className="flex items-center gap-3 mt-2.5 flex-wrap">
             {hasPrice && (
-              <span className="flex items-center gap-1 text-xs font-black text-gray-900">
+              <span className="flex items-center gap-1 text-xs font-black text-gray-900 dark:text-white">
                 <DollarSign size={11} className="text-emerald-500" />
                 {service.minPrice === service.maxPrice
                   ? `$${service.minPrice}`
@@ -99,20 +99,20 @@ function ServiceCard({
               </span>
             )}
             {service.duration > 0 && (
-              <span className="flex items-center gap-1 text-xs text-gray-500 font-medium">
-                <Clock size={11} className="text-blue-400" />~{service.duration}{" "}
+              <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 font-medium">
+                <Clock size={11} className="text-brand-400" />~{service.duration}{" "}
                 day{service.duration !== 1 ? "s" : ""}
               </span>
             )}
             {!service.isActive && (
-              <span className="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
                 Inactive
               </span>
             )}
             <button
               type="button"
               onClick={onBook}
-              className="ml-auto flex items-center gap-1 text-xs font-bold text-blue-600 hover:underline"
+              className="ml-auto flex items-center gap-1 text-xs font-bold text-brand-700 hover:underline"
             >
               Post a task <ChevronRight size={11} />
             </button>
@@ -160,7 +160,7 @@ export default function ServiceSection({
     return (
       <div className="p-6 space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-24 bg-gray-100 rounded-2xl animate-pulse" />
+          <div key={i} className="h-24 bg-gray-100 dark:bg-gray-800 rounded-2xl animate-pulse" />
         ))}
       </div>
     );
@@ -170,7 +170,7 @@ export default function ServiceSection({
     return (
       <div className="p-10 text-center">
         <AlertCircle size={28} className="text-red-400 mx-auto mb-2" />
-        <p className="text-sm text-gray-500 font-semibold">
+        <p className="text-sm text-gray-500 dark:text-gray-400 font-semibold">
           Failed to load services
         </p>
       </div>
@@ -180,13 +180,13 @@ export default function ServiceSection({
   if (services.length === 0) {
     return (
       <div className="p-14 text-center">
-        <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
-          <Package size={22} className="text-blue-400" />
+        <div className="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
+          <Package size={22} className="text-brand-400" />
         </div>
-        <p className="text-sm font-bold text-gray-700">
+        <p className="text-sm font-bold text-gray-700 dark:text-gray-200">
           No services listed yet
         </p>
-        <p className="text-xs text-gray-400 mt-1">
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
           {isCurrentUser
             ? "Add services from the CompaniesCenter app — tap the + button."
             : "Services offered will appear here"}
@@ -198,11 +198,11 @@ export default function ServiceSection({
   return (
     <div className="p-3 space-y-2">
       <div className="flex items-center justify-between px-1 pb-1">
-        <span className="text-xs text-gray-400 font-medium">
+        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">
           {services.length} service{services.length !== 1 ? "s" : ""}
         </span>
         {isCurrentUser && (
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-gray-400 dark:text-gray-500">
             Manage services in the app
           </span>
         )}

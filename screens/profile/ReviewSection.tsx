@@ -91,7 +91,7 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
     >
       <div className="flex gap-3">
         {/* Avatar */}
-        <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+        <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-brand-700 to-brand-900 flex items-center justify-center">
           {avatar ? (
             <Image
               src={avatar}
@@ -108,10 +108,10 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 flex-wrap">
             <div>
-              <p className="text-sm font-bold text-gray-900">{name}</p>
+              <p className="text-sm font-bold text-gray-900 dark:text-white">{name}</p>
               <div className="flex items-center gap-2 mt-0.5">
                 <Stars rating={review.rating} size={11} />
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-gray-400 dark:text-gray-500">
                   {review.createdAt
                     ? new Date(review.createdAt).toLocaleDateString("en-US", {
                         month: "short",
@@ -129,7 +129,7 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
             )}
           </div>
 
-          <p className="text-sm text-gray-600 leading-relaxed mt-2">
+          <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-2">
             {review.description}
           </p>
 
@@ -139,7 +139,7 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
               {review.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100"
+                  className="text-[10px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full border border-brand-100"
                 >
                   {tag}
                 </span>
@@ -151,7 +151,7 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
           <div className="flex items-center gap-3 mt-2.5">
             <button
               type="button"
-              className="flex items-center gap-1 text-xs text-gray-400 hover:text-blue-600 transition-colors"
+              className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 hover:text-brand-700 transition-colors"
             >
               <ThumbsUp size={11} />
               Helpful ({review.helpfulVotes?.length ?? 0})
@@ -160,7 +160,7 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
               <button
                 type="button"
                 onClick={() => setShowReply(!showReply)}
-                className="flex items-center gap-1 text-xs text-gray-400 hover:text-blue-600 transition-colors"
+                className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 hover:text-brand-700 transition-colors"
               >
                 <MessageSquare size={11} />
                 Reply
@@ -184,11 +184,11 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <div className="mt-3 bg-blue-50 border border-blue-100 rounded-xl p-3">
-                  <p className="text-[10px] font-black text-blue-700 mb-1">
+                <div className="mt-3 bg-brand-50 border border-brand-100 rounded-xl p-3">
+                  <p className="text-[10px] font-black text-brand-800 mb-1">
                     Provider replied
                   </p>
-                  <p className="text-xs text-gray-600 leading-relaxed">
+                  <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
                     {review.providerReply}
                   </p>
                 </div>
@@ -255,9 +255,9 @@ export default function ReviewSection({
   return (
     <div>
       {/* Write review CTA */}
-      <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+      <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-black text-gray-900">
+          <p className="text-sm font-black text-gray-900 dark:text-white">
             {allReviews.length} Review{allReviews.length !== 1 ? "s" : ""}
           </p>
           {submitted && (
@@ -269,7 +269,7 @@ export default function ReviewSection({
         <button
           type="button"
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all active:scale-95"
+          className="flex items-center gap-1.5 px-4 py-2 bg-brand-900 hover:bg-brand-800 text-white text-xs font-bold rounded-xl transition-all active:scale-95"
         >
           <Star size={12} />
           {showForm ? "Cancel" : "Write a review"}
@@ -286,15 +286,15 @@ export default function ReviewSection({
             transition={{ duration: 0.22 }}
             className="overflow-hidden"
           >
-            <div className="px-5 py-4 bg-blue-50/60 border-b border-blue-100 space-y-3">
+            <div className="px-5 py-4 bg-brand-50/60 border-b border-brand-100 space-y-3">
               <div>
-                <p className="text-xs font-bold text-gray-700 mb-2">
+                <p className="text-xs font-bold text-gray-700 dark:text-gray-200 mb-2">
                   Your rating
                 </p>
                 <StarPicker value={rating} onChange={setRating} />
               </div>
               <div>
-                <p className="text-xs font-bold text-gray-700 mb-1.5">
+                <p className="text-xs font-bold text-gray-700 dark:text-gray-200 mb-1.5">
                   Your review
                 </p>
                 <textarea
@@ -303,14 +303,14 @@ export default function ReviewSection({
                   rows={3}
                   placeholder="Share your experience with this provider…"
                   aria-label="Review text"
-                  className="w-full text-sm text-gray-700 bg-white border border-gray-200 rounded-xl px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 resize-none transition-all"
+                  className="w-full text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2.5 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 resize-none transition-all"
                 />
               </div>
               <button
                 type="button"
                 onClick={handleSubmit}
                 disabled={!rating || !text.trim() || submitting}
-                className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl transition-all active:scale-95"
+                className="flex items-center gap-2 px-5 py-2.5 bg-brand-900 hover:bg-brand-800 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl transition-all active:scale-95"
               >
                 {submitting ? (
                   <Loader2 size={13} className="animate-spin" />
@@ -329,11 +329,11 @@ export default function ReviewSection({
         <div className="p-6 space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="flex gap-3 animate-pulse">
-              <div className="w-9 h-9 rounded-xl bg-gray-200 flex-shrink-0" />
+              <div className="w-9 h-9 rounded-xl bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
               <div className="flex-1 space-y-2">
-                <div className="h-3 bg-gray-200 rounded w-1/3" />
-                <div className="h-2.5 bg-gray-100 rounded w-full" />
-                <div className="h-2.5 bg-gray-100 rounded w-4/5" />
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/3" />
+                <div className="h-2.5 bg-gray-100 dark:bg-gray-800 rounded w-full" />
+                <div className="h-2.5 bg-gray-100 dark:bg-gray-800 rounded w-4/5" />
               </div>
             </div>
           ))}
@@ -341,15 +341,15 @@ export default function ReviewSection({
       ) : error ? (
         <div className="p-10 text-center">
           <AlertCircle size={24} className="text-red-400 mx-auto mb-2" />
-          <p className="text-sm text-gray-500">Failed to load reviews</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Failed to load reviews</p>
         </div>
       ) : allReviews.length === 0 ? (
         <div className="p-14 text-center">
           <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
             <Star size={22} className="text-amber-400" />
           </div>
-          <p className="text-sm font-bold text-gray-700">No reviews yet</p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-sm font-bold text-gray-700 dark:text-gray-200">No reviews yet</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
             Be the first to leave a review
           </p>
         </div>
