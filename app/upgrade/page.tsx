@@ -14,7 +14,7 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
-import { getCurrentUser } from "@/axios/auth";
+import useGlobalStore from "@/stores";
 import {
   getProviderPlans,
   startCheckout,
@@ -103,27 +103,26 @@ function FaqRow({ q, a }: { q: string; a: string }) {
 
 export default function UpgradePage() {
   const router = useRouter();
+  // Session source of truth is the app store (what the navbar/profile use), not
+  // a /users/profile probe that can 401 on a stray cookie and falsely bounce a
+  // logged-in user to sign-in.
+  const isAuthenticated = useGlobalStore((s) => s.isAuthenticated);
   const [plans, setPlans] = useState<BillingPlan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [authed, setAuthed] = useState(false);
   const [checkingId, setCheckingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Plans are public catalogue data, so render them for everyone. Auth is
-    // only needed at the Subscribe step — no hard redirect that would make the
-    // page look empty when a session is slow or missing.
+    // Plans are public catalogue data — render them for everyone. Auth is only
+    // needed at the Subscribe step.
     (async () => {
-      const [user, list] = await Promise.all([
-        getCurrentUser().catch(() => null),
-        getProviderPlans().catch(() => {
-          setError("Couldn't load plans. Please try again.");
-          return [] as BillingPlan[];
-        }),
-      ]);
-      setAuthed(!!user);
-      setPlans(list);
-      setLoading(false);
+      try {
+        setPlans(await getProviderPlans());
+      } catch {
+        setError("Couldn't load plans. Please try again.");
+      } finally {
+        setLoading(false);
+      }
     })();
   }, []);
 
@@ -135,7 +134,7 @@ export default function UpgradePage() {
   );
 
   const subscribe = async (planId: string) => {
-    if (!authed) {
+    if (!isAuthenticated) {
       router.push("/auth/signin?next=/upgrade");
       return;
     }
