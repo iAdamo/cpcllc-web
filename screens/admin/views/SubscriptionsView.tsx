@@ -31,7 +31,7 @@ const BLANK_PLAN: Plan = {
   description: "",
   audience: "provider",
   priceCents: 0,
-  currency: "NGN",
+  currency: "USD",
   interval: "month",
   features: [],
   isActive: true,
@@ -80,7 +80,7 @@ export function SubscriptionsView() {
         <KpiCard label="Past Due" value={stats?.pastDue ?? "—"} tone="orange" />
         <KpiCard
           label="MRR"
-          value={stats?.mrrCents ? `₦${(stats.mrrCents / 100).toLocaleString()}` : "—"}
+          value={stats?.mrrCents ? `$${(stats.mrrCents / 100).toLocaleString()}` : "—"}
           tone="purple"
         />
       </div>
@@ -216,7 +216,7 @@ function PlanFormModal({
         description: form.description?.trim() || undefined,
         audience: form.audience,
         priceCents: Math.round(parseFloat(priceMajor || "0") * 100),
-        currency: form.currency.trim().toUpperCase(),
+        currency: "USD", // single currency — Paystack charges the NGN equivalent
         interval: form.interval,
         features: featuresText
           .split("\n")
@@ -266,26 +266,24 @@ function PlanFormModal({
           </Field>
 
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Price">
+            <Field label="Price (USD)">
               <input
                 type="number"
                 min={0}
                 step="0.01"
                 value={priceMajor}
                 onChange={(e) => setPriceMajor(e.target.value)}
-                placeholder="5000"
+                placeholder="50.00"
                 className={inputCls}
               />
             </Field>
-            <Field label="Currency">
-              <select
-                value={form.currency}
-                onChange={(e) => set("currency", e.target.value)}
-                className={inputCls}
-              >
-                <option value="NGN">NGN</option>
-                <option value="USD">USD</option>
-              </select>
+            <Field label="Currency" hint="charged via Paystack">
+              <input
+                value="USD"
+                disabled
+                aria-label="Currency"
+                className={`${inputCls} disabled:opacity-70`}
+              />
             </Field>
           </div>
 
