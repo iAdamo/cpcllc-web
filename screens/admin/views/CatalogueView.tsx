@@ -190,7 +190,7 @@ export function CatalogueView() {
       {/* Header */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-300 flex items-center justify-center">
             <Boxes size={20} />
           </div>
           <div>
@@ -205,7 +205,7 @@ export function CatalogueView() {
         </div>
         <button
           onClick={openNewCategory}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium"
         >
           <Plus size={16} /> New category
         </button>
@@ -450,7 +450,7 @@ export function CatalogueView() {
 // ── Small building blocks ───────────────────────────────────────────────────
 
 const inputClass =
-  "w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white outline-none focus:border-blue-500";
+  "w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white outline-none focus:border-brand-500";
 
 function Field({
   label,
@@ -533,7 +533,7 @@ function IconPicker({
               onClick={() => onPick(name)}
               className={`w-8 h-8 rounded-md flex items-center justify-center transition-colors ${
                 selected
-                  ? "ring-2 ring-blue-500 text-white"
+                  ? "ring-2 ring-brand-500 text-white"
                   : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
               }`}
               style={selected ? { backgroundColor: color } : undefined}
@@ -568,7 +568,7 @@ function ModalActions({
       <button
         onClick={onSave}
         disabled={saving}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50"
       >
         {saving && <Loader2 size={15} className="animate-spin" />}
         Save

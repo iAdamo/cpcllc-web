@@ -166,7 +166,7 @@ export default function LocationContact({ onNext, onBack }: Props) {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="hello@yourbusiness.com"
             autoComplete="email"
-            className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm placeholder-gray-300 focus:border-blue-600 focus:outline-none transition-colors"
+            className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm placeholder-gray-300 focus:border-brand-600 focus:outline-none transition-colors"
           />
           {email.length > 0 && !emailValid && (
             <p className="text-xs text-red-500 mt-1">
@@ -179,7 +179,7 @@ export default function LocationContact({ onNext, onBack }: Props) {
         <div>
           <FieldLabel icon={<Phone size={12} />} label="Business Phone" />
           <div className="relative">
-            <div className="flex border-2 border-gray-200 rounded-xl overflow-visible focus-within:border-blue-600 transition-colors">
+            <div className="flex border-2 border-gray-200 rounded-xl overflow-visible focus-within:border-brand-600 transition-colors">
               <button
                 type="button"
                 onClick={() => setShowCountryDrop((v) => !v)}
@@ -216,7 +216,7 @@ export default function LocationContact({ onNext, onBack }: Props) {
                       setShowCountryDrop(false);
                     }}
                     className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0 ${
-                      c.code === selectedCountry ? "bg-blue-50" : ""
+                      c.code === selectedCountry ? "bg-brand-50" : ""
                     }`}
                   >
                     <span className="text-2xl leading-none">{c.flag}</span>
@@ -227,7 +227,7 @@ export default function LocationContact({ onNext, onBack }: Props) {
                       <p className="text-xs text-gray-400">{c.dialCode}</p>
                     </div>
                     {c.code === selectedCountry && (
-                      <Check size={14} className="text-blue-600" />
+                      <Check size={14} className="text-brand-600" />
                     )}
                   </button>
                 ))}
@@ -274,12 +274,12 @@ export default function LocationContact({ onNext, onBack }: Props) {
                   value={addressQuery}
                   onChange={(e) => handleAddressSearch(e.target.value)}
                   placeholder="Search your business address…"
-                  className="w-full border-2 border-gray-200 rounded-xl pl-9 pr-4 py-3 text-gray-900 text-sm placeholder-gray-300 focus:border-blue-600 focus:outline-none transition-colors"
+                  className="w-full border-2 border-gray-200 rounded-xl pl-9 pr-4 py-3 text-gray-900 text-sm placeholder-gray-300 focus:border-brand-600 focus:outline-none transition-colors"
                 />
                 {loadingPlace && (
                   <Loader2
                     size={15}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-500 animate-spin"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-500 animate-spin"
                   />
                 )}
               </div>

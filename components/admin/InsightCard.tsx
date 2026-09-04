@@ -57,10 +57,10 @@ export function InsightCard({
       icon: "text-red-500",
     },
     neutral: {
-      bg: "bg-blue-50",
-      border: "border-blue-200",
-      text: "text-blue-700",
-      icon: "text-blue-500",
+      bg: "bg-brand-50",
+      border: "border-brand-200",
+      text: "text-brand-700",
+      icon: "text-brand-500",
     },
   };
 

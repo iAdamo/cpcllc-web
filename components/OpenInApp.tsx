@@ -5,10 +5,10 @@ import Image from "next/image";
 const OpenInApp = () => {
   return (
     <Center className="md:hidden h-screen">
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex flex-col items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col items-center justify-center p-6">
         <div className="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden p-8 text-center">
           <div className="flex justify-center mb-6">
-            <div className="bg-blue-100 rounded-2xl flex items-center justify-center">
+            <div className="bg-brand-100 rounded-2xl flex items-center justify-center">
               <Image
                 src="/assets/logo-color.svg"
                 alt="Company Logo"
@@ -60,7 +60,7 @@ const OpenInApp = () => {
 
           <p className="text-sm text-gray-500">
             Already have the app?{" "}
-            <button className="text-blue-600 hover:text-blue-800 font-medium">
+            <button className="text-brand-600 hover:text-brand-800 font-medium">
               Open it now
             </button>
           </p>

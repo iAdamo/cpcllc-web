@@ -95,19 +95,19 @@ export default function Gallery({ onNext, onBack }: Props) {
             }}
             className={`w-full border-2 border-dashed rounded-2xl py-10 flex flex-col items-center gap-3 transition-all ${
               dragging
-                ? "border-blue-500 bg-blue-50"
-                : "border-gray-200 bg-gray-50 hover:border-blue-400 hover:bg-blue-50/50"
+                ? "border-brand-500 bg-brand-50"
+                : "border-gray-200 bg-gray-50 hover:border-brand-400 hover:bg-brand-50/50"
             }`}
           >
             <div
               className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors ${
-                dragging ? "bg-blue-100" : "bg-white shadow-sm"
+                dragging ? "bg-brand-100" : "bg-white shadow-sm"
               }`}
             >
               {dragging ? (
-                <Upload size={24} className="text-blue-500" />
+                <Upload size={24} className="text-brand-500" />
               ) : (
-                <ImagePlus size={24} className="text-blue-400" />
+                <ImagePlus size={24} className="text-brand-400" />
               )}
             </div>
             <div className="text-center">
@@ -169,7 +169,7 @@ export default function Gallery({ onNext, onBack }: Props) {
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="aspect-square rounded-xl border-2 border-dashed border-gray-200 hover:border-blue-400 hover:bg-blue-50/40 flex flex-col items-center justify-center gap-1 transition-all text-gray-400 hover:text-blue-500"
+                className="aspect-square rounded-xl border-2 border-dashed border-gray-200 hover:border-brand-400 hover:bg-brand-50/40 flex flex-col items-center justify-center gap-1 transition-all text-gray-400 hover:text-brand-500"
               >
                 <ImagePlus size={18} />
                 <span className="text-[10px] font-semibold">Add more</span>

@@ -59,7 +59,7 @@ export function TimeRangeSelector() {
       <Button
         variant={granularity === "monthly" ? "solid" : "outline"}
         onPress={() => handleGranularityChange("monthly")}
-        className={granularity === "monthly" ? "bg-blue-500" : ""}
+        className={granularity === "monthly" ? "bg-brand-500" : ""}
       >
         <ButtonText className={granularity === "monthly" ? "text-white" : ""}>
           Monthly
@@ -69,7 +69,7 @@ export function TimeRangeSelector() {
       <Button
         variant={granularity === "daily" ? "solid" : "outline"}
         onPress={() => handleGranularityChange("daily")}
-        className={granularity === "daily" ? "bg-blue-500" : ""}
+        className={granularity === "daily" ? "bg-brand-500" : ""}
       >
         <ButtonText className={granularity === "daily" ? "text-white" : ""}>
           Daily

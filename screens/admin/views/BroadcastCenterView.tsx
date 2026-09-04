@@ -397,7 +397,7 @@ function BroadcastBuilder({
               className="w-full h-28 object-cover"
             />
           ) : (
-            <div className="h-2 bg-gradient-to-r from-fuchsia-500 to-indigo-500" />
+            <div className="h-2 bg-gradient-to-r from-fuchsia-500 to-brand-500" />
           )}
           <div className="p-3">
             <p className="text-[10px] font-bold uppercase tracking-wide text-fuchsia-600">

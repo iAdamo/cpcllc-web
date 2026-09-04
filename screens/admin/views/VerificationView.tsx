@@ -133,7 +133,7 @@ export function VerificationView() {
                         href={d.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-slate-50 dark:bg-slate-800 text-blue-600 dark:text-blue-300 hover:underline"
+                        className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-slate-50 dark:bg-slate-800 text-brand-600 dark:text-brand-300 hover:underline"
                       >
                         <FileText size={12} /> {d.type || "document"}
                       </a>

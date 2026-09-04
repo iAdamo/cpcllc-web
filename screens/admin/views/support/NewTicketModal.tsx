@@ -116,14 +116,14 @@ export function NewTicketModal({
               Customer
             </label>
             {requester ? (
-              <div className="mt-1 flex items-center justify-between bg-blue-50 dark:bg-blue-950/30 rounded-lg px-3 py-2">
+              <div className="mt-1 flex items-center justify-between bg-brand-50 dark:bg-brand-950/30 rounded-lg px-3 py-2">
                 <span className="text-sm text-slate-800 dark:text-slate-100">
                   {name(requester)}{" "}
                   <span className="text-slate-400">· {requester.email}</span>
                 </span>
                 <button
                   onClick={() => setRequester(null)}
-                  className="text-xs text-blue-600 font-semibold"
+                  className="text-xs text-brand-600 font-semibold"
                 >
                   Change
                 </button>
@@ -138,7 +138,7 @@ export function NewTicketModal({
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search customer by name or email…"
-                  className="w-full text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 pl-9 pr-3 py-2 focus:outline-none focus:border-blue-400"
+                  className="w-full text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 pl-9 pr-3 py-2 focus:outline-none focus:border-brand-400"
                 />
                 {results.length > 0 && (
                   <div className="absolute z-10 mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg overflow-hidden">
@@ -225,7 +225,7 @@ export function NewTicketModal({
           <button
             onClick={save}
             disabled={!canSave || saving}
-            className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 disabled:opacity-40 flex items-center gap-2"
+            className="px-4 py-2 rounded-lg bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 disabled:opacity-40 flex items-center gap-2"
           >
             {saving && <Loader2 size={14} className="animate-spin" />}
             Create ticket

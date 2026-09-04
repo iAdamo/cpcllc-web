@@ -63,7 +63,7 @@ export function SupportView() {
       {/* Header */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-300 flex items-center justify-center">
             <LifeBuoy size={20} />
           </div>
           <div>
@@ -77,7 +77,7 @@ export function SupportView() {
         </div>
         <button
           onClick={() => setNewOpen(true)}
-          className="flex items-center gap-1.5 text-sm px-3.5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+          className="flex items-center gap-1.5 text-sm px-3.5 py-2 rounded-lg bg-brand-600 text-white hover:bg-brand-700"
         >
           <Plus size={15} /> New ticket
         </button>
@@ -107,7 +107,7 @@ export function SupportView() {
             onClick={() => setScope(s)}
             className={`text-sm px-3.5 py-1.5 rounded-full capitalize ${
               scope === s
-                ? "bg-blue-600 text-white"
+                ? "bg-brand-600 text-white"
                 : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300"
             }`}
           >

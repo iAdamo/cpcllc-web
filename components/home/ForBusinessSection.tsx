@@ -68,7 +68,7 @@ export default function ForBusinessSection() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center justify-center gap-3 px-9 py-4 bg-white hover:bg-blue-50 text-[#162660] font-black text-base rounded-2xl transition-all hover:-translate-y-0.5 shadow-xl group"
+                className="inline-flex items-center justify-center gap-3 px-9 py-4 bg-white hover:bg-brand-50 text-[#162660] font-black text-base rounded-2xl transition-all hover:-translate-y-0.5 shadow-xl group"
               >
                 {t("find_opportunities")}
                 <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />

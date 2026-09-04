@@ -94,7 +94,7 @@ export function AdsView() {
         <button
           onClick={save}
           disabled={saving}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50"
         >
           {saving && <Loader2 size={15} className="animate-spin" />} Save config
         </button>
@@ -140,7 +140,7 @@ function PlatformCard({
               value={units[f.k] ?? ""}
               onChange={(e) => onSet(os, f.k, e.target.value)}
               placeholder={f.ph}
-              className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white outline-none focus:border-blue-500"
+              className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white outline-none focus:border-brand-500"
             />
           </label>
         ))}
@@ -169,7 +169,7 @@ function Toggle({
       <button
         onClick={() => onChange(!value)}
         className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
-          value ? "bg-blue-600" : "bg-slate-300 dark:bg-slate-700"
+          value ? "bg-brand-600" : "bg-slate-300 dark:bg-slate-700"
         }`}
       >
         <span

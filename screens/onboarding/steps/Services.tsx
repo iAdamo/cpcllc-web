@@ -64,7 +64,7 @@ export default function Services({ onNext, onBack }: Props) {
           {selected.map((s) => (
             <span
               key={s._id}
-              className="inline-flex items-center gap-1.5 bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full"
+              className="inline-flex items-center gap-1.5 bg-brand-100 text-brand-700 text-xs font-semibold px-3 py-1 rounded-full"
             >
               {s.name}
               <button
@@ -72,7 +72,7 @@ export default function Services({ onNext, onBack }: Props) {
                 onClick={() =>
                   setSelected((prev) => prev.filter((p) => p._id !== s._id))
                 }
-                className="hover:text-blue-900 transition-colors"
+                className="hover:text-brand-900 transition-colors"
                 aria-label={`Remove ${s.name}`}
               >
                 ×
@@ -92,7 +92,7 @@ export default function Services({ onNext, onBack }: Props) {
       {/* Category list */}
       {isLoading ? (
         <div className="flex items-center justify-center py-16">
-          <Loader2 size={24} className="animate-spin text-blue-500" />
+          <Loader2 size={24} className="animate-spin text-brand-500" />
         </div>
       ) : (
         <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1 no-scrollbar">
@@ -117,7 +117,7 @@ export default function Services({ onNext, onBack }: Props) {
                       {cat.name}
                     </span>
                     {activeSubs.length > 0 && (
-                      <span className="w-5 h-5 bg-blue-600 text-white text-[10px] font-black rounded-full flex items-center justify-center">
+                      <span className="w-5 h-5 bg-brand-600 text-white text-[10px] font-black rounded-full flex items-center justify-center">
                         {activeSubs.length}
                       </span>
                     )}
@@ -153,10 +153,10 @@ export default function Services({ onNext, onBack }: Props) {
                               disabled={atMax}
                               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                                 isActive
-                                  ? "bg-blue-600 text-white shadow-sm shadow-blue-200"
+                                  ? "bg-brand-600 text-white shadow-sm shadow-brand-200"
                                   : atMax
                                   ? "bg-gray-100 text-gray-300 cursor-not-allowed"
-                                  : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300 hover:text-blue-700"
+                                  : "bg-white border border-gray-200 text-gray-600 hover:border-brand-300 hover:text-brand-700"
                               }`}
                             >
                               {isActive && (

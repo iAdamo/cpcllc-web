@@ -110,7 +110,7 @@ export function ReviewModerationView() {
                 setPage(1);
                 setSearch(e.target.value);
               }}
-              className="text-sm border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-3 py-1.5 outline-none focus:border-blue-400"
+              className="text-sm border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-3 py-1.5 outline-none focus:border-brand-400"
             />
             <select
               aria-label="Filter by status"

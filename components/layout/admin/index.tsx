@@ -37,7 +37,7 @@ const SidebarHeader = ({
       />
       {!collapsed && (
         <div className="flex flex-col leading-tight">
-          <span className="text-[10px] uppercase tracking-wider text-blue-600 dark:text-blue-400 font-medium">
+          <span className="text-[10px] uppercase tracking-wider text-brand-600 dark:text-brand-400 font-medium">
             Admin Console
           </span>
         </div>
@@ -76,7 +76,7 @@ const SidebarItem = ({
     "group flex items-center w-full text-left text-sm transition-colors duration-150 rounded-md";
   const sizing = collapsed ? "justify-center px-2 py-2.5" : "px-3 py-2 gap-3";
   const state = active
-    ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-medium"
+    ? "bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 font-medium"
     : danger
       ? "text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
       : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60";
@@ -107,7 +107,7 @@ const SidebarItem = ({
         <span
           className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
             active
-              ? "bg-blue-600 text-white"
+              ? "bg-brand-600 text-white"
               : "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200"
           }`}
         >
@@ -203,7 +203,7 @@ const TopBar = ({
           {item?.label ?? "Dashboard"}
         </h1>
       </div>
-      <div className="flex-1 max-w-xl hidden md:flex items-center bg-slate-50 dark:bg-slate-800/60 rounded-lg px-3 h-9 mx-4 border border-transparent focus-within:border-blue-300">
+      <div className="flex-1 max-w-xl hidden md:flex items-center bg-slate-50 dark:bg-slate-800/60 rounded-lg px-3 h-9 mx-4 border border-transparent focus-within:border-brand-300">
         <Search size={16} className="text-slate-400" />
         <input
           type="text"

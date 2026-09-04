@@ -451,7 +451,7 @@ export default function DashboardView() {
           <div className="space-y-3">
             {(recent?.recentUsers ?? []).slice(0, 5).map((u: any) => (
               <div key={String(u._id)} className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-xs font-semibold flex items-center justify-center">
+                <div className="w-9 h-9 rounded-full bg-brand-100 dark:bg-brand-950/50 text-brand-700 dark:text-brand-300 text-xs font-semibold flex items-center justify-center">
                   {(u.firstName?.[0] ?? "?") + (u.lastName?.[0] ?? "")}
                 </div>
                 <div className="flex-1">

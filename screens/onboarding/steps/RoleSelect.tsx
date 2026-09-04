@@ -26,7 +26,7 @@ const ROLES: {
       "Compare quotes & reviews",
       "Book same-day appointments",
     ],
-    color: "from-blue-500 to-cyan-500",
+    color: "from-brand-500 to-cyan-500",
   },
   {
     id: "Provider",
@@ -38,7 +38,7 @@ const ROLES: {
       "Manage bookings & enquiries",
       "Build your professional profile",
     ],
-    color: "from-violet-500 to-blue-500",
+    color: "from-brand-500 to-brand-500",
   },
 ];
 
@@ -79,15 +79,15 @@ export default function RoleSelect({ onNext, onBack }: Props) {
               onClick={() => setSelected(id)}
               className={`relative text-left p-6 rounded-2xl border-2 transition-all duration-200 group focus:outline-none ${
                 active
-                  ? "border-blue-600 bg-blue-50/50 shadow-lg shadow-blue-100"
-                  : "border-gray-200 bg-white hover:border-blue-300 hover:shadow-md"
+                  ? "border-brand-600 bg-brand-50/50 shadow-lg shadow-brand-100"
+                  : "border-gray-200 bg-white hover:border-brand-300 hover:shadow-md"
               }`}
             >
               {/* Selected check */}
               {active && (
                 <motion.div
                   layoutId="role-check"
-                  className="absolute top-4 right-4 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center"
+                  className="absolute top-4 right-4 w-6 h-6 bg-brand-600 rounded-full flex items-center justify-center"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
@@ -111,7 +111,7 @@ export default function RoleSelect({ onNext, onBack }: Props) {
                   <li key={perk} className="flex items-center gap-2">
                     <span
                       className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                        active ? "bg-blue-500" : "bg-gray-300"
+                        active ? "bg-brand-500" : "bg-gray-300"
                       } transition-colors`}
                     />
                     <span className="text-xs text-gray-500">{perk}</span>

@@ -71,7 +71,7 @@ function Avatar({ variant = "sm" }: { variant?: AvatarVariant }) {
     />
   ) : (
     <div
-      className={`rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white font-black ${cls.wrap}`}
+      className={`rounded-full bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-white font-black ${cls.wrap}`}
     >
       {initials}
     </div>
@@ -152,7 +152,7 @@ export default function ProfileMenu() {
         onClick={() => setOpen((v) => !v)}
         className="flex items-center gap-2 p-1 pr-2 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group"
       >
-        <div className="ring-2 ring-blue-200 dark:ring-blue-800 rounded-full group-hover:ring-blue-400 transition-all">
+        <div className="ring-2 ring-brand-200 dark:ring-brand-800 rounded-full group-hover:ring-brand-400 transition-all">
           <Avatar variant="sm" />
         </div>
         <ChevronDown
@@ -174,7 +174,7 @@ export default function ProfileMenu() {
             className="absolute right-0 top-full mt-2 w-72 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden z-50"
           >
             {/* ── Header ── */}
-            <div className="px-4 pt-4 pb-3 bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/40 dark:to-violet-950/40">
+            <div className="px-4 pt-4 pb-3 bg-gradient-to-br from-brand-50 to-brand-50 dark:from-brand-950/40 dark:to-brand-950/40">
               <div className="flex items-center gap-3">
                 <div className="ring-2 ring-white dark:ring-gray-700 rounded-full shadow-md">
                   <Avatar variant="md" />
@@ -189,8 +189,8 @@ export default function ProfileMenu() {
                   <span
                     className={`inline-flex items-center gap-1 mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       isProvider
-                        ? "bg-violet-100 text-violet-700 dark:bg-violet-900/50 dark:text-violet-300"
-                        : "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                        ? "bg-brand-100 text-brand-700 dark:bg-brand-900/50 dark:text-brand-300"
+                        : "bg-brand-100 text-brand-700 dark:bg-brand-900/50 dark:text-brand-300"
                     }`}
                   >
                     {isProvider ? <Building2 size={9} /> : <User size={9} />}
@@ -210,12 +210,12 @@ export default function ProfileMenu() {
                   onClick={async () => {
                     await handleRoleSwitch(isProvider ? "Client" : "Provider");
                   }}
-                  className="mt-3 w-full flex items-center justify-between px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 hover:border-blue-300 hover:text-blue-700 dark:hover:text-blue-400 transition-all group/sw"
+                  className="mt-3 w-full flex items-center justify-between px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 hover:border-brand-300 hover:text-brand-700 dark:hover:text-brand-400 transition-all group/sw"
                 >
                   <div className="flex items-center gap-2">
                     <ArrowLeftRight
                       size={13}
-                      className="text-gray-400 group-hover/sw:text-blue-500 transition-colors"
+                      className="text-gray-400 group-hover/sw:text-brand-500 transition-colors"
                     />
                     <span>
                       Switch to{" "}
@@ -232,7 +232,7 @@ export default function ProfileMenu() {
                   {hasProviderProfile && (
                     <ChevronRight
                       size={13}
-                      className="text-gray-300 group-hover/sw:text-blue-400 transition-colors"
+                      className="text-gray-300 group-hover/sw:text-brand-400 transition-colors"
                     />
                   )}
                 </button>
@@ -310,11 +310,11 @@ function MenuItem({
     >
       <Icon
         size={15}
-        className="text-gray-400 group-hover:text-blue-500 transition-colors"
+        className="text-gray-400 group-hover:text-brand-500 transition-colors"
       />
       <span className="flex-1 text-left">{label}</span>
       {badge && (
-        <span className="text-[10px] font-bold bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-300 px-2 py-0.5 rounded-full">
+        <span className="text-[10px] font-bold bg-brand-100 text-brand-600 dark:bg-brand-900/50 dark:text-brand-300 px-2 py-0.5 rounded-full">
           {badge}
         </span>
       )}

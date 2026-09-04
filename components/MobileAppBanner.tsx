@@ -61,13 +61,13 @@ export default function MobileAppBanner() {
           <div className="bg-white border-t border-gray-100 shadow-2xl">
             {/* Open in app — page-specific, shown only on relevant routes */}
             {showDeepLink && (
-              <div className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 flex items-center justify-between gap-3">
+              <div className="px-4 py-2.5 bg-gradient-to-r from-brand-600 to-brand-600 flex items-center justify-between gap-3">
                 <p className="text-white text-xs font-semibold truncate">
                   View this page in the app for a better experience
                 </p>
                 <a
                   href={deepLink}
-                  className="flex-shrink-0 flex items-center gap-1.5 bg-white text-blue-700 text-xs font-black px-3 py-1.5 rounded-lg whitespace-nowrap"
+                  className="flex-shrink-0 flex items-center gap-1.5 bg-white text-brand-700 text-xs font-black px-3 py-1.5 rounded-lg whitespace-nowrap"
                 >
                   <ExternalLink size={11} />
                   Open in app

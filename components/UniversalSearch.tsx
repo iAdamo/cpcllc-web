@@ -149,7 +149,7 @@ export function HeroSearch({
         <div className="flex flex-col sm:flex-row">
           {/* What */}
           <div className="flex items-center flex-1 px-5 py-4 border-b sm:border-b-0 sm:border-r border-gray-100">
-            <Search className="text-blue-600 w-5 h-5 mr-3 flex-shrink-0" />
+            <Search className="text-brand-600 w-5 h-5 mr-3 flex-shrink-0" />
             <div className="flex flex-col flex-1 min-w-0">
               <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.15em] mb-0.5">
                 What
@@ -177,7 +177,7 @@ export function HeroSearch({
 
           {/* Where */}
           <div className="flex items-center flex-1 px-5 py-4 border-b sm:border-b-0 border-gray-100">
-            <MapPin className="text-blue-600 w-5 h-5 mr-3 flex-shrink-0" />
+            <MapPin className="text-brand-600 w-5 h-5 mr-3 flex-shrink-0" />
             <div className="flex flex-col flex-1 min-w-0">
               <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.15em] mb-0.5">
                 Where
@@ -206,10 +206,10 @@ export function HeroSearch({
                 type="button"
                 aria-label="Use my location"
                 onClick={useMyLocation}
-                className="text-gray-300 hover:text-blue-500 transition-colors"
+                className="text-gray-300 hover:text-brand-500 transition-colors"
               >
                 {locLoading ? (
-                  <Loader2 size={14} className="animate-spin text-blue-500" />
+                  <Loader2 size={14} className="animate-spin text-brand-500" />
                 ) : (
                   <Navigation size={14} />
                 )}
@@ -222,7 +222,7 @@ export function HeroSearch({
             <button
               type="button"
               onClick={submit}
-              className="w-full sm:w-auto h-full px-7 py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 active:scale-95 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap text-sm shadow-lg shadow-blue-500/30"
+              className="w-full sm:w-auto h-full px-7 py-3.5 bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 active:scale-95 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap text-sm shadow-lg shadow-brand-500/30"
             >
               {isFetching ? (
                 <Loader2 size={15} className="animate-spin" />
@@ -256,8 +256,8 @@ export function HeroSearch({
                 }}
                 className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-left transition-colors"
               >
-                <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <Building2 size={16} className="text-blue-600" />
+                <div className="w-9 h-9 rounded-xl bg-brand-100 flex items-center justify-center flex-shrink-0">
+                  <Building2 size={16} className="text-brand-600" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-gray-900 truncate">
@@ -283,7 +283,7 @@ export function HeroSearch({
                 e.preventDefault();
                 submit();
               }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 border-t border-gray-100 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 border-t border-gray-100 text-sm font-semibold text-brand-600 hover:bg-brand-50 transition-colors"
             >
               <Search size={13} />
               View all results
@@ -381,7 +381,7 @@ export function ProvidersSearch({
         <div className="flex flex-col sm:flex-row">
           {/* What */}
           <div className="flex items-center flex-1 px-5 py-4 border-b sm:border-b-0 sm:border-r border-gray-100">
-            <Search className="text-blue-600 w-5 h-5 mr-3 flex-shrink-0" />
+            <Search className="text-brand-600 w-5 h-5 mr-3 flex-shrink-0" />
             <div className="flex flex-col flex-1 min-w-0">
               <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.15em] mb-0.5">
                 What
@@ -409,7 +409,7 @@ export function ProvidersSearch({
 
           {/* Where */}
           <div className="flex items-center flex-1 px-5 py-4 border-b sm:border-b-0 border-gray-100">
-            <MapPin className="text-blue-600 w-5 h-5 mr-3 flex-shrink-0" />
+            <MapPin className="text-brand-600 w-5 h-5 mr-3 flex-shrink-0" />
             <div className="flex flex-col flex-1 min-w-0">
               <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.15em] mb-0.5">
                 Where
@@ -452,10 +452,10 @@ export function ProvidersSearch({
                 type="button"
                 aria-label="Use my location"
                 onClick={useMyLocation}
-                className="text-gray-300 hover:text-blue-500 transition-colors"
+                className="text-gray-300 hover:text-brand-500 transition-colors"
               >
                 {locLoading ? (
-                  <Loader2 size={14} className="animate-spin text-blue-500" />
+                  <Loader2 size={14} className="animate-spin text-brand-500" />
                 ) : (
                   <Navigation size={14} />
                 )}
@@ -468,7 +468,7 @@ export function ProvidersSearch({
             <button
               type="button"
               onClick={submit}
-              className="w-full sm:w-auto h-full px-7 py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 active:scale-95 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap text-sm shadow-lg shadow-blue-500/30"
+              className="w-full sm:w-auto h-full px-7 py-3.5 bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 active:scale-95 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap text-sm shadow-lg shadow-brand-500/30"
             >
               <Search size={15} />
               Search
@@ -543,9 +543,9 @@ export function JobsSearch() {
   };
 
   return (
-    <div className="flex flex-1 items-center gap-1.5 bg-gray-900 dark:bg-gray-800 border border-gray-700 rounded-2xl px-1 py-1 focus-within:ring-2 focus-within:ring-blue-500/40 transition-all">
+    <div className="flex flex-1 items-center gap-1.5 bg-gray-900 dark:bg-gray-800 border border-gray-700 rounded-2xl px-1 py-1 focus-within:ring-2 focus-within:ring-brand-500/40 transition-all">
       {/* Task indicator pill */}
-      <div className="flex-shrink-0 flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-black px-2.5 py-1.5 rounded-xl">
+      <div className="flex-shrink-0 flex items-center gap-1.5 bg-brand-600 text-white text-[10px] font-black px-2.5 py-1.5 rounded-xl">
         <Briefcase size={11} />
         <span className="hidden sm:inline">Tasks</span>
       </div>
@@ -595,10 +595,10 @@ export function JobsSearch() {
           type="button"
           aria-label="Use my location"
           onClick={useMyLocation}
-          className="text-gray-500 hover:text-blue-400 transition-colors flex-shrink-0"
+          className="text-gray-500 hover:text-brand-400 transition-colors flex-shrink-0"
         >
           {locLoading ? (
-            <Loader2 size={12} className="animate-spin text-blue-400" />
+            <Loader2 size={12} className="animate-spin text-brand-400" />
           ) : (
             <Navigation size={12} />
           )}
@@ -609,7 +609,7 @@ export function JobsSearch() {
       <button
         type="button"
         onClick={submit}
-        className="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold rounded-xl transition-all text-sm"
+        className="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-bold rounded-xl transition-all text-sm"
         aria-label="Search tasks"
       >
         <Search size={13} />

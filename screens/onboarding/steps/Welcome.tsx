@@ -23,11 +23,11 @@ export default function Welcome({ onNext }: { onNext: () => void }) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 overflow-hidden px-6">
+    <div className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-brand-950 to-slate-900 overflow-hidden px-6">
       {/* Background blobs */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-violet-600/15 rounded-full blur-[100px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 w-[600px] h-[300px] bg-blue-900/30 rounded-full blur-[80px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-brand-600/20 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-brand-600/15 rounded-full blur-[100px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 w-[600px] h-[300px] bg-brand-900/30 rounded-full blur-[80px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
 
       {/* Grid overlay */}
       <div
@@ -56,12 +56,12 @@ export default function Welcome({ onNext }: { onNext: () => void }) {
 
           <h1 className="text-5xl sm:text-6xl font-black text-white leading-[1.05] tracking-tight">
             Build your{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand-400 to-brand-400 bg-clip-text text-transparent">
               presence.
             </span>
             <br />
             Find the{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand-400 to-brand-400 bg-clip-text text-transparent">
               best.
             </span>
           </h1>
@@ -84,7 +84,7 @@ export default function Welcome({ onNext }: { onNext: () => void }) {
               key={label}
               className="flex items-center gap-2.5 bg-white/8 border border-white/12 px-4 py-2.5 rounded-xl"
             >
-              <Icon size={14} className="text-blue-400 shrink-0" />
+              <Icon size={14} className="text-brand-400 shrink-0" />
               <span className="text-white/70 text-xs font-medium whitespace-nowrap">
                 {label}
               </span>
@@ -102,7 +102,7 @@ export default function Welcome({ onNext }: { onNext: () => void }) {
           <button
             type="button"
             onClick={handleStart}
-            className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-10 py-4 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-black rounded-2xl text-base transition-all duration-200 shadow-2xl shadow-blue-600/40"
+            className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-10 py-4 bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-black rounded-2xl text-base transition-all duration-200 shadow-2xl shadow-brand-600/40"
           >
             Get Started
             <ArrowRight
@@ -117,7 +117,7 @@ export default function Welcome({ onNext }: { onNext: () => void }) {
               <button
                 type="button"
                 onClick={() => router.push("/login")}
-                className="text-blue-400 hover:text-blue-300 font-semibold underline-offset-2 hover:underline transition-colors"
+                className="text-brand-400 hover:text-brand-300 font-semibold underline-offset-2 hover:underline transition-colors"
               >
                 Sign in
               </button>

@@ -12,11 +12,11 @@ interface KpiCardProps {
 }
 
 const toneMap: Record<NonNullable<KpiCardProps["tone"]>, { bg: string; text: string }> = {
-  blue: { bg: "bg-blue-50 dark:bg-blue-950/40", text: "text-blue-600 dark:text-blue-300" },
+  blue: { bg: "bg-brand-50 dark:bg-brand-950/40", text: "text-brand-600 dark:text-brand-300" },
   green: { bg: "bg-emerald-50 dark:bg-emerald-950/40", text: "text-emerald-600 dark:text-emerald-300" },
   purple: { bg: "bg-purple-50 dark:bg-purple-950/40", text: "text-purple-600 dark:text-purple-300" },
   orange: { bg: "bg-orange-50 dark:bg-orange-950/40", text: "text-orange-600 dark:text-orange-300" },
-  indigo: { bg: "bg-indigo-50 dark:bg-indigo-950/40", text: "text-indigo-600 dark:text-indigo-300" },
+  indigo: { bg: "bg-brand-50 dark:bg-brand-950/40", text: "text-brand-600 dark:text-brand-300" },
   rose: { bg: "bg-rose-50 dark:bg-rose-950/40", text: "text-rose-600 dark:text-rose-300" },
   slate: { bg: "bg-slate-100 dark:bg-slate-800", text: "text-slate-600 dark:text-slate-300" },
 };

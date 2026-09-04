@@ -6,7 +6,7 @@ interface StatusPillProps {
 }
 
 const toneMap: Record<NonNullable<StatusPillProps["tone"]>, string> = {
-  blue: "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300",
+  blue: "bg-brand-50 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300",
   green: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300",
   yellow: "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300",
   rose: "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300",

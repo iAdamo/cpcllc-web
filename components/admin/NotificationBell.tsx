@@ -143,7 +143,7 @@ export function NotificationBell() {
             {unread > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-xs text-blue-600 font-semibold flex items-center gap-1"
+                className="text-xs text-brand-600 font-semibold flex items-center gap-1"
               >
                 <Check size={12} /> Mark all read
               </button>
@@ -160,7 +160,7 @@ export function NotificationBell() {
                   key={n.id}
                   onClick={() => openItem(n)}
                   className={`w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 ${
-                    !n.readAt ? "bg-blue-50/50 dark:bg-blue-950/20" : ""
+                    !n.readAt ? "bg-brand-50/50 dark:bg-brand-950/20" : ""
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">

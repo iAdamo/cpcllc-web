@@ -95,7 +95,7 @@ export default function AiAssistantFab() {
         type="button"
         aria-label="Open AI assistant"
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-5 right-5 z-[60] w-14 h-14 rounded-full bg-gradient-to-br from-blue-600 to-violet-600 text-white shadow-xl shadow-blue-500/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+        className="fixed bottom-5 right-5 z-[60] w-14 h-14 rounded-full bg-gradient-to-br from-brand-600 to-brand-600 text-white shadow-xl shadow-brand-500/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
       >
         {open ? <X size={22} /> : <Sparkles size={22} />}
       </button>
@@ -110,7 +110,7 @@ export default function AiAssistantFab() {
             className="fixed bottom-24 right-5 z-[60] w-[calc(100vw-2.5rem)] max-w-sm h-[32rem] max-h-[70vh] bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white">
+            <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-brand-600 to-brand-600 text-white">
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                 <Sparkles size={16} />
               </div>
@@ -133,7 +133,7 @@ export default function AiAssistantFab() {
                   <div
                     className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-sm whitespace-pre-wrap ${
                       m.role === "user"
-                        ? "bg-blue-600 text-white rounded-br-sm"
+                        ? "bg-brand-600 text-white rounded-br-sm"
                         : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-bl-sm"
                     }`}
                   >
@@ -154,7 +154,7 @@ export default function AiAssistantFab() {
                       key={s}
                       type="button"
                       onClick={() => send(s)}
-                      className="text-[12px] px-2.5 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-blue-400 hover:text-blue-600 transition-colors"
+                      className="text-[12px] px-2.5 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-brand-400 hover:text-brand-600 transition-colors"
                     >
                       {s}
                     </button>
@@ -184,7 +184,7 @@ export default function AiAssistantFab() {
                   aria-label="Send"
                   onClick={() => send(input)}
                   disabled={streaming || !input.trim()}
-                  className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center disabled:opacity-40 hover:bg-blue-700 transition-colors flex-shrink-0"
+                  className="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center disabled:opacity-40 hover:bg-brand-700 transition-colors flex-shrink-0"
                 >
                   {streaming ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
                 </button>

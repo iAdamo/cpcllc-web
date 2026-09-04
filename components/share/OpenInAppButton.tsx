@@ -24,7 +24,7 @@ export function OpenInAppButton({ path }: { path: string }) {
     <button
       type="button"
       onClick={handleClick}
-      className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition"
+      className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition"
     >
       Open in CompaniesCenter app
     </button>

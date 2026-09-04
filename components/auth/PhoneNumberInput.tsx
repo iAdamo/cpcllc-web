@@ -66,7 +66,7 @@ export default function PhoneNumberInput({
   return (
     <div className="space-y-2">
       <div
-        className={`flex overflow-hidden rounded-xl border-2 transition-all outline-none focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-500/20 dark:focus-within:border-blue-500 ${
+        className={`flex overflow-hidden rounded-xl border-2 transition-all outline-none focus-within:border-brand-400 focus-within:ring-2 focus-within:ring-brand-500/20 dark:focus-within:border-brand-500 ${
           touched && error
             ? "border-rose-300 bg-rose-50 dark:border-rose-700 dark:bg-rose-950/20"
             : touched && !error

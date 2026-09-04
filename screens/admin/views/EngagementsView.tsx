@@ -71,7 +71,7 @@ export function EngagementsView() {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-300 flex items-center justify-center">
             <Activity size={20} />
           </div>
           <div>
@@ -118,7 +118,7 @@ export function EngagementsView() {
                 setPage(1);
                 setSearch(e.target.value);
               }}
-              className="text-sm border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-3 py-1.5 outline-none focus:border-blue-400"
+              className="text-sm border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-3 py-1.5 outline-none focus:border-brand-400"
             />
             <select
               aria-label="Filter by stage"
@@ -194,7 +194,7 @@ export function EngagementsView() {
                   <td className="px-5 py-2.5 text-right">
                     <button
                       onClick={() => setOpenId(t._id)}
-                      className="text-xs text-blue-600 dark:text-blue-300 font-medium hover:underline"
+                      className="text-xs text-brand-600 dark:text-brand-300 font-medium hover:underline"
                     >
                       View
                     </button>

@@ -188,7 +188,7 @@ export default function SignUpPage({ onBack }: Props) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 dark:from-slate-950 dark:via-blue-950/20 dark:to-slate-950">
+    <div className="bg-gradient-to-br from-slate-50 via-brand-50 to-slate-50 dark:from-slate-950 dark:via-brand-950/20 dark:to-slate-950">
       {pathname === "/onboarding" && (
         <button
           type="button"
@@ -240,7 +240,7 @@ export default function SignUpPage({ onBack }: Props) {
                       ? "border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950/20"
                       : "border-slate-200 dark:border-slate-700 dark:bg-slate-800"
                   }
-                  focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                  focus:border-brand-400 dark:focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20`}
                   placeholder="you@example.com"
                 />
                 {touched.email && email && validateEmail(email) && (
@@ -316,7 +316,7 @@ export default function SignUpPage({ onBack }: Props) {
                         ? "border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950/20"
                         : "border-slate-200 dark:border-slate-700 dark:bg-slate-800"
                     }
-                    focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                    focus:border-brand-400 dark:focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20`}
                     placeholder="Create a strong password"
                   />
                   <button
@@ -490,7 +490,7 @@ export default function SignUpPage({ onBack }: Props) {
                           ? "border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950/20"
                           : "border-slate-200 dark:border-slate-700 dark:bg-slate-800"
                       }
-                      focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                      focus:border-brand-400 dark:focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20`}
                       placeholder="Confirm your password"
                     />
                     <button
@@ -535,7 +535,7 @@ export default function SignUpPage({ onBack }: Props) {
                 ${
                   loading || !isFormValid
                     ? "bg-slate-300 dark:bg-slate-700 cursor-not-allowed"
-                    : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg shadow-blue-600/30 hover:shadow-blue-600/40 active:scale-95"
+                    : "bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 shadow-lg shadow-brand-600/30 hover:shadow-brand-600/40 active:scale-95"
                 }`}
               >
                 {loading ? (
@@ -553,7 +553,7 @@ export default function SignUpPage({ onBack }: Props) {
                 Already have an account?{" "}
                 <Link
                   href="/auth/signin"
-                  className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                  className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors"
                 >
                   Sign in
                 </Link>

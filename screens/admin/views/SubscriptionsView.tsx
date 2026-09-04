@@ -91,7 +91,7 @@ export function SubscriptionsView() {
             <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Plans</h3>
             <button
               onClick={() => setEditing({ ...BLANK_PLAN })}
-              className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
+              className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
             >
               <Plus size={14} /> New plan
             </button>
@@ -354,7 +354,7 @@ function PlanFormModal({
           <button
             onClick={save}
             disabled={saving || !form.name.trim() || !form.code.trim()}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50"
           >
             {saving && <Loader2 size={15} className="animate-spin" />}
             {isEdit ? "Save changes" : "Create plan"}
@@ -366,7 +366,7 @@ function PlanFormModal({
 }
 
 const inputCls =
-  "w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white outline-none focus:border-blue-500";
+  "w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white outline-none focus:border-brand-500";
 
 function Field({
   label,

@@ -91,12 +91,12 @@ export function RolesView() {
   };
 
   const input =
-    "w-full text-sm rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 focus:outline-none focus:border-indigo-400";
+    "w-full text-sm rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 focus:outline-none focus:border-brand-400";
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-lg bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-300 flex items-center justify-center">
           <UserCog size={20} />
         </div>
         <div>
@@ -113,7 +113,7 @@ export function RolesView() {
       {canCreateAdmin && (
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
         <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-          <UserPlus size={16} className="text-indigo-600" />
+          <UserPlus size={16} className="text-brand-600" />
           <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
             Create admin
           </h3>
@@ -175,7 +175,7 @@ export function RolesView() {
           <button
             type="submit"
             disabled={!canSubmit || saving}
-            className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white"
+            className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 disabled:opacity-40 text-white"
           >
             {saving ? (
               <Loader2 size={15} className="animate-spin" />
@@ -235,7 +235,7 @@ export function RolesView() {
             )}
             {admins.map((a: any) => (
               <div key={a._id} className="px-5 py-3 flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-indigo-100 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 text-xs font-semibold flex items-center justify-center">
+                <div className="w-9 h-9 rounded-full bg-brand-100 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-semibold flex items-center justify-center">
                   {(a.user?.firstName?.[0] ?? "?") + (a.user?.lastName?.[0] ?? "")}
                 </div>
                 <div className="flex-1">

@@ -178,7 +178,7 @@ export function MfaSection() {
           <button
             type="button"
             onClick={startEnrollment}
-            className="h-11 px-6 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+            className="h-11 px-6 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium"
           >
             Enable MFA
           </button>
@@ -252,14 +252,14 @@ export function MfaSection() {
                   type="checkbox"
                   checked={savedRecoveryCodes}
                   onChange={(e) => setSavedRecoveryCodes(e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  className="w-4 h-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
                 />
                 I&apos;ve saved these somewhere safe
               </label>
               <button
                 type="button"
                 onClick={downloadRecoveryCodes}
-                className="inline-flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-300 hover:underline"
+                className="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-300 hover:underline"
               >
                 <Download size={12} /> Download as .txt
               </button>
@@ -288,7 +288,7 @@ export function MfaSection() {
                 onChange={(e) =>
                   setToken(e.target.value.replace(/\D/g, "").slice(0, 6))
                 }
-                className="w-full h-14 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-2xl outline-none focus:border-blue-400 tracking-[0.5em] font-mono text-center"
+                className="w-full h-14 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-2xl outline-none focus:border-brand-400 tracking-[0.5em] font-mono text-center"
                 placeholder="000000"
               />
               <button
@@ -298,7 +298,7 @@ export function MfaSection() {
                   token.length !== 6 ||
                   !savedRecoveryCodes
                 }
-                className="w-full h-11 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-11 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {phase === "confirming" ? "Confirming…" : "Confirm and enable MFA"}
               </button>
@@ -350,7 +350,7 @@ export function MfaSection() {
               onChange={(e) =>
                 setToken(e.target.value.replace(/\D/g, "").slice(0, 6))
               }
-              className="w-full h-12 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-lg outline-none focus:border-blue-400 tracking-[0.4em] font-mono text-center"
+              className="w-full h-12 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-lg outline-none focus:border-brand-400 tracking-[0.4em] font-mono text-center"
               placeholder="000000"
             />
             <button

@@ -45,11 +45,11 @@ export default function MobileGate() {
 
   return (
     <div
-      className="fixed inset-0 z-[9997] flex flex-col items-center justify-center px-6 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-950 dark:to-gray-900"
+      className="fixed inset-0 z-[9997] flex flex-col items-center justify-center px-6 bg-gradient-to-br from-slate-50 to-brand-50 dark:from-gray-950 dark:to-gray-900"
       style={{ pointerEvents: "all" }}
     >
       {/* App icon */}
-      <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-xl mb-6">
+      <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-brand-600 to-brand-600 flex items-center justify-center shadow-xl mb-6">
         <Smartphone size={36} className="text-white" />
       </div>
 

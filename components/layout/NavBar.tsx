@@ -53,7 +53,7 @@ function LocationChip({ transparent = false }: { transparent?: boolean }) {
         className={
           transparent
             ? "text-white/80 flex-shrink-0"
-            : "text-blue-500 flex-shrink-0"
+            : "text-brand-500 flex-shrink-0"
         }
       />
       <span className="truncate">
@@ -97,7 +97,7 @@ function JobsNavSearch() {
   };
 
   return (
-    <div className="flex items-center w-full max-w-md bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full px-4 py-2 gap-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-400 transition-all">
+    <div className="flex items-center w-full max-w-md bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full px-4 py-2 gap-2 focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-brand-400 transition-all">
       <Search size={15} className="text-gray-400 flex-shrink-0" />
       <input
         type="text"
@@ -250,7 +250,7 @@ const NavBar = () => {
                       pathname === href
                         ? transparent
                           ? "!text-white bg-white/10"
-                          : "!text-blue-600 bg-blue-50 dark:!text-blue-400 dark:bg-blue-950"
+                          : "!text-brand-600 bg-brand-50 dark:!text-brand-400 dark:bg-brand-950"
                         : ""
                     }`}
                   >
@@ -343,9 +343,9 @@ const NavBar = () => {
                           setLanguage(lang);
                           setLangOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-blue-50 dark:hover:bg-blue-950 hover:text-blue-600 ${
+                        className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-brand-50 dark:hover:bg-brand-950 hover:text-brand-600 ${
                           language === lang
-                            ? "text-blue-600 font-bold bg-blue-50/50 dark:bg-blue-950/50"
+                            ? "text-brand-600 font-bold bg-brand-50/50 dark:bg-brand-950/50"
                             : "text-gray-700 dark:text-gray-200"
                         }`}
                       >
@@ -365,7 +365,7 @@ const NavBar = () => {
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                   transparent
                     ? "bg-white/15 text-white border border-white/30 hover:bg-white/25"
-                    : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                    : "bg-brand-600 hover:bg-brand-700 text-white shadow-sm"
                 }`}
               >
                 <PlusCircle size={14} />
@@ -397,7 +397,7 @@ const NavBar = () => {
                 <button
                   type="button"
                   onClick={() => router.push("/onboarding")}
-                  className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm hover:shadow-md hover:shadow-blue-500/25 active:scale-95"
+                  className="px-5 py-2.5 bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-700 hover:to-brand-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm hover:shadow-md hover:shadow-brand-500/25 active:scale-95"
                 >
                   {t("getStarted")}
                 </button>
@@ -458,7 +458,7 @@ const NavBar = () => {
                             router.push("/tasks/create");
                             setMobileOpen(false);
                           }}
-                          className="w-full py-3.5 text-center font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl flex items-center justify-center gap-2"
+                          className="w-full py-3.5 text-center font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl flex items-center justify-center gap-2"
                         >
                           <PlusCircle size={16} />
                           Post a Task
@@ -504,7 +504,7 @@ const NavBar = () => {
                           router.push("/onboarding");
                           setMobileOpen(false);
                         }}
-                        className="w-full py-3.5 text-center font-bold text-white bg-gradient-to-r from-blue-600 to-violet-600 rounded-xl"
+                        className="w-full py-3.5 text-center font-bold text-white bg-gradient-to-r from-brand-600 to-brand-600 rounded-xl"
                       >
                         {t("getStarted")}
                       </button>
@@ -536,7 +536,7 @@ const NavBar = () => {
                           onClick={() => setLanguage(lang)}
                           className={`px-4 py-2 text-sm rounded-xl font-semibold transition-colors ${
                             language === lang
-                              ? "bg-blue-600 text-white"
+                              ? "bg-brand-600 text-white"
                               : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
                           }`}
                         >

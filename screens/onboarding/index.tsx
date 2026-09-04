@@ -155,7 +155,7 @@ export default function Onboarding() {
         animate="center"
         exit="exit"
         transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
-        className="w-full h-full bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50"
+        className="w-full h-full bg-gradient-to-br from-slate-50 via-brand-50 to-slate-50"
       >
         {onboardingStep === 0 && <Welcome onNext={goNext} />}
         {onboardingStep === 1 && <RoleSelect onNext={goNext} onBack={goBack} />}
@@ -184,9 +184,9 @@ export default function Onboarding() {
   return (
     <div className="fixed inset-0 z-50 flex overflow-hidden bg-white">
       {/* ── Left brand panel ─────────────────────────────────────────────── */}
-      <aside className="hidden lg:flex w-[38%] flex-shrink-0 flex-col justify-between bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-10 relative overflow-hidden">
-        <div className="absolute -top-32 -left-32 w-80 h-80 bg-blue-600/25 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-violet-600/20 rounded-full blur-[80px] pointer-events-none" />
+      <aside className="hidden lg:flex w-[38%] flex-shrink-0 flex-col justify-between bg-gradient-to-br from-slate-950 via-brand-950 to-slate-900 p-10 relative overflow-hidden">
+        <div className="absolute -top-32 -left-32 w-80 h-80 bg-brand-600/25 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-brand-600/20 rounded-full blur-[80px] pointer-events-none" />
 
         {/* Logo */}
         <button
@@ -194,7 +194,7 @@ export default function Onboarding() {
           onClick={() => router.replace("/")}
           className="relative z-10 text-start text-white font-black text-xl tracking-tight"
         >
-          Companies<span className="text-blue-400">Center</span>
+          Companies<span className="text-brand-400">Center</span>
         </button>
 
         {/* Contextual message */}
@@ -211,7 +211,7 @@ export default function Onboarding() {
               <h2 className="text-[2rem] font-black text-white leading-tight whitespace-pre-line">
                 {lc.headline}
               </h2>
-              <p className="text-blue-200/70 text-sm leading-relaxed max-w-xs">
+              <p className="text-brand-200/70 text-sm leading-relaxed max-w-xs">
                 {lc.sub}
               </p>
               {lc.badge && (
@@ -233,7 +233,7 @@ export default function Onboarding() {
               key={i}
               className={`rounded-full transition-all duration-500 ${
                 i < progCurrent
-                  ? "w-6 h-1.5 bg-blue-400"
+                  ? "w-6 h-1.5 bg-brand-400"
                   : i === progCurrent - 1
                   ? "w-8 h-1.5 bg-white"
                   : "w-1.5 h-1.5 bg-white/25"
@@ -248,7 +248,7 @@ export default function Onboarding() {
         {/* Mobile header */}
         <div className="lg:hidden flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
           <span className="font-black text-lg text-gray-900">
-            Companies<span className="text-blue-600">Center</span>
+            Companies<span className="text-brand-600">Center</span>
           </span>
           {progTotal > 0 && (
             <span className="text-xs font-semibold text-gray-400 tabular-nums">
@@ -261,7 +261,7 @@ export default function Onboarding() {
         {progTotal > 0 && (
           <div className="lg:hidden h-0.5 bg-gray-100 shrink-0">
             <motion.div
-              className="h-full bg-blue-600 origin-left"
+              className="h-full bg-brand-600 origin-left"
               animate={{ scaleX: progCurrent / progTotal }}
               transition={{ duration: 0.4, ease: "easeOut" }}
               style={{ transformOrigin: "left" }}

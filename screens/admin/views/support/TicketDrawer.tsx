@@ -271,7 +271,7 @@ export function TicketDrawer({
                       onClick={() =>
                         runAction(() => assignTicket(ticket._id, meId))
                       }
-                      className="text-xs px-2 py-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 whitespace-nowrap"
+                      className="text-xs px-2 py-1.5 rounded-md bg-brand-600 text-white hover:bg-brand-700 whitespace-nowrap"
                     >
                       Assign to me
                     </button>
@@ -332,7 +332,7 @@ export function TicketDrawer({
                       note
                         ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-200"
                         : mine
-                        ? "bg-blue-600 text-white"
+                        ? "bg-brand-600 text-white"
                         : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100"
                     }`}
                   >
@@ -368,7 +368,7 @@ export function TicketDrawer({
                 onClick={() => setInternal(false)}
                 className={`text-xs px-2.5 py-1 rounded-full ${
                   !internal
-                    ? "bg-blue-600 text-white"
+                    ? "bg-brand-600 text-white"
                     : "bg-slate-100 dark:bg-slate-800 text-slate-500"
                 }`}
               >
@@ -398,12 +398,12 @@ export function TicketDrawer({
                     : "Reply to the customer…"
                 }
                 rows={2}
-                className="flex-1 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 resize-none focus:outline-none focus:border-blue-400"
+                className="flex-1 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 resize-none focus:outline-none focus:border-brand-400"
               />
               <button
                 onClick={doReply}
                 disabled={!reply.trim() || sending}
-                className="w-10 h-10 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white flex items-center justify-center flex-shrink-0"
+                className="w-10 h-10 rounded-lg bg-brand-600 hover:bg-brand-700 disabled:opacity-40 text-white flex items-center justify-center flex-shrink-0"
               >
                 {sending ? (
                   <Loader2 size={16} className="animate-spin" />

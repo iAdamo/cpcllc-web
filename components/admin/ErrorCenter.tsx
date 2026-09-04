@@ -138,7 +138,7 @@ export function ErrorCenter() {
                   setSearch(e.target.value);
                 }}
                 placeholder="Search message, code, endpoint…"
-                className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-800 outline-none focus:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-800 outline-none focus:border-brand-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
               />
             </div>
             <select
@@ -182,7 +182,7 @@ export function ErrorCenter() {
                 <button
                   key={item.errorId}
                   onClick={() => openDetail(item)}
-                  className="flex w-full items-start justify-between gap-3 rounded-lg border border-slate-200 p-3 text-left transition-colors hover:border-blue-300 hover:bg-blue-50/40 dark:border-slate-800 dark:hover:border-blue-800 dark:hover:bg-blue-950/20"
+                  className="flex w-full items-start justify-between gap-3 rounded-lg border border-slate-200 p-3 text-left transition-colors hover:border-brand-300 hover:bg-brand-50/40 dark:border-slate-800 dark:hover:border-brand-800 dark:hover:bg-brand-950/20"
                 >
                   <div className="min-w-0">
                     <div className="truncate text-sm font-medium text-slate-900 dark:text-white">

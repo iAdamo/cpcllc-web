@@ -23,7 +23,7 @@ export const SearchEngine = () => {
       <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden">
         {/* Service input */}
         <div className="flex items-center flex-1 px-5 py-4 border-b md:border-b-0 md:border-r border-gray-100">
-          <SearchIcon className="text-blue-600 w-5 h-5 mr-3 flex-shrink-0" />
+          <SearchIcon className="text-brand-600 w-5 h-5 mr-3 flex-shrink-0" />
           <div className="flex flex-col flex-1 min-w-0">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
               What
@@ -41,7 +41,7 @@ export const SearchEngine = () => {
 
         {/* Location input */}
         <div className="flex items-center flex-1 px-5 py-4 border-b md:border-b-0 border-gray-100">
-          <MapPinIcon className="text-blue-600 w-5 h-5 mr-3 flex-shrink-0" />
+          <MapPinIcon className="text-brand-600 w-5 h-5 mr-3 flex-shrink-0" />
           <div className="flex flex-col flex-1 min-w-0">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
               Where
@@ -62,7 +62,7 @@ export const SearchEngine = () => {
           <button
             onClick={handleSearch}
             type="button"
-            className="w-full md:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap"
+            className="w-full md:w-auto px-8 py-3 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap"
           >
             <SearchIcon className="w-4 h-4" />
             <span>Search</span>
@@ -112,7 +112,7 @@ export const MSearchEngine = () => {
       <button
         type="button"
         onClick={() => router.push(`/providers?q=${encodeURIComponent(query)}`)}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 font-semibold transition-colors"
+        className="bg-brand-600 hover:bg-brand-700 text-white px-5 py-3 font-semibold transition-colors"
       >
         Go
       </button>

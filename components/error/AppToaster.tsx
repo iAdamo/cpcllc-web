@@ -23,8 +23,8 @@ const VARIANT_STYLES: Record<
     icon: "M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z",
   },
   info: {
-    bar: "bg-blue-500",
-    ring: "ring-blue-500/20",
+    bar: "bg-brand-500",
+    ring: "ring-brand-500/20",
     icon: "M12 16v-4m0-4h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0z",
   },
 };
@@ -72,7 +72,7 @@ function ToastRow({ toast }: { toast: Toast }) {
                 toast.action?.onPress();
                 dismiss(toast.id);
               }}
-              className="mt-2 text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
+              className="mt-2 text-sm font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400"
             >
               {toast.action.label}
             </button>

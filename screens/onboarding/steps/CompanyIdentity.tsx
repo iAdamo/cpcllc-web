@@ -55,7 +55,7 @@ export default function CompanyIdentity({ onNext, onBack }: Props) {
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
-            className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-100 to-violet-100 border-2 border-white shadow-lg ring-2 ring-blue-200 hover:ring-blue-400 transition-all group overflow-hidden shrink-0"
+            className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-100 to-brand-100 border-2 border-white shadow-lg ring-2 ring-brand-200 hover:ring-brand-400 transition-all group overflow-hidden shrink-0"
           >
             {logoPreview ? (
               <Image
@@ -68,7 +68,7 @@ export default function CompanyIdentity({ onNext, onBack }: Props) {
             ) : (
               <Building2
                 size={28}
-                className="absolute inset-0 m-auto text-blue-400"
+                className="absolute inset-0 m-auto text-brand-400"
               />
             )}
             <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
@@ -83,7 +83,7 @@ export default function CompanyIdentity({ onNext, onBack }: Props) {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="mt-2 text-xs font-semibold text-blue-600 hover:underline"
+              className="mt-2 text-xs font-semibold text-brand-600 hover:underline"
             >
               {logoPreview ? "Change logo" : "Upload logo"}
             </button>
@@ -121,9 +121,9 @@ export default function CompanyIdentity({ onNext, onBack }: Props) {
             placeholder="Tell clients what makes your business great, your experience, and what sets you apart…"
             rows={4}
             maxLength={500}
-            className="w-full resize-none border-2 border-gray-200 rounded-xl bg-transparent px-4 pt-8 pb-3 text-gray-900 text-sm placeholder-gray-300 focus:border-blue-600 focus:outline-none transition-colors"
+            className="w-full resize-none border-2 border-gray-200 rounded-xl bg-transparent px-4 pt-8 pb-3 text-gray-900 text-sm placeholder-gray-300 focus:border-brand-600 focus:outline-none transition-colors"
           />
-          <label className="absolute top-2.5 left-4 text-[10px] font-bold uppercase tracking-widest text-blue-600">
+          <label className="absolute top-2.5 left-4 text-[10px] font-bold uppercase tracking-widest text-brand-600">
             Description *
           </label>
           <span className="absolute bottom-3 right-4 text-[10px] text-gray-300 tabular-nums">
@@ -154,14 +154,14 @@ function FloatInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="peer w-full border-b-2 border-gray-200 bg-transparent pt-5 pb-2 text-gray-900 font-semibold text-sm placeholder-gray-300 focus:border-blue-600 focus:outline-none transition-colors"
+        className="peer w-full border-b-2 border-gray-200 bg-transparent pt-5 pb-2 text-gray-900 font-semibold text-sm placeholder-gray-300 focus:border-brand-600 focus:outline-none transition-colors"
       />
       <label
         className={`absolute left-0 text-xs font-bold uppercase tracking-wider transition-all duration-200 pointer-events-none ${
           hasValue
-            ? "top-0 text-blue-600"
+            ? "top-0 text-brand-600"
             : "top-12 text-gray-400 text-sm normal-case tracking-normal font-normal"
-        } peer-focus:top-0 peer-focus:text-blue-600 peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider`}
+        } peer-focus:top-0 peer-focus:text-brand-600 peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider`}
       >
         {label}
       </label>

@@ -90,7 +90,7 @@ const Footer = () => {
                   key={alt}
                   href={href}
                   aria-label={alt}
-                  className="w-9 h-9 bg-white/8 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-colors border border-white/10 hover:border-blue-600"
+                  className="w-9 h-9 bg-white/8 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors border border-white/10 hover:border-brand-600"
                 >
                   <Image
                     src={icon}

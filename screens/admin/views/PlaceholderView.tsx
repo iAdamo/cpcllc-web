@@ -15,7 +15,7 @@ export function PlaceholderView({ title, description, icon: Icon, features }: Pl
     <div className="space-y-6">
       <div className="flex items-start gap-3">
         {Icon && (
-          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-300 flex items-center justify-center">
             <Icon size={20} />
           </div>
         )}
@@ -33,7 +33,7 @@ export function PlaceholderView({ title, description, icon: Icon, features }: Pl
           <div className="max-w-md mx-auto text-left mt-6 space-y-2">
             {features.map((f) => (
               <div key={f} className="flex items-start gap-2 text-sm">
-                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-blue-500" />
+                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-brand-500" />
                 <span className="text-slate-600 dark:text-slate-300">{f}</span>
               </div>
             ))}

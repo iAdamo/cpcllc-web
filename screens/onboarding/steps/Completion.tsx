@@ -51,10 +51,10 @@ export default function Completion() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-950 via-brand-950 to-slate-900 overflow-hidden">
       {/* Blobs */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-violet-600/15 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-brand-600/15 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="relative z-10 flex flex-col items-center px-6 text-center max-w-md w-full">
         {/* Loading state */}
@@ -66,13 +66,13 @@ export default function Completion() {
             className="flex flex-col items-center gap-6"
           >
             <div className="w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-              <Loader2 size={32} className="text-blue-400 animate-spin" />
+              <Loader2 size={32} className="text-brand-400 animate-spin" />
             </div>
             <div>
               <p className="text-white font-black text-2xl mb-2">
                 Setting everything up…
               </p>
-              <p className="text-blue-200/60 text-sm">
+              <p className="text-brand-200/60 text-sm">
                 Creating your profile, just a moment.
               </p>
             </div>
@@ -129,11 +129,11 @@ export default function Completion() {
               </p>
               <h1 className="text-4xl font-black text-white leading-tight mb-3">
                 Welcome,{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-brand-400 to-brand-400 bg-clip-text text-transparent">
                   {name}!
                 </span>
               </h1>
-              <p className="text-blue-200/70 text-sm leading-relaxed">
+              <p className="text-brand-200/70 text-sm leading-relaxed">
                 {isProvider
                   ? "Your provider profile is live. Clients in your area can now find and book you."
                   : "Your account is all set. Browse verified professionals and book your first service."}
@@ -163,7 +163,7 @@ export default function Completion() {
                   key={item}
                   className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3"
                 >
-                  <Sparkles size={14} className="text-blue-400 shrink-0" />
+                  <Sparkles size={14} className="text-brand-400 shrink-0" />
                   <span className="text-sm text-white/80 font-medium">
                     {item}
                   </span>
@@ -200,7 +200,7 @@ export default function Completion() {
               <p className="text-white font-black text-2xl mb-2">
                 Something went wrong
               </p>
-              <p className="text-blue-200/60 text-sm">
+              <p className="text-brand-200/60 text-sm">
                 {error ?? "We couldn't save your profile. Please try again."}
               </p>
             </div>
