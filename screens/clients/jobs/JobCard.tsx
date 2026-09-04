@@ -83,7 +83,7 @@ export default function JobCard({
       onClick={() => onSelect(job)}
       className={`group relative bg-white dark:bg-gray-900 rounded-xl border cursor-pointer transition-all duration-150 overflow-hidden ${
         isSelected
-          ? "border-blue-500 shadow-md shadow-blue-500/10 ring-1 ring-blue-500/20"
+          ? "border-brand-500 shadow-md shadow-brand-500/10 ring-1 ring-brand-500/20"
           : "border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 hover:shadow-sm"
       }`}
     >
@@ -106,10 +106,10 @@ export default function JobCard({
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/40 dark:to-violet-950/40">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-brand-50 to-brand-50 dark:from-brand-950/40 dark:to-brand-950/40">
               <Briefcase
                 size={22}
-                className="text-blue-300 dark:text-blue-700"
+                className="text-brand-300 dark:text-brand-700"
               />
             </div>
           )}
@@ -120,7 +120,7 @@ export default function JobCard({
           {/* Row 1: badges + save */}
           <div className="flex items-center gap-1.5 mb-1">
             {job.subcategoryId?.name && (
-              <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 px-2 py-0.5 rounded-full truncate max-w-[100px]">
+              <span className="text-[10px] font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/50 px-2 py-0.5 rounded-full truncate max-w-[100px]">
                 {job.subcategoryId.name}
               </span>
             )}
@@ -133,7 +133,7 @@ export default function JobCard({
               </span>
             )}
             {job.status === "In Progress" && (
-              <span className="text-[10px] font-bold bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 px-2 py-0.5 rounded-full flex-shrink-0">
+              <span className="text-[10px] font-bold bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 px-2 py-0.5 rounded-full flex-shrink-0">
                 In Progress
               </span>
             )}
@@ -146,7 +146,7 @@ export default function JobCard({
               }}
               className={`ml-auto flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg transition-all ${
                 isSaved
-                  ? "text-blue-600 dark:text-blue-400"
+                  ? "text-brand-600 dark:text-brand-400"
                   : "text-gray-300 dark:text-gray-600 hover:text-gray-500 dark:hover:text-gray-400"
               }`}
             >
@@ -155,7 +155,7 @@ export default function JobCard({
           </div>
 
           {/* Row 2: title */}
-          <h3 className="font-bold text-gray-900 dark:text-white text-[13px] leading-snug line-clamp-1 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors mb-0.5">
+          <h3 className="font-bold text-gray-900 dark:text-white text-[13px] leading-snug line-clamp-1 group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors mb-0.5">
             {job.title}
           </h3>
 
@@ -202,7 +202,7 @@ export default function JobCard({
                   className="w-4 h-4 rounded-full object-cover"
                 />
               ) : (
-                <div className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-[7px] text-white font-black">
+                <div className="w-4 h-4 rounded-full bg-gradient-to-br from-brand-400 to-brand-500 flex items-center justify-center text-[7px] text-white font-black">
                   {clientName.charAt(0)}
                 </div>
               )}
@@ -224,7 +224,7 @@ export default function JobCard({
                   ? "bg-green-50 dark:bg-green-950/30 text-green-600 dark:text-green-400 cursor-default"
                   : !canApply
                   ? "bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm active:scale-95"
+                  : "bg-brand-600 hover:bg-brand-700 text-white shadow-sm active:scale-95"
               }`}
             >
               {hasApplied ? "Applied" : "Apply"}

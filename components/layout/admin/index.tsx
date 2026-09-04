@@ -137,7 +137,7 @@ const Sidebar = ({
     }`}
   >
     <SidebarHeader collapsed={collapsed} toggle={toggle} />
-    <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-4 scrollbar-thin">
+    <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-4 scrollbar-none">
       {SIDEBAR_GROUPS.map((group) => (
         <div key={group.title}>
           {!collapsed && (

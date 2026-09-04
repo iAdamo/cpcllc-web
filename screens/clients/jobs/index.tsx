@@ -230,7 +230,7 @@ export default function JobsPage() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
+        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto scrollbar-none">
           {NAV.map(({ id, label, icon: Icon }) => {
             const badge =
               id === "proposals"
@@ -249,7 +249,7 @@ export default function JobsPage() {
                 }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                   active
-                    ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400"
+                    ? "bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-400"
                     : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
                 }`}
               >
@@ -257,7 +257,7 @@ export default function JobsPage() {
                   size={16}
                   className={
                     active
-                      ? "text-blue-600 dark:text-blue-400"
+                      ? "text-brand-600 dark:text-brand-400"
                       : "text-gray-400"
                   }
                 />
@@ -266,7 +266,7 @@ export default function JobsPage() {
                   <span
                     className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
                       active
-                        ? "bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-400"
+                        ? "bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-400"
                         : "bg-gray-100 dark:bg-gray-800 text-gray-500"
                     }`}
                   >
@@ -280,12 +280,12 @@ export default function JobsPage() {
 
         {/* Upgrade card */}
         <div className="p-3 shrink-0">
-          <div className="bg-gradient-to-br from-blue-600 to-violet-600 rounded-2xl p-4 text-white">
+          <div className="bg-gradient-to-br from-brand-600 to-brand-600 rounded-2xl p-4 text-white">
             <div className="flex items-center gap-2 mb-2">
               <Zap size={13} className="text-yellow-300" />
               <span className="text-xs font-black">Upgrade to Pro</span>
             </div>
-            <p className="text-[11px] text-blue-100/80 leading-relaxed mb-3">
+            <p className="text-[11px] text-brand-100/80 leading-relaxed mb-3">
               Early task access, proposal templates & detailed analytics.
             </p>
             <button
@@ -318,7 +318,7 @@ export default function JobsPage() {
                 onClick={() => setShowFilters((v) => !v)}
                 className={`flex-shrink-0 flex gap-1.5 px-3 py-2 text-sm font-semibold rounded-xl border transition-all ${
                   showFilters
-                    ? "bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400"
+                    ? "bg-brand-50 dark:bg-brand-950/40 border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-400"
                     : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
@@ -334,7 +334,7 @@ export default function JobsPage() {
                     onClick={() => setViewMode(m)}
                     className={`w-9 h-9 flex items-center justify-center transition-colors ${
                       viewMode === m
-                        ? "bg-blue-50 dark:bg-blue-950/40 text-blue-600"
+                        ? "bg-brand-50 dark:bg-brand-950/40 text-brand-600"
                         : "text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                     }`}
                     aria-label={m === "list" ? "List view" : "Grid view"}
@@ -365,7 +365,7 @@ export default function JobsPage() {
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
                       title="Sort by"
-                      className="text-xs font-semibold bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-2.5 py-2 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="text-xs font-semibold bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-2.5 py-2 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-brand-500"
                     >
                       {SORT_OPTIONS.map((o) => (
                         <option key={o}>{o}</option>
@@ -384,7 +384,7 @@ export default function JobsPage() {
                           onClick={() => setUrgencyFilter(u)}
                           className={`text-[11px] font-bold px-2.5 py-1.5 rounded-lg transition-all ${
                             urgencyFilter === u
-                              ? "bg-blue-600 text-white"
+                              ? "bg-brand-600 text-white"
                               : "bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700"
                           }`}
                         >
@@ -405,7 +405,7 @@ export default function JobsPage() {
               onClick={() => setActiveCategory("")}
               className={`flex-shrink-0 text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
                 activeCategory === ""
-                  ? "bg-blue-600 text-white shadow-sm"
+                  ? "bg-brand-600 text-white shadow-sm"
                   : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
               }`}
             >
@@ -420,7 +420,7 @@ export default function JobsPage() {
                 }
                 className={`flex-shrink-0 text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
                   activeCategory === cat.name
-                    ? "bg-blue-600 text-white shadow-sm"
+                    ? "bg-brand-600 text-white shadow-sm"
                     : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
                 }`}
               >
@@ -453,7 +453,7 @@ export default function JobsPage() {
                 <StatCard
                   label="Proposals Sent"
                   value={myProposals.length}
-                  color="bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-400"
+                  color="bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-400"
                 />
                 <StatCard
                   label="Saved Tasks"
@@ -463,7 +463,7 @@ export default function JobsPage() {
                 <StatCard
                   label="Proposals Viewed"
                   value={myProposals.filter((p) => p.viewedByClient).length}
-                  color="bg-violet-50 dark:bg-violet-950/30 text-violet-700 dark:text-violet-400"
+                  color="bg-brand-50 dark:bg-brand-950/30 text-brand-700 dark:text-brand-400"
                 />
                 <StatCard
                   label="Tasks Available"
@@ -553,9 +553,9 @@ export default function JobsPage() {
           <div ref={sentinelRef} className="py-4 flex justify-center">
             {(isSearching || isLoadingMore) && (
               <div className="flex gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce [animation-delay:0ms]" />
-                <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce [animation-delay:150ms]" />
-                <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce [animation-delay:300ms]" />
+                <div className="w-2 h-2 rounded-full bg-brand-400 animate-bounce [animation-delay:0ms]" />
+                <div className="w-2 h-2 rounded-full bg-brand-400 animate-bounce [animation-delay:150ms]" />
+                <div className="w-2 h-2 rounded-full bg-brand-400 animate-bounce [animation-delay:300ms]" />
               </div>
             )}
             {!hasMore &&
@@ -570,7 +570,7 @@ export default function JobsPage() {
       </div>
 
       {/* ── Right sidebar (desktop only) ─────────────────────── */}
-      <aside className="hidden xl:flex fixed right-0 top-20 bottom-0 w-80 bg-white dark:bg-gray-900 border-l border-gray-100 dark:border-gray-800 flex-col z-10 overflow-y-auto">
+      <aside className="hidden xl:flex fixed right-0 top-20 bottom-0 w-80 bg-white dark:bg-gray-900 border-l border-gray-100 dark:border-gray-800 flex-col z-10 overflow-y-auto scrollbar-none">
         {selectedJob ? null : (
           <div className="p-4 space-y-5">
             {/* Stats */}
@@ -579,11 +579,11 @@ export default function JobsPage() {
                 Your Stats
               </h3>
               <div className="grid grid-cols-2 gap-2">
-                <div className="bg-blue-50 dark:bg-blue-950/30 rounded-2xl p-3.5">
-                  <p className="text-2xl font-black text-blue-700 dark:text-blue-400">
+                <div className="bg-brand-50 dark:bg-brand-950/30 rounded-2xl p-3.5">
+                  <p className="text-2xl font-black text-brand-700 dark:text-brand-400">
                     {myProposals.length}
                   </p>
-                  <p className="text-[11px] text-blue-500 font-semibold mt-0.5">
+                  <p className="text-[11px] text-brand-500 font-semibold mt-0.5">
                     Proposals
                   </p>
                 </div>
@@ -595,11 +595,11 @@ export default function JobsPage() {
                     Saved
                   </p>
                 </div>
-                <div className="bg-violet-50 dark:bg-violet-950/30 rounded-2xl p-3.5">
-                  <p className="text-2xl font-black text-violet-700 dark:text-violet-400">
+                <div className="bg-brand-50 dark:bg-brand-950/30 rounded-2xl p-3.5">
+                  <p className="text-2xl font-black text-brand-700 dark:text-brand-400">
                     {myProposals.filter((p) => p.viewedByClient).length}
                   </p>
-                  <p className="text-[11px] text-violet-500 font-semibold mt-0.5">
+                  <p className="text-[11px] text-brand-500 font-semibold mt-0.5">
                     Viewed
                   </p>
                 </div>
@@ -624,7 +624,7 @@ export default function JobsPage() {
                   <button
                     type="button"
                     onClick={() => setActiveView("proposals")}
-                    className="text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                    className="text-[10px] font-bold text-brand-600 dark:text-brand-400 hover:underline"
                   >
                     View all
                   </button>
@@ -635,10 +635,10 @@ export default function JobsPage() {
                       key={p._id}
                       className="flex items-center gap-2.5 p-2.5 bg-gray-50 dark:bg-gray-800 rounded-xl"
                     >
-                      <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center flex-shrink-0">
+                      <div className="w-8 h-8 rounded-xl bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center flex-shrink-0">
                         <Send
                           size={13}
-                          className="text-blue-600 dark:text-blue-400"
+                          className="text-brand-600 dark:text-brand-400"
                         />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -677,10 +677,10 @@ export default function JobsPage() {
                       }}
                       className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
                     >
-                      <span className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-100 to-violet-100 dark:from-blue-900/40 dark:to-violet-900/40 flex items-center justify-center text-[11px] font-black text-blue-700 dark:text-blue-400 flex-shrink-0">
+                      <span className="w-6 h-6 rounded-lg bg-gradient-to-br from-brand-100 to-brand-100 dark:from-brand-900/40 dark:to-brand-900/40 flex items-center justify-center text-[11px] font-black text-brand-700 dark:text-brand-400 flex-shrink-0">
                         {i + 1}
                       </span>
-                      <span className="flex-1 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 group-hover:text-blue-700 dark:group-hover:text-blue-400 truncate transition-colors">
+                      <span className="flex-1 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 group-hover:text-brand-700 dark:group-hover:text-brand-400 truncate transition-colors">
                         {cat.name}
                       </span>
                       <ChevronRight
@@ -694,12 +694,12 @@ export default function JobsPage() {
             )}
 
             {/* Pro tip */}
-            <div className="bg-gradient-to-br from-slate-900 to-blue-950 rounded-2xl p-4 text-white">
+            <div className="bg-gradient-to-br from-slate-900 to-brand-950 rounded-2xl p-4 text-white">
               <div className="flex items-center gap-2 mb-2">
                 <Star size={13} className="text-yellow-400" />
                 <span className="text-xs font-black">Pro Tip</span>
               </div>
-              <p className="text-[11px] text-blue-200/80 leading-relaxed">
+              <p className="text-[11px] text-brand-200/80 leading-relaxed">
                 Proposals with a clear cover letter and competitive price
                 receive 3× more responses.
               </p>
@@ -707,7 +707,7 @@ export default function JobsPage() {
 
             {/* Trending indicator */}
             <div className="flex items-center gap-2 px-1">
-              <TrendingUp size={13} className="text-blue-500" />
+              <TrendingUp size={13} className="text-brand-500" />
               <p className="text-[11px] text-gray-500 dark:text-gray-400">
                 <span className="font-bold text-gray-700 dark:text-gray-300">
                   Technology & IT

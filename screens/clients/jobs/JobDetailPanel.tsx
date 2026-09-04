@@ -46,7 +46,7 @@ const STATUS_BADGE: Record<string, string> = {
   Active:
     "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   "In Progress":
-    "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+    "bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400",
   Completed: "bg-gray-100 text-gray-500 dark:bg-gray-800",
   Cancelled: "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400",
   Expired:
@@ -135,7 +135,7 @@ export default function JobDetailPanel({
                 onClick={() => setSavedJobs(job)}
                 className={`w-8 h-8 flex items-center justify-center rounded-xl transition-all ${
                   isSaved
-                    ? "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400"
+                    ? "bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400"
                     : "text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
@@ -144,7 +144,7 @@ export default function JobDetailPanel({
             </div>
 
             {/* Scrollable body */}
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto scrollbar-none">
               {/* Cover image */}
               {allImages[0] && (
                 <div className="relative aspect-video w-full overflow-hidden">
@@ -173,7 +173,7 @@ export default function JobDetailPanel({
                 {/* Category + title */}
                 <div>
                   {job.subcategoryId?.name && (
-                    <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider">
                       {job.subcategoryId.name}
                     </span>
                   )}
@@ -184,11 +184,11 @@ export default function JobDetailPanel({
 
                 {/* Stats grid */}
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="bg-blue-50 dark:bg-blue-950/30 rounded-2xl p-3 text-center">
-                    <p className="text-lg font-black text-blue-700 dark:text-blue-400 leading-none">
+                  <div className="bg-brand-50 dark:bg-brand-950/30 rounded-2xl p-3 text-center">
+                    <p className="text-lg font-black text-brand-700 dark:text-brand-400 leading-none">
                       {formatBudget(job.budget)}
                     </p>
-                    <p className="text-[10px] text-blue-500 mt-1 font-semibold">
+                    <p className="text-[10px] text-brand-500 mt-1 font-semibold">
                       {job.negotiable ? "Negotiable" : "Fixed"}
                     </p>
                   </div>
@@ -236,7 +236,7 @@ export default function JobDetailPanel({
                     {job.status}
                   </span>
                   {job.visibility !== "Public" && (
-                    <span className="flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
+                    <span className="flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400">
                       <Shield size={10} />
                       {job.visibility}
                     </span>
@@ -281,7 +281,7 @@ export default function JobDetailPanel({
                       className="rounded-full object-cover flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-[13px] text-white font-black flex-shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-brand-500 flex items-center justify-center text-[13px] text-white font-black flex-shrink-0">
                       {clientName.charAt(0)}
                     </div>
                   )}
@@ -334,7 +334,7 @@ export default function JobDetailPanel({
                     ? "bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed"
                     : job.status !== "Active"
                     ? "bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white shadow-md shadow-blue-500/25"
+                    : "bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white shadow-md shadow-brand-500/25"
                 }`}
               >
                 {hasApplied ? (

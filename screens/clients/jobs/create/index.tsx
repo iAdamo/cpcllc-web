@@ -92,7 +92,7 @@ function FieldError({ message }: { message?: string }) {
 }
 
 const inputBase =
-  "w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all";
+  "w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all";
 
 const inputError = "border-red-400 dark:border-red-600 focus:ring-red-500";
 
@@ -136,15 +136,15 @@ function PreviewCard({
   return (
     <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 space-y-4">
       <div className="flex items-center gap-2 mb-1">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/40 dark:to-violet-950/40 flex items-center justify-center flex-shrink-0">
-          <Briefcase size={18} className="text-blue-500 dark:text-blue-400" />
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-50 to-brand-50 dark:from-brand-950/40 dark:to-brand-950/40 flex items-center justify-center flex-shrink-0">
+          <Briefcase size={18} className="text-brand-500 dark:text-brand-400" />
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-bold text-gray-900 dark:text-white text-sm leading-snug line-clamp-2">
             {title || "Your task title"}
           </p>
           {subcategoryName && (
-            <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400">
+            <span className="text-[10px] font-semibold text-brand-600 dark:text-brand-400">
               {subcategoryName}
             </span>
           )}
@@ -395,7 +395,7 @@ export default function CreateTaskPage() {
           </p>
           <Link
             href="/profile"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl transition-colors"
           >
             View my tasks
           </Link>
@@ -685,7 +685,7 @@ export default function CreateTaskPage() {
                       onClick={() => setVisibility(value)}
                       className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-bold border transition-all ${
                         visibility === value
-                          ? "bg-blue-600 border-transparent text-white shadow-sm"
+                          ? "bg-brand-600 border-transparent text-white shadow-sm"
                           : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600"
                       }`}
                     >
@@ -736,7 +736,7 @@ export default function CreateTaskPage() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 hover:bg-blue-50/40 dark:hover:bg-blue-950/20 rounded-xl py-5 text-sm font-semibold text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-all"
+                    className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-200 dark:border-gray-700 hover:border-brand-400 dark:hover:border-brand-600 hover:bg-brand-50/40 dark:hover:bg-brand-950/20 rounded-xl py-5 text-sm font-semibold text-gray-400 dark:text-gray-500 hover:text-brand-500 dark:hover:text-brand-400 transition-all"
                   >
                     <ImagePlus size={18} />
                     Add images
@@ -802,7 +802,7 @@ export default function CreateTaskPage() {
                     <div
                       className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
                         anonymous
-                          ? "bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
+                          ? "bg-brand-100 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400"
                           : "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500"
                       }`}
                     >
@@ -819,7 +819,7 @@ export default function CreateTaskPage() {
                   </div>
                   <div
                     className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
-                      anonymous ? "bg-blue-600" : "bg-gray-200 dark:bg-gray-700"
+                      anonymous ? "bg-brand-600" : "bg-gray-200 dark:bg-gray-700"
                     }`}
                   >
                     <motion.span
@@ -857,7 +857,7 @@ export default function CreateTaskPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm font-black text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 disabled:opacity-60 disabled:cursor-not-allowed shadow-md hover:shadow-blue-500/30 transition-all active:scale-[0.99]"
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm font-black text-white bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-700 hover:to-brand-600 disabled:opacity-60 disabled:cursor-not-allowed shadow-md hover:shadow-brand-500/30 transition-all active:scale-[0.99]"
               >
                 {isLoading ? (
                   <>
