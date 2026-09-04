@@ -57,7 +57,7 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
     <StyledJsxRegistry>
       <SessionProvider>
         <Providers>
-          <GluestackUIProvider mode="light">
+          <GluestackUIProvider mode="system">
             <TranslationProvider>
               <GlobalLoadingOverlay />
               <MobileGate />
