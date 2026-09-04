@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-blue-600 text-white items-center justify-center mb-3">
+          <div className="inline-flex w-12 h-12 rounded-xl bg-brand-600 text-white items-center justify-center mb-3">
             <KeyRound size={22} />
           </div>
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
             </p>
             <Link
               href={`/auth/reset-password?email=${encodeURIComponent(email)}`}
-              className="inline-flex items-center gap-1 text-sm text-blue-600 dark:text-blue-300 hover:underline font-medium"
+              className="inline-flex items-center gap-1 text-sm text-brand-600 dark:text-brand-300 hover:underline font-medium"
             >
               I have a code <ArrowRight size={14} />
             </Link>
@@ -89,7 +89,7 @@ export default function ForgotPasswordPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-blue-400"
+                className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-brand-400"
                 placeholder="you@example.com"
               />
             </div>
@@ -97,7 +97,7 @@ export default function ForgotPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-11 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Sending…" : "Send reset link"}
             </button>
@@ -106,7 +106,7 @@ export default function ForgotPasswordPage() {
               Remembered it?{" "}
               <Link
                 href="/auth/signin"
-                className="text-blue-600 dark:text-blue-300 hover:underline font-medium"
+                className="text-brand-600 dark:text-brand-300 hover:underline font-medium"
               >
                 Sign in
               </Link>

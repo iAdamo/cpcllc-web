@@ -40,7 +40,7 @@ interface SectionLink {
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 const inputBase =
-  "w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed";
+  "w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed";
 
 function SectionHeading({
   title,
@@ -117,7 +117,7 @@ function Toggle({
       </div>
       <div
         className={`relative flex-shrink-0 w-11 h-6 rounded-full transition-colors ${
-          checked ? "bg-blue-600" : "bg-gray-200 dark:bg-gray-700"
+          checked ? "bg-brand-600" : "bg-gray-200 dark:bg-gray-700"
         }`}
       >
         <motion.span
@@ -189,7 +189,7 @@ function ProfileSection() {
       <Card>
         <div className="flex items-center gap-4">
           <div className="relative flex-shrink-0">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-violet-100 dark:from-blue-950/40 dark:to-violet-950/40 overflow-hidden">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-100 to-brand-100 dark:from-brand-950/40 dark:to-brand-950/40 overflow-hidden">
               {avatarSrc ? (
                 <Image
                   src={avatarSrc}
@@ -200,14 +200,14 @@ function ProfileSection() {
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <User size={24} className="text-blue-400" />
+                  <User size={24} className="text-brand-400" />
                 </div>
               )}
             </div>
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-md transition-colors"
+              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-brand-600 hover:bg-brand-700 text-white flex items-center justify-center shadow-md transition-colors"
               aria-label="Change photo"
             >
               <Camera size={13} />
@@ -231,7 +231,7 @@ function ProfileSection() {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline mt-1"
+              className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline mt-1"
             >
               Change photo
             </button>
@@ -304,7 +304,7 @@ function ProfileSection() {
           type="button"
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-bold transition-colors"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-bold transition-colors"
         >
           {saving ? (
             <Loader2 size={14} className="animate-spin" />
@@ -460,7 +460,7 @@ function AccountSection() {
           type="button"
           onClick={handleChangePassword}
           disabled={pwSaving || !currentPw || !newPw || !confirmPw}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-bold transition-colors"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-bold transition-colors"
         >
           {pwSaving ? (
             <Loader2 size={14} className="animate-spin" />
@@ -587,7 +587,7 @@ function NotificationsSection() {
 
       <button
         type="button"
-        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-colors"
+        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold transition-colors"
       >
         Save preferences
       </button>
@@ -684,7 +684,7 @@ function PrivacySection() {
           </div>
           <button
             type="button"
-            className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex-shrink-0"
+            className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex-shrink-0"
           >
             View
           </button>
@@ -693,7 +693,7 @@ function PrivacySection() {
 
       <button
         type="button"
-        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-colors"
+        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold transition-colors"
       >
         Save preferences
       </button>
@@ -747,7 +747,7 @@ export default function SettingsPage() {
             <nav className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
               {/* User chip */}
               <div className="px-4 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-100 to-violet-100 dark:from-blue-950/40 dark:to-violet-950/40 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-100 to-brand-100 dark:from-brand-950/40 dark:to-brand-950/40 flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {user?.profilePicture ? (
                     <Image
                       src={
@@ -761,7 +761,7 @@ export default function SettingsPage() {
                       className="object-cover"
                     />
                   ) : (
-                    <User size={15} className="text-blue-400" />
+                    <User size={15} className="text-brand-400" />
                   )}
                 </div>
                 <div className="min-w-0">
@@ -771,8 +771,8 @@ export default function SettingsPage() {
                   <span
                     className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
                       isProvider
-                        ? "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300"
-                        : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
+                        ? "bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300"
+                        : "bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300"
                     }`}
                   >
                     {isProvider ? "Provider" : "Client"}
@@ -790,7 +790,7 @@ export default function SettingsPage() {
                       onClick={() => setActive(item.id)}
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold transition-colors text-left ${
                         isActive
-                          ? "bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-400"
+                          ? "bg-brand-50 dark:bg-brand-950/20 text-brand-700 dark:text-brand-400"
                           : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                       }`}
                     >
@@ -814,7 +814,7 @@ export default function SettingsPage() {
                   onClick={() => setActive(item.id)}
                   className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-colors ${
                     isActive
-                      ? "bg-blue-600 border-transparent text-white"
+                      ? "bg-brand-600 border-transparent text-white"
                       : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400"
                   }`}
                 >

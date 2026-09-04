@@ -60,7 +60,7 @@ export default function ResetPasswordPage() {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-blue-600 text-white items-center justify-center mb-3">
+          <div className="inline-flex w-12 h-12 rounded-xl bg-brand-600 text-white items-center justify-center mb-3">
             <KeyRound size={22} />
           </div>
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
@@ -104,7 +104,7 @@ export default function ResetPasswordPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-blue-400"
+                className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-brand-400"
                 placeholder="you@example.com"
               />
             </div>
@@ -127,7 +127,7 @@ export default function ResetPasswordPage() {
                 onChange={(e) =>
                   setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
                 }
-                className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-blue-400 tracking-[0.4em] font-mono text-center"
+                className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-brand-400 tracking-[0.4em] font-mono text-center"
                 placeholder="000000"
               />
             </div>
@@ -148,7 +148,7 @@ export default function ResetPasswordPage() {
                   minLength={6}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-11 px-3 pr-10 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-blue-400"
+                  className="w-full h-11 px-3 pr-10 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-brand-400"
                   placeholder="At least 6 characters"
                 />
                 <button
@@ -177,14 +177,14 @@ export default function ResetPasswordPage() {
                 minLength={6}
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
-                className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-blue-400"
+                className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-brand-400"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-11 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Resetting…" : "Reset password"}
             </button>
@@ -192,7 +192,7 @@ export default function ResetPasswordPage() {
             <p className="text-xs text-slate-500 text-center pt-2">
               <Link
                 href="/forgot-password"
-                className="text-blue-600 dark:text-blue-300 hover:underline font-medium"
+                className="text-brand-600 dark:text-brand-300 hover:underline font-medium"
               >
                 Request a new code
               </Link>

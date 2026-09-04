@@ -164,12 +164,12 @@ export default function AccountDeletionPage() {
   );
 
   const isDeletion = option === "deletion";
-  const accentBlue = "bg-blue-600 hover:bg-blue-700";
+  const accentBlue = "bg-brand-600 hover:bg-brand-700";
   const accentRed = "bg-red-600 hover:bg-red-700";
   const accent = isDeletion ? accentRed : accentBlue;
-  const accentText = isDeletion ? "text-red-600 dark:text-red-400" : "text-blue-600 dark:text-blue-400";
-  const accentBg = isDeletion ? "bg-red-50 dark:bg-red-950/20" : "bg-blue-50 dark:bg-blue-950/20";
-  const accentBorder = isDeletion ? "border-red-200 dark:border-red-800/50" : "border-blue-200 dark:border-blue-800/50";
+  const accentText = isDeletion ? "text-red-600 dark:text-red-400" : "text-brand-600 dark:text-brand-400";
+  const accentBg = isDeletion ? "bg-red-50 dark:bg-red-950/20" : "bg-brand-50 dark:bg-brand-950/20";
+  const accentBorder = isDeletion ? "border-red-200 dark:border-red-800/50" : "border-brand-200 dark:border-brand-800/50";
   const selectedReasonObj = REASONS.find((r) => r.id === selectedReason);
 
   const STEPS: Step[] = ["warning", "form", "confirm"];
@@ -196,7 +196,7 @@ export default function AccountDeletionPage() {
         {/* Header */}
         <div
           className={`rounded-2xl mb-6 overflow-hidden bg-gradient-to-r ${
-            isDeletion ? "from-slate-800 to-red-900" : "from-slate-800 to-blue-900"
+            isDeletion ? "from-slate-800 to-red-900" : "from-slate-800 to-brand-900"
           }`}
         >
           <div className="px-6 pt-6 pb-5">
@@ -237,13 +237,13 @@ export default function AccountDeletionPage() {
               onClick={() => setOption("deactivate")}
               className={`w-full text-left rounded-2xl border-2 p-5 transition-all bg-white dark:bg-gray-900 ${
                 option === "deactivate"
-                  ? "border-blue-500"
+                  ? "border-brand-500"
                   : "border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600"
               }`}
             >
               <div className="flex gap-4">
-                <div className="shrink-0 w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/40 flex items-center justify-center">
-                  <Archive size={18} className="text-blue-600 dark:text-blue-400" />
+                <div className="shrink-0 w-10 h-10 rounded-xl bg-brand-100 dark:bg-brand-950/40 flex items-center justify-center">
+                  <Archive size={18} className="text-brand-600 dark:text-brand-400" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
@@ -253,7 +253,7 @@ export default function AccountDeletionPage() {
                     <div
                       className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ml-3 transition-all ${
                         option === "deactivate"
-                          ? "border-blue-500 bg-blue-500"
+                          ? "border-brand-500 bg-brand-500"
                           : "border-slate-300 dark:border-gray-600"
                       }`}
                     >
@@ -265,10 +265,10 @@ export default function AccountDeletionPage() {
                     secure and you can return anytime.
                   </p>
                   <div className="flex gap-4 mt-3">
-                    <span className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400">
+                    <span className="flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400">
                       <CheckCircle size={12} /> Data preserved
                     </span>
-                    <span className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400">
+                    <span className="flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400">
                       <CheckCircle size={12} /> Instant reactivation
                     </span>
                   </div>
@@ -455,13 +455,13 @@ export default function AccountDeletionPage() {
             >
               <div
                 className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 ${
-                  isDeletion ? "bg-red-100 dark:bg-red-950/40" : "bg-blue-100 dark:bg-blue-950/40"
+                  isDeletion ? "bg-red-100 dark:bg-red-950/40" : "bg-brand-100 dark:bg-brand-950/40"
                 }`}
               >
                 {isDeletion ? (
                   <Trash2 size={28} className="text-red-600 dark:text-red-400" />
                 ) : (
-                  <Archive size={28} className="text-blue-600 dark:text-blue-400" />
+                  <Archive size={28} className="text-brand-600 dark:text-brand-400" />
                 )}
               </div>
               <h3 className={`text-lg font-semibold mb-1 ${accentText}`}>
@@ -496,7 +496,7 @@ export default function AccountDeletionPage() {
                   <li key={i} className="flex items-start gap-3">
                     <span
                       className={`mt-2 shrink-0 w-1.5 h-1.5 rounded-full ${
-                        isDeletion ? "bg-red-400" : "bg-blue-400"
+                        isDeletion ? "bg-red-400" : "bg-brand-400"
                       }`}
                     />
                     <span className="text-sm text-slate-600 dark:text-gray-400 leading-relaxed">
@@ -590,7 +590,7 @@ export default function AccountDeletionPage() {
                     <p className="text-xs text-slate-400 dark:text-gray-500 mt-0.5">{reason.description}</p>
                   </div>
                   {selectedReason === reason.id && (
-                    <Check size={15} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                    <Check size={15} className="text-brand-600 dark:text-brand-400 shrink-0" />
                   )}
                 </button>
               ))}

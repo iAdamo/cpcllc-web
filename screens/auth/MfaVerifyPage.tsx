@@ -115,7 +115,7 @@ export default function MfaVerifyPage() {
               autoFocus
               value={token}
               onChange={(e) => setToken(e.target.value.replace(/\s/g, ""))}
-              className="w-full h-14 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-2xl outline-none focus:border-blue-400 tracking-[0.4em] font-mono text-center"
+              className="w-full h-14 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-2xl outline-none focus:border-brand-400 tracking-[0.4em] font-mono text-center"
               placeholder="000000"
             />
             <p className="text-[11px] text-slate-400">
@@ -126,7 +126,7 @@ export default function MfaVerifyPage() {
           <button
             type="submit"
             disabled={loading || token.length < 6}
-            className="w-full h-11 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full h-11 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Verifying…" : "Verify and sign in"}
           </button>

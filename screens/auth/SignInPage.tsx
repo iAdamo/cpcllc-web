@@ -87,7 +87,7 @@ export default function SignInPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-blue-400"
+              className="w-full h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-brand-400"
               placeholder="you@example.com"
             />
           </div>
@@ -102,7 +102,7 @@ export default function SignInPage() {
               </label>
               <Link
                 href="/auth/forgot-password"
-                className="text-xs text-blue-600 dark:text-blue-300 hover:underline"
+                className="text-xs text-brand-600 dark:text-brand-300 hover:underline"
               >
                 Forgot password?
               </Link>
@@ -115,7 +115,7 @@ export default function SignInPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-11 px-3 pr-10 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-blue-400"
+                className="w-full h-11 px-3 pr-10 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-sm outline-none focus:border-brand-400"
                 placeholder="••••••••"
               />
               <button
@@ -132,7 +132,7 @@ export default function SignInPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-11 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full h-11 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Signing in…" : "Sign in"}
           </button>
@@ -141,7 +141,7 @@ export default function SignInPage() {
             Don&apos;t have an account?{" "}
             <Link
               href="/onboarding"
-              className="text-blue-600 dark:text-blue-300 hover:underline font-medium"
+              className="text-brand-600 dark:text-brand-300 hover:underline font-medium"
             >
               Sign up
             </Link>

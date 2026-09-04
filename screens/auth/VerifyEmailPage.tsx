@@ -62,7 +62,7 @@ export default function VerifyEmailPage() {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-blue-600 text-white items-center justify-center mb-3">
+          <div className="inline-flex w-12 h-12 rounded-xl bg-brand-600 text-white items-center justify-center mb-3">
             <MailCheck size={22} />
           </div>
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
@@ -111,7 +111,7 @@ export default function VerifyEmailPage() {
               onChange={(e) =>
                 setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
               }
-              className="w-full h-14 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-2xl outline-none focus:border-blue-400 tracking-[0.5em] font-mono text-center"
+              className="w-full h-14 px-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-2xl outline-none focus:border-brand-400 tracking-[0.5em] font-mono text-center"
               placeholder="000000"
             />
           </div>
@@ -119,7 +119,7 @@ export default function VerifyEmailPage() {
           <button
             type="submit"
             disabled={loading || code.length !== 6}
-            className="w-full h-11 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full h-11 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Verifying…" : "Verify email"}
           </button>
@@ -131,7 +131,7 @@ export default function VerifyEmailPage() {
                 type="button"
                 onClick={onResend}
                 disabled={resending || !email}
-                className="text-blue-600 dark:text-blue-300 hover:underline font-medium disabled:opacity-50"
+                className="text-brand-600 dark:text-brand-300 hover:underline font-medium disabled:opacity-50"
               >
                 {resending ? "Resending…" : "Resend code"}
               </button>
@@ -140,7 +140,7 @@ export default function VerifyEmailPage() {
               Wrong email?{" "}
               <Link
                 href="/auth/signup"
-                className="text-blue-600 dark:text-blue-300 hover:underline font-medium"
+                className="text-brand-600 dark:text-brand-300 hover:underline font-medium"
               >
                 Start over
               </Link>

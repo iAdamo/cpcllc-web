@@ -57,9 +57,9 @@ const STATUS_COLOR: Record<string, string> = {
   Active:
     "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400",
   "In Progress":
-    "bg-violet-100 text-violet-700 dark:bg-violet-950/40 dark:text-violet-400",
+    "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
   Completed:
-    "bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400",
+    "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
   Cancelled: "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400",
   Expired: "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400",
 };
@@ -92,10 +92,10 @@ function SavedProviderCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 flex items-center gap-4 hover:border-blue-200 dark:hover:border-blue-800 hover:shadow-sm transition-all group"
+      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 flex items-center gap-4 hover:border-brand-200 dark:hover:border-brand-800 hover:shadow-sm transition-all group"
     >
       {/* Avatar */}
-      <div className="flex-shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center">
+      <div className="flex-shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-br from-brand-400 to-brand-500 flex items-center justify-center">
         {logoUrl ? (
           <Image
             src={logoUrl}
@@ -118,7 +118,7 @@ function SavedProviderCard({
             {provider.providerName}
           </h3>
           {category && (
-            <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 px-2 py-0.5 rounded-full flex-shrink-0">
+            <span className="text-[10px] font-semibold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/50 px-2 py-0.5 rounded-full flex-shrink-0">
               {category}
             </span>
           )}
@@ -148,7 +148,7 @@ function SavedProviderCard({
       <div className="flex items-center gap-2 flex-shrink-0">
         <Link
           href={`/providers/${provider._id}`}
-          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
+          className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
         >
           View
         </Link>
@@ -189,11 +189,11 @@ function SavedTaskCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 flex items-center gap-4 hover:border-blue-200 dark:hover:border-blue-800 hover:shadow-sm transition-all group"
+      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 flex items-center gap-4 hover:border-brand-200 dark:hover:border-brand-800 hover:shadow-sm transition-all group"
     >
       {/* Icon */}
-      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/40 dark:to-violet-950/40 flex items-center justify-center">
-        <Briefcase size={20} className="text-blue-500 dark:text-blue-400" />
+      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-50 to-brand-50 dark:from-brand-950/40 dark:to-brand-950/40 flex items-center justify-center">
+        <Briefcase size={20} className="text-brand-500 dark:text-brand-400" />
       </div>
 
       {/* Info */}
@@ -248,7 +248,7 @@ function SavedTaskCard({
       <div className="flex items-center gap-2 flex-shrink-0">
         <Link
           href={`/tasks/${job._id}`}
-          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
+          className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
         >
           View
         </Link>
@@ -286,8 +286,8 @@ function EmptyState({
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center justify-center py-20 text-center"
     >
-      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/40 dark:to-violet-950/40 flex items-center justify-center mb-4">
-        <Icon size={28} className="text-blue-300 dark:text-blue-600" />
+      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-50 to-brand-50 dark:from-brand-950/40 dark:to-brand-950/40 flex items-center justify-center mb-4">
+        <Icon size={28} className="text-brand-300 dark:text-brand-600" />
       </div>
       <h3 className="font-black text-gray-900 dark:text-white text-base mb-1">
         {title}
@@ -297,7 +297,7 @@ function EmptyState({
       </p>
       <Link
         href={ctaHref}
-        className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-colors"
+        className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl transition-colors"
       >
         {ctaLabel}
         <ArrowRight size={14} />
@@ -346,7 +346,7 @@ export default function FavoritesPage() {
               Your Favorites
             </h1>
             {totalCount > 0 && (
-              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-black">
+              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-black">
                 {totalCount}
               </span>
             )}
@@ -367,7 +367,7 @@ export default function FavoritesPage() {
                 onClick={() => setActiveTab(id)}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
                   active
-                    ? "bg-blue-600 text-white shadow-sm"
+                    ? "bg-brand-600 text-white shadow-sm"
                     : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
