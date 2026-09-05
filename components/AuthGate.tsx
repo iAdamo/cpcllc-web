@@ -22,6 +22,7 @@ const PUBLIC_PATHS = new Set<string>([
   "/terms-of-service",
   "/privacy-policy",
   "/i",
+  "/contact",
 ]);
 
 function isPublicPath(pathname: string): boolean {

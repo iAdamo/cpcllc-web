@@ -44,6 +44,7 @@ const PUBLIC_EXACT = [
   "/auth/reset-password",
   // "/auth/verify-email",
   "/admin/mfa/verify",
+  "/contact",
 ];
 const PUBLIC_PREFIX = ["/providers", "/admin", "/profile", "/i"];
 

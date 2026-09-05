@@ -20,6 +20,7 @@ const PUBLIC_PATHS = [
   "/auth/verify-email",
   "/admin/mfa/verify",
   "/i",
+  "/contact",
 ];
 
 function isPublic(pathname: string) {

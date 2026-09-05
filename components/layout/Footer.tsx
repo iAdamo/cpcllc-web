@@ -2,16 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {
-  facebook,
-  instagram,
-  linkedin,
-  tiktok,
-  twitter,
-  youtube,
-} from "@/public/assets/icons";
 import { useTranslation } from "@/context/TranslationContext";
-
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
+  Youtube,
+} from "lucide-react-native";
 const footerLinks = [
   {
     title: "For Clients",
@@ -35,7 +33,7 @@ const footerLinks = [
   {
     title: "Resources",
     links: [
-      { label: "Help Center", href: "/help" },
+      { label: "Help Center", href: "/contact" },
       { label: "About Us", href: "/about" },
       { label: "Blog", href: "/blog" },
       { label: "Careers", href: "/careers" },
@@ -53,12 +51,12 @@ const footerLinks = [
 ];
 
 const socials = [
-  { icon: facebook, alt: "Facebook", href: "#" },
-  { icon: instagram, alt: "Instagram", href: "#" },
-  { icon: linkedin, alt: "LinkedIn", href: "#" },
-  { icon: tiktok, alt: "TikTok", href: "#" },
-  { icon: twitter, alt: "X / Twitter", href: "#" },
-  { icon: youtube, alt: "YouTube", href: "#" },
+  { icon: <Facebook />, alt: "Facebook", href: "#" },
+  { icon: <Instagram />, alt: "Instagram", href: "#" },
+  { icon: <Linkedin />, alt: "LinkedIn", href: "#" },
+  // { icon: <Tiktok />, alt: "TikTok", href: "#" },
+  { icon: <Twitter />, alt: "X / Twitter", href: "#" },
+  { icon: <Youtube />, alt: "YouTube", href: "#" },
 ];
 
 const Footer = () => {
@@ -92,13 +90,7 @@ const Footer = () => {
                   aria-label={alt}
                   className="w-9 h-9 bg-white/8 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors border border-white/10 hover:border-brand-600"
                 >
-                  <Image
-                    src={icon}
-                    alt={alt}
-                    width={16}
-                    height={16}
-                    className="opacity-70"
-                  />
+                  {icon}
                 </Link>
               ))}
             </div>
@@ -161,9 +153,7 @@ const Footer = () => {
 
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-white/30 text-sm">
-          <p>
-            &copy; 2025 CompaniesCenterLLC&trade;. {t("allRightsReserved")}
-          </p>
+          <p>&copy; 2025 CompaniesCenterLLC&trade;. {t("allRightsReserved")}</p>
           <div className="flex items-center gap-6">
             <Link
               href="/privacy-policy"

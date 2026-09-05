@@ -190,6 +190,7 @@ const NavBar = () => {
           href: "#howitworks",
           show: pathname === "/",
         },
+        { label: t("Contact"), href: "/contact", show: !isAuthenticated },
       ].filter((l) => l.show),
     [t, isAuthenticated, pathname, user, isProviders, isTasks],
   );
