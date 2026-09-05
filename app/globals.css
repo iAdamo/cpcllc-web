@@ -96,6 +96,40 @@ html.dark .legal-prose hr {
   border-color: #1f2937; /* gray-800 */
 }
 
+/* Data tables inside legal documents. Wrap each table in .table-wrap so wide
+   tables scroll instead of overflowing the page on mobile. */
+.legal-prose .table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+.legal-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.legal-prose th,
+.legal-prose td {
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  color: #374151;
+}
+.legal-prose th {
+  background: #f9fafb;
+  font-weight: 700;
+  color: #111827;
+}
+html.dark .legal-prose th,
+html.dark .legal-prose td {
+  border-color: #1f2937;
+  color: #cbd5e1;
+}
+html.dark .legal-prose th {
+  background: #111827;
+  color: #f8fafc;
+}
+
 /* Embedded (mobile-app WebView) mode: hide all web chrome so a page opened
    inside the app reads as a native document. Set by the pre-paint script in the
    root layout (?embedded=1 / CCWebView UA) or injected by the app. */
