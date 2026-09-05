@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import LegalLayout from "@/components/legal/LegalLayout";
 
 export const metadata: Metadata = {
   title: "Terms and Conditions | Companies Center LLC",
@@ -9,16 +10,12 @@ export const metadata: Metadata = {
 
 export default function TermsOfService() {
   return (
-    <main className="min-h-screen bg-white px-4 lg:px-0 py-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
+    <LegalLayout
+      title="CompaniesCenter LLC — Terms of Service"
+      effectiveDate="February 5, 2026"
+    >
+        {/* Website */}
         <section className="mb-8">
-          <h1 className="text-3xl font-bold text-black mb-2">
-            COMPANIESCENTER LLC — TERMS OF SERVICE
-          </h1>
-          <p className="text-sm text-gray-600 mb-2">
-            <strong>Effective Date:</strong> February 5, 2026
-          </p>
           <p className="text-gray-600">
             <strong>Website:</strong>{" "}
             <a
@@ -711,7 +708,6 @@ export default function TermsOfService() {
             </div>
           </div>
         </section>
-      </div>
-    </main>
+    </LegalLayout>
   );
 }

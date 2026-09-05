@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import LegalLayout from "@/components/legal/LegalLayout";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | CompaniesCenter",
@@ -7,16 +8,11 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicy() {
   return (
-    <main className="min-h-screen bg-white px-4 lg:px-0 py-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">
-          COMPANIESCENTER LLC — PRIVACY POLICY
-        </h1>
-        <p className="text-gray-600 mb-8">
-          <strong>Effective Date:</strong> February 5, 2026
-        </p>
-
-        <p className="mb-4 text-gray-800">
+    <LegalLayout
+      title="CompaniesCenter LLC — Privacy Policy"
+      effectiveDate="February 5, 2026"
+    >
+      <p className="mb-4 text-gray-800">
           Welcome to <strong>Companies Center</strong> (&apos;Companies
           Center&apos;, &apos;we&apos;, &apos;us&apos;, or &apos;our&apos;).
           This Privacy Policy explains how we collect, use, share, and protect
@@ -550,7 +546,6 @@ export default function PrivacyPolicy() {
             revised Privacy Policy.
           </p>
         </section>
-      </div>
-    </main>
+    </LegalLayout>
   );
 }

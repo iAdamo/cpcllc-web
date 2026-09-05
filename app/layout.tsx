@@ -58,6 +58,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="flex-1 antialiased h-screen w-screen overflow-hidden overflow-y-scroll">
+        {/* Pre-paint: when a page is opened inside the mobile app's WebView, mark
+            the document so CSS can strip the web chrome (nav, footer, app-gate,
+            assistant) with no flash. Triggered by ?embedded=1 on the URL or a
+            CCWebView user-agent; the app can also add the class directly via
+            injectedJavaScriptBeforeContentLoaded. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var p=new URLSearchParams(window.location.search);var e=p.get('embedded');if(e==='1'||e==='true'||/CCWebView/i.test(navigator.userAgent)){document.documentElement.classList.add('cc-embedded');}}catch(_){}`,
+          }}
+        />
         <AppChrome>{children}</AppChrome>
       </body>
     </html>

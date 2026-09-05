@@ -60,14 +60,33 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
           <GluestackUIProvider mode="system">
             <TranslationProvider>
               <GlobalLoadingOverlay />
-              <MobileGate />
-              {!shouldHideNav && <NavBar />}
+              {/* data-chrome marks marketing/web-only chrome so embedded
+                  (mobile-app WebView) pages can strip it via CSS — see
+                  html.cc-embedded in globals.css. */}
+              <div data-chrome>
+                <MobileGate />
+              </div>
+              {!shouldHideNav && (
+                <div data-chrome>
+                  <NavBar />
+                </div>
+              )}
               {reserveNavSpace && (
-                <div aria-hidden className="h-16 md:h-20 flex-shrink-0" />
+                <div
+                  aria-hidden
+                  data-chrome
+                  className="h-16 md:h-20 flex-shrink-0"
+                />
               )}
               {children}
-              {!shouldHideFooter && <Footer />}
-              <AiAssistantFab />
+              {!shouldHideFooter && (
+                <div data-chrome>
+                  <Footer />
+                </div>
+              )}
+              <div data-chrome>
+                <AiAssistantFab />
+              </div>
             </TranslationProvider>
           </GluestackUIProvider>
         </Providers>

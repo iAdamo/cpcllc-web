@@ -50,3 +50,55 @@ html.dark body {
 .card-img-zoom:hover img {
   transform: scale(1.05);
 }
+
+/* Legal documents (privacy, terms) — themes headings, body, links, rules and
+   lists for light + dark from one place, so the long hardcoded markup doesn't
+   need per-element dark: variants. Descendant selectors (0,1,1)+ win over the
+   inline single-class Tailwind colours (0,1,0). */
+.legal-prose h1,
+.legal-prose h2,
+.legal-prose h3 {
+  color: #111827; /* gray-900 */
+}
+.legal-prose p,
+.legal-prose li {
+  color: #374151; /* gray-700 */
+}
+.legal-prose strong {
+  color: #111827;
+}
+.legal-prose a {
+  color: #162660; /* brand navy */
+}
+.legal-prose a:hover {
+  text-decoration: underline;
+}
+.legal-prose hr {
+  border-color: #e5e7eb; /* gray-200 */
+}
+
+html.dark .legal-prose h1,
+html.dark .legal-prose h2,
+html.dark .legal-prose h3 {
+  color: #f8fafc; /* slate-50 */
+}
+html.dark .legal-prose p,
+html.dark .legal-prose li {
+  color: #cbd5e1; /* slate-300 */
+}
+html.dark .legal-prose strong {
+  color: #f1f5f9;
+}
+html.dark .legal-prose a {
+  color: #deae60; /* gold */
+}
+html.dark .legal-prose hr {
+  border-color: #1f2937; /* gray-800 */
+}
+
+/* Embedded (mobile-app WebView) mode: hide all web chrome so a page opened
+   inside the app reads as a native document. Set by the pre-paint script in the
+   root layout (?embedded=1 / CCWebView UA) or injected by the app. */
+html.cc-embedded [data-chrome] {
+  display: none !important;
+}
