@@ -106,6 +106,7 @@ export type AdminView =
   | "api"
   | "integrations"
   | "subscriptions"
+  | "terms"
   | "logout";
 
 // Back-compat with old DashboardView usages

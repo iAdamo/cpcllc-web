@@ -11,6 +11,8 @@ export const adminKeys = {
   overviewSeries: (range: string) =>
     ["admin", "overview", "series", range] as const,
 
+  terms: ["admin", "terms"] as const,
+
   users: ["admin", "users"] as const,
   usersView: (filter: Record<string, unknown>) =>
     ["admin", "users", "list", filter] as const,

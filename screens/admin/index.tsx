@@ -28,6 +28,7 @@ import { ModerationView } from "@/screens/admin/views/ModerationView";
 import { CatalogueView } from "@/screens/admin/views/CatalogueView";
 import { AdsView } from "@/screens/admin/views/AdsView";
 import { SettingsView } from "@/screens/admin/views/SettingsView";
+import { TermsView } from "@/screens/admin/views/TermsView";
 import { PlaceholderView } from "@/screens/admin/views/PlaceholderView";
 import {
   CalendarCheck,
@@ -274,6 +275,8 @@ function renderView(view: string) {
       );
     case "settings":
       return <SettingsView />;
+    case "terms":
+      return <TermsView />;
     case "api":
       return (
         <PlaceholderView
