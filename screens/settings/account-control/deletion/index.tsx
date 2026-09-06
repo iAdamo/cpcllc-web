@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import useGlobalStore from "@/stores";
+import { deactivateUser } from "@/axios/auth";
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 
@@ -126,13 +127,14 @@ function PasswordInput({
 
 export default function AccountDeletionPage() {
   const router = useRouter();
-  const { logout } = useGlobalStore();
+  const { logout, isAuthenticated } = useGlobalStore();
 
   const [option, setOption] = useState<Option>("");
   const [step, setStep] = useState<Step>("warning");
   const [selectedReason, setSelectedReason] = useState("");
   const [reasonOpen, setReasonOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const {
     control,
@@ -147,21 +149,55 @@ export default function AccountDeletionPage() {
   const handleDeactivation = useCallback(
     async (data: DeactivationFormType) => {
       setIsLoading(true);
+      setErrorMsg(null);
       try {
-        await logout({
+        // Do the deactivation/deletion FIRST so a wrong password surfaces an
+        // error and does NOT sign the user out. Only clear the session on
+        // success (the store's logout swallows this error otherwise).
+        await deactivateUser({
           password: data.password,
           reason: selectedReason || data.feedback || "No reason provided",
           shouldDeleteAfter30Days: option === "deletion",
         });
+        await logout();
         router.push("/");
-      } catch {
-        alert("Unable to process. Please verify your credentials and try again.");
+      } catch (err: unknown) {
+        const res = (err as { response?: { data?: { message?: unknown } } })
+          ?.response?.data?.message;
+        setErrorMsg(
+          typeof res === "string"
+            ? res
+            : "Unable to process. Verify your password and try again.",
+        );
       } finally {
         setIsLoading(false);
       }
     },
     [logout, option, selectedReason, router]
   );
+
+  // Google's public deletion URL must be reachable, but the flow needs a signed-
+  // in account. Send signed-out visitors to sign in, then back here.
+  if (!isAuthenticated) {
+    return (
+      <div className="pt-20 min-h-screen bg-gray-50 dark:bg-gray-950">
+        <div className="max-w-lg mx-auto px-4 py-16 text-center">
+          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+            Manage your account
+          </h1>
+          <p className="mb-6 text-gray-600 dark:text-gray-400">
+            Sign in to deactivate or delete your Companies Center account.
+          </p>
+          <Link
+            href="/auth/signin?next=/settings/account-control/deletion"
+            className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700"
+          >
+            Sign in to continue <ChevronRight size={16} />
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const isDeletion = option === "deletion";
   const accentBlue = "bg-brand-600 hover:bg-brand-700";
@@ -192,6 +228,12 @@ export default function AccountDeletionPage() {
           <ArrowLeft size={15} />
           Back to Settings
         </Link>
+
+        {errorMsg && (
+          <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800/50 dark:bg-red-950/20 dark:text-red-300">
+            {errorMsg}
+          </div>
+        )}
 
         {/* Header */}
         <div
