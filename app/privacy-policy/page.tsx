@@ -735,10 +735,27 @@ export default function PrivacyPolicy() {
             profile information directly in the app
           </li>
           <li>
-            <strong>Delete your account</strong> — request deletion in the app
-            under account settings, or by contacting us. Deleting your account
-            removes or de-identifies your personal information, subject to the
-            retention exceptions in Section 10
+            <strong>Deactivate your account</strong> — a reversible pause. Your
+            profile is hidden and you are signed out; sign back in anytime to
+            restore it
+          </li>
+          <li>
+            <strong>Delete your account</strong> — request permanent deletion in
+            the mobile app under Settings, or on the web at{" "}
+            <a
+              href="/settings/account-control/deletion"
+              className="text-blue-600 hover:underline"
+            >
+              companiescenter.com/settings/account-control/deletion
+            </a>
+            . For your security, deletion asks you to confirm your password.
+            Deletion is scheduled with a <strong>30-day grace period</strong> —
+            during those 30 days you can cancel by signing back in. After the
+            grace period, a scheduled process permanently deletes or anonymizes
+            your personal information (for example, your name, email, phone,
+            profile photo, and login credentials), subject to the retention
+            exceptions in Section 10. Content you shared publicly or with other
+            users (such as reviews) may remain in de-identified form
           </li>
           <li>
             <strong>Location and permissions</strong> — control location, camera,

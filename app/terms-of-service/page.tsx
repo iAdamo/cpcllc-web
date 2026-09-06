@@ -12,7 +12,7 @@ export default function TermsOfService() {
   return (
     <LegalLayout
       title="CompaniesCenter LLC — Terms of Service"
-      effectiveDate="February 5, 2026"
+      effectiveDate="September 4, 2026"
     >
         {/* Website */}
         <section className="mb-8">
@@ -47,6 +47,46 @@ export default function TermsOfService() {
           </p>
         </section>
 
+        {/* Short version */}
+        <section className="mb-8 space-y-4">
+          <h2 className="text-2xl font-bold text-black">The short version</h2>
+          <p className="text-gray-800">
+            This plain-language summary is for convenience only — the full,
+            numbered sections below are what legally apply.
+          </p>
+          <ul className="pl-4 space-y-2">
+            <li className="text-gray-800">
+              • Companies Center is a <strong>marketplace</strong> that connects
+              Clients and Service Providers, plus a <strong>Store</strong> for
+              digital and business services. We are generally{" "}
+              <strong>not a party</strong> to the agreements between Clients and
+              Providers.
+            </li>
+            <li className="text-gray-800">
+              • You are responsible for your account, your content, and your
+              dealings with other users. Be honest, lawful, and respectful.
+            </li>
+            <li className="text-gray-800">
+              • Profiles and reviews are tied to real activity. Do not post fake,
+              misleading, unlawful, or infringing content.
+            </li>
+            <li className="text-gray-800">
+              • Paid features are billed through the processor or app store shown
+              at checkout; digital purchases in our mobile apps use Apple or
+              Google in-app billing.
+            </li>
+            <li className="text-gray-800">
+              • You can <strong>deactivate</strong> (reversible) or{" "}
+              <strong>delete</strong> your account (permanent, after a 30-day
+              grace period) at any time — see Section 16.
+            </li>
+            <li className="text-gray-800">
+              • The Platform is provided <strong>as is</strong>, our liability is
+              limited, and disputes are handled as set out below.
+            </li>
+          </ul>
+        </section>
+
         {/* Section 1 */}
         <section className="mb-8 space-y-4">
           <h2 className="text-2xl font-bold text-black">
@@ -62,10 +102,16 @@ export default function TermsOfService() {
             <p className="text-gray-800">
               <strong>Email:</strong>{" "}
               <a
-                href="mailto:companiescentereu@gmail.com"
+                href="mailto:support@companiescenter.com"
                 className="text-blue-600 hover:underline"
               >
-                companiescentereu@gmail.com
+                support@companiescenter.com
+              </a>
+            </p>
+            <p className="text-gray-800">
+              <strong>Phone:</strong>{" "}
+              <a href="tel:+18138971727" className="text-blue-600 hover:underline">
+                +1 (813) 897-1727
               </a>
             </p>
             <p className="text-gray-800">
@@ -546,10 +592,73 @@ export default function TermsOfService() {
 
         {/* Section 16 */}
         <section className="mb-8 space-y-4">
-          <h2 className="text-2xl font-bold text-black">16. TERMINATION</h2>
+          <h2 className="text-2xl font-bold text-black">
+            16. ACCOUNT DEACTIVATION, DELETION, SUSPENSION, AND TERMINATION
+          </h2>
+
+          <h3 className="text-xl font-semibold">16.1 Your choices</h3>
           <p className="text-gray-800">
-            We may suspend or terminate access if you violate these Terms or
-            create risk. You may stop using the Platform at any time.
+            You may stop using the Platform at any time. From your account
+            settings — in the mobile app under Settings, or on the web at{" "}
+            <a
+              href="https://companiescenter.com/settings/account-control/deletion"
+              className="text-blue-600 hover:underline"
+            >
+              companiescenter.com/settings/account-control/deletion
+            </a>{" "}
+            — you can:
+          </p>
+          <ul className="pl-4 space-y-2">
+            <li className="text-gray-800">
+              • <strong>Deactivate</strong> your account. This is{" "}
+              <strong>reversible</strong>: your profile is hidden and you are
+              signed out, and you can restore your account by signing back in.
+            </li>
+            <li className="text-gray-800">
+              • <strong>Delete</strong> your account permanently. Deletion is
+              scheduled with a <strong>30-day grace period</strong>. During those
+              30 days you can cancel by signing back in; after the grace period,
+              your personal information is permanently deleted or anonymized as
+              described in our Privacy Policy.
+            </li>
+          </ul>
+          <p className="text-gray-800">
+            For your security, deactivation and deletion require you to confirm
+            your password. Some information may be retained after deletion where
+            we are required or permitted by law (for example, transaction, tax,
+            and dispute records, and records needed to prevent fraud or abuse),
+            and content you shared publicly or with other users (such as reviews)
+            may remain in de-identified form.
+          </p>
+
+          <h3 className="text-xl font-semibold">
+            16.2 Suspension and termination by us
+          </h3>
+          <p className="text-gray-800">
+            We may suspend, limit, or terminate your access to the Platform, in
+            whole or in part, with or without notice, if we reasonably believe
+            you have violated these Terms, created risk or possible legal
+            exposure for us or others, engaged in fraud or abuse, or where
+            required by law. Where practical and lawful, we will provide notice
+            and an opportunity to address the issue.
+          </p>
+
+          <h3 className="text-xl font-semibold">16.3 Effect of termination</h3>
+          <p className="text-gray-800">
+            When your account is deactivated, deleted, suspended, or terminated,
+            your right to access and use the Platform ends. Licenses you granted
+            us that are necessary to operate, secure, or comply with law continue
+            as described in these Terms and the Privacy Policy. Outstanding
+            obligations — including payment obligations and any commitments to
+            other users you dealt with — survive.
+          </p>
+
+          <h3 className="text-xl font-semibold">16.4 Survival</h3>
+          <p className="text-gray-800">
+            Provisions that by their nature should survive termination will do
+            so, including those on user content and license, disclaimers,
+            limitation of liability, indemnification, dispute resolution, and
+            governing law.
           </p>
         </section>
 
@@ -692,10 +801,10 @@ export default function TermsOfService() {
             <p className="text-gray-800">
               <strong>Email:</strong>{" "}
               <a
-                href="mailto:companiescentereu@gmail.com"
+                href="mailto:support@companiescenter.com"
                 className="text-blue-600 hover:underline"
               >
-                companiescentereu@gmail.com
+                support@companiescenter.com
               </a>
             </p>
             <div>
