@@ -4,6 +4,8 @@ export interface RegisterUser {
   email: string;
   phoneNumber: string;
   password: string;
+  // 18+ attestation captured at signup. Required by the API.
+  ageConfirmed?: boolean;
 }
 
 export interface LoginUser {

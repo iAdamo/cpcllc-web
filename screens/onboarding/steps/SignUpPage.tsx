@@ -101,6 +101,7 @@ export default function SignUpPage({ onBack }: Props) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
 
@@ -135,7 +136,13 @@ export default function SignUpPage({ onBack }: Props) {
       password && Object.values(passwordRequirements).every(Boolean);
     const confirmPasswordValid = confirmPassword && passwordsMatch;
 
-    return emailValid && phoneValid && passwordValid && confirmPasswordValid;
+    return (
+      emailValid &&
+      phoneValid &&
+      passwordValid &&
+      confirmPasswordValid &&
+      ageConfirmed
+    );
   }, [
     email,
     phoneNumber,
@@ -144,6 +151,7 @@ export default function SignUpPage({ onBack }: Props) {
     confirmPassword,
     passwordRequirements,
     passwordsMatch,
+    ageConfirmed,
   ]);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -164,6 +172,7 @@ export default function SignUpPage({ onBack }: Props) {
         email,
         phoneNumber: dialedPhoneNumber,
         password,
+        ageConfirmed: true,
       });
       console.log(pathname);
       pathname === "/onboarding" && setParamsFrom(pathname);
@@ -526,6 +535,20 @@ export default function SignUpPage({ onBack }: Props) {
                   {error}
                 </div>
               )}
+
+              {/* Age gate (18+). We store only this attestation, never a date of
+                  birth. */}
+              <label className="flex gap-3 items-start cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={ageConfirmed}
+                  onChange={(e) => setAgeConfirmed(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-brand-600 focus:ring-brand-500/30"
+                />
+                <span className="text-sm text-slate-700 dark:text-slate-300">
+                  I confirm I am at least 18 years old.
+                </span>
+              </label>
 
               {/* Submit Button */}
               <button
