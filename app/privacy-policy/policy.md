@@ -455,13 +455,11 @@ another person's location does not automatically authorize Companies Center to s
 recipient's location. If both participants share, each must consent to sharing their own
 device location.
 
-The person sharing can stop an ad hoc session at any time through a visible control in the
-application. For a session tied to an active Booking or Task, the Client who requested it can
-stop it at any time, and the session also ends automatically when the work ends or the
-maximum duration is reached; a Service Provider fulfilling that Booking keeps sharing until
-one of those events so the Client can rely on live arrival while the job is in progress.
-Either participant can revoke device location permission through operating system settings at
-any time, and the other participant is notified when sharing ends.
+The person sharing can stop sharing at any time through a visible control in the application.
+This right applies to ad hoc sessions and to sessions connected to a Booking or Task. Stopping
+live location sharing does not end the underlying Booking or Task; the other participant is
+notified that sharing ended and may request live location again. A participant may also revoke
+device location permission through operating system settings at any time.
 
 The application displays an in app indicator and any operating system indicator required
 while background location is active. Companies Center requests background location only when
@@ -603,11 +601,10 @@ users to submit personal information to the assistant and contractually availabl
 processing protections apply. Companies Center does not intentionally use user prompts or
 responses to train its own general purpose model.
 
-Companies Center may retain prompts and responses for up to 30 days for delivery, abuse
-prevention, troubleshooting, and security unless the user deliberately saves an assistant
-conversation or a longer period is required to investigate abuse or comply with law. The
-artificial intelligence provider may retain limited information according to its applicable
-terms.
+Companies Center does not retain assistant prompts or responses on its own servers beyond
+the transient processing needed to return an answer, except where a copy is briefly retained
+to investigate abuse or comply with law. The artificial intelligence provider may retain
+limited information according to its applicable terms.
 
 Generated answers can be incomplete, inaccurate, or inappropriate. Users should not rely on
 the assistant as legal, medical, financial, emergency, or professional advice. Users can obtain
