@@ -11,6 +11,9 @@ const remotePatterns = [
 ];
 
 const nextConfig = {
+  // Emit a self-contained server bundle (.next/standalone) so the Docker image
+  // ships only the traced runtime deps instead of the whole node_modules.
+  output: "standalone",
   eslint: {
     ignoreDuringBuilds: true,
   },
