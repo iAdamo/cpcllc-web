@@ -303,10 +303,11 @@ displayed with that badge. It must not be interpreted as a guarantee of identity
 insurance, character, safety, competence, or quality.
 
 Companies Center does not collect government identification, selfies, biometric templates,
-liveness information, or provider verification documents unless and until a secure
-verification feature is activated and a specific notice explains the information, purpose,
-service provider, access, and retention. Verification documents are stored privately and are
-never served through public permanent URLs.
+liveness information, or provider verification documents. Identity verification is not active.
+If it is activated in the future, it will be performed by a third-party verification provider
+that captures and stores the documents on its own systems; Companies Center will receive only
+the verification result (such as verified or not verified), not the underlying documents, and a
+specific notice will identify the provider, purpose, and retention before any collection begins.
 
 ### 5.16 Artificial Intelligence Interactions
 
@@ -500,7 +501,10 @@ uploaded content to provide the requested feature.
 Before Companies Center makes an image or video available through the Platform, it removes
 embedded location and device metadata to the extent technically feasible. Companies Center
 may resize, compress, transcode, generate thumbnails, validate file types, and limit file
-sizes. Companies Center may also review content that is reported or flagged.
+sizes, and scans stored files for malware at the hosting layer. Automated scanning is limited
+to malware. Other prohibited content is handled by human moderation — user reports, automated
+moderation rules, and a moderation team that reviews reported content and can remove it,
+restrict features, or suspend accounts — rather than by automatically scanning every upload.
 
 Public media and private media are stored separately. Public profile and post media may use
 public delivery URLs. Private messages, support attachments, exact location evidence,
@@ -822,11 +826,10 @@ retained only for as long as reasonably necessary for the purpose for which they
 resolve disputes, prevent repeated abuse, maintain security, and comply with legal, tax, and
 accounting obligations, after which they are deleted, deidentified, or aggregated.
 
-Verification documents, if a secure verification feature is activated, are retained only as long as
-necessary to make the decision, process an appeal, prevent fraud, or comply with law. Raw documents
-are deleted within 90 days after a final decision unless a longer period is specifically required and
-disclosed. Verification results may remain while the badge is active and for a limited period after
-it is removed for audit and fraud prevention.
+Verification documents are not collected or stored by Companies Center. If identity verification
+is activated in the future, the documents are held by the third-party verification provider under
+its own retention terms; Companies Center retains only the verification result, which may remain
+while a badge is active and for a limited period after it is removed for audit and fraud prevention.
 
 Subscription, processor, refund, dispute, tax, accounting, estimate, and invoice records may be
 retained for the period required by applicable accounting, tax, fraud prevention, contractual, or
