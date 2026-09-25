@@ -668,8 +668,9 @@ prevention, and customer support services. These vendors receive only informatio
 necessary for their function and are subject to contractual or legal obligations appropriate to
 their role.
 
-Depending on the enabled feature, service providers may include providers operating MongoDB and
-Redis infrastructure, Amazon Web Services, Google Maps and Places, Google Gemini, Google Firebase
+Depending on the enabled feature, service providers may include the provider hosting our servers
+and file storage (currently Hostinger), providers operating MongoDB and Redis infrastructure,
+Google Maps and Places, Google Gemini, Google Firebase
 Cloud Messaging, Expo push services, Mailtrap or another transactional email provider, web push
 providers, and the payment processor identified at checkout. A software dependency does not mean
 that a vendor receives information when the relevant service is disabled.
