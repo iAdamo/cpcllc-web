@@ -58,6 +58,12 @@ export default async function PublicInvoicePage({
   const { token } = await params;
   const doc = await getPublicInvoice(token);
   if (!doc) notFound();
+  // PDFs are private: stream through the token-gated API route, which enforces
+  // the link's expiry/revocation. `pdfUrl` only exists on legacy documents.
+  const apiBase = (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "");
+  const pdfHref: string | null = doc.pdfPath
+    ? `${apiBase}${doc.pdfPath}`
+    : (doc.pdfUrl ?? null);
 
   const isInvoice = doc.kind === "invoice";
   const label = isInvoice ? "Invoice" : "Estimate";
@@ -93,9 +99,9 @@ export default async function PublicInvoicePage({
           <span className="text-sm text-neutral-500">
             {b.name} · {label} {doc.number}
           </span>
-          {doc.pdfUrl ? (
+          {pdfHref ? (
             <a
-              href={doc.pdfUrl}
+              href={pdfHref}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-lg px-4 py-2 text-sm font-semibold text-white"
