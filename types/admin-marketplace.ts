@@ -65,7 +65,12 @@ export interface AdminUserDetail extends AdminUserRow {
     reason?: string;
     date?: string;
     initiatedBy?: string;
+    /** Staff blocks: suspension | ban | deletion. */
+    kind?: string;
+    until?: string | null;
+    reasonCode?: string;
   } | null;
+  scheduledDeletionAt?: string | null;
   stats: { tasksPosted: number; tasksCompleted: number };
 }
 

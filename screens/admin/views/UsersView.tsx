@@ -15,16 +15,23 @@ import useGlobalStore from "@/stores";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
+import { AccountActionPanel } from "@/components/admin/AccountActionPanel";
 import {
-  reactivateAdminUser,
-  suspendAdminUser,
   verifyAdminUserEmail,
   verifyAdminUserPhone,
 } from "@/axios/admin";
 import {
   useAdminUsersView,
   useAdminUserDetail,
+  useAdminUserActions,
 } from "@/hooks/admin/useAdminQueries";
+import {
+  accountStatus,
+  describeAction,
+  isStaffBlocked,
+  type AccountActionRow,
+  type AccountActionType,
+} from "@/lib/accountActions";
 
 /** Country is derived server-side from the phone prefix (+1 / +234). */
 function countryLabel(country?: string | null): string {
@@ -195,8 +202,8 @@ export function UsersView() {
                 </td>
                 <td className="px-5 py-2.5">
                   <StatusPill
-                    label={u.isActive ? "Active" : "Suspended"}
-                    tone={u.isActive ? "green" : "rose"}
+                    label={accountStatus(u).label}
+                    tone={accountStatus(u).tone}
                   />
                 </td>
                 <td className="px-5 py-2.5 text-slate-500 text-xs">
@@ -259,47 +266,38 @@ function UserDetailDrawer({
   onMutated: () => void;
 }) {
   const { data: u, loading, refresh: refetch } = useAdminUserDetail(id);
+  const history = useAdminUserActions(id);
+  // The action form replaces the details while it's open.
+  const [panel, setPanel] = useState<AccountActionType | null>(null);
 
-  const onSuspend = async () => {
-    if (!id) return;
-    const reason = window.prompt("Reason for suspension?");
-    if (!reason) return;
-    await suspendAdminUser(id, reason);
-    await refetch();
-    onMutated();
-  };
-
-  const onReactivate = async () => {
-    if (!id) return;
-    await reactivateAdminUser(id);
-    await refetch();
-    onMutated();
+  const close = () => {
+    setPanel(null);
+    onClose();
   };
 
   return (
     <Drawer
       open={!!id}
-      onClose={onClose}
+      onClose={close}
       title={u ? `${u.firstName ?? ""} ${u.lastName ?? ""}`.trim() || u.email || "User" : "Loading…"}
       subtitle={u?.email}
       footer={
-        u && (
+        u && !panel && !u.isDeleted && (
           <div className="flex flex-wrap gap-2">
-            {u.isActive ? (
+            {isStaffBlocked(u) && (
               <button
-                onClick={onSuspend}
-                className="text-xs px-3 py-1.5 rounded-md bg-rose-600 text-white hover:bg-rose-700 flex items-center gap-1"
-              >
-                <UserX size={14} /> Suspend
-              </button>
-            ) : (
-              <button
-                onClick={onReactivate}
+                onClick={() => setPanel("reinstatement")}
                 className="text-xs px-3 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 flex items-center gap-1"
               >
-                <UserCheck size={14} /> Reactivate
+                <UserCheck size={14} /> Reinstate
               </button>
             )}
+            <button
+              onClick={() => setPanel("warning")}
+              className="text-xs px-3 py-1.5 rounded-md bg-rose-600 text-white hover:bg-rose-700 flex items-center gap-1"
+            >
+              <UserX size={14} /> {isStaffBlocked(u) ? "Change action" : "Take action"}
+            </button>
             {!u.isEmailVerified && (
               <button
                 onClick={async () => {
@@ -329,17 +327,37 @@ function UserDetailDrawer({
       }
     >
       {loading && <p className="text-sm text-slate-500">Loading…</p>}
-      {u && <UserDetailBody user={u} />}
+      {u && id && panel && (
+        <AccountActionPanel
+          userId={id}
+          firstName={u.firstName}
+          initialType={panel}
+          onCancel={() => setPanel(null)}
+          onDone={() => {
+            setPanel(null);
+            refetch();
+            history.refresh();
+            onMutated();
+          }}
+        />
+      )}
+      {u && !panel && (
+        <>
+          <UserDetailBody user={u} />
+          <AccountHistory rows={history.data ?? []} loading={history.loading} />
+        </>
+      )}
     </Drawer>
   );
 }
 
 function UserDetailBody({ user: u }: { user: any }) {
+  const status = accountStatus(u);
   return (
     <div className="space-y-4 text-sm">
       <Row label="ID" value={u._id} />
       <Row label="Role" value={u.activeRole} />
-      <Row label="Status" value={u.isActive ? "Active" : "Suspended"} />
+      <Row label="Status" value={status.label} />
       <Row label="Email" value={`${u.email} ${u.isEmailVerified ? "(verified)" : "(unverified)"}`} />
       <Row
         label="Phone"
@@ -354,19 +372,60 @@ function UserDetailBody({ user: u }: { user: any }) {
       <Row label="Tasks completed" value={u.stats?.tasksCompleted ?? 0} />
       <Row label="Joined" value={u.createdAt ? new Date(u.createdAt).toLocaleString() : "—"} />
       <Row label="Last login" value={u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString() : "—"} />
-      {u.deactivation?.reason && (
+      {u.isActive === false && (
         <div className="mt-4 p-3 rounded-md bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900">
-          <p className="text-xs font-medium text-rose-700 dark:text-rose-300">Suspended</p>
-          <p className="text-xs text-rose-600 dark:text-rose-400 mt-1">
-            {u.deactivation.reason}
-          </p>
+          <p className="text-xs font-medium text-rose-700 dark:text-rose-300">{status.label}</p>
+          {status.detail && (
+            <p className="text-xs text-rose-600 dark:text-rose-400 mt-1">{status.detail}</p>
+          )}
+          {u.deactivation?.reason && (
+            <p className="text-xs text-rose-600 dark:text-rose-400 mt-1">“{u.deactivation.reason}”</p>
+          )}
           <p className="text-[11px] text-rose-500 mt-1">
-            By {u.deactivation.initiatedBy} on{" "}
-            {u.deactivation.date ? new Date(u.deactivation.date).toLocaleDateString() : "—"}
+            Since{" "}
+            {u.deactivation?.date ? new Date(u.deactivation.date).toLocaleDateString() : "—"}
           </p>
         </div>
       )}
     </div>
+  );
+}
+
+function AccountHistory({ rows, loading }: { rows: AccountActionRow[]; loading: boolean }) {
+  return (
+    <section className="mt-6">
+      <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+        Account history
+      </h4>
+      {loading && <p className="text-xs text-slate-400">Loading…</p>}
+      {!loading && rows.length === 0 && (
+        <p className="text-xs text-slate-400">No warnings, suspensions or other actions.</p>
+      )}
+      <ol className="space-y-2">
+        {rows.map((row) => {
+          const d = describeAction(row);
+          return (
+            <li
+              key={row._id}
+              className="p-3 rounded-md border border-slate-100 dark:border-slate-800"
+            >
+              <p className="text-sm font-medium text-slate-900 dark:text-white">{d.title}</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">{d.meta}</p>
+              {row.messageToUser && (
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1.5">
+                  “{row.messageToUser}”
+                </p>
+              )}
+              {row.internalNote && (
+                <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">
+                  Staff note: {row.internalNote}
+                </p>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </section>
   );
 }
 

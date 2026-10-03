@@ -8,6 +8,7 @@ import {
   type OverviewSeriesPoint,
   getAdminUsersView,
   getAdminUserDetail,
+  getAccountActions,
   getAdminProvidersView,
   getAdminProviderDetail,
   getAdminClientsView,
@@ -30,6 +31,7 @@ import type {
   AdminUserDetail,
   AdminUsersBundle,
 } from "@/types/admin-marketplace";
+import type { AccountActionRow } from "@/lib/accountActions";
 import { adminKeys } from "./adminQueryKeys";
 
 const ADMIN_STALE_TIME = 60 * 1000;
@@ -130,6 +132,18 @@ export function useAdminTasksView(filter: Record<string, unknown>) {
 }
 
 /* ─── Detail drawer hooks ──────────────────────────────────────────────── */
+
+/** Staff actions on an account (warnings, suspensions, …), newest first. */
+export function useAdminUserActions(id: string | null) {
+  return shape(
+    useQuery<AccountActionRow[]>({
+      queryKey: adminKeys.userActions(id ?? ""),
+      queryFn: () => getAccountActions(id ?? ""),
+      enabled: !!id,
+      staleTime: ADMIN_STALE_TIME,
+    }),
+  );
+}
 
 export function useAdminUserDetail(id: string | null) {
   return shape(

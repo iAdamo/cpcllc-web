@@ -1,4 +1,6 @@
 import { ApiClientSingleton } from "@/axios/conf";
+import type { ActionBody, AccountActionRow } from "@/lib/accountActions";
+import type { DecisionBody } from "@/lib/moderationDecision";
 import type {
   MetricsResponse,
   MetricsRequest,
@@ -130,14 +132,15 @@ export const getAdminTaskDetail = async (
 };
 
 /* ───────── Admin marketplace — mutations ───────── */
-export const suspendAdminUser = async (id: string, reason: string) =>
-  (
-    await axiosInstance.patch(`admin/marketplace/users/${id}/suspend`, {
-      reason,
-    })
-  ).data;
-export const reactivateAdminUser = async (id: string) =>
-  (await axiosInstance.patch(`admin/marketplace/users/${id}/reactivate`)).data;
+/** Warn, suspend (for a time or permanently), delete or reinstate. The API
+ *  records it, enforces it and emails the person. */
+export const applyAccountAction = async (id: string, body: ActionBody) =>
+  (await axiosInstance.post(`admin/marketplace/users/${id}/actions`, body))
+    .data;
+export const getAccountActions = async (
+  id: string,
+): Promise<AccountActionRow[]> =>
+  (await axiosInstance.get(`admin/marketplace/users/${id}/actions`)).data;
 export const verifyAdminUserEmail = async (id: string) =>
   (await axiosInstance.patch(`admin/marketplace/users/${id}/verify-email`))
     .data;
@@ -398,6 +401,9 @@ export const getModerationStats = async () =>
   (await axiosInstance.get(`admin/moderation/stats`)).data;
 export const listModerationReports = async (params: any = {}) =>
   (await axiosInstance.get(`admin/moderation/reports`, { params })).data;
+export const decideModerationReport = async (id: string, body: DecisionBody) =>
+  (await axiosInstance.patch(`admin/moderation/reports/${id}/decide`, body))
+    .data;
 
 /* ───────── Subscriptions ───────── */
 export const getSubscriptionStats = async (): Promise<SubscriptionStats> =>

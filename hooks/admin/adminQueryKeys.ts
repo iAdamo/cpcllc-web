@@ -17,6 +17,7 @@ export const adminKeys = {
   usersView: (filter: Record<string, unknown>) =>
     ["admin", "users", "list", filter] as const,
   userDetail: (id: string) => ["admin", "users", "detail", id] as const,
+  userActions: (id: string) => ["admin", "users", "actions", id] as const,
 
   providers: ["admin", "providers"] as const,
   providersView: (filter: Record<string, unknown>) =>
