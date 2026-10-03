@@ -21,6 +21,16 @@ import {
 
 const OPEN = new Set(["queued", "auto_flagged", "reviewing", "escalated"]);
 
+/** What each report target is called (the API sends its own type names). */
+const TARGET_NAMES: Record<string, string> = {
+  Task: "Job",
+  Provider: "Business",
+  Reviews: "Review",
+  Message: "Message",
+  Chat: "Chat",
+  User: "Account",
+};
+
 export function ModerationView() {
   const [items, setItems] = useState<any[]>([]);
   const [stats, setStats] = useState<any>(null);
@@ -80,8 +90,11 @@ export function ModerationView() {
             )}
             {items.map((r: any) => (
               <tr key={r._id}>
-                <td className="px-5 py-2.5 text-slate-700 dark:text-slate-200">
-                  {r.targetType} <span className="text-xs text-slate-400">#{r.targetId.slice(-6)}</span>
+                <td className="px-5 py-2.5 text-slate-700 dark:text-slate-200 max-w-[260px]">
+                  <span className="block truncate">{r.targetLabel || r.targetType}</span>
+                  <span className="text-xs text-slate-400">
+                    {TARGET_NAMES[r.targetType] ?? r.targetType} #{r.targetId.slice(-6)}
+                  </span>
                 </td>
                 <td className="px-5 py-2.5">{r.reason}</td>
                 <td className="px-5 py-2.5 text-slate-600 dark:text-slate-300">
@@ -97,7 +110,7 @@ export function ModerationView() {
                   {OPEN.has(r.status) && (
                     <button
                       onClick={() => setOpen(r)}
-                      aria-label={`Decide report on ${r.targetType} ${r.targetId.slice(-6)}`}
+                      aria-label={`Decide report on ${TARGET_NAMES[r.targetType] ?? r.targetType} ${r.targetLabel || r.targetId.slice(-6)}`}
                       className="text-xs text-brand-600 dark:text-brand-300 font-medium hover:underline"
                     >
                       Decide
@@ -114,7 +127,11 @@ export function ModerationView() {
         open={!!open}
         onClose={() => setOpen(null)}
         title="Decide this report"
-        subtitle={open ? `${open.targetType} #${String(open.targetId).slice(-6)} · ${open.reason}` : undefined}
+        subtitle={
+          open
+            ? `${TARGET_NAMES[open.targetType] ?? open.targetType}: ${open.targetLabel || `#${String(open.targetId).slice(-6)}`} · ${open.reason}`
+            : undefined
+        }
       >
         {open && (
           <DecisionPanel
