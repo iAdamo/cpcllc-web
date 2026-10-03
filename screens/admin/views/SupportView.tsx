@@ -7,6 +7,7 @@ import { KpiCard } from "@/components/admin/KpiCard";
 import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
 import useGlobalStore from "@/stores";
 import { TicketDrawer } from "./support/TicketDrawer";
+import { CaseDrawer } from "@/components/admin/disputes/CaseDrawer";
 import { NewTicketModal } from "./support/NewTicketModal";
 
 type Scope = "all" | "unassigned" | "mine";
@@ -32,6 +33,7 @@ export function SupportView() {
   const [query, setQuery] = useState("");
 
   const [openId, setOpenId] = useState<string | null>(null);
+  const [caseId, setCaseId] = useState<string | null>(null);
   const [newOpen, setNewOpen] = useState(false);
 
   const load = useCallback(async () => {
@@ -203,7 +205,12 @@ export function SupportView() {
         ticketId={openId}
         onClose={() => setOpenId(null)}
         onChanged={load}
+        onOpenCase={(id) => {
+          setOpenId(null);
+          setCaseId(id);
+        }}
       />
+      <CaseDrawer caseId={caseId} onClose={() => setCaseId(null)} />
       <NewTicketModal
         open={newOpen}
         onClose={() => setNewOpen(false)}

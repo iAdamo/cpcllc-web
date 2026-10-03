@@ -251,7 +251,7 @@ export interface AccountActionRow {
   messageToUser?: string;
   internalNote?: string;
   until?: string | null;
-  source: "admin" | "moderation" | "system";
+  source: "admin" | "moderation" | "system" | "dispute";
   actorId?: { firstName?: string; lastName?: string; email?: string } | null;
   emailedAt?: string | null;
   createdAt: string;
@@ -280,6 +280,7 @@ export function describeAction(row: AccountActionRow): { title: string; meta: st
   const parts = [
     row.type !== "reinstatement" ? reasonLabel(row.reasonCode) : undefined,
     row.source === "moderation" ? "From a report" : undefined,
+    row.source === "dispute" ? "From a dispute case" : undefined,
     by ? `by ${by}` : undefined,
     day(row.createdAt),
     row.emailedAt ? "Emailed" : "Not emailed",

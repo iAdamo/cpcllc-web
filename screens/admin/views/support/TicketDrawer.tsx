@@ -15,6 +15,8 @@ import {
   listAdminUsers,
 } from "@/axios/admin";
 import { socketService, SocketEvents, SupportEvents } from "@/lib/socket";
+import { OpenCaseForm } from "@/components/admin/disputes/OpenCaseForm";
+import { caseStatusLabel } from "@/lib/disputeCase";
 
 const STATUSES = [
   "new",
@@ -51,10 +53,13 @@ export function TicketDrawer({
   ticketId,
   onClose,
   onChanged,
+  onOpenCase,
 }: {
   ticketId: string | null;
   onClose: () => void;
   onChanged: () => void;
+  /** Show a dispute case (closes this drawer, opens the case). */
+  onOpenCase: (caseId: string) => void;
 }) {
   const meId = useGlobalStore((s) => s.user?._id);
   const [data, setData] = useState<{ ticket: any; messages: any[] } | null>(
@@ -312,6 +317,39 @@ export function TicketDrawer({
                 }
               />
             </details>
+
+            {/* Dispute case: linked, or open one from this ticket */}
+            {ticket.dispute?._id ? (
+              <div className="flex items-center justify-between text-xs p-2 rounded-md bg-rose-50 dark:bg-rose-950/30">
+                <span className="text-rose-700 dark:text-rose-300">
+                  Dispute case {ticket.dispute.disputeNumber} ·{" "}
+                  {caseStatusLabel(ticket.dispute.status)}
+                </span>
+                <button
+                  onClick={() => onOpenCase(String(ticket.dispute._id))}
+                  className="font-medium text-brand-600 dark:text-brand-300 hover:underline"
+                >
+                  Open case
+                </button>
+              </div>
+            ) : (
+              <details className="text-xs" open={ticket.category === "dispute"}>
+                <summary className="cursor-pointer text-rose-600 dark:text-rose-300">
+                  Open a dispute case
+                </summary>
+                <div className="mt-2">
+                  <OpenCaseForm
+                    source={{ ticket: String(ticket._id) }}
+                    prefillSummary={ticket.subject}
+                    needsRespondent={!ticket.counterparty && !ticket.task}
+                    onOpened={(id) => {
+                      onChanged();
+                      onOpenCase(id);
+                    }}
+                  />
+                </div>
+              </details>
+            )}
           </div>
 
           {/* Thread */}

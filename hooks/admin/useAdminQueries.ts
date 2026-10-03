@@ -18,6 +18,9 @@ import {
   getAdminEngagementsView,
   getAdminEngagementDetail,
   getAdminReviewsView,
+  listDisputes,
+  getDispute,
+  getDisputeStats,
   type AdminEngagementsBundle,
   type AdminReviewsBundle,
 } from "@/axios/admin";
@@ -220,6 +223,41 @@ export function useAdminReviewsView(filter: Record<string, unknown>) {
       queryFn: () => getAdminReviewsView(filter),
       staleTime: ADMIN_STALE_TIME,
       placeholderData: (prev) => prev,
+    }),
+  );
+}
+
+/* ─── Disputes ─────────────────────────────────────────────────────────── */
+
+export function useAdminDisputesView(filter: Record<string, unknown>, enabled = true) {
+  return shape(
+    useQuery<{ items: any[]; total: number; page: number; limit: number; totalPages: number }>({
+      queryKey: adminKeys.disputesView(filter),
+      queryFn: () => listDisputes(filter),
+      enabled,
+      staleTime: ADMIN_STALE_TIME,
+    }),
+  );
+}
+
+export function useAdminDisputeStats() {
+  return shape(
+    useQuery<{ open: number; underReview: number; escalated: number; resolved: number; awaiting: number }>({
+      queryKey: adminKeys.disputeStats,
+      queryFn: () => getDisputeStats() as never,
+      staleTime: ADMIN_STALE_TIME,
+    }),
+  );
+}
+
+/** A case with its evidence, messages and decisions. */
+export function useAdminDispute(id: string | null) {
+  return shape(
+    useQuery<{ dispute: any; evidence: any[]; messages: any[]; decisions: any[] }>({
+      queryKey: adminKeys.disputeDetail(id ?? ""),
+      queryFn: () => getDispute(id ?? ""),
+      enabled: !!id,
+      staleTime: ADMIN_STALE_TIME,
     }),
   );
 }

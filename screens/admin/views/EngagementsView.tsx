@@ -5,10 +5,14 @@ import { Activity, RefreshCw, ShieldCheck } from "lucide-react";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
+import { CaseDrawer } from "@/components/admin/disputes/CaseDrawer";
+import { OpenCaseForm } from "@/components/admin/disputes/OpenCaseForm";
 import {
   useAdminEngagementsView,
   useAdminEngagementDetail,
+  useAdminDisputesView,
 } from "@/hooks/admin/useAdminQueries";
+import { caseStatusLabel, isOpenCase } from "@/lib/disputeCase";
 
 const STAGES = [
   { key: "accepted", label: "Accepted" },
@@ -48,14 +52,16 @@ const fmtDate = (d?: string) =>
 /**
  * Service-lifecycle oversight (design §3 / §9, admin side). Every engagement
  * that has an assigned provider, grouped by its lifecycle stage, with a detail
- * drawer that shows the completion evidence + verified certificate. Read-only —
- * admins observe the workflow; disputes are actioned in the Disputes view.
+ * drawer that shows the completion evidence + verified certificate. A job in
+ * dispute can be opened as a dispute case from its drawer; the case itself is
+ * worked in the case drawer (also reachable from Disputes).
  */
 export function EngagementsView() {
   const [stage, setStage] = useState<string>("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [openId, setOpenId] = useState<string | null>(null);
+  const [caseId, setCaseId] = useState<string | null>(null);
 
   const filter: Record<string, unknown> = { page, limit: 25 };
   if (stage) filter.stage = stage;
@@ -230,7 +236,15 @@ export function EngagementsView() {
         )}
       </div>
 
-      <EngagementDrawer id={openId} onClose={() => setOpenId(null)} />
+      <EngagementDrawer
+        id={openId}
+        onClose={() => setOpenId(null)}
+        onOpenCase={(id) => {
+          setOpenId(null);
+          setCaseId(id);
+        }}
+      />
+      <CaseDrawer caseId={caseId} onClose={() => setCaseId(null)} />
     </div>
   );
 }
@@ -238,14 +252,23 @@ export function EngagementsView() {
 function EngagementDrawer({
   id,
   onClose,
+  onOpenCase,
 }: {
   id: string | null;
   onClose: () => void;
+  onOpenCase: (caseId: string) => void;
 }) {
   const { data, loading } = useAdminEngagementDetail(id);
   const task = data?.task;
   const lc = task?.lifecycle;
   const cert = data?.certificate;
+  const { data: cases } = useAdminDisputesView({ task: id, limit: 10 }, !!id);
+  const caseList = cases?.items ?? [];
+  const hasOpenCase = caseList.some((c: any) => isOpenCase(c.status));
+  const clientName = task?.userId
+    ? `${task.userId.firstName ?? ""} ${task.userId.lastName ?? ""}`.trim() || "Client"
+    : "Client";
+  const providerName = task?.providerId?.providerName ?? "The business";
 
   return (
     <Drawer
@@ -294,6 +317,46 @@ function EngagementDrawer({
               </p>
             </div>
           )}
+
+          <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <h4 className="text-xs font-semibold text-slate-900 dark:text-white">Dispute cases</h4>
+            {caseList.length > 0 && (
+              <ul className="mt-2 space-y-1">
+                {caseList.map((c: any) => (
+                  <li key={c._id} className="flex items-center justify-between text-xs">
+                    <span className="text-slate-700 dark:text-slate-200">
+                      {c.disputeNumber} · {caseStatusLabel(c.status)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onOpenCase(String(c._id))}
+                      className="text-brand-600 dark:text-brand-300 font-medium hover:underline"
+                    >
+                      Open case
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {!hasOpenCase && task.providerId && (
+              <details className="mt-2" open={lc?.stage === "disputed"}>
+                <summary className="cursor-pointer text-xs text-rose-600 dark:text-rose-300 py-1">
+                  Open a dispute case
+                </summary>
+                <div className="mt-2">
+                  <OpenCaseForm
+                    source={{ task: String(task._id) }}
+                    prefillSummary={lc?.issue?.reason}
+                    sides={{ client: clientName, provider: providerName }}
+                    onOpened={onOpenCase}
+                  />
+                </div>
+              </details>
+            )}
+            {caseList.length === 0 && !task.providerId && (
+              <p className="mt-1 text-xs text-slate-400">No provider on this job, so there is no one to open a case with.</p>
+            )}
+          </div>
 
           {cert && (
             <div className="mt-4 p-3 rounded-md bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900">

@@ -41,6 +41,12 @@ export const adminKeys = {
   engagementDetail: (id: string) =>
     ["admin", "engagements", "detail", id] as const,
 
+  disputes: ["admin", "disputes"] as const,
+  disputesView: (filter: Record<string, unknown>) =>
+    ["admin", "disputes", "list", filter] as const,
+  disputeStats: ["admin", "disputes", "stats"] as const,
+  disputeDetail: (id: string) => ["admin", "disputes", "detail", id] as const,
+
   reviewsMod: ["admin", "reviews-mod"] as const,
   reviewsModView: (filter: Record<string, unknown>) =>
     ["admin", "reviews-mod", "list", filter] as const,
@@ -58,7 +64,9 @@ export function keysForScope(scope: AdminScope): (readonly unknown[])[] {
       return [adminKeys.clients, adminKeys.overview];
     case "tasks":
       return [adminKeys.tasks, adminKeys.overview];
-    // tickets/disputes/fraud/moderation only feed the dashboard today.
+    case "disputes":
+      return [adminKeys.disputes, adminKeys.overview];
+    // tickets/fraud/moderation only feed the dashboard today.
     default:
       return [adminKeys.overview];
   }

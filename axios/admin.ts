@@ -375,11 +375,20 @@ export const createTicket = async (body: {
 /* ───────── Disputes ───────── */
 export const getDisputeStats = async (): Promise<DisputeStats> =>
   (await axiosInstance.get(`admin/disputes/stats`)).data;
-export const listDisputes = async (params: any = {}) =>
+export const listDisputes = async (params: Record<string, unknown> = {}) =>
   (await axiosInstance.get(`admin/disputes`, { params })).data;
 export const getDispute = async (id: string) =>
   (await axiosInstance.get(`admin/disputes/${id}`)).data;
-export const resolveDispute = async (id: string, payload: any) =>
+/** Open a case from a job ({ task }), a support ticket ({ ticket }), or two people. */
+export const createDispute = async (body: Record<string, unknown>) =>
+  (await axiosInstance.post(`admin/disputes`, body)).data;
+export const addDisputeMessage = async (id: string, body: Record<string, unknown>) =>
+  (await axiosInstance.post(`admin/disputes/${id}/messages`, body)).data;
+export const addDisputeEvidence = async (id: string, body: Record<string, unknown>) =>
+  (await axiosInstance.post(`admin/disputes/${id}/evidence`, body)).data;
+export const assignDispute = async (id: string, assigneeUserId: string) =>
+  (await axiosInstance.patch(`admin/disputes/${id}/assign`, { assigneeUserId })).data;
+export const resolveDispute = async (id: string, payload: Record<string, unknown>) =>
   (await axiosInstance.post(`admin/disputes/${id}/resolve`, payload)).data;
 export const escalateDispute = async (id: string, reason: string) =>
   (await axiosInstance.post(`admin/disputes/${id}/escalate`, { reason })).data;
