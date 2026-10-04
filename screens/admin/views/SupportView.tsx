@@ -9,6 +9,7 @@ import useGlobalStore from "@/stores";
 import { TicketDrawer } from "./support/TicketDrawer";
 import { CaseDrawer } from "@/components/admin/disputes/CaseDrawer";
 import { NewTicketModal } from "./support/NewTicketModal";
+import { TICKET_CATEGORIES } from "./support/categories";
 
 type Scope = "all" | "unassigned" | "mine";
 
@@ -30,6 +31,7 @@ export function SupportView() {
 
   const [scope, setScope] = useState<Scope>("all");
   const [status, setStatus] = useState("");
+  const [category, setCategory] = useState("");
   const [query, setQuery] = useState("");
 
   const [openId, setOpenId] = useState<string | null>(null);
@@ -42,6 +44,7 @@ export function SupportView() {
     if (scope === "unassigned") params.unassigned = true;
     if (scope === "mine" && meId) params.assignee = meId;
     if (status) params.status = status;
+    if (category) params.category = category;
     if (query.trim()) params.query = query.trim();
     try {
       const [list, s] = await Promise.allSettled([
@@ -54,7 +57,7 @@ export function SupportView() {
     } finally {
       setLoading(false);
     }
-  }, [scope, status, query, meId]);
+  }, [scope, status, category, query, meId]);
 
   useEffect(() => {
     void load();
@@ -119,11 +122,25 @@ export function SupportView() {
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
+          aria-label="Filter by status"
           className="text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5"
         >
           {STATUS_FILTERS.map((s) => (
             <option key={s} value={s}>
               {s || "All statuses"}
+            </option>
+          ))}
+        </select>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          aria-label="Filter by category"
+          className="text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5"
+        >
+          <option value="">All categories</option>
+          {TICKET_CATEGORIES.map((c) => (
+            <option key={c.value} value={c.value}>
+              {c.label}
             </option>
           ))}
         </select>

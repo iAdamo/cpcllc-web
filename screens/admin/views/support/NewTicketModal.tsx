@@ -3,19 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { X, Search, Loader2 } from "lucide-react";
 import { createTicket, getAdminUsersView } from "@/axios/admin";
+import { TICKET_CATEGORIES } from "./categories";
 
-const CATEGORIES = [
-  "account",
-  "payment",
-  "subscription",
-  "task",
-  "booking",
-  "review",
-  "dispute",
-  "trust_safety",
-  "technical",
-  "other",
-];
 const PRIORITIES = ["low", "normal", "high", "urgent"];
 
 function name(u: any): string {
@@ -172,9 +161,9 @@ export function NewTicketModal({
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full mt-1 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-2"
               >
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
+                {TICKET_CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
                   </option>
                 ))}
               </select>

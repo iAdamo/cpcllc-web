@@ -17,6 +17,7 @@ import {
 import { socketService, SocketEvents, SupportEvents } from "@/lib/socket";
 import { OpenCaseForm } from "@/components/admin/disputes/OpenCaseForm";
 import { caseStatusLabel } from "@/lib/disputeCase";
+import { ticketCategoryLabel } from "./categories";
 
 const STATUSES = [
   "new",
@@ -232,7 +233,9 @@ export function TicketDrawer({
                 label={ticket.priority}
                 tone={statusToTone(ticket.priority)}
               />
-              <span className="text-xs text-slate-500">{ticket.category}</span>
+              <span className="text-xs text-slate-500">
+                {ticketCategoryLabel(ticket.category)}
+              </span>
             </div>
             <div className="text-sm text-slate-600 dark:text-slate-300">
               <span className="text-slate-400">From </span>
