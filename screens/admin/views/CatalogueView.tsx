@@ -44,6 +44,7 @@ type SubForm = {
   icon: string;
   iconColor: string;
   tags: string;
+  isOffered: boolean;
 };
 
 const emptyCategory: CategoryForm = { name: "", description: "" };
@@ -53,6 +54,7 @@ const emptySub: SubForm = {
   icon: "",
   iconColor: "",
   tags: "",
+  isOffered: true,
 };
 
 export function CatalogueView() {
@@ -145,6 +147,7 @@ export function CatalogueView() {
       icon: s.icon ?? "",
       iconColor: s.iconColor ?? "",
       tags: (s.tags ?? []).join(", "),
+      isOffered: s.isOffered !== false,
     });
     setError(null);
     setSubOpen(true);
@@ -165,7 +168,11 @@ export function CatalogueView() {
           .map((t) => t.trim())
           .filter(Boolean),
       };
-      if (subEditing) await updateSubcategory(subEditing._id, payload);
+      if (subEditing)
+        await updateSubcategory(subEditing._id, {
+          ...payload,
+          isOffered: subForm.isOffered,
+        });
       else await createSubcategory(payload);
       setSubOpen(false);
       await refresh();
@@ -199,7 +206,8 @@ export function CatalogueView() {
             </h2>
             <p className="text-sm text-slate-500 mt-0.5">
               Manage the categories and subcategories shown across the app and
-              website.
+              website. A subcategory marked Not offered stays here but is
+              hidden everywhere else.
             </p>
           </div>
         </div>
@@ -245,20 +253,21 @@ export function CatalogueView() {
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 <button
                   onClick={() => openNewSub(c._id)}
+                  aria-label={`Add a subcategory to ${c.name}`}
                   className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200"
                 >
                   <FolderPlus size={13} /> Subcategory
                 </button>
                 <button
                   onClick={() => openEditCategory(c)}
-                  aria-label="Edit category"
+                  aria-label={`Edit category ${c.name}`}
                   className="p-1.5 rounded-md text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
                   <Pencil size={15} />
                 </button>
                 <button
                   onClick={() => removeCategory(c)}
-                  aria-label="Delete category"
+                  aria-label={`Delete category ${c.name}`}
                   className="p-1.5 rounded-md text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40"
                 >
                   <Trash2 size={15} />
@@ -277,7 +286,11 @@ export function CatalogueView() {
                   {c.subcategories.map((s) => (
                     <div
                       key={s._id}
-                      className="group flex items-start gap-2.5 p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-slate-200"
+                      className={`group flex items-start gap-2.5 p-3 rounded-lg border hover:border-slate-200 ${
+                        s.isOffered === false
+                          ? "border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60"
+                          : "border-slate-100 dark:border-slate-800"
+                      }`}
                     >
                       <span
                         className="w-8 h-8 rounded-lg flex items-center justify-center text-white flex-shrink-0"
@@ -296,9 +309,19 @@ export function CatalogueView() {
                         })()}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
-                          {s.name}
-                        </p>
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
+                            {s.name}
+                          </p>
+                          {s.isOffered === false && (
+                            <span
+                              className="flex-shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                              title="Hidden from every picker; businesses can't newly choose it"
+                            >
+                              Not offered
+                            </span>
+                          )}
+                        </div>
                         {s.description && (
                           <p className="text-xs text-slate-500 truncate">
                             {s.description}
@@ -317,17 +340,17 @@ export function CatalogueView() {
                           </div>
                         )}
                       </div>
-                      <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
                         <button
                           onClick={() => openEditSub(c._id, s)}
-                          aria-label="Edit subcategory"
+                          aria-label={`Edit ${s.name} in ${c.name}`}
                           className="p-1 rounded text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
                           <Pencil size={13} />
                         </button>
                         <button
                           onClick={() => removeSub(s)}
-                          aria-label="Delete subcategory"
+                          aria-label={`Delete ${s.name} from ${c.name}`}
                           className="p-1 rounded text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40"
                         >
                           <Trash2 size={13} />
@@ -435,6 +458,28 @@ export function CatalogueView() {
               placeholder="pipe, drain, faucet"
             />
           </Field>
+          {subEditing && (
+            <label className="flex items-start gap-2.5 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={subForm.isOffered}
+                onChange={(e) =>
+                  setSubForm({ ...subForm, isOffered: e.target.checked })
+                }
+                className="mt-0.5 h-4 w-4 accent-brand-600"
+              />
+              <span className="text-sm">
+                <span className="font-medium text-slate-900 dark:text-white">
+                  Offered on the marketplace
+                </span>
+                <span className="block text-xs text-slate-500 mt-0.5">
+                  Off: hidden from every service picker in the app and website,
+                  and no business can newly choose it. Businesses that already
+                  offer it keep it.
+                </span>
+              </span>
+            </label>
+          )}
           {error && <p className="text-sm text-red-500">{error}</p>}
           <ModalActions
             saving={saving}

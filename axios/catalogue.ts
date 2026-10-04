@@ -10,6 +10,8 @@ export interface AdminSubcategory {
   iconColor?: string;
   tags?: string[];
   categoryId?: string;
+  /** False: hidden from every picker and can't be newly chosen. Missing = offered. */
+  isOffered?: boolean;
 }
 
 export interface AdminCategory {
@@ -53,7 +55,7 @@ export const createSubcategory = async (input: SubcategoryInput) =>
 
 export const updateSubcategory = async (
   id: string,
-  input: Partial<SubcategoryInput>,
+  input: Partial<SubcategoryInput> & { isOffered?: boolean },
 ) => (await axiosInstance.patch(`${base}/subcategories/${id}`, input)).data;
 
 export const deleteSubcategory = async (id: string) =>
