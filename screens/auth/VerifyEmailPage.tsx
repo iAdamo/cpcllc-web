@@ -5,12 +5,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { MailCheck } from "lucide-react";
 import { verifyEmail, sendCode } from "@/axios/auth";
-import { getTermsStatus } from "@/axios/terms";
+import { useFetchTermsStatus } from "@/hooks/useTerms";
 import { termsPageFor } from "@/lib/terms";
 import useGlobalStore from "@/stores";
 
 export default function VerifyEmailPage() {
   const router = useRouter();
+  const fetchTermsStatus = useFetchTermsStatus();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") ?? "";
   const { paramsFrom, setOnboardingStep, updateProfile } = useGlobalStore();
@@ -29,9 +30,9 @@ export default function VerifyEmailPage() {
       updateProfile({ isEmailVerified: true });
       const target = paramsFrom === "/onboarding" ? paramsFrom : "/";
       if (paramsFrom === "/onboarding") setOnboardingStep(3);
-      // Like the app: the current Terms and Privacy come next, before anything
-      // else the account does.
-      const terms = await getTermsStatus().catch(() => null);
+      // Like the app: agreed on the sign-up form, straight on; anything left
+      // to accept (an older sign-up, a newer version), the documents first.
+      const terms = await fetchTermsStatus().catch(() => null);
       router.replace(terms && !terms.ok ? termsPageFor(target) : target);
     } catch (err: any) {
       // The server's own reason ("That code is not right. 4 tries left.").

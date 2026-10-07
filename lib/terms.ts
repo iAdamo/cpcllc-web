@@ -1,7 +1,9 @@
 /**
  * The website's Terms and Privacy acceptance (screens/auth/TermsAcceptancePage).
- * Pure, so the rules are unit-tested. Mirrors the app: Privacy Policy first,
- * then Terms of Service, each read to the end before Accept.
+ * Pure, so the rules are unit-tested. Mirrors the app: the sign-up checkbox
+ * records acceptance with the account; otherwise (older sign-ups, a newly
+ * published version) Privacy Policy first, then Terms of Service, each read
+ * to the end before Accept.
  */
 
 export interface RequiredTerms {
@@ -30,6 +32,38 @@ export function orderRequired(
       (order as string[]).includes(t.termsType),
     )
     .sort((a, b) => order.indexOf(a.termsType) - order.indexOf(b.termsType));
+}
+
+/** GET terms/current: the version of each policy in force now. */
+export interface CurrentTerms {
+  terms: RequiredTerms[];
+}
+
+/** What the sign-up checkbox sends ("I agree to the Terms of Service and
+ *  have read the Privacy Policy"): the versions the form showed. */
+export interface AcceptedTerms {
+  service?: string;
+  privacy?: string;
+  platform: "web";
+}
+
+/** The `acceptedTerms` field for the sign-up body, or undefined to leave it
+ *  out: an API older than the checkbox has no terms/current and would refuse
+ *  the unknown field. Those accounts, and any whose versions couldn't load,
+ *  are shown the documents after the email code instead. */
+export function acceptedTermsFor(
+  current: CurrentTerms | null | undefined,
+): AcceptedTerms | undefined {
+  const version = (type: ShownTermsType) =>
+    current?.terms?.find((t) => t.termsType === type)?.version;
+  const service = version("service");
+  const privacy = version("privacy");
+  if (!service && !privacy) return undefined;
+  return {
+    ...(service ? { service } : {}),
+    ...(privacy ? { privacy } : {}),
+    platform: "web",
+  };
 }
 
 /** The acceptance page, coming back to `currentPath` afterwards. */

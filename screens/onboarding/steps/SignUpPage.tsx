@@ -6,6 +6,8 @@ import { storeReferralCodeFromUrl } from "@/axios/referral";
 import Link from "next/link";
 import { Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
 import useGlobalStore from "@/stores";
+import { useCurrentTerms } from "@/hooks/useTerms";
+import { TERMS_DOCS } from "@/lib/terms";
 import PhoneNumberInput, {
   phoneCountryOptions,
   type SupportedPhoneCountryCode,
@@ -102,6 +104,9 @@ export default function SignUpPage({ onBack }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [ageConfirmed, setAgeConfirmed] = useState(false);
+  const [termsAgreed, setTermsAgreed] = useState(false);
+  // The versions the Terms checkbox agrees to; recorded with the account.
+  const { acceptedTerms } = useCurrentTerms();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
 
@@ -141,7 +146,8 @@ export default function SignUpPage({ onBack }: Props) {
       phoneValid &&
       passwordValid &&
       confirmPasswordValid &&
-      ageConfirmed
+      ageConfirmed &&
+      termsAgreed
     );
   }, [
     email,
@@ -152,6 +158,7 @@ export default function SignUpPage({ onBack }: Props) {
     passwordRequirements,
     passwordsMatch,
     ageConfirmed,
+    termsAgreed,
   ]);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -173,6 +180,9 @@ export default function SignUpPage({ onBack }: Props) {
         phoneNumber: dialedPhoneNumber,
         password,
         ageConfirmed: true,
+        // Without it (versions didn't load, or an older API) the documents
+        // are shown after the email code instead.
+        ...(acceptedTerms ? { acceptedTerms } : {}),
       });
       console.log(pathname);
       pathname === "/onboarding" && setParamsFrom(pathname);
@@ -550,6 +560,43 @@ export default function SignUpPage({ onBack }: Props) {
                 </span>
               </label>
 
+              {/* Terms of Service + Privacy Policy, recorded with the account
+                  (the versions from GET terms/current). The documents open in
+                  a new tab so the form keeps what was typed. */}
+              <div className="flex gap-3 items-start">
+                <input
+                  id="terms-agree"
+                  type="checkbox"
+                  checked={termsAgreed}
+                  onChange={(e) => setTermsAgreed(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-brand-600 focus:ring-brand-500/30 cursor-pointer"
+                />
+                <label
+                  htmlFor="terms-agree"
+                  className="text-sm text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+                >
+                  I agree to the{" "}
+                  <a
+                    href={TERMS_DOCS.service.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-brand-600 dark:text-brand-400 underline"
+                  >
+                    {TERMS_DOCS.service.title}
+                  </a>{" "}
+                  and have read the{" "}
+                  <a
+                    href={TERMS_DOCS.privacy.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-brand-600 dark:text-brand-400 underline"
+                  >
+                    {TERMS_DOCS.privacy.title}
+                  </a>
+                  .
+                </label>
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
@@ -583,24 +630,6 @@ export default function SignUpPage({ onBack }: Props) {
               </p>
             </form>
           </div>
-
-          {/* Footer Text */}
-          <p className="text-[11px] text-slate-500 dark:text-slate-500 text-center mt-5 leading-relaxed">
-            By signing up you agree to our{" "}
-            <Link
-              href="/terms-of-service"
-              className="text-slate-700 dark:text-slate-400 hover:underline"
-            >
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/privacy-policy"
-              className="text-slate-700 dark:text-slate-400 hover:underline"
-            >
-              Privacy Policy
-            </Link>
-          </p>
         </div>
       </div>
     </div>

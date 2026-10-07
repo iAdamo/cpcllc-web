@@ -49,9 +49,12 @@ error when it is missing in production and falls back to a dev tunnel otherwise.
   the query cache by `hooks/useAdminCacheBridge.ts`. Subscribe with
   `useSubscription(channel)`; do not add raw socket listeners in views.
 - Style gluestack components with `className`. Keep the idiom consistent per file.
-- **Terms acceptance is `/auth/terms`, never automatic.** The API answers
-  `TERMS_NOT_ACCEPTED` and `axios/conf.ts` sends the person there; it shows each
-  policy page in a frame and unlocks Accept at the `data-legal-end` marker that
+- **Terms are accepted by the person, never automatically.** At sign-up, the
+  Terms checkbox (`SignUpPage`, `hooks/useTerms.ts`) sends the versions from
+  `GET terms/current`. Anything left after that (an older sign-up, a new
+  version) goes to `/auth/terms`: the API answers `TERMS_NOT_ACCEPTED` and
+  `axios/conf.ts` sends the person there; it shows each policy page in a frame
+  and unlocks Accept at the `data-legal-end` marker that
   `components/legal/LegalLayout.tsx` renders after the text. A new legal page
   goes through `LegalLayout`. Every `next` redirect goes through
   `lib/safeNext.ts`. See cpcllc-backend docs/terms-acceptance.md.

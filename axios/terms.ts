@@ -1,5 +1,9 @@
 import { ApiClientSingleton } from "@/axios/conf";
-import type { RequiredTerms, ShownTermsType } from "@/lib/terms";
+import type {
+  CurrentTerms,
+  RequiredTerms,
+  ShownTermsType,
+} from "@/lib/terms";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -40,7 +44,14 @@ export async function publishTerms(
   return data as AdminTerms;
 }
 
-// ── A person's own acceptance (screens/auth/TermsAcceptancePage) ──
+// ── A person's own acceptance (hooks/useTerms) ──
+
+/** The current version of each policy, for the sign-up Terms checkbox.
+ *  Public. An API older than the checkbox answers 404. */
+export async function getCurrentTerms(): Promise<CurrentTerms> {
+  const { data } = await axiosInstance.get("terms/current");
+  return data;
+}
 
 /** Which current policies this account still has to accept. */
 export async function getTermsStatus(): Promise<{

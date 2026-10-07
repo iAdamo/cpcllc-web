@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
+  acceptedTermsFor,
   orderRequired,
   reachedEnd,
   termsPageFor,
@@ -45,10 +46,33 @@ describe("website Terms acceptance", () => {
     expect(reachedEnd(undefined, 540)).toBe(false);
   });
 
+  it("the sign-up checkbox sends the versions the form showed, as the website", () => {
+    expect(
+      acceptedTermsFor({
+        terms: [
+          { termsType: "privacy", version: "v1.0" },
+          { termsType: "service", version: "v2.0" },
+          { termsType: "payments", version: "v1.0" },
+        ],
+      }),
+    ).toEqual({ service: "v2.0", privacy: "v1.0", platform: "web" });
+  });
+
+  it("sends nothing when the versions couldn't load (an older API refuses the field)", () => {
+    expect(acceptedTermsFor(undefined)).toBeUndefined();
+    expect(acceptedTermsFor(null)).toBeUndefined();
+    expect(acceptedTermsFor({ terms: [] })).toBeUndefined();
+  });
+
   it("both policy pages render through LegalLayout, which carries the end marker", () => {
     // components/legal/LegalLayout.test.tsx proves the marker follows the text.
-    for (const page of ["app/privacy-policy/page.tsx", "app/terms-of-service/page.tsx"]) {
-      expect(readFileSync(join(__dirname, "..", page), "utf8")).toContain("<LegalLayout");
+    for (const page of [
+      "app/privacy-policy/page.tsx",
+      "app/terms-of-service/page.tsx",
+    ]) {
+      expect(readFileSync(join(__dirname, "..", page), "utf8")).toContain(
+        "<LegalLayout",
+      );
     }
   });
 });

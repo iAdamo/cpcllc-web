@@ -6,6 +6,8 @@ export interface RegisterUser {
   password: string;
   // 18+ attestation captured at signup. Required by the API.
   ageConfirmed?: boolean;
+  /** The Terms checkbox: the versions the form showed (lib/terms). */
+  acceptedTerms?: import("@/lib/terms").AcceptedTerms;
 }
 
 export interface LoginUser {
