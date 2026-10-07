@@ -29,6 +29,7 @@ import { CatalogueView } from "@/screens/admin/views/CatalogueView";
 import { AdsView } from "@/screens/admin/views/AdsView";
 import { SettingsView } from "@/screens/admin/views/SettingsView";
 import { TermsView } from "@/screens/admin/views/TermsView";
+import { RetentionView } from "@/screens/admin/views/RetentionView";
 import { PlaceholderView } from "@/screens/admin/views/PlaceholderView";
 import {
   CalendarCheck,
@@ -277,6 +278,8 @@ function renderView(view: string) {
       return <SettingsView />;
     case "terms":
       return <TermsView />;
+    case "retention":
+      return <RetentionView />;
     case "api":
       return (
         <PlaceholderView

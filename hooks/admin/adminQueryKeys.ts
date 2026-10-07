@@ -13,6 +13,11 @@ export const adminKeys = {
 
   terms: ["admin", "terms"] as const,
 
+  // Data retention: periods + last run, run history, legal holds.
+  retention: ["admin", "retention"] as const,
+  retentionRuns: ["admin", "retention", "runs"] as const,
+  retentionHolds: ["admin", "retention", "holds"] as const,
+
   users: ["admin", "users"] as const,
   usersView: (filter: Record<string, unknown>) =>
     ["admin", "users", "list", filter] as const,
