@@ -24,7 +24,7 @@ view of it instead.
 npm run dev
 npm run build
 npm run lint
-npm test        # vitest, currently 3 test files
+npm test        # vitest, 11 test files; renders components too (vitest.config.ts)
 ```
 
 API base URL: `NEXT_PUBLIC_API_URL` in production. `axios/conf.ts` logs an explicit
@@ -49,10 +49,19 @@ error when it is missing in production and falls back to a dev tunnel otherwise.
   the query cache by `hooks/useAdminCacheBridge.ts`. Subscribe with
   `useSubscription(channel)`; do not add raw socket listeners in views.
 - Style gluestack components with `className`. Keep the idiom consistent per file.
+- **Terms acceptance is `/auth/terms`, never automatic.** The API answers
+  `TERMS_NOT_ACCEPTED` and `axios/conf.ts` sends the person there; it shows each
+  policy page in a frame and unlocks Accept at the `data-legal-end` marker that
+  `components/legal/LegalLayout.tsx` renders after the text. A new legal page
+  goes through `LegalLayout`. Every `next` redirect goes through
+  `lib/safeNext.ts`. See cpcllc-backend docs/terms-acceptance.md.
+- **No made-up numbers, uplifts or credentials in copy** (FTC). A gate test
+  (`lib/marketingClaims.test.ts`) scans `app`, `components` and `screens`; a real
+  figure comes from the API.
 
 ## Known issues
 
-- **3 test files across the largest frontend surface in the workspace.** Every fix
+- **11 test files across the largest frontend surface in the workspace.** Every fix
   and feature ships with a test, per the workspace law. That is how the number moves.
 - No CI. `lint`, `test` and `build` all work and nothing runs them automatically.
 - Pre-existing type noise in gluestack-ui components is not from current work. Do not

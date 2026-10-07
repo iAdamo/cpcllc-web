@@ -170,7 +170,7 @@ export default function FilterSidebar({
                 />
                 <ToggleRow
                   label="Verified Only"
-                  description="Background checked & licensed"
+                  description="Approved by our review team"
                   icon={Shield}
                   value={filters.verifiedOnly}
                   onChange={(v) => onChange({ verifiedOnly: v })}
@@ -260,7 +260,7 @@ export default function FilterSidebar({
               Are you a provider?
             </p>
             <p className="text-white/70 text-xs mb-3 leading-relaxed">
-              Join thousands of businesses growing with us.
+              List your business and get found by clients near you.
             </p>
             <a
               href="/onboarding"

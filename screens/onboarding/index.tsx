@@ -46,24 +46,24 @@ const LEFT_CONTENT: Record<
   { headline: string; sub: string; badge?: string }
 > = {
   1: {
-    headline: "Join 500+ verified\nprofessionals.",
+    headline: "Join verified\nlocal professionals.",
     sub: "Whether you're looking for help or ready to offer your skills, CompaniesCenterLLC connects the right people.",
-    badge: "Trusted across many countries",
+    badge: "Serving the US and Nigeria",
   },
   2: {
     headline: "Create account",
     sub: "Join our platform and start connecting with services, CompaniesCenterLLC connects the right people.",
-    badge: "Trusted across many countries",
+    badge: "Serving the US and Nigeria",
   },
   3: {
     headline: "Your profile is your\nfirst impression.",
-    sub: "A complete profile gets up to 3× more enquiries. Take 60 seconds to make it count.",
-    badge: "3× more client reach",
+    sub: "Clients choose from what your profile shows. Take 60 seconds to make it count.",
+    badge: "Takes about a minute",
   },
   4: {
     headline: "Stand out from\nthe crowd.",
-    sub: "Providers with a complete company profile are featured first in search results.",
-    badge: "Featured placement",
+    sub: "A clear company name, logo and description help clients pick you.",
+    badge: "Your public profile",
   },
   5: {
     headline: "Reach clients\nwho need you.",
@@ -77,8 +77,8 @@ const LEFT_CONTENT: Record<
   },
   7: {
     headline: "A picture is worth\na thousand words.",
-    sub: "Providers with 4+ photos get significantly more enquiries. Show off your best work.",
-    badge: "4× more engagement",
+    sub: "Photos of real jobs show clients what you do. Show off your best work.",
+    badge: "Your gallery",
   },
 };
 

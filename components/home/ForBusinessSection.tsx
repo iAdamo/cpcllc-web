@@ -9,15 +9,17 @@ import { useTranslation } from "@/context/TranslationContext";
 
 const perks = [
   { Icon: TrendingUp, label: "Grow your client base instantly" },
-  { Icon: Users, label: "Access thousands of homeowners" },
+  { Icon: Users, label: "Reach homeowners near you" },
   { Icon: Star, label: "Build your verified reputation" },
   { Icon: DollarSign, label: "No commission on jobs" },
 ];
 
+// An illustration of the dashboard, labelled as an example. No revenue or
+// growth figures: on a page selling to businesses they read as earnings claims.
 const dashboardStats = [
-  { label: "New Leads", value: "24", trend: "+12%", color: "text-brand-700" },
-  { label: "Rating", value: "4.9★", trend: "+0.2", color: "text-amber-500" },
-  { label: "Revenue", value: "$8.4k", trend: "+18%", color: "text-emerald-600" },
+  { label: "New Leads", value: "24", color: "text-brand-700" },
+  { label: "Rating", value: "4.9★", color: "text-amber-500" },
+  { label: "Reviews", value: "38", color: "text-emerald-600" },
 ];
 
 export default function ForBusinessSection() {
@@ -94,8 +96,8 @@ export default function ForBusinessSection() {
               {/* Dashboard header */}
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <p className="text-white/50 text-xs font-medium">Provider Dashboard</p>
-                  <p className="text-white font-black text-lg">Tampa Pro Plumbing</p>
+                  <p className="text-white/50 text-xs font-medium">Example dashboard</p>
+                  <p className="text-white font-black text-lg">Your Business</p>
                 </div>
                 <div className="flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/30 px-3 py-1.5 rounded-full">
                   <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
@@ -105,11 +107,10 @@ export default function ForBusinessSection() {
 
               {/* Stats row */}
               <div className="grid grid-cols-3 gap-3 mb-6">
-                {dashboardStats.map(({ label, value, trend, color }) => (
+                {dashboardStats.map(({ label, value, color }) => (
                   <div key={label} className="bg-white/5 rounded-2xl p-4 text-center">
                     <p className={`text-2xl font-black ${color} mb-0.5`}>{value}</p>
-                    <p className="text-white/40 text-[10px] font-medium mb-1">{label}</p>
-                    <p className="text-emerald-400 text-[10px] font-bold">{trend}</p>
+                    <p className="text-white/40 text-[10px] font-medium">{label}</p>
                   </div>
                 ))}
               </div>

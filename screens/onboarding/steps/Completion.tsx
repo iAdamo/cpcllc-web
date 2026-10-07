@@ -154,9 +154,9 @@ export default function Completion() {
                     "Respond to enquiries and grow your business",
                   ]
                 : [
-                    "Search 500+ verified professionals near you",
+                    "Search verified professionals near you",
                     "Compare quotes, reviews, and availability",
-                    "Book same-day appointments with ease",
+                    "Book appointments with ease",
                   ]
               ).map((item) => (
                 <div

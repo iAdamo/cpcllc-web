@@ -77,9 +77,8 @@ const Footer = () => {
               className="mb-5"
             />
             <p className="text-white/45 text-sm leading-relaxed mb-7">
-              Florida&apos;s trusted marketplace for home service professionals.
-              Connecting homeowners with verified, background-checked providers
-              since 2023.
+              A marketplace for local service professionals in the US and
+              Nigeria. Find a provider, compare reviews, and get the job done.
             </p>
             {/* Socials */}
             <div className="flex gap-2.5">

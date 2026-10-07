@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import useGlobalStore from "@/stores";
 
 const FEATURES = [
-  { icon: ShieldCheck, label: "Background-checked professionals" },
+  { icon: ShieldCheck, label: "Verified providers, clearly marked" },
   { icon: Star, label: "Real reviews & verified ratings" },
-  { icon: Zap, label: "Fast local matches, same day" },
+  { icon: Zap, label: "Local providers near you" },
 ];
 
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];

@@ -22,9 +22,9 @@ const ROLES: {
     title: "I need services",
     subtitle: "Browse and hire trusted professionals",
     perks: [
-      "Search 500+ verified providers",
+      "Search verified providers near you",
       "Compare quotes & reviews",
-      "Book same-day appointments",
+      "Book appointments that suit you",
     ],
     color: "from-brand-500 to-cyan-500",
   },

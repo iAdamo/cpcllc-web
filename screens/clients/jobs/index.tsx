@@ -16,7 +16,6 @@ import {
   Menu,
   X,
   Star,
-  TrendingUp,
 } from "lucide-react";
 import useGlobalStore from "@/stores";
 import { useCategories } from "@/hooks/useCategories";
@@ -700,19 +699,8 @@ export default function JobsPage() {
                 <span className="text-xs font-black">Pro Tip</span>
               </div>
               <p className="text-[11px] text-brand-200/80 leading-relaxed">
-                Proposals with a clear cover letter and competitive price
-                receive 3× more responses.
-              </p>
-            </div>
-
-            {/* Trending indicator */}
-            <div className="flex items-center gap-2 px-1">
-              <TrendingUp size={13} className="text-brand-500" />
-              <p className="text-[11px] text-gray-500 dark:text-gray-400">
-                <span className="font-bold text-gray-700 dark:text-gray-300">
-                  Technology & IT
-                </span>{" "}
-                is trending today
+                A clear cover letter and a fair price help your proposal
+                stand out.
               </p>
             </div>
           </div>
