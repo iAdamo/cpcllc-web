@@ -7,12 +7,29 @@ export interface AiChatMessage {
   content: string;
 }
 
-export const getAiStatus = async (): Promise<{ available: boolean }> =>
+/** Sanux status. `consented` and `off` come only for a signed-in account. */
+export interface SanuxStatus {
+  available: boolean;
+  noticeVersion: string;
+  consented?: boolean;
+  off?: boolean;
+}
+
+export const getAiStatus = async (): Promise<SanuxStatus> =>
   (await axiosInstance.get("ai/status")).data;
 
+/** Record acceptance of the Sanux notice (stored on the account when signed
+ *  in; a guest's lives in this browser). */
+export const acceptAiNotice = async (version: string): Promise<void> => {
+  await axiosInstance.post("ai/consent", { version });
+};
+
 /** Non-streaming reply (fallback / simple use). */
-export const aiChat = async (messages: AiChatMessage[]): Promise<string> =>
-  (await axiosInstance.post("ai/chat", { messages })).data.reply;
+export const aiChat = async (
+  messages: AiChatMessage[],
+  noticeVersion: string,
+): Promise<string> =>
+  (await axiosInstance.post("ai/chat", { messages, noticeVersion })).data.reply;
 
 /**
  * Stream an assistant reply over SSE, calling `onDelta` for each text chunk.
@@ -21,6 +38,7 @@ export const aiChat = async (messages: AiChatMessage[]): Promise<string> =>
  */
 export async function aiChatStream(
   messages: AiChatMessage[],
+  noticeVersion: string,
   onDelta: (text: string) => void,
   signal?: AbortSignal,
 ): Promise<void> {
@@ -28,12 +46,18 @@ export async function aiChatStream(
   const res = await fetch(`${base}/ai/chat/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages, noticeVersion }),
     credentials: "include",
     signal,
   });
   if (!res.ok || !res.body) {
-    throw new Error(`AI stream failed (${res.status})`);
+    // The server's reason when it refused ("You turned Sanux off...").
+    const body = await res.json().catch(() => null);
+    const message: string | undefined = body?.error?.message;
+    throw Object.assign(new Error(message ?? `AI stream failed (${res.status})`), {
+      status: res.status,
+      serverMessage: res.status < 500 ? message : undefined,
+    });
   }
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
