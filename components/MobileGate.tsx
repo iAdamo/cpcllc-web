@@ -18,6 +18,7 @@ const PUBLIC_PATHS = [
   "/auth/reset-password",
   "/auth/forgot-password",
   "/auth/verify-email",
+  "/auth/terms",
   "/admin/mfa/verify",
   "/i",
   "/contact",

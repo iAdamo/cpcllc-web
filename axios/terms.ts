@@ -1,4 +1,5 @@
 import { ApiClientSingleton } from "@/axios/conf";
+import type { RequiredTerms, ShownTermsType } from "@/lib/terms";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -37,4 +38,26 @@ export async function publishTerms(
 ): Promise<AdminTerms> {
   const { data } = await axiosInstance.post("admin/terms/publish", input);
   return data as AdminTerms;
+}
+
+// ── A person's own acceptance (screens/auth/TermsAcceptancePage) ──
+
+/** Which current policies this account still has to accept. */
+export async function getTermsStatus(): Promise<{
+  ok: boolean;
+  requiredTerms?: RequiredTerms[];
+}> {
+  const { data } = await axiosInstance.get("terms/status");
+  return data;
+}
+
+/** Record the person's decision on each policy, from the website. */
+export async function decideTerms(
+  items: Array<{ termsType: ShownTermsType; status: "accepted" | "declined" }>,
+): Promise<unknown> {
+  const { data } = await axiosInstance.post(
+    "terms/decide",
+    items.map((i) => ({ ...i, platform: "web" })),
+  );
+  return data;
 }

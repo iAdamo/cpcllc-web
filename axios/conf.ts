@@ -2,6 +2,7 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 import { getDeviceId, getSessionId } from "@/utils/Device";
 import { AppErrorService } from "@/lib/errorService";
 import { createSingleFlight } from "@/lib/singleFlight";
+import { TERMS_PAGE, termsPageFor } from "@/lib/terms";
 
 const PROD_FALLBACK_WARNING =
   "NEXT_PUBLIC_API_URL is not set — API requests will fail. Set it in the deployment environment.";
@@ -81,6 +82,19 @@ const createClient = () => {
           normalized.severity === "critical")
       ) {
         AppErrorService.report(normalized);
+      }
+
+      // The account hasn't accepted the current Terms/Privacy: show them (the
+      // acceptance page records the person's own decision), then come back.
+      if (
+        status === 403 &&
+        normalized.code === "TERMS_NOT_ACCEPTED" &&
+        typeof window !== "undefined" &&
+        !window.location.pathname.startsWith(TERMS_PAGE)
+      ) {
+        window.location.href = termsPageFor(
+          window.location.pathname + window.location.search,
+        );
       }
 
       // Session expired on a protected page — send the user to sign-in.

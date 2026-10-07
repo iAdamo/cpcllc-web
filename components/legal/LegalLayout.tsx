@@ -39,6 +39,9 @@ export default function LegalLayout({
         <article className="legal-prose rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 md:p-10">
           {children}
         </article>
+        {/* End of the document. The website's Terms acceptance unlocks Accept
+            only once this is in view (lib/terms LEGAL_END_ATTR, reachedEnd). */}
+        <div data-legal-end="" aria-hidden="true" />
       </div>
     </main>
   );

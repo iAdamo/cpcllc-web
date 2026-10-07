@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { MailCheck } from "lucide-react";
 import { verifyEmail, sendCode } from "@/axios/auth";
+import { getTermsStatus } from "@/axios/terms";
+import { termsPageFor } from "@/lib/terms";
 import useGlobalStore from "@/stores";
 
 export default function VerifyEmailPage() {
@@ -25,17 +27,17 @@ export default function VerifyEmailPage() {
     try {
       await verifyEmail({ email, code });
       updateProfile({ isEmailVerified: true });
-      if (paramsFrom === "/onboarding") {
-        setOnboardingStep(3);
-        router.replace(paramsFrom);
-      } else {
-        router.replace("/");
-      }
+      const target = paramsFrom === "/onboarding" ? paramsFrom : "/";
+      if (paramsFrom === "/onboarding") setOnboardingStep(3);
+      // Like the app: the current Terms and Privacy come next, before anything
+      // else the account does.
+      const terms = await getTermsStatus().catch(() => null);
+      router.replace(terms && !terms.ok ? termsPageFor(target) : target);
     } catch (err: any) {
+      // The server's own reason ("That code is not right. 4 tries left.").
       setError(
-        err?.response?.data?.message ??
-          err?.message ??
-          "That code didn't work. It may be expired — try again."
+        err?.appError?.userMessage ??
+          "That code didn't work. It may be expired. Try again."
       );
     } finally {
       setLoading(false);
@@ -51,7 +53,7 @@ export default function VerifyEmailPage() {
       setResentAt(Date.now());
     } catch (err: any) {
       setError(
-        err?.response?.data?.message ?? "Couldn't resend. Try again shortly."
+        err?.appError?.userMessage ?? "Couldn't resend. Try again shortly."
       );
     } finally {
       setResending(false);
