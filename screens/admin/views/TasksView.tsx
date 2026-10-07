@@ -272,7 +272,6 @@ function TaskDetailDrawer({
           <Row label="Status" value={t.status} />
           <Row label="Urgency" value={t.urgency ?? "—"} />
           <Row label="Visibility" value={t.visibility ?? "—"} />
-          <Row label="Anonymous" value={t.anonymous ? "Yes" : "No"} />
           <Row label="Active" value={t.isActive ? "Yes" : "No (archived)"} />
           <Row
             label="Deadline"
