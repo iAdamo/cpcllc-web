@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Shield, Scale, ArrowLeft, Loader2 } from "lucide-react";
 import useGlobalStore from "@/stores";
-import { getTermsStatus, decideTerms } from "@/axios/terms";
+import { useDecideTerms, useTermsStatus } from "@/hooks/useTerms";
 import { notify } from "@/lib/notify";
 import { safeNextPath } from "@/lib/safeNext";
 import {
@@ -32,36 +32,44 @@ export default function TermsAcceptancePage() {
   const next = safeNextPath(searchParams.get("next"));
   const logout = useGlobalStore((s) => s.logout);
 
-  const [required, setRequired] = useState<
-    Array<RequiredTerms & { termsType: ShownTermsType }> | null
-  >(null);
+  const [required, setRequired] = useState<Array<
+    RequiredTerms & { termsType: ShownTermsType }
+  > | null>(null);
   const [index, setIndex] = useState(0);
   // Per document, so "read" can't carry from one policy to the next.
   const [readTypes, setReadTypes] = useState<ReadonlySet<ShownTermsType>>(
     () => new Set(),
   );
-  const [saving, setSaving] = useState(false);
+  // Which document's frame has its text on screen. The frame first loads an
+  // empty shell; until the text arrives it shows a loading state, not a blank.
+  const [renderedFor, setRenderedFor] = useState<ShownTermsType | null>(null);
+  const status = useTermsStatus();
+  const decide = useDecideTerms();
+  const saving = decide.isPending;
   const frameRef = useRef<HTMLIFrameElement>(null);
   const stopWatching = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    getTermsStatus()
-      .then((s) => {
-        const docs = orderRequired(s.requiredTerms);
-        if (s.ok || docs.length === 0) router.replace(next);
-        else setRequired(docs);
-      })
-      .catch((error) => {
-        // Not signed in (or the session ended): sign in first, then come back.
-        if (error?.response?.status === 401) {
-          router.replace(
-            `/auth/signin?next=${encodeURIComponent(termsPageFor(next))}`,
-          );
-        } else {
-          notify.error(error, { module: "auth", feature: "terms-status" });
-        }
-      });
-  }, [next, router]);
+    const s = status.data;
+    if (!s) return;
+    const docs = orderRequired(s.requiredTerms);
+    if (s.ok || docs.length === 0) router.replace(next);
+    // Once: a later re-read must not restart someone halfway through.
+    else setRequired((prev) => prev ?? docs);
+  }, [status.data, next, router]);
+
+  useEffect(() => {
+    const error: any = status.error;
+    if (!error) return;
+    // Not signed in (or the session ended): sign in first, then come back.
+    if (error?.response?.status === 401) {
+      router.replace(
+        `/auth/signin?next=${encodeURIComponent(termsPageFor(next))}`,
+      );
+    } else {
+      notify.error(error, { module: "auth", feature: "terms-status" });
+    }
+  }, [status.error, next, router]);
 
   const current = required?.[index];
   const doc = current ? TERMS_DOCS[current.termsType] : null;
@@ -77,7 +85,11 @@ export default function TermsAcceptancePage() {
     if (!win || !frameDoc) return;
     const check = () => {
       const end = frameDoc.querySelector(`[${LEGAL_END_ATTR}]`);
-      if (!reachedEnd(end?.getBoundingClientRect().top ?? null, win.innerHeight)) return;
+      if (end) setRenderedFor(termsType);
+      if (
+        !reachedEnd(end?.getBoundingClientRect().top ?? null, win.innerHeight)
+      )
+        return;
       setReadTypes((prev) => new Set(prev).add(termsType));
       stop();
     };
@@ -88,8 +100,14 @@ export default function TermsAcceptancePage() {
       win.removeEventListener("resize", check);
       stopWatching.current = null;
     };
-    observer.observe(frameDoc.documentElement, { childList: true, subtree: true });
-    frameDoc.addEventListener("scroll", check, { capture: true, passive: true });
+    observer.observe(frameDoc.documentElement, {
+      childList: true,
+      subtree: true,
+    });
+    frameDoc.addEventListener("scroll", check, {
+      capture: true,
+      passive: true,
+    });
     win.addEventListener("resize", check);
     stopWatching.current = stop;
     check();
@@ -103,9 +121,8 @@ export default function TermsAcceptancePage() {
       setIndex((i) => i + 1);
       return;
     }
-    setSaving(true);
     try {
-      await decideTerms(
+      await decide.mutateAsync(
         required.map((t) => ({ termsType: t.termsType, status: "accepted" })),
       );
       router.replace(next);
@@ -115,8 +132,6 @@ export default function TermsAcceptancePage() {
         module: "auth",
         feature: "accept-terms",
       });
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -174,14 +189,24 @@ export default function TermsAcceptancePage() {
         </div>
 
         {/* The document itself */}
-        <iframe
-          key={current.termsType}
-          ref={frameRef}
-          src={`${doc.path}?embedded=1`}
-          title={doc.title}
-          onLoad={() => watchFrame(current.termsType)}
-          className="w-full h-[60vh] bg-white"
-        />
+        <div className="relative">
+          <iframe
+            key={current.termsType}
+            ref={frameRef}
+            src={`${doc.path}?embedded=1`}
+            title={doc.title}
+            onLoad={() => watchFrame(current.termsType)}
+            className="w-full h-[60vh] bg-white"
+          />
+          {renderedFor !== current.termsType && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white dark:bg-slate-900">
+              <Loader2 className="animate-spin text-brand-600" aria-hidden />
+              <p className="text-sm text-slate-500" role="status">
+                Loading the {doc.title}…
+              </p>
+            </div>
+          )}
+        </div>
 
         {/* Decision */}
         <div className="px-5 py-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
