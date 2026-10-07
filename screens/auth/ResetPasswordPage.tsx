@@ -191,7 +191,7 @@ export default function ResetPasswordPage() {
 
             <p className="text-xs text-slate-500 text-center pt-2">
               <Link
-                href="/forgot-password"
+                href="/auth/forgot-password"
                 className="text-brand-600 dark:text-brand-300 hover:underline font-medium"
               >
                 Request a new code
