@@ -18,6 +18,12 @@ export const adminKeys = {
   retentionRuns: ["admin", "retention", "runs"] as const,
   retentionHolds: ["admin", "retention", "holds"] as const,
 
+  // Privacy requests, appeals, copyright notices and counter-notices.
+  legalRequests: ["admin", "legal-requests"] as const,
+  legalRequestsView: (filter: Record<string, unknown>) =>
+    ["admin", "legal-requests", "list", filter] as const,
+  legalRequest: (id: string) => ["admin", "legal-requests", "detail", id] as const,
+
   users: ["admin", "users"] as const,
   usersView: (filter: Record<string, unknown>) =>
     ["admin", "users", "list", filter] as const,

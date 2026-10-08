@@ -28,6 +28,7 @@ import {
   ScrollText,
   Archive,
   KeyRound,
+  Scale,
   ClipboardList,
   Cable,
   Plug,
@@ -97,6 +98,7 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
         badgeKey: "fraudAlerts",
       },
       { key: "compliance", label: "Compliance", icon: KeyRound },
+      { key: "legal_requests", label: "Privacy & Copyright Requests", icon: Scale },
     ],
   },
   {
