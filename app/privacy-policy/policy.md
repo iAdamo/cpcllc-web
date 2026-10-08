@@ -1,3 +1,5 @@
+**Last Updated:** October 8, 2026
+
 Companies Center LLC provides a local services marketplace through its mobile
 applications, website, administrative systems, and related services. This Privacy
 Policy explains what information Companies Center LLC collects, how we use it, when it
@@ -117,7 +119,8 @@ recover or secure an account.
 We store a cryptographic hash of the account password rather than the readable password.
 We may store short lived verification records, password reset records, refresh token
 records, login session information, device registrations, and the time and version of
-legal acceptances.
+legal acceptances. Email verification and password reset codes are stored only as keyed
+hashes, never in readable form.
 
 ### 5.2 Age Confirmation
 
@@ -157,10 +160,11 @@ account number, routing number, or SWIFT information. Companies Center treats th
 as sensitive.
 
 Sensitive financial account fields are hidden from every public profile, search result,
-and administrative listing by default. They are accessible only to the provider and, where
-necessary, specifically authorized personnel and the recipient of a document on which the
-provider deliberately elects to display those instructions, and they are protected by
-encryption at rest in production storage. A provider can remove or update the information.
+and administrative listing. When a provider enters them, they are printed on the estimates
+and invoices that provider creates, including the document page opened from a shared link,
+so anyone who receives the document or its link can see them. The database that stores them
+is encrypted at rest; the fields are not separately encrypted. A provider can remove or
+update the information.
 Companies Center does not use these details to withdraw money from the account and does
 not verify that they are correct.
 
@@ -264,10 +268,10 @@ guaranteed results.
 
 When a paid provider tool is enabled, the checkout page identifies the payment processor
 before payment is submitted. The payment processor receives full payment credentials
-directly. Companies Center may receive a customer or payment token, processor reference,
-plan, amount, currency, billing status, renewal status, cancellation status, refund status,
-dispute status, and transaction timestamps. Companies Center does not store full card
-numbers or card security codes.
+directly. Companies Center receives the processor's payment reference, the plan, amount,
+currency, payment status, and the paid period. Paid tools are sold as prepaid periods that
+do not renew automatically. Companies Center does not receive or store card numbers, card
+security codes, expiry dates, billing addresses, or a saved payment method.
 
 Payments for real world services between Clients and Service Providers take place outside
 Companies Center. Companies Center does not hold those funds, operate escrow, or verify
@@ -388,8 +392,8 @@ Certain information is necessary to provide a requested service. An email addres
 credentials are necessary to create and protect an account. General location or a manually
 entered service area may be necessary for local discovery. A job site address may be
 necessary after a Client selects a Service Provider. Device permissions are necessary only
-for features that require the camera, microphone, photos, notifications, files, or live
-location.
+for features that require the camera, microphone, notifications, or location. Choosing photos
+or files requires no permission (Section 32).
 
 Declining optional information does not prevent use of unrelated functions. A user can
 manually enter an address without granting location permission. A user can use core
@@ -473,24 +477,24 @@ maximum session duration is reached, whichever occurs first. A safety ceiling pr
 indefinite collection.
 
 During an active session, location may be collected at intervals that vary with movement,
-distance, accuracy, battery use, and device conditions. Active coordinates may be held
-temporarily in a real time cache with a maximum 15 minute expiration as a technical fallback.
-Companies Center deletes the active cache when the session ends.
+distance, accuracy, battery use, and device conditions. Active coordinates are held in a real
+time cache that expires 15 minutes after the most recent update.
 
-Companies Center may store the most recent coordinate briefly to restore an interrupted
-active session. That coordinate is cleared when the session ends and no later than 24 hours
-after termination. Companies Center does not retain a route history for advertising, ranking,
-behavioral profiling, or unrelated analytics.
+Companies Center stores the most recent coordinate of each participant, refreshed at most
+every 30 seconds, so that an interrupted session can resume. It is deleted within 25 hours
+after the session ends. Companies Center does not keep a route history.
 
 Companies Center may retain limited session metadata, such as participant identifiers,
 consent time, start time, stop time, duration, and reason for termination, for up to 180 days
 to investigate safety complaints, resolve disputes, and demonstrate that consent controls
 operated. Session metadata does not include a continuing route history. When a user
-deactivates or deletes an account, their active live location sessions end.
+deactivates or deletes an account, their active live location sessions end. A request that is
+never answered closes 24 hours after it was sent, and a request connected to work that never
+starts closes 24 hours after the scheduled time, so the same limits apply to them.
 
 Live coordinates are delivered only to the authorized participants and systems necessary to
-operate the session. Restricted personnel may access a last known point only when reasonably
-necessary for a documented safety, support, security, or legal purpose. Such access is logged.
+operate the session. Companies Center staff have no tool that displays a person's live or last
+known location.
 
 ## 12. Photographs Videos Files and Metadata
 
@@ -498,18 +502,21 @@ Users may choose to upload profile images, service media, Task media, post media
 media, message attachments, support evidence, and document files. Companies Center processes
 uploaded content to provide the requested feature.
 
-Before Companies Center makes an image or video available through the Platform, it removes
-embedded location and device metadata to the extent technically feasible. Companies Center
-may resize, compress, transcode, generate thumbnails, validate file types, and limit file
-sizes, and scans stored files for malware at the hosting layer. Automated scanning is limited
-to malware. Other prohibited content is handled by human moderation — user reports, automated
-moderation rules, and a moderation team that reviews reported content and can remove it,
-restrict features, or suspend accounts — rather than by automatically scanning every upload.
+Before Companies Center stores an uploaded photograph, it removes embedded metadata,
+including GPS location and device details. It also removes embedded metadata from videos
+posted to public areas. Animated images, images that cannot be processed, videos sent in
+messages, and documents such as PDF or word processing files are stored as uploaded. Companies
+Center may resize, compress, generate thumbnails, validate file types, and limit file sizes.
 
-Public media and private media are stored separately. Public profile and post media may use
-public delivery URLs. Private messages, support attachments, exact location evidence,
-verification documents, estimates, invoices, and other restricted files use authenticated or
-expiring links. A public media URL is not used for a verification document.
+Uploads are not automatically scanned. Prohibited content is handled through user reports and
+review by a moderation team, which can remove content, restrict features, or suspend accounts.
+
+Public media and private media are stored separately. Public profile, service, and post media
+use public addresses. Message attachments, support attachments, Task photos, and proposal
+attachments are private: they open only through authenticated requests or links that expire
+within two hours, issued to people permitted to see the related conversation, ticket, Task, or
+proposal. Estimates and invoices open only for the provider who created them or through a
+document link (Section 15).
 
 Users should still review photographs and videos for visible house numbers, license plates,
 faces, documents, reflections, or other information that may reveal identity or location.
@@ -520,7 +527,10 @@ Removing technical metadata cannot remove information visible inside the image i
 Clients control whether a Task is directed to one provider or opened to eligible providers. A
 public or market visible Task may show its description, category, budget, timing, approximate
 area, selected media, and other information the Client chooses to publish. It does not show
-the Client's private residential address or exact job site address.
+the Client's private residential address or exact job site address. Until the Client selects
+a provider, other providers and visitors see the Client's first name and last initial, without
+a profile photograph. A provider to whom the Task is directed, and the provider the Client
+selects, see the Client's name and photograph.
 
 Proposals, proposal prices, and proposal messages are visible to the Client and the provider
 who submitted them. Companies Center does not make competing proposals public. Once a Client
@@ -544,16 +554,15 @@ preserve messages when a participant requests support, reports abuse, submits a 
 when access is reasonably necessary for safety, security, fraud prevention, legal compliance,
 or enforcement of the Terms.
 
-Blocking applies across Platform interactions, not only the existing conversation. Subject to
-safety and record preservation needs, a blocked user is prevented from starting new
-conversations, sending new service requests, submitting proposals to the blocker, following or
-commenting on the blocker's content, requesting live location, or receiving restricted
-information about the blocker. Historical records may remain visible where necessary to
-preserve an existing Booking, dispute, invoice, report, or legal record.
+Either participant can block a conversation. While it is blocked, neither participant can send
+messages in it. Blocking does not currently prevent the other person from viewing public
+content or using other Platform features. A user can report another user to Customer Support
+at any time.
 
-Deleting a message may remove it for one participant or all participants depending on the
-control displayed. The application identifies the effect before deletion. Copies preserved in
-reports, disputes, backups, or legal records follow the retention rules in Section 26.
+Where the application offers it, a sender can delete their own message. Deletion is permanent
+and applies to both participants: the message and any attachment are erased, not hidden.
+Copies preserved in reports, disputes, backups, or legal records follow the retention rules in
+Section 26.
 
 ## 15. Estimates and Invoices
 
@@ -566,8 +575,10 @@ and delivery of the document. Companies Center does not become the seller of the
 service and does not guarantee collection.
 
 Public document links are unlisted but may be viewed by anyone who possesses the link. Links
-expire, can be revoked by the provider, are excluded from search engine indexing, and do not
-expose unrelated account information. Users should send links only to intended recipients.
+expire 90 days after the provider last saves or sends the document, can be revoked by the
+provider at any time, are excluded from search engine indexing, and do not expose unrelated
+account information. If the provider has entered bank details, they appear on the shared
+document (Section 5.5). Users should send links only to intended recipients.
 
 Invoice payment statuses are entered manually. A label such as paid means that the provider or
 another authorized user recorded that status. It is not confirmation from a bank or payment
@@ -593,22 +604,26 @@ safety outcome, income, booking, or business result.
 ## 17. Artificial Intelligence Assistant
 
 When enabled, the Companies Center assistant uses a third party generative artificial
-intelligence provider, currently Google Gemini, to generate informational responses. The text
+intelligence provider to generate informational responses. The text
 submitted by the user and the generated answer are transmitted to that provider. The assistant
 is not used to make final decisions about verification, moderation, suspension, search ranking,
 pricing, eligibility, or access to employment, housing, credit, insurance, medical care, or
 another similarly significant service.
 
-The provider's treatment of prompts and responses may depend on the account and service tier
-used by Companies Center. Companies Center uses a paid business configuration before allowing
-users to submit personal information to the assistant and contractually available data
-processing protections apply. Companies Center does not intentionally use user prompts or
-responses to train its own general purpose model.
+Before a person's first message, the assistant shows a notice explaining that what they type is
+sent to the provider, and nothing is sent until the person accepts. Acceptance is recorded with
+the version of the notice: on the account for signed in users, and on the device for visitors.
+Signed in users can turn the assistant off in the application's settings, which withdraws that
+acceptance; the notice is shown again if they turn it back on.
 
-Companies Center does not retain assistant prompts or responses on its own servers beyond
-the transient processing needed to return an answer, except where a copy is briefly retained
-to investigate abuse or comply with law. The artificial intelligence provider may retain
-limited information according to its applicable terms.
+The text a user types is sent without the user's name, email address, location, or account
+details, and the provider receives it from Companies Center's servers, not from the user's
+device. The provider may process and retain prompts and responses under its own terms, which
+depend on the service tier Companies Center uses. Companies Center does not use prompts or
+responses to train its own models.
+
+Companies Center does not store assistant prompts or responses on its servers. The
+conversation is kept only on the user's device while the chat is open.
 
 Generated answers can be incomplete, inaccurate, or inappropriate. Users should not rely on
 the assistant as legal, medical, financial, emergency, or professional advice. Users can obtain
@@ -616,13 +631,18 @@ ordinary support without using the assistant.
 
 ## 18. Notifications Email and Other Communications
 
-Companies Center may send in app, push, email, web push, or, when operational and authorized,
-SMS communications. These may include account verification, password reset, security, Booking,
-Task, message, support, dispute, subscription, service update, and marketing communications.
+Companies Center may send in app, push, email, and web push communications. These may include
+account verification, password reset, security, Booking, Task, message, support, dispute,
+subscription, service update, and marketing communications. Companies Center does not send SMS
+messages and does not make marketing calls.
 
-Users can manage available channel preferences. Marketing email includes an unsubscribe method.
-A user may continue to receive necessary account, security, legal, transaction, and service
-messages even after opting out of marketing.
+Users can turn push and email notifications on or off. They can also turn off Announcements and
+offers, which stops marketing announcements in the application, by push, and by email.
+Marketing email includes an unsubscribe link. When a person unsubscribes, Companies Center keeps
+only a one way hash of the email address, so the choice holds even if the address is used
+again; turning Announcements and offers back on removes it. A user continues to receive
+necessary account, security, legal, transaction, and service messages after opting out of
+marketing.
 
 Lock screen notifications use a privacy preserving preview. They do not display exact addresses,
 coordinates, complete private messages, financial account information, verification documents,
@@ -644,9 +664,9 @@ Companies Center does not currently use third party cookies or mobile identifier
 advertising. Companies Center does not currently use a behavioral analytics SDK to follow users
 across unrelated applications or websites.
 
-Google Maps or another embedded map may receive an IP address, browser or device information,
-coordinates, and address queries needed to provide the map. Where required, Companies Center
-delays nonessential third party content until the appropriate notice or consent is provided.
+An embedded map provider may receive an IP address, browser or device information,
+coordinates, and address queries needed to provide the map. The map loads when the page or
+screen that shows it opens.
 
 Because Companies Center does not sell personal information or share it for cross context
 behavioral advertising, a browser privacy signal does not change an otherwise nonexistent sale
@@ -661,18 +681,18 @@ sending a proposal to a Client, revealing an exact job site address to a selecte
 delivering a direct message, sharing an invoice link, or transmitting live location to a
 consenting participant.
 
-Companies Center may disclose information to vendors that provide hosting, database, cache, file
-storage, content delivery, authentication support, email, SMS, push notification, maps,
-geocoding, artificial intelligence, payment processing, application monitoring, security, fraud
-prevention, and customer support services. These vendors receive only information reasonably
+Companies Center may disclose information to vendors that provide server hosting, database,
+cache, file storage, email, push notification, maps and location search, artificial
+intelligence, optional social sign in, and payment processing services. Error reporting,
+customer support, and fraud review are operated by Companies Center itself. These vendors
+receive only information reasonably
 necessary for their function and are subject to contractual or legal obligations appropriate to
 their role.
 
-Depending on the enabled feature, service providers may include the provider hosting our servers
-and file storage (currently Hostinger), providers operating MongoDB and Redis infrastructure,
-Google Maps and Places, Google Gemini, Google Firebase
-Cloud Messaging, Expo push services, Mailtrap or another transactional email provider, web push
-providers, and the payment processor identified at checkout. A software dependency does not mean
+Depending on the enabled feature, service providers may include providers of server hosting and
+file storage, database and cache infrastructure, maps and location search, generative artificial
+intelligence, push notification delivery, transactional email, and web push, and the payment
+processor identified at checkout. A software dependency does not mean
 that a vendor receives information when the relevant service is disabled.
 
 Companies Center may disclose information to professional advisers, auditors, insurers,
@@ -782,59 +802,74 @@ described below, to comply with legal obligations, resolve disputes, enforce agr
 security, and preserve the rights of other users. When retention ends, information is deleted,
 deidentified, or aggregated.
 
-Account and profile information is retained while the account is active and during the 30 day
-deletion cancellation period. It is then deleted or deidentified within 30 additional days, except
-for limited records that must be retained for a stated lawful purpose.
+**Account and profile.** Account and profile information is retained while the account is active
+and during the 30 day deletion cancellation period described in Section 27. The account is then
+deleted or anonymized within one day. Private residential addresses and saved coordinates are
+deleted with the account.
 
-Terms acceptance and age attestation records may be retained for up to three years after account
-deletion to establish the version accepted and eligibility representation. Retained records are
-separated from ordinary product use and are not used for marketing.
+**Legal acceptances.** Terms acceptance and age confirmation records remain with the anonymized
+account record after deletion, showing only the document version, the time, and the platform,
+without the person's identity.
 
-Email and password reset verification codes expire after a short validity period and are deleted or
-rendered unusable after use. Refresh tokens expire according to their configured lifetime and are
-revoked on logout, password reset, account compromise, or deletion.
+**Codes and sessions.** Email verification and password reset codes expire after 30 or 60 minutes
+and are removed once used. Refresh tokens expire after their configured lifetime and are revoked
+on logout, password reset, suspected compromise, or deletion; expired tokens are deleted
+automatically.
 
-Push tokens and device registrations are retained while valid and needed for an active account or
-device. They are disabled or deleted after logout, invalidation, device removal, or account deletion.
+**Notifications.** Notification settings, push tokens, and device registrations are retained while
+needed for an active account or device and are deleted when the account is deleted. In app
+notifications are deleted after 30 days, and notification delivery records after 90 days. An
+unsubscribed email address is kept only as a one way hash, as described in Section 18.
 
-Private residential addresses are retained while needed for the account or requested service. Exact
-job site addresses are restricted after completion and are deleted or deidentified when no longer
-needed for an active dispute, safety matter, or record obligation.
+**Live location.** The real time cache expires 15 minutes after the most recent update. The
+resume coordinate is deleted within 25 hours after the session ends. Session consent and
+termination metadata is deleted 180 days after the session ends.
 
-Live location cache records are deleted when a session ends, with a maximum 15 minute technical
-expiration as a fallback. A persistent resume coordinate is cleared when the session ends and no
-later than 24 hours later. Limited session consent and termination metadata may be retained for up
-to 180 days.
+**Public content.** Public profiles, services, posts, comments, and uploaded public media are
+retained until the user deletes them or the account is deleted. Deleting a post deletes its
+comments and media at once; deleting a service deletes its media. A file that another item of the
+same user still shows is kept with that item.
 
-Public profiles, services, posts, comments, and uploaded public media are retained until the user
-deletes them, the account is deleted, or Companies Center removes them. Operational copies are
-deleted within 30 days after the applicable deletion process, subject to backups and legal
-preservation.
+**Tasks, proposals, and Bookings.** Tasks, including the job site address and photos, are retained
+until the Client deletes them or the Client's account is deleted; their proposals and proposal
+attachments are deleted with them. A proposal sent by a provider whose account is deleted remains
+on the Client's Task without its attachments. Bookings are deleted one year after the appointment,
+unless the work is linked to an estimate, invoice, or dispute, in which case they are kept as long
+as that record.
 
-Tasks, proposals, Bookings, completion records, reviews, and recommendations are retained while the
-account is active. After deletion, Companies Center deletes or deidentifies information associated
-with the requesting user, while preserving only the minimum information required to protect another
-user's records, resolve a dispute, prevent fraud, or comply with law.
+**Reviews.** Reviews written by a deleted account remain with their star rating and completion
+mark, but their text and photos are removed.
 
-Messages and attachments are retained while needed to provide conversations and while the
-participants maintain them. Following account deletion, Companies Center deletes the requesting
-user's attachments and direct identifiers or replaces them with a neutral deleted user identifier,
-unless a particular message is preserved as evidence in a report, dispute, safety investigation, or
-legal matter. Another participant may retain a deidentified copy of correspondence received.
+**Messages.** A message the sender deletes is erased at once. When an account is deleted, every
+message that person sent is deleted with its attachments. Messages the other participant sent
+remain in that participant's conversation, where the deleted person appears as a deleted user.
 
-Support, moderation, dispute, fraud, diagnostic, security log, referral, and assistant records are
-retained only for as long as reasonably necessary for the purpose for which they were collected, to
-resolve disputes, prevent repeated abuse, maintain security, and comply with legal, tax, and
-accounting obligations, after which they are deleted, deidentified, or aggregated.
+**Support, safety, and audit records.** Support tickets, with their messages and attachments, are
+deleted one year after the ticket is closed; after account deletion a ticket keeps its text and
+loses its attachments. Staff audit records are deleted one year after the entry. Dispute cases,
+moderation reports, fraud events, and account actions such as warnings and suspensions are deleted
+three years after the case is closed, the report is decided, the event is resolved, or the action
+ends; a permanent suspension is kept while it stands. A record linked to one that is still kept,
+such as a support ticket opened about a dispute, is kept as long as that record.
 
-Verification documents are not collected or stored by Companies Center. If identity verification
-is activated in the future, the documents are held by the third-party verification provider under
-its own retention terms; Companies Center retains only the verification result, which may remain
-while a badge is active and for a limited period after it is removed for audit and fraud prevention.
+**Privacy and copyright requests.** Privacy requests, appeals, copyright notices, and
+counter-notices are deleted two years after they are closed, including after the account they
+concern is deleted.
 
-Subscription, processor, refund, dispute, tax, accounting, estimate, and invoice records may be
-retained for the period required by applicable accounting, tax, fraud prevention, contractual, or
-legal obligations.
+**Other records.** Error reports are kept on a rolling basis and record the address of a failed
+request without its query values. Referral codes and redemptions are retained, including after
+account deletion, to prevent repeated claims. Companies Center does not store assistant prompts or
+responses (Section 17). Verification documents are not collected; Section 5.15 applies if
+verification is activated in the future.
+
+**Financial records.** Estimates and invoices, with their documents, are retained for seven years
+from their issue date, and records of purchases of Companies Center paid tools for seven years from
+the end of the paid period, including after account deletion.
+
+**Deletion and legal holds.** A daily process deletes records when their period ends. Companies
+Center may place a legal hold on a record or an account when a legal claim, investigation, or legal
+obligation requires it. Held information, including an account scheduled for deletion, is kept
+until the hold is released and is then deleted under these rules.
 
 Backups are protected and isolated from ordinary use. Deleted information may remain in backups for a
 limited period before rotation. If restoration is necessary, deletion records are reapplied so
@@ -845,22 +880,25 @@ information already scheduled for deletion is not returned to active use.
 Deactivation is a temporary restriction. It may hide or limit account activity while preserving
 information so the user can return. Deactivation is not account deletion.
 
-A user may request account deletion within the iOS or Android application. A user may also request
-deletion without reinstalling the application by visiting companiescenter.com and selecting Account
-Deletion, including through the external account deletion resource provided in the applicable app
-store listing.
+A user may request account deletion within the iOS or Android application under Settings, then
+Deactivation and deletion. A user may also request deletion without reinstalling the application
+by signing in at companiescenter.com/settings/account-control/deletion. An account created only
+with social sign in
+can first set a password with Forgot password, or use the application.
 
 After a deletion request, Companies Center begins a 30 day cancellation period. During this period,
 the public profile and new marketplace activity are disabled, active sessions and live location are
-stopped, unnecessary notifications and marketing are disabled, and the account is scheduled for
-deletion. Signing in does not silently cancel deletion. The user must choose an explicit Reactivate
-or Cancel Deletion action.
+stopped, and the account is scheduled for deletion. Signing in again during this period cancels the
+deletion and restores the account; the application also offers a Cancel deletion action.
 
 When the cancellation period ends, Companies Center deletes or anonymizes the main account, private
-files, active tokens, push tokens, public content, saved items, addresses, provider profile, posts,
-messages, live location sessions, and other information scheduled for deletion. Related records are
-deleted, deidentified, or restricted according to Section 26. Companies Center sends deletion
-instructions to service providers where technically available and legally appropriate.
+files, active tokens, notification settings and push tokens, public content, saved items, addresses,
+provider profile, posts, messages, live location sessions, and other information scheduled for
+deletion, within one day. Related records are deleted, deidentified, or restricted according to
+Section 26. If a legal hold applies to the account, deletion waits until the hold is released.
+Where the user signed in with Apple, Companies Center also asks Apple to revoke its access. Companies
+Center sends deletion instructions to other service providers where technically available and
+legally appropriate.
 
 Information may be retained after deletion when necessary for tax or accounting obligations, fraud
 and abuse prevention, security, exercise or defense of legal claims, enforcement of agreements,
@@ -887,8 +925,10 @@ only when the information is reasonably related to that feature.
 
 ## 29. Submitting and Verifying a Privacy Request
 
-Users may submit a request through in app Customer Support, the Contact or Privacy Request function
-available through companiescenter.com, or the Account Deletion resource for deletion requests.
+Users may submit a request at companiescenter.com/privacy-request, through Customer Support in the
+application, or, for deletion, through the options in Section 27. Each request receives a reference
+number by email. Companies Center aims to respond within 30 days, and in any case within the period
+required by applicable law.
 
 Companies Center may verify a request by asking the user to authenticate the account, confirm control
 of an email address or telephone number, identify recent account activity, or provide other
@@ -896,9 +936,13 @@ information reasonably related to the request. Companies Center does not request
 necessary to verify the person and protect the account.
 
 An authorized agent may submit a request where permitted by law. Companies Center may request evidence
-of the agent's authority and may ask the user to verify identity directly. Companies Center responds
-within the period required by applicable law and explains any material denial and available appeal
-method.
+of the agent's authority and may ask the user to verify identity directly.
+
+If Companies Center denies a request in whole or in part, its response explains why and how to
+appeal. An appeal is submitted at companiescenter.com/privacy-request with the request's reference
+number and the email address used to file it, and each decision may be appealed once. If an appeal is
+denied, the response explains how to contact the state Attorney General, the Nigeria Data Protection
+Commission, or another authority where applicable.
 
 ## 30. United States State Privacy Disclosures
 
@@ -966,14 +1010,18 @@ available under applicable law.
 
 ## 32. Permissions and Device Controls
 
-The mobile applications may request camera, microphone, photo library, selected files, approximate
-location, precise location, background location, and notification permissions. Companies Center does not
-request contacts, device calendar, or Bluetooth permission for the functions described in this Policy.
+The mobile applications may request camera, microphone, approximate location, precise location,
+background location, and notification permissions. They do not request access to the photo library,
+contacts, device calendar, Bluetooth, or an advertising identifier, and they do not ask to track users
+across other companies' applications or websites.
 
-Permissions are requested in context when a feature needs them. Camera and photo permissions allow a
-user to create or select media. Microphone permission supports audio in a user created video. Location
-permission supports map results and voluntary live location. Notification permission supports alerts.
-File permission supports user selected attachments.
+Permissions are requested in context when a feature needs them. Camera permission allows a user to take
+a photo or video; on Android 9 and earlier, the same request also covers storage, where the camera saves
+the photo. Microphone permission supports audio in a user created video. Location permission supports
+map results and voluntary live location; background location is requested only when a live location
+session starts. Notification permission supports alerts. Photos, videos, and files are chosen through
+the device's own picker, which gives the application only the items the user selects and requires no
+permission.
 
 Users may refuse or later revoke a permission through device settings. The related feature may stop
 working, but unrelated Platform functions remain available where technically feasible. A user may
@@ -1010,8 +1058,13 @@ notice.
 
 ## 35. Contact Companies Center
 
-Privacy questions and requests may be submitted through Customer Support in the Companies Center
-application or through the Contact and Privacy Request options available at companiescenter.com.
+Privacy questions and requests may be submitted at companiescenter.com/privacy-request, through
+Customer Support in the Companies Center application, or through the Contact page at
+companiescenter.com/contact. Appeals of a decision on a privacy request are submitted at the same
+address (Section 29).
+
+Notices of claimed copyright infringement and counter-notices are handled under the procedure at
+companiescenter.com/dmca.
 
 Account deletion requests may be submitted through the application or through the Account Deletion
 resource available from companiescenter.com and the applicable app store listing.
