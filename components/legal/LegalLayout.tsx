@@ -8,11 +8,12 @@ import type { ReactNode } from "react";
  */
 export default function LegalLayout({
   title,
-  effectiveDate,
+  lastUpdated,
   children,
 }: {
   title: string;
-  effectiveDate?: string;
+  /** From the document's own first line (lib/legalDoc). */
+  lastUpdated?: string;
   children: ReactNode;
 }) {
   return (
@@ -26,9 +27,9 @@ export default function LegalLayout({
           <h1 className="text-3xl md:text-4xl font-black text-white leading-tight">
             {title}
           </h1>
-          {effectiveDate ? (
+          {lastUpdated ? (
             <p className="text-white/60 mt-3 text-sm">
-              Effective Date: {effectiveDate}
+              Last updated: {lastUpdated}
             </p>
           ) : null}
         </div>

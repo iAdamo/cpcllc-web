@@ -518,7 +518,7 @@ const NavBar = () => {
                       href="/terms-of-service"
                       className="text-xs font-medium text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                     >
-                      Terms of Use
+                      Terms of Service
                     </Link>
                     <Link
                       href="/privacy-policy"

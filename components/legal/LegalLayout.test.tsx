@@ -16,4 +16,26 @@ describe("LegalLayout", () => {
     expect(marker).toBeGreaterThan(-1);
     expect(marker).toBeGreaterThan(html.indexOf("LAST-PARAGRAPH"));
   });
+
+  it("the header shows the document's own date", () => {
+    const html = renderToStaticMarkup(
+      <LegalLayout title="Terms of Service" lastUpdated="October 8, 2026">
+        <p>x</p>
+      </LegalLayout>,
+    );
+    expect(html).toContain("Last updated: October 8, 2026");
+    expect(html).not.toContain("Effective Date");
+  });
+});
+
+describe("Markdown", () => {
+  it("renders a list block as a list, joining wrapped lines", async () => {
+    const { default: Markdown } = await import("./Markdown");
+    const html = renderToStaticMarkup(
+      <Markdown source={"Users may not:\n\n- create **fake** reviews;\n- review a service\nthey did not use."} />,
+    );
+    expect(html).toBe(
+      "<p>Users may not:</p><ul><li>create <strong>fake</strong> reviews;</li><li>review a service they did not use.</li></ul>",
+    );
+  });
 });
