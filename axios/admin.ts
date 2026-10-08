@@ -21,8 +21,8 @@ import type {
   AdminOverviewShape,
   AdminProviderDetail,
   AdminProvidersBundle,
-  AdminTaskDetail,
-  AdminTasksBundle,
+  AdminJobDetail,
+  AdminJobsBundle,
   AdminUserDetail,
   AdminUsersBundle,
 } from "@/types/admin-marketplace";
@@ -39,7 +39,7 @@ export type OverviewRange = "1D" | "7D" | "1M" | "1Y";
 export interface OverviewSeriesPoint {
   date: string;
   users: number;
-  tasks: number;
+  jobs: number;
   providers: number;
 }
 
@@ -112,21 +112,21 @@ export const getAdminClientDetail = async (
   return response.data;
 };
 
-export const getAdminTasksView = async (
+export const getAdminJobsView = async (
   params: Record<string, unknown>,
-): Promise<AdminTasksBundle> => {
-  const response = await axiosInstance.get<AdminTasksBundle>(
-    `admin/marketplace/tasks`,
+): Promise<AdminJobsBundle> => {
+  const response = await axiosInstance.get<AdminJobsBundle>(
+    `admin/marketplace/jobs`,
     { params },
   );
   return response.data;
 };
 
-export const getAdminTaskDetail = async (
+export const getAdminJobDetail = async (
   id: string,
-): Promise<AdminTaskDetail> => {
-  const response = await axiosInstance.get<AdminTaskDetail>(
-    `admin/marketplace/tasks/${id}`,
+): Promise<AdminJobDetail> => {
+  const response = await axiosInstance.get<AdminJobDetail>(
+    `admin/marketplace/jobs/${id}`,
   );
   return response.data;
 };
@@ -247,16 +247,16 @@ export const getAdminReferrals = async (params?: {
   };
 }> => (await axiosInstance.get("admin/referrals", { params })).data;
 
-export const setAdminTaskStatus = async (id: string, status: string) =>
+export const setAdminJobStatus = async (id: string, status: string) =>
   (
-    await axiosInstance.patch(`admin/marketplace/tasks/${id}/status`, {
+    await axiosInstance.patch(`admin/marketplace/jobs/${id}/status`, {
       status,
     })
   ).data;
-export const archiveAdminTask = async (id: string) =>
-  (await axiosInstance.patch(`admin/marketplace/tasks/${id}/archive`)).data;
-export const restoreAdminTask = async (id: string) =>
-  (await axiosInstance.patch(`admin/marketplace/tasks/${id}/restore`)).data;
+export const archiveAdminJob = async (id: string) =>
+  (await axiosInstance.patch(`admin/marketplace/jobs/${id}/archive`)).data;
+export const restoreAdminJob = async (id: string) =>
+  (await axiosInstance.patch(`admin/marketplace/jobs/${id}/restore`)).data;
 
 /* ───────── Legacy metrics ───────── */
 export const getMetrics = async (
@@ -379,7 +379,7 @@ export const listDisputes = async (params: Record<string, unknown> = {}) =>
   (await axiosInstance.get(`admin/disputes`, { params })).data;
 export const getDispute = async (id: string) =>
   (await axiosInstance.get(`admin/disputes/${id}`)).data;
-/** Open a case from a job ({ task }), a support ticket ({ ticket }), or two people. */
+/** Open a case from a job ({ job }), a support ticket ({ ticket }), or two people. */
 export const createDispute = async (body: Record<string, unknown>) =>
   (await axiosInstance.post(`admin/disputes`, body)).data;
 export const addDisputeMessage = async (id: string, body: Record<string, unknown>) =>

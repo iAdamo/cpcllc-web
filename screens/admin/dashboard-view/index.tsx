@@ -39,7 +39,7 @@ import {
   Legend,
 } from "recharts";
 
-const TASK_STATUS_COLORS: Record<string, string> = {
+const JOB_STATUS_COLORS: Record<string, string> = {
   Active: "#3B82F6",
   In_progress: "#10B981",
   Completed: "#8B5CF6",
@@ -90,7 +90,7 @@ export default function DashboardView() {
   const overview = dashboard?.overview;
   const recent = dashboard?.recentActivities;
   const topProviders = dashboard?.topProviders ?? [];
-  const recentTasks = dashboard?.recentTasks ?? [];
+  const recentJobs = dashboard?.recentJobs ?? [];
   const tickets = dashboard?.ticketStats;
   const disputes = dashboard?.disputeStats;
   const fraud = dashboard?.fraudStats;
@@ -108,12 +108,12 @@ export default function DashboardView() {
     return raw.map((p) => ({
       label: formatBucketLabel(p.date, range),
       Users: p.users,
-      Tasks: p.tasks,
+      Jobs: p.jobs,
       Providers: p.providers,
     }));
   }, [rangeSeries, overview?.series, range]);
 
-  const donut = (overview?.taskStatusBreakdown ?? []).map((s: any) => ({
+  const donut = (overview?.jobStatusBreakdown ?? []).map((s: any) => ({
     name: s.status,
     value: s.count,
   }));
@@ -160,11 +160,11 @@ export default function DashboardView() {
           tone="green"
         />
         <KpiCard
-          label="Total Tasks"
+          label="Total Jobs"
           value={
-            loading ? "—" : (kpis.tasksPosted ?? 0).toLocaleString("en-US")
+            loading ? "—" : (kpis.jobsPosted ?? 0).toLocaleString("en-US")
           }
-          delta={loading ? undefined : deltas.tasksPosted}
+          delta={loading ? undefined : deltas.jobsPosted}
           deltaLabel="last 30 days"
           icon={ListTodo}
           tone="orange"
@@ -172,8 +172,8 @@ export default function DashboardView() {
         {/* Snapshot metrics below have no historical series to measure against,
             so they carry no growth chip rather than a fabricated one. */}
         <KpiCard
-          label="Open Tasks"
-          value={loading ? "—" : (kpis.openTasks ?? 0).toLocaleString("en-US")}
+          label="Open Jobs"
+          value={loading ? "—" : (kpis.openJobs ?? 0).toLocaleString("en-US")}
           icon={CalendarCheck}
           tone="indigo"
         />
@@ -280,7 +280,7 @@ export default function DashboardView() {
                 <YAxis tick={{ fontSize: 11 }} stroke="#94a3b8" />
                 <Tooltip />
                 <Area dataKey="Users" stroke="#3B82F6" fill="url(#u)" />
-                <Area dataKey="Tasks" stroke="#10B981" fill="url(#t)" />
+                <Area dataKey="Jobs" stroke="#10B981" fill="url(#t)" />
                 <Area dataKey="Providers" stroke="#8B5CF6" fill="url(#b)" />
               </AreaChart>
             </ResponsiveContainer>
@@ -288,7 +288,7 @@ export default function DashboardView() {
           </div>
         </PanelCard>
 
-        <PanelCard title="Task Status Distribution">
+        <PanelCard title="Job Status Distribution">
           <div className="h-64">
             {donut.length === 0 ? (
               <div className="h-full flex items-center justify-center text-sm text-slate-400">
@@ -307,7 +307,7 @@ export default function DashboardView() {
                     {donut.map((entry: any, i: number) => (
                       <Cell
                         key={i}
-                        fill={TASK_STATUS_COLORS[entry.name] ?? "#94a3b8"}
+                        fill={JOB_STATUS_COLORS[entry.name] ?? "#94a3b8"}
                       />
                     ))}
                   </Pie>
@@ -322,12 +322,12 @@ export default function DashboardView() {
 
       {/* Recent activities + system health */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <PanelCard title="Recent Tasks" className="lg:col-span-2">
+        <PanelCard title="Recent Jobs" className="lg:col-span-2">
           <div className="overflow-x-auto -mx-5">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-[11px] uppercase tracking-wider text-slate-400">
-                  <th className="px-5 py-2 font-medium">Task</th>
+                  <th className="px-5 py-2 font-medium">Job</th>
                   <th className="px-5 py-2 font-medium">Client</th>
                   <th className="px-5 py-2 font-medium">Budget</th>
                   <th className="px-5 py-2 font-medium">Status</th>
@@ -335,7 +335,7 @@ export default function DashboardView() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {recentTasks.slice(0, 6).map((t: any) => (
+                {recentJobs.slice(0, 6).map((t: any) => (
                   <tr
                     key={String(t._id)}
                     className="hover:bg-slate-50 dark:hover:bg-slate-800/50"
@@ -360,13 +360,13 @@ export default function DashboardView() {
                     </td>
                   </tr>
                 ))}
-                {recentTasks.length === 0 && (
+                {recentJobs.length === 0 && (
                   <tr>
                     <td
                       className="px-5 py-6 text-center text-slate-400 text-sm"
                       colSpan={5}
                     >
-                      No recent tasks
+                      No recent jobs
                     </td>
                   </tr>
                 )}

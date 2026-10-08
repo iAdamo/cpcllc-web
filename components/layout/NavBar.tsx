@@ -1,26 +1,13 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Menu,
-  X,
-  ChevronDown,
-  Globe,
-  Bell,
-  Heart,
-  Sun,
-  Moon,
-  MapPin,
-  PlusCircle,
-  Search,
-} from "lucide-react";
+import { Menu, X, ChevronDown, Globe, Bell, Heart, Sun, Moon, MapPin } from "lucide-react";
 import { useTheme } from "next-themes";
 import useGlobalStore from "@/stores";
-import { getCachedJobResults } from "@/hooks/useGlobalSearch";
 import ProfileMenu from "@/components/ProfileMenu";
 import { useTranslation } from "@/context/TranslationContext";
 import { ProviderData } from "@/types";
@@ -63,70 +50,6 @@ function LocationChip({ transparent = false }: { transparent?: boolean }) {
   );
 }
 
-// ── Jobs nav search ───────────────────────────────────────────────────────────
-
-function JobsNavSearch() {
-  const { setSearchFilters, searchFilters, setFilteredJobs } = useGlobalStore();
-  const [query, setQuery] = useState(searchFilters?.query ?? "");
-  const mounted = useRef(false);
-
-  useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-      return;
-    }
-    const q = query.trim().toLowerCase();
-    // Client-side filter only — API call happens on Enter via flush()
-    if (!q) {
-      setFilteredJobs([]);
-    } else {
-      setFilteredJobs(
-        getCachedJobResults().filter(
-          (j) =>
-            j.title?.toLowerCase().includes(q) ||
-            j.description?.toLowerCase().includes(q) ||
-            (j.subcategoryId as any)?.name?.toLowerCase().includes(q),
-        ),
-      );
-    }
-  }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const flush = () => {
-    // The jobs page's useGlobalSearch query re-keys on the shared filters.
-    setSearchFilters({ query: query || undefined });
-  };
-
-  return (
-    <div className="flex items-center w-full max-w-md bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full px-4 py-2 gap-2 focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-brand-400 transition-all">
-      <Search size={15} className="text-gray-400 flex-shrink-0" />
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") flush();
-        }}
-        placeholder="Search for services or tasks…"
-        className="flex-1 text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 bg-transparent outline-none min-w-0"
-      />
-      {query && (
-        <button
-          type="button"
-          onClick={() => {
-            setQuery("");
-            setFilteredJobs([]);
-            setSearchFilters({ query: undefined });
-          }}
-          aria-label="Clear search"
-          className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
-        >
-          <X size={13} />
-        </button>
-      )}
-    </div>
-  );
-}
-
 // ── NavBar ─────────────────────────────────────────────────────────────────────
 
 const NavBar = () => {
@@ -144,7 +67,6 @@ const NavBar = () => {
 
   const isHome = pathname === "/";
   const isProviders = pathname === "/providers";
-  const isTasks = pathname === "/tasks";
 
   useEffect(() => {
     setMounted(true);
@@ -171,19 +93,9 @@ const NavBar = () => {
           show: !isProviders && user?.activeRole === "Client",
         },
         {
-          label: "My Tasks",
-          href: "/tasks",
-          show: user?.activeRole === "Client" && pathname !== "/tasks",
-        },
-        {
-          label: t("jobs"),
-          href: "/tasks",
-          show: isAuthenticated && !isTasks && user?.activeRole === "Provider",
-        },
-        {
           label: "Register your business",
           href: "/onboarding",
-          show: !(user?.activeRoleId as ProviderData)?._id && !isTasks,
+          show: !(user?.activeRoleId as ProviderData)?._id,
         },
         {
           label: t("how_it_works"),
@@ -192,7 +104,7 @@ const NavBar = () => {
         },
         { label: t("Contact"), href: "/contact", show: !isAuthenticated },
       ].filter((l) => l.show),
-    [t, isAuthenticated, pathname, user, isProviders, isTasks],
+    [t, isAuthenticated, pathname, user, isProviders],
   );
 
   return (
@@ -233,12 +145,9 @@ const NavBar = () => {
           {/* Location chip — left side, authenticated only */}
           <LocationChip transparent={transparent} />
 
-          {/* Center: search on /tasks, nav links elsewhere */}
+          {/* Center: nav links */}
           <div className="hidden md:flex flex-1 items-center justify-center min-w-0 px-4">
-            {isTasks ? (
-              <JobsNavSearch />
-            ) : (
-              <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1">
                 {navLinks.map(({ label, href }) => (
                   <Link
                     key={href}
@@ -259,7 +168,6 @@ const NavBar = () => {
                   </Link>
                 ))}
               </div>
-            )}
           </div>
 
           {/* Right actions */}
@@ -358,21 +266,6 @@ const NavBar = () => {
               </AnimatePresence>
             </div>
 
-            {/* Post a Task — clients only */}
-            {user?.activeRole === "Client" && (
-              <button
-                type="button"
-                onClick={() => router.push("/tasks/create")}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                  transparent
-                    ? "bg-white/15 text-white border border-white/30 hover:bg-white/25"
-                    : "bg-brand-600 hover:bg-brand-700 text-white shadow-sm"
-                }`}
-              >
-                <PlusCircle size={14} />
-                Post a Task
-              </button>
-            )}
 
             <div
               className={`w-px h-5 mx-1 ${
@@ -421,13 +314,6 @@ const NavBar = () => {
           </button>
         </div>
 
-        {/* Mobile: search bar on /tasks */}
-        {isTasks && (
-          <div className="md:hidden px-4 pb-3">
-            <JobsNavSearch />
-          </div>
-        )}
-
         {/* Mobile dropdown panel */}
         <AnimatePresence>
           {mobileOpen && (
@@ -452,19 +338,6 @@ const NavBar = () => {
                 <div className="pt-4 space-y-2">
                   {user ? (
                     <>
-                      {user.activeRole === "Client" && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            router.push("/tasks/create");
-                            setMobileOpen(false);
-                          }}
-                          className="w-full py-3.5 text-center font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl flex items-center justify-center gap-2"
-                        >
-                          <PlusCircle size={16} />
-                          Post a Task
-                        </button>
-                      )}
                       <button
                         type="button"
                         onClick={() => {

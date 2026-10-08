@@ -19,7 +19,7 @@ const FILTERS = [
 
 /**
  * Dispute cases between a client and a business. Cases are opened from a
- * disputed job (Service Lifecycle) or a support ticket; each opens here to
+ * disputed job (Job progress) or a support ticket; each opens here to
  * message both people, record evidence and decide.
  */
 export function DisputesView() {
@@ -101,7 +101,7 @@ export function DisputesView() {
                   <td colSpan={7} className="px-5 py-8 text-center text-slate-400">
                     {status
                       ? "No cases with this status."
-                      : "No cases yet. Open one from a disputed job in Service Lifecycle or from a support ticket."}
+                      : "No cases yet. Open one from a disputed job in Job progress or from a support ticket."}
                   </td>
                 </tr>
               )}
@@ -109,9 +109,9 @@ export function DisputesView() {
                 <tr key={d._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                   <td className="px-5 py-2.5 font-medium text-slate-900 dark:text-white">
                     {d.disputeNumber}
-                    {d.task?.title && (
+                    {d.job?.title && (
                       <span className="block text-xs font-normal text-slate-500 max-w-[220px] truncate">
-                        {d.task.title}
+                        {d.job.title}
                       </span>
                     )}
                   </td>

@@ -32,7 +32,7 @@ export default function Completion() {
       if (ok) {
         completeOnboarding();
         setSubmitted(true);
-        router.replace("/tasks");
+        router.replace("/jobs");
       } else {
         setFailed(true);
       }

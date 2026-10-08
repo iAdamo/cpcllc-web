@@ -13,8 +13,8 @@ import {
   getAdminProviderDetail,
   getAdminClientsView,
   getAdminClientDetail,
-  getAdminTasksView,
-  getAdminTaskDetail,
+  getAdminJobsView,
+  getAdminJobDetail,
   getAdminEngagementsView,
   getAdminEngagementDetail,
   getAdminReviewsView,
@@ -29,8 +29,8 @@ import type {
   AdminOverviewShape,
   AdminProviderDetail,
   AdminProvidersBundle,
-  AdminTaskDetail,
-  AdminTasksBundle,
+  AdminJobDetail,
+  AdminJobsBundle,
   AdminUserDetail,
   AdminUsersBundle,
 } from "@/types/admin-marketplace";
@@ -123,11 +123,11 @@ export function useAdminClientsView(filter: Record<string, unknown>) {
   );
 }
 
-export function useAdminTasksView(filter: Record<string, unknown>) {
+export function useAdminJobsView(filter: Record<string, unknown>) {
   return shape(
-    useQuery<AdminTasksBundle>({
-      queryKey: adminKeys.tasksView(filter),
-      queryFn: () => getAdminTasksView(filter),
+    useQuery<AdminJobsBundle>({
+      queryKey: adminKeys.jobsView(filter),
+      queryFn: () => getAdminJobsView(filter),
       staleTime: ADMIN_STALE_TIME,
       placeholderData: (prev) => prev,
     }),
@@ -181,11 +181,11 @@ export function useAdminClientDetail(id: string | null) {
   );
 }
 
-export function useAdminTaskDetail(id: string | null) {
+export function useAdminJobDetail(id: string | null) {
   return shape(
-    useQuery<AdminTaskDetail>({
-      queryKey: adminKeys.taskDetail(id ?? ""),
-      queryFn: () => getAdminTaskDetail(id ?? ""),
+    useQuery<AdminJobDetail>({
+      queryKey: adminKeys.jobDetail(id ?? ""),
+      queryFn: () => getAdminJobDetail(id ?? ""),
       enabled: !!id,
       staleTime: ADMIN_STALE_TIME,
     }),
@@ -207,7 +207,7 @@ export function useAdminEngagementsView(filter: Record<string, unknown>) {
 
 export function useAdminEngagementDetail(id: string | null) {
   return shape(
-    useQuery<{ task: any; certificate: any }>({
+    useQuery<{ job: any; certificate: any }>({
       queryKey: adminKeys.engagementDetail(id ?? ""),
       queryFn: () => getAdminEngagementDetail(id ?? ""),
       enabled: !!id,

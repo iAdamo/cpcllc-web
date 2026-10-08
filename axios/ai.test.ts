@@ -22,12 +22,12 @@ afterEach(() => vi.unstubAllGlobals());
 describe("aiChatStream", () => {
   it("sends the notice version with the messages and streams the reply", async () => {
     const fetchMock = vi.fn(async () =>
-      sse(['data: {"delta":"Tap "}\n\n', 'data: {"delta":"Post a task."}\n\ndata: [DONE]\n\n']),
+      sse(['data: {"delta":"Tap "}\n\n', 'data: {"delta":"Post a job."}\n\ndata: [DONE]\n\n']),
     );
     vi.stubGlobal("fetch", fetchMock);
     let text = "";
     await aiChatStream([{ role: "user", content: "Hi" }], "2026-10-08", (d) => (text += d));
-    expect(text).toBe("Tap Post a task.");
+    expect(text).toBe("Tap Post a job.");
     const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toMatch(/\/ai\/chat\/stream$/);
     expect(JSON.parse(init.body as string)).toEqual({

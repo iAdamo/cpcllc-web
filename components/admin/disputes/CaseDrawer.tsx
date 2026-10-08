@@ -112,7 +112,7 @@ export function CaseDrawer({ caseId, onClose }: { caseId: string | null; onClose
           <dl className="mt-3 space-y-1.5">
             <Row term="Raised by" value={names.raisedBy} sub={d.raisedBy?.email} />
             <Row term="Other side" value={names.respondent} sub={d.respondent?.email} />
-            {d.task?.title && <Row term="Job" value={d.task.title} />}
+            {d.job?.title && <Row term="Job" value={d.job.title} />}
             <Row
               term="Assigned to"
               value={d.assignee ? personName(d.assignee) : "Nobody yet"}

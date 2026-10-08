@@ -39,7 +39,7 @@ const commitments = [
   },
   {
     Icon: CalendarClock,
-    title: "Post a task, get responses",
+    title: "Post a job, get responses",
     text: "Describe what you need once. Available providers near you see it instantly and reply with proposals — no phone tag.",
     color: "from-emerald-600 to-emerald-700",
   },

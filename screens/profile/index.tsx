@@ -195,8 +195,8 @@ export default function ProfilePage() {
 
   const handleHire = () => {
     if (!provider) return;
-    // Directed request: pre-target this provider so the task is private to them.
-    const target = `/tasks/create?provider=${provider._id}`;
+    // Directed request: pre-target this provider so the job is private to them.
+    const target = `/jobs/create?provider=${provider._id}`;
     if (!isAuthenticated) {
       router.push(`/auth/signin?next=${encodeURIComponent(target)}`);
       return;

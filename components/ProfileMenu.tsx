@@ -119,7 +119,7 @@ export default function ProfileMenu() {
     if (hasProviderProfile) {
       if (role === "Provider") {
         await setSwitchRole("Provider");
-        if (user.activeRole === "Provider") router.replace("/tasks");
+        if (user.activeRole === "Provider") router.replace("/");
       }
       if (role === "Client") {
         await setSwitchRole("Client");

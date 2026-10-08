@@ -1,6 +1,6 @@
 /**
  * Resolving which country a marketplace search should be scoped to. The backend
- * filters providers/tasks hard by `location.primary.address.country`, so sending
+ * filters providers/jobs hard by `location.primary.address.country`, so sending
  * the wrong country returns the wrong country's results (or nothing).
  *
  * Priority: the signed-in user's own account country → the device's

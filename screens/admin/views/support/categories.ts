@@ -7,7 +7,7 @@ export const TICKET_CATEGORIES = [
   { value: "account", label: "Account" },
   { value: "payment", label: "Payment" },
   { value: "subscription", label: "Subscription" },
-  { value: "task", label: "Tasks" },
+  { value: "job", label: "Jobs" },
   { value: "booking", label: "Bookings" },
   { value: "review", label: "Reviews" },
   { value: "dispute", label: "Disputes" },

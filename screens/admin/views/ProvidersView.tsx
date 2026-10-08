@@ -294,8 +294,8 @@ function ProviderDetailDrawer({
           <Row label="Live trackable" value={p.isLiveTrackable ? "Yes" : "No"} />
           <Row label="Rating" value={`${p.stats?.rating ?? 0} (${p.reviewCount ?? 0} reviews)`} />
           <Row label="Followers" value={p.followersCount ?? 0} />
-          <Row label="Tasks taken" value={p.stats?.tasksTaken ?? 0} />
-          <Row label="Tasks completed" value={p.stats?.tasksCompleted ?? 0} />
+          <Row label="Jobs taken" value={p.stats?.jobsTaken ?? 0} />
+          <Row label="Jobs completed" value={p.stats?.jobsCompleted ?? 0} />
           <Row label="Joined" value={p.createdAt ? new Date(p.createdAt).toLocaleString() : "—"} />
           {p.owner && (
             <div className="mt-4 p-3 rounded-md bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">

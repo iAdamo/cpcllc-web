@@ -6,18 +6,18 @@ import { KpiCard } from "@/components/admin/KpiCard";
 import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
 import {
-  archiveAdminTask,
-  restoreAdminTask,
-  setAdminTaskStatus,
+  archiveAdminJob,
+  restoreAdminJob,
+  setAdminJobStatus,
 } from "@/axios/admin";
 import {
-  useAdminTasksView,
-  useAdminTaskDetail,
+  useAdminJobsView,
+  useAdminJobDetail,
 } from "@/hooks/admin/useAdminQueries";
 
 const STATUS_OPTIONS = ["Active", "In_progress", "Completed", "Cancelled", "Expired"] as const;
 
-export function TasksView() {
+export function JobsView() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string>("");
   const [page, setPage] = useState(1);
@@ -27,7 +27,7 @@ export function TasksView() {
   if (search) filter.search = search;
   if (status) filter.status = status;
 
-  const { data, loading, refresh } = useAdminTasksView(filter);
+  const { data, loading, refresh } = useAdminJobsView(filter);
 
   const stats = data?.stats;
   const list = data?.page;
@@ -41,7 +41,7 @@ export function TasksView() {
             <ClipboardList size={20} />
           </div>
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Tasks</h2>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Jobs</h2>
             <p className="text-sm text-slate-500 mt-0.5">All job posts across the marketplace</p>
           </div>
         </div>
@@ -68,13 +68,13 @@ export function TasksView() {
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
         <div className="px-5 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2 justify-between">
           <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-            Tasks ({list?.total ?? 0})
+            Jobs ({list?.total ?? 0})
           </h3>
           <div className="flex gap-2">
             <input
               type="text"
-              aria-label="Search tasks"
-              placeholder="Search tasks…"
+              aria-label="Search jobs"
+              placeholder="Search jobs…"
               value={search}
               onChange={(e) => {
                 setPage(1);
@@ -117,14 +117,14 @@ export function TasksView() {
             {loading && items.length === 0 && (
               <tr>
                 <td className="px-5 py-8 text-center text-slate-400" colSpan={8}>
-                  Loading tasks…
+                  Loading jobs…
                 </td>
               </tr>
             )}
             {!loading && items.length === 0 && (
               <tr>
                 <td className="px-5 py-8 text-center text-slate-400" colSpan={8}>
-                  No tasks found.
+                  No jobs found.
                 </td>
               </tr>
             )}
@@ -191,7 +191,7 @@ export function TasksView() {
         )}
       </div>
 
-      <TaskDetailDrawer
+      <JobDetailDrawer
         id={openId}
         onClose={() => setOpenId(null)}
         onMutated={() => void refresh()}
@@ -200,7 +200,7 @@ export function TasksView() {
   );
 }
 
-function TaskDetailDrawer({
+function JobDetailDrawer({
   id,
   onClose,
   onMutated,
@@ -209,7 +209,7 @@ function TaskDetailDrawer({
   onClose: () => void;
   onMutated: () => void;
 }) {
-  const { data: t, loading, refresh: refetch } = useAdminTaskDetail(id);
+  const { data: t, loading, refresh: refetch } = useAdminJobDetail(id);
 
   const run = async (fn: () => Promise<unknown>) => {
     await fn();
@@ -221,16 +221,16 @@ function TaskDetailDrawer({
     <Drawer
       open={!!id}
       onClose={onClose}
-      title={t?.title || (loading ? "Loading…" : "Task")}
+      title={t?.title || (loading ? "Loading…" : "Job")}
       subtitle={t ? `Status: ${t.status}` : undefined}
       footer={
         t && (
           <div className="flex flex-wrap gap-2">
             <select
-              aria-label="Change task status"
+              aria-label="Change job status"
               value={t.status}
               onChange={(e) =>
-                run(() => setAdminTaskStatus(id!, e.target.value))
+                run(() => setAdminJobStatus(id!, e.target.value))
               }
               className="text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-2 py-1.5"
             >
@@ -242,14 +242,14 @@ function TaskDetailDrawer({
             </select>
             {t.isActive ? (
               <button
-                onClick={() => run(() => archiveAdminTask(id!))}
+                onClick={() => run(() => archiveAdminJob(id!))}
                 className="text-xs px-3 py-1.5 rounded-md bg-rose-600 text-white hover:bg-rose-700 flex items-center gap-1"
               >
                 <Archive size={14} /> Archive
               </button>
             ) : (
               <button
-                onClick={() => run(() => restoreAdminTask(id!))}
+                onClick={() => run(() => restoreAdminJob(id!))}
                 className="text-xs px-3 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 flex items-center gap-1"
               >
                 <RotateCcw size={14} /> Restore

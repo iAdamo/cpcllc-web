@@ -135,7 +135,7 @@ export enum AdminEvents {
   USER_REGISTERED = "admin:user_registered",
   USER_HEARTBEAT = "admin:user_heartbeat",
   PROVIDER_REGISTERED = "admin:provider_registered",
-  TASK_CREATED = "admin:task_created",
+  JOB_CREATED = "admin:job_created",
 }
 
 /** Live support-ticket thread events (mirror backend SupportEvents). */

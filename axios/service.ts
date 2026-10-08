@@ -1,6 +1,5 @@
 import { ApiClientSingleton } from "./conf";
-import { ServiceData, Category, JobData, ProposalData } from "@/types";
-import useGlobalStore from "@/stores";
+import { ServiceData, Category } from "@/types";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
 
@@ -68,71 +67,13 @@ export const getServices = async (
   return response.data;
 };
 
-export const createJob = async (data: FormData): Promise<JobData> => {
-  const response = await axiosInstance.post("services/tasks", data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return { ...response.data, status: response.status };
-};
-
-export const getJobsByUser = async (): Promise<JobData[]> => {
-  const response = await axiosInstance.get("services/tasks/me");
-  return response.data;
-};
-
-export const updateJob = async (
-  jobId: string,
-  data: FormData,
-): Promise<JobData> => {
-  const response = await axiosInstance.patch(`services/tasks/${jobId}`, data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-
-  return response.data;
-};
-
-export const deleteJob = async (jobId: string): Promise<JobData[]> => {
-  const response = await axiosInstance.delete(`services/tasks/${jobId}`);
-  return response.data;
-};
-
-export const getJobById = async (jobId: string): Promise<JobData> => {
-  const response = await axiosInstance.get(`services/tasks/${jobId}`);
-  return response.data;
-};
-
-export const createProposal = async (
-  jobId: string,
-  data: FormData,
-): Promise<void> => {
-  try {
-    await axiosInstance.post(`services/tasks/${jobId}/proposals`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  } catch (error: any) {
-    if (error?.response?.status === 409) {
-      useGlobalStore
-        .getState()
-        .setError("A proposal for this job already exists.");
-    }
-    console.error("Error creating proposal:", error);
-    throw error;
-  }
-};
-
 export const updateProposal = async (
   jobId: string,
   proposalId: string,
   data: FormData,
 ): Promise<void> => {
   await axiosInstance.patch(
-    `services/tasks/${jobId}/proposals/${proposalId}`,
+    `services/jobs/${jobId}/proposals/${proposalId}`,
     data,
     {
       headers: {
@@ -142,22 +83,12 @@ export const updateProposal = async (
   );
 };
 
-export const getProposalsByJob = async (jobId: string): Promise<any[]> => {
-  const response = await axiosInstance.get(`services/tasks/${jobId}/proposals`);
-  return response.data;
-};
-
-export const getMyProposals = async (): Promise<ProposalData[]> => {
-  const response = await axiosInstance.get(`services/tasks/proposals/me`);
-  return response.data;
-};
-
 export const updateProposalStatus = async (
   proposalId: string,
   status: string,
 ): Promise<any> => {
   const response = await axiosInstance.patch(
-    `services/tasks/proposals/${proposalId}`,
+    `services/jobs/proposals/${proposalId}`,
     { status },
   );
   return response.data;

@@ -104,7 +104,7 @@ const idOf = (v: unknown): string =>
 export interface CaseLike {
   raisedBy?: Person;
   respondent?: Person;
-  task?: { userId?: unknown } | null;
+  job?: { userId?: unknown } | null;
   provider?: { owner?: unknown; providerName?: string } | null;
 }
 
@@ -113,7 +113,7 @@ export function sideOf(c: CaseLike, person: Person): Side {
   const id = idOf(person);
   if (!id) return "";
   if (c.provider?.owner && idOf(c.provider.owner) === id) return "provider";
-  if (c.task?.userId && idOf(c.task.userId) === id) return "client";
+  if (c.job?.userId && idOf(c.job.userId) === id) return "client";
   return "";
 }
 
@@ -148,7 +148,7 @@ export function emptyOpenCase(summary = ""): OpenCaseForm {
   };
 }
 
-export type OpenCaseSource = { task: string } | { ticket: string };
+export type OpenCaseSource = { job: string } | { ticket: string };
 
 /**
  * `respondent` is set when staff had to pick the other person (a ticket that
@@ -175,7 +175,7 @@ export function buildOpenCaseBody(
       summary,
       ...(details ? { details } : {}),
       priority: form.priority,
-      ...("task" in source ? { raisedBySide: form.raisedBySide } : {}),
+      ...("job" in source ? { raisedBySide: form.raisedBySide } : {}),
       ...(respondent?.id ? { respondent: respondent.id } : {}),
     },
   };

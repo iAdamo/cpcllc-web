@@ -17,7 +17,7 @@ import {
 const theCase = {
   raisedBy: { _id: "c1", firstName: "Ada", lastName: "Obi" },
   respondent: { _id: "o1", firstName: "Ben", lastName: "Cole" },
-  task: { userId: "c1" },
+  job: { userId: "c1" },
   provider: { owner: "o1", providerName: "Bright Plumbing" },
 };
 
@@ -46,10 +46,10 @@ describe("people in a case", () => {
 describe("opening a case", () => {
   it("from a job sends who raised it; from a ticket it doesn't", () => {
     const form = { ...emptyOpenCase("Still leaking"), raisedBySide: "provider" as const };
-    expect(buildOpenCaseBody({ task: "t1" }, form)).toEqual({
+    expect(buildOpenCaseBody({ job: "t1" }, form)).toEqual({
       ok: true,
       body: {
-        task: "t1",
+        job: "t1",
         reason: "quality_issue",
         summary: "Still leaking",
         priority: "normal",
@@ -61,9 +61,9 @@ describe("opening a case", () => {
   });
 
   it("needs a summary under 300 characters", () => {
-    expect(buildOpenCaseBody({ task: "t1" }, emptyOpenCase("  "))).toMatchObject({ ok: false });
+    expect(buildOpenCaseBody({ job: "t1" }, emptyOpenCase("  "))).toMatchObject({ ok: false });
     expect(
-      buildOpenCaseBody({ task: "t1" }, { ...emptyOpenCase(), summary: "x".repeat(301) }),
+      buildOpenCaseBody({ job: "t1" }, { ...emptyOpenCase(), summary: "x".repeat(301) }),
     ).toMatchObject({ ok: false });
   });
 

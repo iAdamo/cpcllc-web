@@ -20,7 +20,7 @@ export const globalSearch = async ({
   country,
   radius,
 }: {
-  model: "providers" | "services" | "tasks";
+  model: "providers" | "services" | "jobs";
   page: number;
   limit: number;
   engine: boolean;
@@ -36,12 +36,12 @@ export const globalSearch = async ({
   country?: string;
   radius?: string;
 }): Promise<{
-  type?: "suggestions" | "providers" | "tasks" | "services";
+  type?: "suggestions" | "providers" | "jobs" | "services";
   data: {
     suggestions?: AddressSuggestion[];
     providers: ProviderData[];
     services?: ServiceData[];
-    tasks?: JobData[];
+    jobs?: JobData[];
     page: number;
   };
   page: number;

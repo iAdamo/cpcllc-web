@@ -16,11 +16,11 @@ import {
 const GREETING: AiChatMessage = {
   role: "assistant",
   content:
-    "Hi! I'm Sanux, the CompaniesCenter assistant. Ask me how to find a provider, post a task, or how the platform works.",
+    "Hi! I'm Sanux, the CompaniesCenter assistant. Ask me how to find a provider, post a job, or how the platform works.",
 };
 
 const SUGGESTIONS = [
-  "How do I post a task?",
+  "How do I post a job?",
   "How do payments work?",
   "How do I find a plumber near me?",
 ];

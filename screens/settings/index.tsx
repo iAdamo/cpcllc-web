@@ -510,7 +510,7 @@ function AccountSection() {
 
 function NotificationsSection() {
   const [prefs, setPrefs] = useState({
-    taskUpdates: true,
+    jobUpdates: true,
     newProposals: true,
     messages: true,
     marketing: false,
@@ -533,17 +533,17 @@ function NotificationsSection() {
           Activity
         </p>
         <Toggle
-          checked={prefs.taskUpdates}
-          onChange={() => toggle("taskUpdates")}
-          label="Task updates"
-          description="When a task status changes or you receive an update"
+          checked={prefs.jobUpdates}
+          onChange={() => toggle("jobUpdates")}
+          label="Job updates"
+          description="When a job status changes or you receive an update"
         />
         <div className="border-t border-gray-100 dark:border-gray-800" />
         <Toggle
           checked={prefs.newProposals}
           onChange={() => toggle("newProposals")}
           label="New proposals"
-          description="When a provider submits a proposal on your task"
+          description="When a provider submits a proposal on your job"
         />
         <div className="border-t border-gray-100 dark:border-gray-800" />
         <Toggle

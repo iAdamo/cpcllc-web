@@ -3,7 +3,7 @@
  *
  *   https://companiescenter.com/post/<id>
  *
- * Behaviour mirrors /t (task) and /c (provider):
+ * Behaviour mirrors /t (job) and /c (provider):
  *   - iOS / Android with the app installed: the OS App/Universal Link
  *     intercepts and opens the post in-app (see mobile app.json
  *     intentFilters `/post/` + associatedDomains). Web is the fallback.

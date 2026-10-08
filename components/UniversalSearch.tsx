@@ -481,7 +481,7 @@ export function ProvidersSearch({
 }
 
 // ── Jobs header search ─────────────────────────────────────────────────────────
-// Compact task-focused bar for the /jobs page — different visual language.
+// Compact job-focused bar for the /jobs page — different visual language.
 // Updates the shared filters; the jobs page's useGlobalSearch query refetches.
 
 export function JobsSearch() {
@@ -544,20 +544,20 @@ export function JobsSearch() {
 
   return (
     <div className="flex flex-1 items-center gap-1.5 bg-gray-900 dark:bg-gray-800 border border-gray-700 rounded-2xl px-1 py-1 focus-within:ring-2 focus-within:ring-brand-500/40 transition-all">
-      {/* Task indicator pill */}
+      {/* Job indicator pill */}
       <div className="flex-shrink-0 flex items-center gap-1.5 bg-brand-600 text-white text-[10px] font-black px-2.5 py-1.5 rounded-xl">
         <Briefcase size={11} />
-        <span className="hidden sm:inline">Tasks</span>
+        <span className="hidden sm:inline">Jobs</span>
       </div>
 
-      {/* Task search input */}
+      {/* Job search input */}
       <div className="flex items-center flex-1 min-w-0 px-2">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={onKey}
-          placeholder="Search tasks, skills…"
+          placeholder="Search jobs, skills…"
           className="flex-1 text-sm font-medium text-white placeholder-gray-400 bg-transparent outline-none min-w-0"
         />
         <AnimatePresence>
@@ -610,7 +610,7 @@ export function JobsSearch() {
         type="button"
         onClick={submit}
         className="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-bold rounded-xl transition-all text-sm"
-        aria-label="Search tasks"
+        aria-label="Search jobs"
       >
         <Search size={13} />
         <span className="hidden md:inline">Search</span>

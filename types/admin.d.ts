@@ -73,7 +73,7 @@ export type AdminView =
   | "users"
   | "providers"
   | "clients"
-  | "tasks"
+  | "jobs"
   | "engagements"
   | "bookings"
   | "projects"
@@ -123,20 +123,20 @@ export interface DashboardOverviewKpis {
   newUsersLast30: number;
   providers: number;
   clients: number;
-  tasksPosted: number;
-  tasksCompleted: number;
-  openTasks: number;
+  jobsPosted: number;
+  jobsCompleted: number;
+  openJobs: number;
   avgRating: number | null;
 }
 
 export interface DashboardOverview {
   kpis: DashboardOverviewKpis;
-  taskStatusBreakdown: { status: string; count: number }[];
+  jobStatusBreakdown: { status: string; count: number }[];
 }
 
 export interface RecentActivities {
   recentUsers: any[];
-  recentTasks: any[];
+  recentJobs: any[];
   recentProviders: any[];
 }
 

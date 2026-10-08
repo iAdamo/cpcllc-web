@@ -14,7 +14,7 @@
  *     = "com.sanuxtech.companiescenterllc"
  *
  * Paths: matched against the URL path Apple intercepts. We claim `/c/*`
- * (provider profile shares — mnemonic: company) and `/t/*` (task shares).
+ * (provider profile shares — mnemonic: company) and `/j/*` (job shares).
  *
  * To update without redeploying everything, change the constants below.
  * iOS only re-fetches the AASA when the app is reinstalled or via the
@@ -38,7 +38,7 @@ export async function GET() {
       details: [
         {
           appID: `${APPLE_TEAM_ID}.${BUNDLE_ID}`,
-          paths: ["/c/*", "/t/*"],
+          paths: ["/c/*", "/j/*"],
         },
       ],
     },

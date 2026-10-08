@@ -344,7 +344,7 @@ export function TicketDrawer({
                   <OpenCaseForm
                     source={{ ticket: String(ticket._id) }}
                     prefillSummary={ticket.subject}
-                    needsRespondent={!ticket.counterparty && !ticket.task}
+                    needsRespondent={!ticket.counterparty && !ticket.job}
                     onOpened={(id) => {
                       onChanged();
                       onOpenCase(id);

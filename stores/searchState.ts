@@ -39,7 +39,7 @@ export const searchSlice: StateCreator<GlobalStore, [], [], SearchState> = (
   searchModel: "providers",
   setSearchModel: (model) => {
     if (get().searchModel !== model) {
-      set({ searchModel: model, filteredProviders: [], filteredJobs: [] });
+      set({ searchModel: model, filteredProviders: [] });
     }
   },
 
@@ -49,8 +49,6 @@ export const searchSlice: StateCreator<GlobalStore, [], [], SearchState> = (
   resetSearchFilters: () => set({ searchFilters: DEFAULT_FILTERS }),
 
   filteredProviders: [],
-  filteredJobs: [],
   setFilteredProviders: (providers) => set({ filteredProviders: providers }),
-  setFilteredJobs: (jobs) => set({ filteredJobs: jobs }),
-  clearFiltered: () => set({ filteredProviders: [], filteredJobs: [] }),
+  clearFiltered: () => set({ filteredProviders: [] }),
 });

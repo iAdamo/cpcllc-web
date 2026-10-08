@@ -23,7 +23,7 @@ const OPEN = new Set(["queued", "auto_flagged", "reviewing", "escalated"]);
 
 /** What each report target is called (the API sends its own type names). */
 const TARGET_NAMES: Record<string, string> = {
-  Task: "Job",
+  Job: "Job",
   Provider: "Business",
   Reviews: "Review",
   Message: "Message",

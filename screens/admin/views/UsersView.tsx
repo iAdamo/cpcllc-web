@@ -368,8 +368,8 @@ function UserDetailBody({ user: u }: { user: any }) {
       <Row label="Address" value={u.address ?? "—"} />
       <Row label="Average rating" value={u.averageRating ?? 0} />
       <Row label="Reviews" value={u.reviewCount ?? 0} />
-      <Row label="Tasks posted" value={u.stats?.tasksPosted ?? 0} />
-      <Row label="Tasks completed" value={u.stats?.tasksCompleted ?? 0} />
+      <Row label="Jobs posted" value={u.stats?.jobsPosted ?? 0} />
+      <Row label="Jobs completed" value={u.stats?.jobsCompleted ?? 0} />
       <Row label="Joined" value={u.createdAt ? new Date(u.createdAt).toLocaleString() : "—"} />
       <Row label="Last login" value={u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString() : "—"} />
       {u.isActive === false && (

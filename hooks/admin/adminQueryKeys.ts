@@ -43,10 +43,10 @@ export const adminKeys = {
     ["admin", "clients", "list", filter] as const,
   clientDetail: (id: string) => ["admin", "clients", "detail", id] as const,
 
-  tasks: ["admin", "tasks"] as const,
-  tasksView: (filter: Record<string, unknown>) =>
-    ["admin", "tasks", "list", filter] as const,
-  taskDetail: (id: string) => ["admin", "tasks", "detail", id] as const,
+  jobs: ["admin", "jobs"] as const,
+  jobsView: (filter: Record<string, unknown>) =>
+    ["admin", "jobs", "list", filter] as const,
+  jobDetail: (id: string) => ["admin", "jobs", "detail", id] as const,
 
   // Trust & Safety — service lifecycle oversight + review moderation.
   engagements: ["admin", "engagements"] as const,
@@ -76,8 +76,8 @@ export function keysForScope(scope: AdminScope): (readonly unknown[])[] {
       return [adminKeys.providers, adminKeys.overview];
     case "clients":
       return [adminKeys.clients, adminKeys.overview];
-    case "tasks":
-      return [adminKeys.tasks, adminKeys.overview];
+    case "jobs":
+      return [adminKeys.jobs, adminKeys.overview];
     case "disputes":
       return [adminKeys.disputes, adminKeys.overview];
     // tickets/fraud/moderation only feed the dashboard today.

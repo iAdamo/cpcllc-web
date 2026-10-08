@@ -1,6 +1,6 @@
 /**
  * Public, unauthenticated REST methods used by the share-link pages
- * (`/p/<slug>` for providers, `/t/<id>` for tasks). Keeps the public
+ * (`/p/<slug>` for providers, `/t/<id>` for jobs). Keeps the public
  * surface separate from the authenticated `admin.ts` / `user.ts` modules.
  */
 import { ApiClientSingleton } from "@/axios/conf";
@@ -53,12 +53,12 @@ export const getFeaturedProviders = async (
 };
 
 /**
- * Fetch a task's public share preview by id. Returns `null` for private
- * (`visibility !== "Public"`) or archived tasks — the backend gates this.
+ * Fetch a job's public share preview by id. Returns `null` for private
+ * (`visibility !== "Public"`) or archived jobs — the backend gates this.
  */
-export const getPublicTaskById = async (id: string): Promise<any | null> => {
+export const getPublicJobById = async (id: string): Promise<any | null> => {
   try {
-    const r = await axiosInstance.get(`services/tasks/public/${id}`);
+    const r = await axiosInstance.get(`jobs/public/${id}`);
     return r.data ?? null;
   } catch {
     return null;

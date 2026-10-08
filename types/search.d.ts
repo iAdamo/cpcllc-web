@@ -11,7 +11,7 @@ export type SortBy =
   | "Most Reviewed";
 
 export interface SearchParams {
-  model: "providers" | "services" | "tasks";
+  model: "providers" | "services" | "jobs";
   page: number;
   limit: number;
   engine: boolean;
@@ -30,7 +30,7 @@ export interface SearchParams {
 export interface SearchResultData {
   providers?: ProviderData[];
   services?: ServiceData[];
-  tasks?: JobData[];
+  jobs?: JobData[];
   // pagination metadata returned by the backend
   page?: number;
   totalPages?: number;

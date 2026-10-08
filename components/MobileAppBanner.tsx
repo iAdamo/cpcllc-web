@@ -20,15 +20,22 @@ function getDeepLink(pathname: string): string {
   if (pathname === "/providers") return `${APP_SCHEME}://providers`;
   if (pathname === "/profile") return `${APP_SCHEME}://profile`;
   if (pathname === "/home") return `${APP_SCHEME}://home`;
-  if (pathname === "/tasks") return `${APP_SCHEME}://tasks`;
+  if (pathname.startsWith("/j/")) {
+    return `${APP_SCHEME}://j/${pathname.split("/j/")[1]}`;
+  }
   if (pathname === "/settings") return `${APP_SCHEME}://settings`;
   return `${APP_SCHEME}://home`;
 }
 
 // Pages where "Open in app" makes contextual sense
-const DEEP_LINK_PAGES = ["/providers", "/profile", "/home", "/tasks", "/settings"];
+const DEEP_LINK_PAGES = ["/providers", "/profile", "/home", "/settings"];
 function shouldShowDeepLink(pathname: string) {
-  return DEEP_LINK_PAGES.some((p) => pathname === p || pathname.startsWith("/providers/"));
+  return DEEP_LINK_PAGES.some(
+    (p) =>
+      pathname === p ||
+      pathname.startsWith("/providers/") ||
+      pathname.startsWith("/j/"),
+  );
 }
 
 export default function MobileAppBanner() {

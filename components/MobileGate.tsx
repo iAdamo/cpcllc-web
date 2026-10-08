@@ -11,7 +11,7 @@ const PUBLIC_PATHS = [
   ...LEGAL_PAGES,
   "/providers",
   "/onboarding",
-  "/tasks",
+  "/j",
   "/settings/account-control/deletion",
   "/admin",
   "/auth/signin",

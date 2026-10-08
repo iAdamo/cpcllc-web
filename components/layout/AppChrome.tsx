@@ -21,7 +21,6 @@ const hideNavRoutes = [
 const hideFooterRoutes = [
   "/onboarding",
   "/admin",
-  "/tasks",
   "/providers",
   "/privacy-policy",
   "/terms-of-service",

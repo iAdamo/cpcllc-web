@@ -18,7 +18,7 @@ export type AdminScope =
   | "users"
   | "providers"
   | "clients"
-  | "tasks"
+  | "jobs"
   | "dashboard";
 
 export interface AdminConnection<T> {
@@ -71,7 +71,7 @@ export interface AdminUserDetail extends AdminUserRow {
     reasonCode?: string;
   } | null;
   scheduledDeletionAt?: string | null;
-  stats: { tasksPosted: number; tasksCompleted: number };
+  stats: { jobsPosted: number; jobsCompleted: number };
 }
 
 export interface AdminUserStatsShape {
@@ -114,8 +114,8 @@ export interface AdminProviderDetail extends AdminProviderRow {
     isActive?: boolean;
   };
   stats: {
-    tasksTaken: number;
-    tasksCompleted: number;
+    jobsTaken: number;
+    jobsCompleted: number;
     followers: number;
     rating: number;
   };
@@ -130,7 +130,7 @@ export interface AdminProviderStatsShape {
   pendingKyc: number;
 }
 
-export interface AdminTaskRow {
+export interface AdminJobRow {
   _id: string;
   title: string;
   budget: number;
@@ -149,7 +149,7 @@ export interface AdminTaskRow {
   subcategoryId?: { _id: string; name?: string };
 }
 
-export interface AdminTaskDetail extends AdminTaskRow {
+export interface AdminJobDetail extends AdminJobRow {
   description: string;
   negotiable: boolean;
   deadline?: string;
@@ -157,11 +157,11 @@ export interface AdminTaskDetail extends AdminTaskRow {
   tags: string[];
   anonymous: boolean;
   updatedAt: string;
-  userId?: AdminTaskRow["userId"] & { phoneNumber?: string };
-  providerId?: AdminTaskRow["providerId"] & { providerEmail?: string };
+  userId?: AdminJobRow["userId"] & { phoneNumber?: string };
+  providerId?: AdminJobRow["providerId"] & { providerEmail?: string };
 }
 
-export interface AdminTaskStatsShape {
+export interface AdminJobStatsShape {
   total: number;
   newLast30Days: number;
   byStatus: {
@@ -184,9 +184,9 @@ export interface AdminProvidersBundle {
 export interface AdminClientsBundle {
   page: AdminConnection<AdminUserRow>;
 }
-export interface AdminTasksBundle {
-  stats: AdminTaskStatsShape;
-  page: AdminConnection<AdminTaskRow>;
+export interface AdminJobsBundle {
+  stats: AdminJobStatsShape;
+  page: AdminConnection<AdminJobRow>;
 }
 
 /* ─── Overview ────────────────────────────────────────────────────────── */
@@ -199,25 +199,25 @@ export interface AdminOverviewShape {
       newUsersLast30?: number;
       providers?: number;
       clients?: number;
-      tasksPosted?: number;
-      tasksCompleted?: number;
-      openTasks?: number;
+      jobsPosted?: number;
+      jobsCompleted?: number;
+      openJobs?: number;
       avgRating?: number;
     };
     /** Real 30-day growth rates (%), only for metrics with history. */
     deltas?: {
       totalUsers?: number;
       providers?: number;
-      tasksPosted?: number;
+      jobsPosted?: number;
     };
     /** Real cumulative daily totals for the Platform Overview chart. */
     series?: {
       date: string;
       users: number;
-      tasks: number;
+      jobs: number;
       providers: number;
     }[];
-    taskStatusBreakdown: { status?: string; count: number }[];
+    jobStatusBreakdown: { status?: string; count: number }[];
   };
   ticketStats: {
     openTickets: number;
@@ -260,7 +260,7 @@ export interface AdminOverviewShape {
     openDisputes?: number;
     fraudAlerts?: number;
     moderationQueue?: number;
-    openTasks?: number;
+    openJobs?: number;
   };
   recentActivities: {
     recentUsers: {
@@ -271,7 +271,7 @@ export interface AdminOverviewShape {
       activeRole?: string;
       createdAt?: string;
     }[];
-    recentTasks: {
+    recentJobs: {
       _id: string;
       title?: string;
       budget?: number;
@@ -291,6 +291,6 @@ export interface AdminOverviewShape {
     }[];
   };
   topProviders: AdminOverviewShape["recentActivities"]["recentProviders"];
-  recentTasks: AdminOverviewShape["recentActivities"]["recentTasks"];
+  recentJobs: AdminOverviewShape["recentActivities"]["recentJobs"];
   systemHealth?: any;
 }

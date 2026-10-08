@@ -4,7 +4,7 @@ import { safeNextPath } from "./safeNext";
 describe("safeNextPath", () => {
   it("keeps a path on this site, with its query", () => {
     expect(safeNextPath("/onboarding")).toBe("/onboarding");
-    expect(safeNextPath("/tasks?tab=mine")).toBe("/tasks?tab=mine");
+    expect(safeNextPath("/jobs?tab=mine")).toBe("/jobs?tab=mine");
   });
 
   it("REGRESSION: refuses paths that leave the site (open redirect)", () => {

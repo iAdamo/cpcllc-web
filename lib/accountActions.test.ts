@@ -120,11 +120,11 @@ describe("history lines", () => {
 
 describe("moderation decisions", () => {
   it("dismiss closes with no action; warn/suspend/ban act on the account", () => {
-    expect(buildDecisionBody({ ...emptyDecision(), outcome: "dismiss" }, "Task")).toEqual({
+    expect(buildDecisionBody({ ...emptyDecision(), outcome: "dismiss" }, "Job")).toEqual({
       ok: true,
       body: { actions: ["no_action"], finalStatus: "dismissed" },
     });
-    expect(buildDecisionBody({ ...emptyDecision(), outcome: "suspend", suspendDays: 3 }, "Task")).toEqual({
+    expect(buildDecisionBody({ ...emptyDecision(), outcome: "suspend", suspendDays: 3 }, "Job")).toEqual({
       ok: true,
       body: { actions: ["suspend_user"], finalStatus: "actioned", suspendDays: 3 },
     });
@@ -139,7 +139,7 @@ describe("moderation decisions", () => {
     expect(
       buildDecisionBody({ ...emptyDecision(), targetUserId: "6650f1c2a9b3e4d5f6a7b8c9" }, "Chat"),
     ).toMatchObject({ ok: true, body: { targetUserId: "6650f1c2a9b3e4d5f6a7b8c9" } });
-    expect(buildDecisionBody({ ...emptyDecision(), messageToUser: "bad" }, "Task")).toMatchObject({
+    expect(buildDecisionBody({ ...emptyDecision(), messageToUser: "bad" }, "Job")).toMatchObject({
       ok: false,
     });
   });

@@ -18,7 +18,7 @@ import {
 import useGlobalStore from "@/stores";
 import { ProviderData, JobData, MediaItem } from "@/types";
 
-type Tab = "providers" | "tasks";
+type Tab = "providers" | "jobs";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -165,9 +165,9 @@ function SavedProviderCard({
   );
 }
 
-// ── Task Card ─────────────────────────────────────────────────────────────────
+// ── Job Card ─────────────────────────────────────────────────────────────────
 
-function SavedTaskCard({
+function SavedJobCard({
   job,
   onRemove,
 }: {
@@ -247,7 +247,7 @@ function SavedTaskCard({
       {/* Actions */}
       <div className="flex items-center gap-2 flex-shrink-0">
         <Link
-          href={`/tasks/${job._id}`}
+          href={`/jobs/${job._id}`}
           className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
         >
           View
@@ -325,8 +325,8 @@ export default function FavoritesPage() {
         count: savedProviders.length,
       },
       {
-        id: "tasks",
-        label: "Saved Tasks",
+        id: "jobs",
+        label: "Saved Jobs",
         icon: Bookmark,
         count: savedJobs.length,
       },
@@ -352,7 +352,7 @@ export default function FavoritesPage() {
             )}
           </div>
           <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-            Providers and tasks you&apos;ve saved for later
+            Providers and jobs you&apos;ve saved for later
           </p>
         </motion.div>
 
@@ -374,7 +374,7 @@ export default function FavoritesPage() {
                 <Icon size={15} />
                 <span className="hidden sm:inline">{label}</span>
                 <span className="sm:hidden">
-                  {id === "providers" ? "Providers" : "Tasks"}
+                  {id === "providers" ? "Providers" : "Jobs"}
                 </span>
                 {count > 0 && (
                   <span
@@ -426,9 +426,9 @@ export default function FavoritesPage() {
             </motion.div>
           )}
 
-          {activeTab === "tasks" && (
+          {activeTab === "jobs" && (
             <motion.div
-              key="tasks"
+              key="jobs"
               initial={{ opacity: 0, x: 8 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -8 }}
@@ -437,16 +437,16 @@ export default function FavoritesPage() {
               {savedJobs.length === 0 ? (
                 <EmptyState
                   icon={Bookmark}
-                  title="No saved tasks yet"
-                  message="Save tasks you want to revisit or apply to later. Explore available tasks now."
-                  ctaLabel="Browse Tasks"
-                  ctaHref="/tasks"
+                  title="No saved jobs yet"
+                  message="Save jobs you want to revisit or apply to later. Explore available jobs now."
+                  ctaLabel="Browse Jobs"
+                  ctaHref="/jobs"
                 />
               ) : (
                 <div className="space-y-3">
                   <AnimatePresence>
                     {savedJobs.map((job: JobData) => (
-                      <SavedTaskCard
+                      <SavedJobCard
                         key={job._id}
                         job={job}
                         onRemove={() => setSavedJobs(job)}

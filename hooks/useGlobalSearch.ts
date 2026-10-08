@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import useGlobalStore from "@/stores";
 import { globalSearch } from "@/axios/search";
-import { queryClient } from "@/lib/queryClient";
 import { getUserCountry } from "@/lib/country";
 import type { SearchFilters, ProviderData, JobData } from "@/types";
 
@@ -19,7 +18,7 @@ interface SearchPage {
 }
 
 function buildSearchParams(
-  model: "providers" | "tasks",
+  model: "providers" | "jobs",
   filters: SearchFilters,
   page: number,
 ) {
@@ -47,23 +46,6 @@ function buildSearchParams(
   } as const;
 }
 
-/**
- * Imperative, non-subscribing read of the most recent cached job results.
- * Used by NavBar's client-side narrowing so it never mounts (and therefore
- * never fetches) the search query itself.
- */
-export function getCachedJobResults(): JobData[] {
-  const entries = queryClient.getQueriesData<InfiniteData<SearchPage>>({
-    queryKey: ["search", "tasks"],
-  });
-  for (let i = entries.length - 1; i >= 0; i--) {
-    const data = entries[i][1];
-    if (data?.pages?.length) {
-      return data.pages.flatMap((p) => p.jobs);
-    }
-  }
-  return [];
-}
 
 /**
  * Server side of the marketplace search. Filters and model live in Zustand
@@ -72,7 +54,7 @@ export function getCachedJobResults(): JobData[] {
  * `setSearchFilters` / `setSearchModel` changes the query key, which
  * re-runs the search — there is no imperative `executeSearch` anymore.
  */
-export function useGlobalSearch(model?: "providers" | "tasks") {
+export function useGlobalSearch(model?: "providers" | "jobs") {
   const storeModel = useGlobalStore((s) => s.searchModel);
   const filters = useGlobalStore((s) => s.searchFilters);
   const setSearchFilters = useGlobalStore((s) => s.setSearchFilters);
@@ -124,7 +106,7 @@ export function useGlobalSearch(model?: "providers" | "tasks") {
       );
       return {
         providers: result.data.providers ?? [],
-        jobs: result.data.tasks ?? [],
+        jobs: result.data.jobs ?? [],
         totalPages: result.totalPages ?? 1,
         total: (result as any).total,
         page,

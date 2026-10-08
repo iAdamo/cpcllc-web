@@ -32,7 +32,7 @@ export function ClientsView() {
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Clients</h2>
             <p className="text-sm text-slate-500 mt-0.5">
-              Marketplace users posting tasks ({list?.total ?? 0})
+              Marketplace users posting jobs ({list?.total ?? 0})
             </p>
           </div>
         </div>
@@ -183,8 +183,8 @@ function ClientDetailDrawer({
           <Row label="Status" value={c.isActive ? "Active" : "Suspended"} />
           <Row label="Average rating" value={c.averageRating ?? 0} />
           <Row label="Reviews" value={c.reviewCount ?? 0} />
-          <Row label="Tasks posted" value={c.stats?.tasksPosted ?? 0} />
-          <Row label="Tasks completed" value={c.stats?.tasksCompleted ?? 0} />
+          <Row label="Jobs posted" value={c.stats?.jobsPosted ?? 0} />
+          <Row label="Jobs completed" value={c.stats?.jobsCompleted ?? 0} />
           <Row label="Joined" value={c.createdAt ? new Date(c.createdAt).toLocaleString() : "—"} />
         </div>
       )}

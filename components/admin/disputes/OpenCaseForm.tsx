@@ -44,7 +44,7 @@ export function OpenCaseForm({
   const [busy, setBusy] = useState(false);
   const [respondent, setRespondent] = useState<{ _id: string; email?: string } | null>(null);
   const set = (patch: Partial<Form>) => setForm((f) => ({ ...f, ...patch }));
-  const key = "task" in source ? source.task : source.ticket;
+  const key = "job" in source ? source.job : source.ticket;
 
   const submit = async () => {
     const built = buildOpenCaseBody(source, form, {

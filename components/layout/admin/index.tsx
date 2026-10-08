@@ -208,7 +208,7 @@ const TopBar = ({
         <input
           type="text"
           aria-label="Global search"
-          placeholder="Search users, tasks, bookings…"
+          placeholder="Search users, jobs, bookings…"
           className="bg-transparent ml-2 flex-1 outline-none text-sm text-slate-700 dark:text-slate-200"
         />
       </div>

@@ -8,7 +8,7 @@
  */
 
 export interface DomainEventPayload<T = unknown> {
-  /** Stable event type, e.g. `user.registered`, `task.created`. */
+  /** Stable event type, e.g. `user.registered`, `job.created`. */
   type: string;
   /** Identifier of the resource the event refers to. */
   resourceId: string;

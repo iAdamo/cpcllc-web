@@ -10,7 +10,7 @@ import DashboardView from "@/screens/admin/dashboard-view";
 import { UsersView } from "@/screens/admin/views/UsersView";
 import { ProvidersView } from "@/screens/admin/views/ProvidersView";
 import { ClientsView } from "@/screens/admin/views/ClientsView";
-import { TasksView } from "@/screens/admin/views/TasksView";
+import { JobsView } from "@/screens/admin/views/JobsView";
 import { EngagementsView } from "@/screens/admin/views/EngagementsView";
 import { ReviewModerationView } from "@/screens/admin/views/ReviewModerationView";
 import { SupportView } from "@/screens/admin/views/SupportView";
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
     openDisputes: b?.openDisputes ?? undefined,
     fraudAlerts: b?.fraudAlerts ?? undefined,
     moderationQueue: b?.moderationQueue ?? undefined,
-    openTasks: b?.openTasks ?? undefined,
+    openJobs: b?.openJobs ?? undefined,
   };
 
   // One-shot subscriber that re-fires the affected admin queries whenever
@@ -173,8 +173,8 @@ function renderView(view: string) {
       return <ProvidersView />;
     case "clients":
       return <ClientsView />;
-    case "tasks":
-      return <TasksView />;
+    case "jobs":
+      return <JobsView />;
     case "engagements":
       return <EngagementsView />;
     case "reviews":

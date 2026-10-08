@@ -102,7 +102,7 @@ const createClient = () => {
       // guests; those must never bounce the visitor to a login wall.
       if (status === 401 && typeof window !== "undefined") {
         const path = window.location.pathname;
-        const protectedPrefixes = ["/admin", "/settings", "/favorites", "/tasks/create"];
+        const protectedPrefixes = ["/admin", "/settings", "/favorites"];
         if (protectedPrefixes.some((p) => path.startsWith(p))) {
           window.location.href = `/auth/signin?next=${encodeURIComponent(path)}`;
         }

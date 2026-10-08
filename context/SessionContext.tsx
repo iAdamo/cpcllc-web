@@ -95,12 +95,11 @@ export function SessionProvider({ children }: PropsWithChildren) {
   /**
    * Returns the canonical "home" page for a given activeRole.
    * Clients land on /providers (browse providers to hire).
-   * Providers land on /tasks (browse client-posted tasks to bid on).
+   * Providers stay on the home page: their work happens in the app.
    * Admins land on /admin.
    */
   const homeForRole = (role?: string): string | null => {
     if (role === "Admin") return "/admin";
-    if (role === "Provider") return "/tasks";
     if (role === "Client") return "/providers";
     return null;
   };
@@ -115,13 +114,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
     if (isAuthenticated) {
       const home = homeForRole(user?.activeRole);
       // Mismatched-role pages → kick to own home
-      if (user?.activeRole === "Provider" && pathname === "/providers") {
-        router.replace("/tasks");
-        return;
-      }
-      if (user?.activeRole === "Client" && pathname === "/tasks") {
-        // Client viewing /tasks is fine — that's their own task list.
-      }
       if (
         user?.activeRole === "Admin" &&
         pathname !== "/admin" &&

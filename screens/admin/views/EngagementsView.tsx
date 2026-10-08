@@ -82,7 +82,7 @@ export function EngagementsView() {
           </div>
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
-              Service Lifecycle
+              Job progress
             </h2>
             <p className="text-sm text-slate-500 mt-0.5">
               Live engagements from acceptance to verified completion
@@ -148,7 +148,7 @@ export function EngagementsView() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-100 dark:border-slate-800">
-                <th className="px-5 py-2.5 font-medium">Task</th>
+                <th className="px-5 py-2.5 font-medium">Job</th>
                 <th className="px-5 py-2.5 font-medium">Client</th>
                 <th className="px-5 py-2.5 font-medium">Provider</th>
                 <th className="px-5 py-2.5 font-medium">Stage</th>
@@ -259,33 +259,33 @@ function EngagementDrawer({
   onOpenCase: (caseId: string) => void;
 }) {
   const { data, loading } = useAdminEngagementDetail(id);
-  const task = data?.task;
-  const lc = task?.lifecycle;
+  const job = data?.job;
+  const lc = job?.lifecycle;
   const cert = data?.certificate;
-  const { data: cases } = useAdminDisputesView({ task: id, limit: 10 }, !!id);
+  const { data: cases } = useAdminDisputesView({ job: id, limit: 10 }, !!id);
   const caseList = cases?.items ?? [];
   const hasOpenCase = caseList.some((c: any) => isOpenCase(c.status));
-  const clientName = task?.userId
-    ? `${task.userId.firstName ?? ""} ${task.userId.lastName ?? ""}`.trim() || "Client"
+  const clientName = job?.userId
+    ? `${job.userId.firstName ?? ""} ${job.userId.lastName ?? ""}`.trim() || "Client"
     : "Client";
-  const providerName = task?.providerId?.providerName ?? "The business";
+  const providerName = job?.providerId?.providerName ?? "The business";
 
   return (
     <Drawer
       open={!!id}
       onClose={onClose}
-      title={task?.title || (loading ? "Loading…" : "Engagement")}
+      title={job?.title || (loading ? "Loading…" : "Engagement")}
       subtitle={lc ? `Stage: ${stageLabel(lc.stage)}` : undefined}
     >
       {loading && <p className="text-sm text-slate-500">Loading…</p>}
-      {task && (
+      {job && (
         <div className="space-y-4 text-sm">
           <Row label="Client" value={
-            task.userId
-              ? `${task.userId.firstName ?? ""} ${task.userId.lastName ?? ""}`.trim()
+            job.userId
+              ? `${job.userId.firstName ?? ""} ${job.userId.lastName ?? ""}`.trim()
               : "—"
           } />
-          <Row label="Provider" value={task.providerId?.providerName ?? "—"} />
+          <Row label="Provider" value={job.providerId?.providerName ?? "—"} />
           <Row label="Stage" value={stageLabel(lc?.stage)} />
           <Row label="Started" value={fmtDate(lc?.startedAt)} />
           <Row label="Expected" value={fmtDate(lc?.expectedCompletionAt)} />
@@ -338,14 +338,14 @@ function EngagementDrawer({
                 ))}
               </ul>
             )}
-            {!hasOpenCase && task.providerId && (
+            {!hasOpenCase && job.providerId && (
               <details className="mt-2" open={lc?.stage === "disputed"}>
                 <summary className="cursor-pointer text-xs text-rose-600 dark:text-rose-300 py-1">
                   Open a dispute case
                 </summary>
                 <div className="mt-2">
                   <OpenCaseForm
-                    source={{ task: String(task._id) }}
+                    source={{ job: String(job._id) }}
                     prefillSummary={lc?.issue?.reason}
                     sides={{ client: clientName, provider: providerName }}
                     onOpened={onOpenCase}
@@ -353,7 +353,7 @@ function EngagementDrawer({
                 </div>
               </details>
             )}
-            {caseList.length === 0 && !task.providerId && (
+            {caseList.length === 0 && !job.providerId && (
               <p className="mt-1 text-xs text-slate-400">No provider on this job, so there is no one to open a case with.</p>
             )}
           </div>

@@ -114,7 +114,7 @@ function ServiceCard({
               onClick={onBook}
               className="ml-auto flex items-center gap-1 text-xs font-bold text-brand-700 hover:underline"
             >
-              Post a task <ChevronRight size={11} />
+              Post a job <ChevronRight size={11} />
             </button>
           </div>
         </div>
@@ -147,13 +147,13 @@ export default function ServiceSection({
     staleTime: 60 * 1000,
   });
 
-  // Hiring flows through tasks — the provider bids like everywhere else.
+  // Hiring flows through jobs — the provider bids like everywhere else.
   const handleBook = () => {
     if (!isAuthenticated) {
-      router.push(`/auth/signin?next=/tasks/create`);
+      router.push(`/auth/signin?next=/jobs/create`);
       return;
     }
-    router.push("/tasks/create");
+    router.push("/jobs/create");
   };
 
   if (isLoading) {
