@@ -1,7 +1,8 @@
 "use client";
 
-import { Settings, ShieldCheck } from "lucide-react";
+import { Settings, ShieldCheck, Share2 } from "lucide-react";
 import { MfaSection } from "@/screens/admin/sections/MfaSection";
+import { SocialLinksSection } from "@/screens/admin/sections/SocialLinksSection";
 
 export function SettingsView() {
   return (
@@ -33,6 +34,21 @@ export function SettingsView() {
           password. Required for any admin handling sensitive operations.
         </p>
         <MfaSection />
+      </section>
+
+      {/* Social links: website footer + the app's Customer Support screen */}
+      <section>
+        <div className="flex items-center gap-2 mb-3">
+          <Share2 size={18} className="text-slate-400" />
+          <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+            Social links
+          </h3>
+        </div>
+        <p className="text-sm text-slate-500 mb-4">
+          Companies Center&apos;s pages on social media. They appear in the
+          website footer and on the app&apos;s Customer Support screen.
+        </p>
+        <SocialLinksSection />
       </section>
     </div>
   );

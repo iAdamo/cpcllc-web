@@ -13,6 +13,9 @@ export const adminKeys = {
 
   terms: ["admin", "terms"] as const,
 
+  // App settings (app-config): social links.
+  appConfig: ["admin", "app-config"] as const,
+
   // Data retention: periods + last run, run history, legal holds.
   retention: ["admin", "retention"] as const,
   retentionRuns: ["admin", "retention", "runs"] as const,
