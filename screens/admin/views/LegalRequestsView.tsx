@@ -38,7 +38,15 @@ const STATUS_TONE: Record<LegalRequestStatus, "blue" | "yellow" | "green" | "ros
   withdrawn: "slate",
 };
 
-const KIND_ORDER: LegalRequestKind[] = ["privacy", "appeal", "copyright", "counter_notice"];
+const KIND_ORDER: LegalRequestKind[] = [
+  "privacy",
+  "appeal",
+  "copyright",
+  "counter_notice",
+  "dispute_notice",
+  "arbitration_opt_out",
+  "legal_notice",
+];
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -77,7 +85,8 @@ export function LegalRequestsView() {
         <div>
           <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Privacy &amp; Copyright Requests</h1>
           <p className="text-sm text-slate-500">
-            Filed on the website&apos;s Privacy requests and DMCA pages. Each person was emailed their reference.
+            Filed on the website&apos;s Privacy requests, DMCA and Legal notices pages. Each person was emailed their
+            reference.
           </p>
         </div>
       </div>
@@ -90,7 +99,7 @@ export function LegalRequestsView() {
               key={k}
               className="inline-flex items-center gap-1.5 rounded-lg border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-1.5 text-sm"
             >
-              <span className="text-slate-500">{KIND_LABELS[k]}s open</span>
+              <span className="text-slate-500">{KIND_LABELS[k]}: open</span>
               <span className="font-semibold tabular-nums text-slate-900 dark:text-white">{data.open[k] ?? 0}</span>
             </span>
           ))}
@@ -374,6 +383,24 @@ function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string
         </p>
       ) : null}
 
+      {r.title ? <Field label="Subject">{r.title}</Field> : null}
+      {r.facts ? (
+        <Field label="Supporting facts">
+          <span className="whitespace-pre-wrap">{r.facts}</span>
+        </Field>
+      ) : null}
+      {r.relief ? (
+        <Field label="Relief requested">
+          <span className="whitespace-pre-wrap">{r.relief}</span>
+        </Field>
+      ) : null}
+      {r.kind === "dispute_notice" ? (
+        <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 px-3 py-2 text-sm text-amber-800 dark:text-amber-200">
+          The 60-day informal resolution period (Terms Section 39.2) runs from {when(r.createdAt)} if the notice is
+          complete. Contact the person to try to resolve it.
+        </div>
+      ) : null}
+      {r.optOutCheck ? <OptOutCheck check={r.optOutCheck} /> : null}
       {r.work ? (
         <Field label="The copyrighted work">
           <span className="whitespace-pre-wrap">{r.work}</span>
@@ -437,6 +464,38 @@ function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string
           ))}
         </ol>
       </div>
+    </div>
+  );
+}
+
+/** Whether an arbitration opt-out came in time: 30 days from first
+ *  accepting the Terms of Service version in force (Section 39.11). */
+function OptOutCheck({ check }: { check: NonNullable<LegalRequestDetail["optOutCheck"]> }) {
+  const verdict =
+    check.inTime === true
+      ? { tone: "bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-200", text: "In time: received within 30 days of first accepting the Terms in force." }
+      : check.inTime === false
+        ? { tone: "bg-rose-50 dark:bg-rose-950/30 text-rose-800 dark:text-rose-200", text: "Late: received more than 30 days after first accepting the Terms in force." }
+        : { tone: "bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-200", text: "Can't tell: no account with this email, or no acceptance of the Terms in force on record. Check the facts before deciding." };
+  return (
+    <div className={`rounded-lg px-3 py-2 text-sm ${verdict.tone}`}>
+      <p className="font-medium">{verdict.text}</p>
+      <p className="mt-1 text-xs">
+        Terms in force: {check.currentVersion ?? "none published"}
+        {check.firstAcceptedCurrentAt ? `, first accepted ${when(check.firstAcceptedCurrentAt)}` : ""}.
+      </p>
+      {check.acceptances.length ? (
+        <ul className="mt-1 text-xs list-disc pl-5">
+          {check.acceptances.map((a, i) => (
+            <li key={i}>
+              {a.version} {a.status} {when(a.decidedAt)}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <p className="mt-1 text-xs">
+        The window starts at the first acceptance of a version that contains the arbitration agreement.
+      </p>
     </div>
   );
 }

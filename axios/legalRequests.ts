@@ -3,6 +3,9 @@ import type {
   AppealForm,
   CopyrightPayload,
   CounterPayload,
+  DisputePayload,
+  LegalNoticePayload,
+  OptOutPayload,
   Filed,
   LegalRequestDetail,
   LegalRequestList,
@@ -30,6 +33,21 @@ export async function fileCopyrightNotice(body: CopyrightPayload): Promise<Filed
 
 export async function fileCounterNotice(body: CounterPayload): Promise<Filed> {
   const { data } = await axiosInstance.post("legal-requests/counter-notice", body);
+  return data;
+}
+
+export async function fileDisputeNotice(body: DisputePayload): Promise<Filed> {
+  const { data } = await axiosInstance.post("legal-requests/dispute-notice", body);
+  return data;
+}
+
+export async function fileOptOut(body: OptOutPayload): Promise<Filed> {
+  const { data } = await axiosInstance.post("legal-requests/arbitration-opt-out", body);
+  return data;
+}
+
+export async function fileLegalNotice(body: LegalNoticePayload): Promise<Filed> {
+  const { data } = await axiosInstance.post("legal-requests/legal-notice", body);
   return data;
 }
 

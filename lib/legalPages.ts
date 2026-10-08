@@ -12,4 +12,5 @@ export const LEGAL_PAGES = [
   "/contact",
   "/privacy-request",
   "/dmca",
+  "/legal-notice",
 ] as const;

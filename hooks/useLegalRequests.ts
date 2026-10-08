@@ -5,11 +5,14 @@ import {
   fileAppeal,
   fileCopyrightNotice,
   fileCounterNotice,
+  fileDisputeNotice,
+  fileLegalNotice,
+  fileOptOut,
   filePrivacyRequest,
 } from "@/axios/legalRequests";
 
-/** Filing on /privacy-request and /dmca. Anyone can file; nothing is
- *  cached (each filing is a one-off write). */
+/** Filing on /privacy-request, /dmca and /legal-notice. Anyone can file;
+ *  nothing is cached (each filing is a one-off write). */
 export function useFilePrivacyRequest() {
   return useMutation({ mutationFn: filePrivacyRequest });
 }
@@ -24,4 +27,16 @@ export function useFileCopyrightNotice() {
 
 export function useFileCounterNotice() {
   return useMutation({ mutationFn: fileCounterNotice });
+}
+
+export function useFileDisputeNotice() {
+  return useMutation({ mutationFn: fileDisputeNotice });
+}
+
+export function useFileOptOut() {
+  return useMutation({ mutationFn: fileOptOut });
+}
+
+export function useFileLegalNotice() {
+  return useMutation({ mutationFn: fileLegalNotice });
 }

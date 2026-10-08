@@ -6,7 +6,14 @@
  * into a payload here, or into the errors to show beside its fields.
  */
 
-export type LegalRequestKind = "privacy" | "appeal" | "copyright" | "counter_notice";
+export type LegalRequestKind =
+  | "privacy"
+  | "appeal"
+  | "copyright"
+  | "counter_notice"
+  | "dispute_notice"
+  | "arbitration_opt_out"
+  | "legal_notice";
 export type LegalRequestStatus =
   | "received"
   | "verifying"
@@ -57,6 +64,9 @@ export const KIND_LABELS: Record<LegalRequestKind, string> = {
   appeal: "Appeal",
   copyright: "Copyright notice",
   counter_notice: "Counter-notice",
+  dispute_notice: "Notice of Dispute",
+  arbitration_opt_out: "Arbitration opt-out",
+  legal_notice: "Legal notice",
 };
 
 export const STATUS_LABELS: Record<LegalRequestStatus, string> = {
@@ -357,6 +367,151 @@ export function counterPayload(f: CounterForm): Result<CounterPayload> {
   }));
 }
 
+// ── Legal notices (/legal-notice; Terms of Service 39.2, 39.11, 43) ────────
+
+export type NoticeTab = "dispute" | "opt-out" | "notice";
+
+export const NOTICE_TABS: { value: NoticeTab; label: string }[] = [
+  { value: "dispute", label: "Notice of Dispute" },
+  { value: "opt-out", label: "Arbitration opt-out" },
+  { value: "notice", label: "Other legal notice" },
+];
+
+/** The form a link opens (/legal-notice?form=opt-out). Lives here, not in
+ *  the "use client" forms module: a server page that imports data from a
+ *  client module gets a client reference, not the value. */
+export function noticeTabFrom(param: unknown): NoticeTab {
+  return NOTICE_TABS.find((t) => t.value === param)?.value ?? "dispute";
+}
+
+export interface DisputeForm {
+  name: string;
+  email: string;
+  description: string;
+  facts: string;
+  relief: string;
+  accurate: boolean;
+  signature: string;
+}
+
+export const emptyDisputeForm = (): DisputeForm => ({
+  name: "",
+  email: "",
+  description: "",
+  facts: "",
+  relief: "",
+  accurate: false,
+  signature: "",
+});
+
+export interface DisputePayload {
+  requester: { name: string; email: string };
+  description: string;
+  facts: string;
+  relief: string;
+  accurate: true;
+  signature: string;
+}
+
+export function disputePayload(f: DisputeForm): Result<DisputePayload> {
+  const e: FieldErrors = {};
+  if (blank(f.name)) e.name = "Enter your full name.";
+  if (!isEmail(f.email)) e.email = "Enter the email address on your account.";
+  if (blank(f.description)) e.description = "Describe the dispute.";
+  if (blank(f.facts)) e.facts = "Give the facts that support it.";
+  if (blank(f.relief)) e.relief = "Say what you are asking for.";
+  if (!f.accurate) e.accurate = "This statement is required.";
+  if (blank(f.signature)) e.signature = "Type your full name to sign.";
+  else if (!blank(f.name) && !signs(f.signature, f.name))
+    e.signature = "Type the same full name you entered above.";
+  return done(e, () => ({
+    requester: { name: f.name.trim(), email: f.email.trim() },
+    description: f.description.trim(),
+    facts: f.facts.trim(),
+    relief: f.relief.trim(),
+    accurate: true as const,
+    signature: f.signature.trim(),
+  }));
+}
+
+export interface OptOutForm {
+  name: string;
+  email: string;
+  optOut: boolean;
+  personal: boolean;
+  signature: string;
+}
+
+export const emptyOptOutForm = (): OptOutForm => ({
+  name: "",
+  email: "",
+  optOut: false,
+  personal: false,
+  signature: "",
+});
+
+export interface OptOutPayload {
+  requester: { name: string; email: string };
+  optOut: true;
+  personal: true;
+  signature: string;
+}
+
+export function optOutPayload(f: OptOutForm): Result<OptOutPayload> {
+  const e: FieldErrors = {};
+  if (blank(f.name)) e.name = "Enter your full name.";
+  if (!isEmail(f.email)) e.email = "Enter the email address on your account.";
+  if (!f.optOut) e.optOut = "Tick this box to opt out.";
+  if (!f.personal) e.personal = "An opt-out must be submitted by you personally.";
+  if (blank(f.signature)) e.signature = "Type your full name to sign.";
+  else if (!blank(f.name) && !signs(f.signature, f.name))
+    e.signature = "Type the same full name you entered above.";
+  return done(e, () => ({
+    requester: { name: f.name.trim(), email: f.email.trim() },
+    optOut: true as const,
+    personal: true as const,
+    signature: f.signature.trim(),
+  }));
+}
+
+export interface LegalNoticeForm {
+  name: string;
+  email: string;
+  organization: string;
+  title: string;
+  details: string;
+}
+
+export const emptyLegalNoticeForm = (): LegalNoticeForm => ({
+  name: "",
+  email: "",
+  organization: "",
+  title: "",
+  details: "",
+});
+
+export interface LegalNoticePayload {
+  requester: { name: string; email: string };
+  organization?: string;
+  title: string;
+  details: string;
+}
+
+export function legalNoticePayload(f: LegalNoticeForm): Result<LegalNoticePayload> {
+  const e: FieldErrors = {};
+  if (blank(f.name)) e.name = "Enter your full name.";
+  if (!isEmail(f.email)) e.email = "Enter a valid email address.";
+  if (blank(f.title)) e.title = "Say in a few words what the notice is about.";
+  else if (f.title.length > 200) e.title = "Keep the subject under 200 characters.";
+  if (blank(f.details)) e.details = "Write or paste the notice.";
+  return done(e, () => ({
+    requester: { name: f.name.trim(), email: f.email.trim() },
+    ...(f.organization.trim() ? { organization: f.organization.trim() } : {}),
+    title: f.title.trim(),
+    details: f.details.trim(),
+  }));
+}
+
 /** What the API returns after filing. */
 export interface Filed {
   reference: string;
@@ -426,6 +581,15 @@ export interface LegalRequestDetail extends LegalRequestSummary {
   strikes: number | null;
   repeatInfringerStrikes: number;
   restoreWindow: { from: string; until: string } | null;
+  title?: string;
+  facts?: string;
+  relief?: string;
+  optOutCheck: {
+    acceptances: { version: string; status: string; decidedAt: string }[];
+    currentVersion: string | null;
+    firstAcceptedCurrentAt: string | null;
+    inTime: boolean | null;
+  } | null;
 }
 
 export function regionLabel(r: Pick<LegalRequestDetail, "region" | "usState">): string {

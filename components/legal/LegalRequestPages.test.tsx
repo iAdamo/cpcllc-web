@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import PrivacyRequestForm from "./PrivacyRequestForm";
 import CopyrightForms from "./CopyrightForms";
+import LegalNoticeForms from "./LegalNoticeForms";
 import DmcaPage from "@/app/dmca/page";
 import { dmcaAgentComplete } from "@/lib/dmcaAgent";
 
@@ -72,5 +73,21 @@ describe("DMCA page", () => {
     } else {
       expect(html).toContain("U.S. Copyright Office registration");
     }
+  });
+});
+
+describe("legal notices page", () => {
+  it("each form on its own; every control labelled, no two alike", () => {
+    for (const initial of ["dispute", "opt-out", "notice"] as const) {
+      const html = render(<LegalNoticeForms initial={initial} />);
+      expect(html).toContain(`aria-selected="true" aria-controls="panel-${initial}"`);
+      expectNamedOnce(html);
+    }
+  });
+
+  it("the opt-out form states the 30-day rule and asks for self-submission", () => {
+    const html = render(<LegalNoticeForms initial="opt-out" />);
+    expect(html).toContain("within 30 days");
+    expect(html).toContain("I am submitting this opt-out myself");
   });
 });

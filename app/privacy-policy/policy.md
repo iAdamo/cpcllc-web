@@ -7,7 +7,7 @@ may be disclosed, how long we retain it, and the choices and rights available to
 
 This Policy applies to Clients, Service Providers, visitors, and other individuals who
 access or interact with Companies Center. It should be read together with the Companies
-Center Terms of Use and any additional notice presented when a particular feature
+Center Terms of Service and any additional notice presented when a particular feature
 requests sensitive information.
 
 Companies Center is intended only for individuals who are at least 18 years old.
@@ -852,9 +852,10 @@ three years after the case is closed, the report is decided, the event is resolv
 ends; a permanent suspension is kept while it stands. A record linked to one that is still kept,
 such as a support ticket opened about a dispute, is kept as long as that record.
 
-**Privacy and copyright requests.** Privacy requests, appeals, copyright notices, and
-counter-notices are deleted two years after they are closed, including after the account they
-concern is deleted.
+**Privacy, copyright, and legal requests.** Privacy requests, appeals, copyright notices,
+counter-notices, Notices of Dispute, and other legal notices are deleted two years after they are
+closed, including after the account they concern is deleted. An arbitration opt-out is kept, because
+it records a choice that continues to apply.
 
 **Other records.** Error reports are kept on a rolling basis and record the address of a failed
 request without its query values. Referral codes and redemptions are retained, including after

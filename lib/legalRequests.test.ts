@@ -4,7 +4,14 @@ import {
   appealPayload,
   copyrightPayload,
   counterPayload,
+  disputePayload,
   emptyCopyrightForm,
+  emptyDisputeForm,
+  emptyLegalNoticeForm,
+  emptyOptOutForm,
+  legalNoticePayload,
+  noticeTabFrom,
+  optOutPayload,
   emptyCounterForm,
   emptyPrivacyForm,
   isOverdue,
@@ -198,5 +205,50 @@ describe("DMCA designated agent", () => {
         email: "copyright@example.test",
       }),
     ).toBe(true);
+  });
+});
+
+describe("legal notice forms (Terms of Service 39.2, 39.11, 43)", () => {
+  it("REGRESSION: the ?form= link opens the right form, and anything else opens the first", () => {
+    expect(noticeTabFrom("opt-out")).toBe("opt-out");
+    expect(noticeTabFrom("notice")).toBe("notice");
+    expect(noticeTabFrom(["opt-out"])).toBe("dispute");
+    expect(noticeTabFrom(undefined)).toBe("dispute");
+  });
+
+  it("a Notice of Dispute needs the facts, the relief, the accuracy statement and a matching signature", () => {
+    const r = disputePayload({ ...emptyDisputeForm(), name: "Ada Obi", email: "ada@x.test", description: "d" });
+    expect("errors" in r && Object.keys(r.errors).sort()).toEqual(["accurate", "facts", "relief", "signature"]);
+    const ok = disputePayload({
+      name: "Ada Obi",
+      email: "ada@x.test",
+      description: " d ",
+      facts: "f",
+      relief: "r",
+      accurate: true,
+      signature: "ada obi",
+    });
+    expect(ok.ok && ok.payload).toEqual({
+      requester: { name: "Ada Obi", email: "ada@x.test" },
+      description: "d",
+      facts: "f",
+      relief: "r",
+      accurate: true,
+      signature: "ada obi",
+    });
+  });
+
+  it("an opt-out needs the decision, self-submission and a signature", () => {
+    const r = optOutPayload({ ...emptyOptOutForm(), name: "Ada Obi", email: "ada@x.test", signature: "Ada Obi" });
+    expect("errors" in r && Object.keys(r.errors).sort()).toEqual(["optOut", "personal"]);
+    const ok = optOutPayload({ name: "Ada Obi", email: "ada@x.test", optOut: true, personal: true, signature: "Ada Obi" });
+    expect(ok.ok).toBe(true);
+  });
+
+  it("another legal notice needs a subject and the notice; the organisation is optional", () => {
+    const r = legalNoticePayload({ ...emptyLegalNoticeForm(), name: "Lee", email: "lee@firm.test" });
+    expect("errors" in r && Object.keys(r.errors).sort()).toEqual(["details", "title"]);
+    const ok = legalNoticePayload({ name: "Lee", email: "lee@firm.test", organization: "", title: "Subpoena", details: "x" });
+    expect(ok.ok && "organization" in ok.payload).toBe(false);
   });
 });

@@ -142,6 +142,14 @@ export default function ContactPage() {
           >
             Copyright and DMCA Policy
           </a>
+          . For a Notice of Dispute, an arbitration opt-out or another legal
+          notice, use{" "}
+          <a
+            href="/legal-notice"
+            className="font-semibold text-brand-700 hover:underline dark:text-gold-400"
+          >
+            Legal notices
+          </a>
           .
         </p>
       </div>
