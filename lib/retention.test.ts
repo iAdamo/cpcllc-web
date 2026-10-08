@@ -37,7 +37,8 @@ describe("data retention page", () => {
 
   it("lists every kind of hold, an account first", () => {
     expect(HOLD_KIND_OPTIONS[0].value).toBe("account");
-    expect(HOLD_KIND_OPTIONS.map((o) => o.value)).toHaveLength(11);
+    expect(HOLD_KIND_OPTIONS.map((o) => o.value)).toHaveLength(12);
+    expect(holdKindLabel("legal_request")).toBe("Privacy or copyright request");
     expect(holdKindLabel("pro_purchase")).toBe("Pro purchase");
   });
 

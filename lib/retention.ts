@@ -12,6 +12,7 @@ export type RetentionKind =
   | "fraud_event"
   | "moderation_report"
   | "dispute"
+  | "legal_request"
   | "pro_purchase"
   | "estimate"
   | "invoice";
@@ -72,6 +73,7 @@ export const HOLD_KIND_OPTIONS: { value: HoldKind; label: string }[] = [
   { value: "booking", label: "Booking" },
   { value: "ticket", label: "Support ticket" },
   { value: "dispute", label: "Dispute" },
+  { value: "legal_request", label: "Privacy or copyright request" },
   { value: "moderation_report", label: "Moderation report" },
   { value: "fraud_event", label: "Fraud event" },
   { value: "account_action", label: "Account action" },
