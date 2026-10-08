@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import useGlobalStore from "@/stores";
 import { UserData } from "@/types";
 import { Spinner } from "@/components/ui/spinner";
+import { LEGAL_PAGES } from "@/lib/legalPages";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -32,11 +33,10 @@ export function useSession() {
 
 // ─── Route guards ─────────────────────────────────────────────────────────────
 
-const PUBLIC_EXACT = [
+const PUBLIC_EXACT: string[] = [
   "/",
   "/onboarding",
-  "/privacy-policy",
-  "/terms-of-service",
+  ...LEGAL_PAGES,
   "/settings/account-control/deletion",
   "/admin",
   "/auth/signin",
@@ -44,7 +44,6 @@ const PUBLIC_EXACT = [
   "/auth/reset-password",
   // "/auth/verify-email",
   "/admin/mfa/verify",
-  "/contact",
 ];
 const PUBLIC_PREFIX = ["/providers", "/admin", "/profile", "/i"];
 

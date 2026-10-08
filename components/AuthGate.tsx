@@ -5,6 +5,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { usePathname, useRouter } from "next/navigation";
 import { getCurrentUser } from "@/axios/auth";
 import useGlobalStore from "@/stores";
+import { LEGAL_PAGES } from "@/lib/legalPages";
 
 /**
  * Paths where AuthGate does NOT enforce email verification — auth flows
@@ -19,10 +20,8 @@ const PUBLIC_PATHS = new Set<string>([
   "/auth/reset-password",
   // "/auth/verify-email",
   "/admin/mfa/verify",
-  "/terms-of-service",
-  "/privacy-policy",
   "/i",
-  "/contact",
+  ...LEGAL_PAGES,
 ]);
 
 function isPublicPath(pathname: string): boolean {

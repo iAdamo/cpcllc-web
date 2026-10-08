@@ -127,6 +127,21 @@ export default function ContactPage() {
           >
             Privacy Policy
           </a>
+          . To ask for a copy, a correction or deletion of your information,
+          or to appeal a decision, use{" "}
+          <a
+            href="/privacy-request"
+            className="font-semibold text-brand-700 hover:underline dark:text-gold-400"
+          >
+            Privacy requests
+          </a>
+          . To report a copyright infringement, see our{" "}
+          <a
+            href="/dmca"
+            className="font-semibold text-brand-700 hover:underline dark:text-gold-400"
+          >
+            Copyright and DMCA Policy
+          </a>
           .
         </p>
       </div>

@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Smartphone, Monitor } from "lucide-react";
+import { LEGAL_PAGES } from "@/lib/legalPages";
 
 // Pages that work normally on mobile (public / no-login required)
 const PUBLIC_PATHS = [
   "/",
-  "/privacy-policy",
-  "/terms-of-service",
+  ...LEGAL_PAGES,
   "/providers",
   "/onboarding",
   "/tasks",
@@ -21,7 +21,6 @@ const PUBLIC_PATHS = [
   "/auth/terms",
   "/admin/mfa/verify",
   "/i",
-  "/contact",
 ];
 
 function isPublic(pathname: string) {
