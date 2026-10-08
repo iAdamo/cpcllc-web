@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Smartphone, Monitor } from "lucide-react";
 import { LEGAL_PAGES } from "@/lib/legalPages";
+import { SHARE_PAGES } from "@/lib/sharePages";
 
 // Pages that work normally on mobile (public / no-login required)
 const PUBLIC_PATHS = [
@@ -11,7 +12,7 @@ const PUBLIC_PATHS = [
   ...LEGAL_PAGES,
   "/providers",
   "/onboarding",
-  "/j",
+  ...SHARE_PAGES,
   "/settings/account-control/deletion",
   "/admin",
   "/auth/signin",

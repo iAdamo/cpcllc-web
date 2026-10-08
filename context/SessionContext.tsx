@@ -14,6 +14,7 @@ import useGlobalStore from "@/stores";
 import { UserData } from "@/types";
 import { Spinner } from "@/components/ui/spinner";
 import { LEGAL_PAGES } from "@/lib/legalPages";
+import { isSharePage } from "@/lib/sharePages";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -49,6 +50,7 @@ const PUBLIC_PREFIX = ["/providers", "/admin", "/profile", "/i"];
 
 function isPublic(path: string) {
   if (PUBLIC_EXACT.includes(path)) return true;
+  if (isSharePage(path)) return true;
   return PUBLIC_PREFIX.some((p) => path.startsWith(p));
 }
 

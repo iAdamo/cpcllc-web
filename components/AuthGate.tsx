@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getCurrentUser } from "@/axios/auth";
 import useGlobalStore from "@/stores";
 import { LEGAL_PAGES } from "@/lib/legalPages";
+import { SHARE_PAGES } from "@/lib/sharePages";
 
 /**
  * Paths where AuthGate does NOT enforce email verification — auth flows
@@ -22,6 +23,7 @@ const PUBLIC_PATHS = new Set<string>([
   "/admin/mfa/verify",
   "/i",
   ...LEGAL_PAGES,
+  ...SHARE_PAGES,
 ]);
 
 function isPublicPath(pathname: string): boolean {
