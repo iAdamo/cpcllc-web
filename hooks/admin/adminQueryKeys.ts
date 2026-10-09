@@ -27,6 +27,11 @@ export const adminKeys = {
     ["admin", "legal-requests", "list", filter] as const,
   legalRequest: (id: string) => ["admin", "legal-requests", "detail", id] as const,
 
+  // Teams support view: companies with a team, members, invites, counts.
+  teams: ["admin", "teams"] as const,
+  teamsView: (filter: Record<string, unknown>) => ["admin", "teams", "list", filter] as const,
+  team: (companyId: string) => ["admin", "teams", "detail", companyId] as const,
+
   users: ["admin", "users"] as const,
   usersView: (filter: Record<string, unknown>) =>
     ["admin", "users", "list", filter] as const,

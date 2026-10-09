@@ -37,6 +37,7 @@ import {
   Receipt,
   Gift,
   BadgeCheck,
+  UsersRound,
 } from "lucide-react";
 import type { AdminView } from "@/types";
 
@@ -69,6 +70,7 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
       { key: "catalogue", label: "Service Catalogue", icon: Boxes },
       { key: "jobs", label: "Jobs", icon: ListTodo, badgeKey: "openJobs" },
       { key: "engagements", label: "Job progress", icon: Activity },
+      { key: "teams", label: "Teams", icon: UsersRound },
       { key: "bookings", label: "Bookings", icon: CalendarCheck },
       { key: "projects", label: "Projects", icon: FolderKanban },
       { key: "reviews", label: "Reviews", icon: Star },

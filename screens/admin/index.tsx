@@ -31,6 +31,7 @@ import { SettingsView } from "@/screens/admin/views/SettingsView";
 import { TermsView } from "@/screens/admin/views/TermsView";
 import { RetentionView } from "@/screens/admin/views/RetentionView";
 import { LegalRequestsView } from "@/screens/admin/views/LegalRequestsView";
+import { TeamsView } from "@/screens/admin/views/TeamsView";
 import { PlaceholderView } from "@/screens/admin/views/PlaceholderView";
 import {
   CalendarCheck,
@@ -283,6 +284,8 @@ function renderView(view: string) {
       return <RetentionView />;
     case "legal_requests":
       return <LegalRequestsView />;
+    case "teams":
+      return <TeamsView />;
     case "api":
       return (
         <PlaceholderView

@@ -109,6 +109,7 @@ export type AdminView =
   | "terms"
   | "retention"
   | "legal_requests"
+  | "teams"
   | "logout";
 
 // Back-compat with old DashboardView usages
