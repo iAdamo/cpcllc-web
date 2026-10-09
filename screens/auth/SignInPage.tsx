@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { safeNextPath } from "@/lib/safeNext";
 import { LogIn, Eye, EyeOff } from "lucide-react";
 import useGlobalStore from "@/stores";
 
@@ -10,7 +11,9 @@ export default function SignInPage() {
   const router = useRouter();
   const { login, error, setError } = useGlobalStore();
   const searchParams = useSearchParams();
-  const nextPath = searchParams.get("next") ?? "/";
+  // Only a path on this site: ?next=https://elsewhere sent people off the
+  // site right after signing in (open redirect, found 2026-10-09).
+  const nextPath = safeNextPath(searchParams.get("next"));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

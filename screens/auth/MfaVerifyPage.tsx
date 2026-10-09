@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { safeNextPath } from "@/lib/safeNext";
 import { ShieldCheck } from "lucide-react";
 import useGlobalStore from "@/stores";
 
@@ -52,7 +53,7 @@ export default function MfaVerifyPage() {
       if (isAuthenticated) {
         setError(null);
         window.sessionStorage.removeItem("mfa-pending");
-        router.replace(pending.next ?? "/");
+        router.replace(safeNextPath(pending.next));
       } else {
         setError("That code didn't work. Try the current code from your app.");
       }
