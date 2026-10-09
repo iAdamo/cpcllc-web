@@ -1,8 +1,9 @@
 "use client";
 
-import { Settings, ShieldCheck, Share2 } from "lucide-react";
+import { Settings, ShieldCheck, Share2, Smartphone } from "lucide-react";
 import { MfaSection } from "@/screens/admin/sections/MfaSection";
 import { SocialLinksSection } from "@/screens/admin/sections/SocialLinksSection";
+import { AppReleaseSection } from "@/screens/admin/sections/AppReleaseSection";
 
 export function SettingsView() {
   return (
@@ -49,6 +50,20 @@ export function SettingsView() {
           website footer and on the app&apos;s Customer Support screen.
         </p>
         <SocialLinksSection />
+      </section>
+
+      {/* Store links + versions: store buttons, the app's update checks */}
+      <section>
+        <div className="flex items-center gap-2 mb-3">
+          <Smartphone size={18} className="text-slate-400" />
+          <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+            App release
+          </h3>
+        </div>
+        <p className="text-sm text-slate-500 mb-4">
+          Where people get the app, and which versions must or may update.
+        </p>
+        <AppReleaseSection />
       </section>
     </div>
   );

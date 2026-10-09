@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Smartphone, Monitor } from "lucide-react";
 import { LEGAL_PAGES } from "@/lib/legalPages";
+import { AppStoreButtons, useStoreLinks } from "@/components/AppStoreButtons";
 import { SHARE_PAGES } from "@/lib/sharePages";
 
 // Pages that work normally on mobile (public / no-login required)
@@ -11,6 +12,7 @@ const PUBLIC_PATHS = [
   "/",
   ...LEGAL_PAGES,
   "/providers",
+  "/clients",
   "/onboarding",
   ...SHARE_PAGES,
   "/settings/account-control/deletion",
@@ -34,6 +36,7 @@ export default function MobileGate() {
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const { appStore, googlePlay } = useStoreLinks();
 
   useEffect(() => {
     setMounted(true);
@@ -63,30 +66,15 @@ export default function MobileGate() {
         for the best mobile experience.
       </p>
 
-      {/* App store badges */}
-      <div className="flex flex-col gap-3 w-full max-w-xs mb-8">
-        <a
-          href="#"
-          className="flex items-center justify-center gap-3 h-14 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold text-sm shadow-lg active:scale-[0.97] transition-transform"
-          aria-label="Download on the App Store"
-        >
-          <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current" aria-hidden>
-            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.15-2.2 1.28-2.18 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.35 2.77M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-          </svg>
-          Download on App Store
-        </a>
-
-        <a
-          href="#"
-          className="flex items-center justify-center gap-3 h-14 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold text-sm shadow-lg active:scale-[0.97] transition-transform"
-          aria-label="Get it on Google Play"
-        >
-          <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current" aria-hidden>
-            <path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l14 8.5c.6.36.6 1.24 0 1.6l-14 8.5c-.66.5-1.6.03-1.6-.8z" />
-          </svg>
-          Get it on Google Play
-        </a>
-      </div>
+      {/* Store buttons only for stores the app is live in (Admin > Settings >
+          App release). Regression: both buttons linked to "#". */}
+      {appStore || googlePlay ? (
+        <AppStoreButtons className="flex-col w-full max-w-xs mb-8 [&>a]:h-14" />
+      ) : (
+        <p className="text-sm font-medium text-gray-600 dark:text-gray-300 text-center mb-8">
+          The app is coming soon to the App Store and Google Play.
+        </p>
+      )}
 
       {/* Desktop hint */}
       <div className="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">

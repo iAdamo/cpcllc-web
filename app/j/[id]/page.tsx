@@ -17,6 +17,7 @@
  */
 import type { Metadata } from "next";
 import { getPublicJobById } from "@/axios/public";
+import { appStoreBannerMeta } from "@/axios/appConfig";
 import { OpenInAppButton } from "@/components/share/OpenInAppButton";
 import { PRICING_LABELS, budgetText, neededByText, statusLabel } from "@/lib/jobs";
 
@@ -62,9 +63,7 @@ export async function generateMetadata({
       title,
       description,
     },
-    other: {
-      "apple-itunes-app": `app-id=0000000000, app-argument=${canonical}`,
-    },
+    other: await appStoreBannerMeta(canonical),
   };
 }
 

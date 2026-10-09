@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { APP_SCHEME, SHARE_PAGES, appLink, isSharePage, providerPath } from "@/lib/sharePages";
+import { APP_HOME, APP_SCHEME, SHARE_PAGES, appLink, isSharePage, providerPath } from "@/lib/sharePages";
 
 /**
  * Shared links must open for everyone. Regression: no route guard listed the
@@ -71,6 +71,25 @@ describe("opening the same page in the app", () => {
     walk(`${root}app`);
     walk(`${root}components`);
     expect(offenders).toEqual([]);
+  });
+
+  it("the app's home is a real app screen (when the app repo is next to this one)", () => {
+    const appSrc = `${root}../companiescenterllc/src/app`;
+    if (!existsSync(appSrc)) return;
+    expect(existsSync(`${appSrc}/(tabs)${APP_HOME}.tsx`)).toBe(true);
+  });
+
+  it("no component writes the app's scheme by hand (the banner used companiescenter://)", () => {
+    const offenders: string[] = [];
+    const walk = (dir: string) => {
+      for (const name of readdirSync(dir, { withFileTypes: true })) {
+        const p = `${dir}/${name.name}`;
+        if (name.isDirectory()) walk(p);
+        else if (/\.tsx?$/.test(name.name) && !p.endsWith("lib/sharePages.ts") && /["'`]companiescenter(llc)?(["'`]|:\/\/)/.test(readFileSync(p, "utf8"))) offenders.push(p);
+      }
+    };
+    for (const d of ["app", "components", "screens", "lib"]) walk(`${root}${d}`);
+    expect(offenders.filter((p) => !p.endsWith(".test.ts"))).toEqual([]);
   });
 
   it("iOS opens every share page in the app (apple-app-site-association lists them all)", async () => {

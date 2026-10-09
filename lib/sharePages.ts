@@ -17,6 +17,10 @@ export const SHARE_PAGES = ["/j", "/c", "/post", "/team-invite"] as const;
 export const isSharePage = (pathname: string): boolean =>
   SHARE_PAGES.some((p) => pathname.startsWith(`${p}/`));
 
+/** The app's first tab (src/app/(tabs)/home.tsx), opened from pages that
+ *  have no page of their own in the app (the providers list, /clients). */
+export const APP_HOME = "/home";
+
 /** The app's custom scheme (companiescenterllc app.json `scheme`). */
 export const APP_SCHEME = "companiescenterllc";
 
