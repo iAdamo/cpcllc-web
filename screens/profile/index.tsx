@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,12 +25,11 @@ import {
   BadgeCheck,
 } from "lucide-react";
 import useGlobalStore from "@/stores";
-import {
-  getUserProfile,
-  updateProviderProfile,
-  getFollowers,
-} from "@/axios/user";
-import { MediaItem, ProviderData, UserData } from "@/types";
+import { updateProviderProfile, getFollowers } from "@/axios/user";
+import { getProviderBySlug } from "@/axios/public";
+import { MediaItem, ProviderData } from "@/types";
+import { ownerIdOf, providerProfileOf } from "@/lib/providerProfile";
+import { appLink } from "@/lib/sharePages";
 
 import ProfileSkeleton from "./ProfileSkeleton";
 import Stars from "./Stars";
@@ -71,12 +72,10 @@ export default function ProfilePage() {
     useGlobalStore();
   const currentUser = user;
 
-  const [data, setData] = useState<UserData | null>(null);
   const [subData, setSubData] = useState<{
     followersCount: number;
     isFollowing: boolean;
   }>();
-  const [provider, setProvider] = useState<ProviderData | null>(null);
 
   const [isUploading, setIsUploading] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("services");
@@ -86,37 +85,30 @@ export default function ProfilePage() {
   const [shareCopied, setShareCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const isCurrentUser = !!(
-    currentUser && (currentUser.activeRoleId as ProviderData)?.slug === slug
-  );
-
-  const fetchData = useCallback(async () => {
-    if (!slug) return;
-    try {
-      if (
-        user?.activeRoleId &&
-        (user.activeRoleId as ProviderData).slug === slug
-      ) {
-        setData(user);
-        setProvider(user.activeRoleId as ProviderData);
-      } else {
-        const res = await getUserProfile(slug);
-        setData(res);
-        setProvider(res.activeRoleId as ProviderData);
-      }
-    } catch (err) {
-      console.error("Failed to fetch profile:", err);
-    }
-  }, [slug, user]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  // The owner sees their own business from their account (and their edits
+  // at once); everyone else gets the public page by its address. Regression:
+  // the page went through the owner's account (users/profile/<slug>), so it
+  // ignored the hidden-owner rule (a deactivated owner's business stayed up)
+  // and sat on the skeleton forever when the lookup failed.
+  const ownBusiness = providerProfileOf(currentUser);
+  const isCurrentUser = !!ownBusiness && ownBusiness.slug === slug;
+  const business = useQuery({
+    queryKey: ["business", slug],
+    queryFn: async () => ((await getProviderBySlug(slug)) as ProviderData | null) ?? null,
+    enabled: !!slug && !isCurrentUser,
+    staleTime: 60_000,
+    retry: false,
+  });
+  const provider: ProviderData | null = isCurrentUser ? ownBusiness : (business.data ?? null);
+  const fetchData = async () => {
+    if (!isCurrentUser) await business.refetch();
+  };
 
   // ── Load followers ─────────────────────────────────────────────────────────
   useEffect(() => {
-    if (!provider?.owner) return;
-    getFollowers(provider.owner).then((res) => {
+    const ownerId = ownerIdOf(provider);
+    if (!ownerId) return;
+    getFollowers(ownerId).then((res) => {
       setSubData({
         followersCount: res.followersCount,
         isFollowing: res.followers.some((f: any) => f.user._id === user?._id),
@@ -193,18 +185,42 @@ export default function ProfilePage() {
     void setSavedProviders(provider._id);
   };
 
+  // Hiring happens in the app (the website is admin and marketing): open this
+  // business there, where Request Service sends it a job. Regression: this
+  // went to /jobs/create, a page the website no longer has.
   const handleHire = () => {
-    if (!provider) return;
-    // Directed request: pre-target this provider so the job is private to them.
-    const target = `/jobs/create?provider=${provider._id}`;
-    if (!isAuthenticated) {
-      router.push(`/auth/signin?next=${encodeURIComponent(target)}`);
-      return;
-    }
-    router.push(target);
+    window.location.href = appLink(`/c/${slug}`);
   };
 
-  if (!provider) return <ProfileSkeleton />;
+  if (!provider) {
+    if (!isCurrentUser && business.isLoading) return <ProfileSkeleton />;
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center px-6 pt-24 pb-16">
+        <div className="max-w-sm text-center">
+          <h1 className="text-xl font-black text-gray-900 dark:text-white">This business isn&apos;t available</h1>
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            It may have been removed, or the connection dropped. Try again, or browse other providers.
+          </p>
+          <div className="mt-5 flex justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => void business.refetch()}
+              disabled={business.isFetching}
+              className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold disabled:opacity-50"
+            >
+              {business.isFetching ? "Trying…" : "Try again"}
+            </button>
+            <Link
+              href="/providers"
+              className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-bold text-gray-700 dark:text-gray-200"
+            >
+              Browse providers
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const logoUrl = resolveUrl(provider.providerLogo);
   // First gallery shot doubles as the cover; the page must survive a
@@ -406,7 +422,7 @@ export default function ProfilePage() {
                       onClick={handleHire}
                       className="w-full py-3 bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white font-black rounded-2xl transition-all active:scale-95 shadow-md shadow-brand-200/50 text-sm flex items-center justify-center gap-2"
                     >
-                      <Briefcase size={14} /> Request Service
+                      <Briefcase size={14} /> Request in the app
                     </button>
                     <div className="flex gap-2">
                       {providerEmail && (
@@ -551,7 +567,7 @@ export default function ProfilePage() {
                     </div>
                     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
                       <ReviewSection
-                        providerId={provider.owner}
+                        providerId={ownerIdOf(provider) ?? ""}
                         newReviews={newReviews}
                       />
                     </div>
@@ -595,7 +611,7 @@ export default function ProfilePage() {
                 onClick={handleHire}
                 className="flex-1 py-3 bg-gradient-to-r from-brand-800 to-brand-900 text-white font-black rounded-2xl text-sm flex items-center justify-center gap-2 shadow-md shadow-brand-200/50 active:scale-95 transition-all"
               >
-                <Briefcase size={14} /> Request Service
+                <Briefcase size={14} /> Request in the app
               </button>
               {providerPhone && (
                 <a

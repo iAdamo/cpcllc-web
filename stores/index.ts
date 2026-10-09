@@ -56,7 +56,6 @@ const useGlobalStore = create<GlobalStore>()(
             currentLocation: state.currentLocation,
             switchRole: state.switchRole,
             savedProviders: state.savedProviders,
-            savedJobs: state.savedJobs,
             paramsFrom: state.paramsFrom,
             activeView: state.activeView,
             sidebarOpen: state.sidebarOpen,

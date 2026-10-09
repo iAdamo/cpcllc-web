@@ -1,6 +1,6 @@
 "use client";
 import { StateCreator } from "zustand";
-import { GlobalStore, ProviderState, SortBy, JobData } from "@/types";
+import { GlobalStore, ProviderState, SortBy } from "@/types";
 import { setUserFavourites } from "@/axios/user";
 
 /**
@@ -18,7 +18,6 @@ export const providerState: StateCreator<GlobalStore, [], [], ProviderState> = (
   setSortBy: (sortBy: SortBy) => set({ sortBy }),
 
   // ── Saved ──────────────────────────────────────────────────────────────────
-  savedJobs: [],
   savedProviders: [],
 
   setSavedProviders: async (providerId) => {
@@ -41,18 +40,6 @@ export const providerState: StateCreator<GlobalStore, [], [], ProviderState> = (
       }
     } catch {
       set({ error: "Failed to update favourites." });
-    }
-  },
-
-  setSavedJobs: (job: JobData) => {
-    const exists = get().savedJobs.some((j) => j._id === job._id);
-    if (exists) {
-      set({
-        savedJobs: get().savedJobs.filter((j) => j._id !== job._id),
-        success: "Removed from Saved Jobs",
-      });
-    } else {
-      set({ savedJobs: [...get().savedJobs, job], success: "Added to Saved Jobs" });
     }
   },
 

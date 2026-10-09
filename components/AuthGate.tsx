@@ -22,6 +22,7 @@ const PUBLIC_PATHS = new Set<string>([
   // "/auth/verify-email",
   "/admin/mfa/verify",
   "/i",
+  "/clients",
   ...LEGAL_PAGES,
   ...SHARE_PAGES,
 ]);

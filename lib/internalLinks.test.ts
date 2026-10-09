@@ -72,6 +72,11 @@ const LINK_PATTERNS = [
   /\brouter\.(?:push|replace|prefetch)\(\s*["'`](\/[^"'`]*)["'`]/g,
   /\bredirect\(\s*["'`](\/[^"'`]*)["'`]/g,
   /\blocation\.(?:href|assign|replace)\s*(?:=|\()\s*["'`](\/[^"'`]*)["'`]/g,
+  // A link built first and followed later: `const target = "/jobs/create"`
+  // (the business page did this, so the calls above never saw it).
+  /\b(?:const|let)\s+\w*(?:target|href|url|path|link|next|dest)\w*\s*=\s*["'`](\/[^"'`]*)["'`]/gi,
+  // Where sign-in returns to: `?next=/c/${slug}`.
+  /[?&]next=(\/[^"'`&\s]*)/g,
 ];
 
 function internalLinks(): { file: string; path: string }[] {

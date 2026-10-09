@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { providerProfileOf } from "@/lib/providerProfile";
+import { ownerIdOf, providerProfileOf } from "@/lib/providerProfile";
 
 /** Every shape `activeRoleId` arrives in on the website. */
 describe("providerProfileOf", () => {
@@ -14,5 +14,15 @@ describe("providerProfileOf", () => {
   it("is the business for a provider", () => {
     const business = { _id: "p1", providerName: "Fixit Co", permissions: [] };
     expect(providerProfileOf({ activeRoleId: business })).toBe(business);
+  });
+});
+
+describe("ownerIdOf", () => {
+  it("the id from either shape of owner", () => {
+    expect(ownerIdOf({ owner: "u1" })).toBe("u1");
+    expect(ownerIdOf({ owner: { _id: "u1", firstName: "Bob" } })).toBe("u1");
+    expect(ownerIdOf({ owner: null })).toBeNull();
+    expect(ownerIdOf({ owner: {} })).toBeNull();
+    expect(ownerIdOf(null)).toBeNull();
   });
 });

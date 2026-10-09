@@ -46,7 +46,8 @@ const PUBLIC_EXACT: string[] = [
   // "/auth/verify-email",
   "/admin/mfa/verify",
 ];
-const PUBLIC_PREFIX = ["/providers", "/admin", "/profile", "/i"];
+// /clients is the "continue in the app" page (the footer's Client Portal).
+const PUBLIC_PREFIX = ["/providers", "/admin", "/i", "/clients"];
 
 function isPublic(path: string) {
   if (PUBLIC_EXACT.includes(path)) return true;
@@ -130,8 +131,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
         return;
       }
     }
+    // A signed-out visitor on a members' page signs in and comes back to it
+    // (they were dropped on the home page with no word why).
     if (!isAuthenticated && !isPublic(pathname)) {
-      router.replace("/");
+      router.replace(`/auth/signin?next=${encodeURIComponent(pathname)}`);
     }
   }, [hydrated, isAuthenticated, pathname, router, user]);
 

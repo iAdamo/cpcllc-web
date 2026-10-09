@@ -1,25 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Heart,
-  Bookmark,
   Star,
   MapPin,
   X,
-  Briefcase,
-  Calendar,
   ArrowRight,
 } from "lucide-react";
 import useGlobalStore from "@/stores";
-import { ProviderData, JobData, MediaItem } from "@/types";
-import { budgetText, neededByText, statusLabel } from "@/lib/jobs";
+import { ProviderData, MediaItem } from "@/types";
 import { providerPath } from "@/lib/sharePages";
-
-type Tab = "providers" | "jobs";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -39,21 +32,6 @@ function getProviderCity(provider: ProviderData): string {
     ""
   );
 }
-
-const STATUS_COLOR: Record<string, string> = {
-  open: "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400",
-  hired: "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
-  in_progress:
-    "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
-  awaiting_confirmation:
-    "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
-  completed:
-    "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
-  disputed: "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400",
-  cancelled: "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400",
-};
-const STATUS_COLOR_OTHER =
-  "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400";
 
 // ── Provider Card ─────────────────────────────────────────────────────────────
 
@@ -151,95 +129,6 @@ function SavedProviderCard({
   );
 }
 
-// ── Job Card ─────────────────────────────────────────────────────────────────
-
-function SavedJobCard({
-  job,
-  onRemove,
-}: {
-  job: JobData;
-  onRemove: () => void;
-}) {
-  const budget = budgetText(job);
-  const statusColor = STATUS_COLOR[job.status] ?? STATUS_COLOR_OTHER;
-  const city =
-    job.location?.address?.city || job.location?.address?.state || "";
-
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.2 }}
-      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 flex items-center gap-4 hover:border-brand-200 dark:hover:border-brand-800 hover:shadow-sm transition-all group"
-    >
-      {/* Icon */}
-      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-50 to-brand-50 dark:from-brand-950/40 dark:to-brand-950/40 flex items-center justify-center">
-        <Briefcase size={20} className="text-brand-500 dark:text-brand-400" />
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap mb-0.5">
-          <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-snug line-clamp-1">
-            {job.title}
-          </h3>
-        </div>
-
-        {job.description && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1 mb-1">
-            {job.description}
-          </p>
-        )}
-
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-sm font-black text-gray-900 dark:text-white">
-            {budget}
-          </span>
-          {job.neededBy && (
-            <span className="flex items-center gap-0.5 text-[11px] font-semibold text-gray-400 dark:text-gray-500">
-              <Calendar size={9} />
-              {neededByText(job.neededBy)}
-            </span>
-          )}
-          {city && (
-            <span className="flex items-center gap-0.5 text-[11px] text-gray-400 dark:text-gray-500">
-              <MapPin size={9} />
-              {city}
-            </span>
-          )}
-          <span
-            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColor}`}
-          >
-            {statusLabel(job.status)}
-          </span>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center gap-2 flex-shrink-0">
-        <Link
-          href={`/j/${job._id}`}
-          className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
-        >
-          View
-        </Link>
-        <button
-          type="button"
-          aria-label="Remove from favorites"
-          onClick={onRemove}
-          className="w-8 h-8 flex items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
-        >
-          <X size={14} />
-        </button>
-      </div>
-    </motion.div>
-  );
-}
-
-// ── Empty State ───────────────────────────────────────────────────────────────
-
 function EmptyState({
   icon: Icon,
   title,
@@ -283,34 +172,16 @@ function EmptyState({
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
+/**
+ * Providers the person saved (stored on their account). Saved jobs aren't here:
+ * nothing on the website can save a job, and the app keeps its own list.
+ */
 export default function FavoritesPage() {
-  const { savedProviders, savedJobs, setSavedProviders, setSavedJobs } =
-    useGlobalStore();
-
-  const [activeTab, setActiveTab] = useState<Tab>("providers");
-
-  const totalCount = savedProviders.length + savedJobs.length;
-
-  const tabs: { id: Tab; label: string; icon: React.ElementType; count: number }[] =
-    [
-      {
-        id: "providers",
-        label: "Saved Providers",
-        icon: Heart,
-        count: savedProviders.length,
-      },
-      {
-        id: "jobs",
-        label: "Saved Jobs",
-        icon: Bookmark,
-        count: savedJobs.length,
-      },
-    ];
+  const { savedProviders, setSavedProviders } = useGlobalStore();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="max-w-3xl mx-auto px-4 py-8">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -318,119 +189,40 @@ export default function FavoritesPage() {
         >
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-black text-gray-900 dark:text-white">
-              Your Favorites
+              Saved providers
             </h1>
-            {totalCount > 0 && (
+            {savedProviders.length > 0 && (
               <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-black">
-                {totalCount}
+                {savedProviders.length}
               </span>
             )}
           </div>
           <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-            Providers and jobs you&apos;ve saved for later
+            Providers you&apos;ve saved for later
           </p>
         </motion.div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-1.5">
-          {tabs.map(({ id, label, icon: Icon, count }) => {
-            const active = activeTab === id;
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setActiveTab(id)}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  active
-                    ? "bg-brand-600 text-white shadow-sm"
-                    : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
-                }`}
-              >
-                <Icon size={15} />
-                <span className="hidden sm:inline">{label}</span>
-                <span className="sm:hidden">
-                  {id === "providers" ? "Providers" : "Jobs"}
-                </span>
-                {count > 0 && (
-                  <span
-                    className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
-                      active
-                        ? "bg-white/20 text-white"
-                        : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
-                    }`}
-                  >
-                    {count}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Content */}
-        <AnimatePresence mode="wait">
-          {activeTab === "providers" && (
-            <motion.div
-              key="providers"
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 8 }}
-              transition={{ duration: 0.18 }}
-            >
-              {savedProviders.length === 0 ? (
-                <EmptyState
-                  icon={Heart}
-                  title="No saved providers yet"
-                  message="Bookmark providers you like to find them quickly later. Browse our network to get started."
-                  ctaLabel="Explore Providers"
-                  ctaHref="/providers"
+        {savedProviders.length === 0 ? (
+          <EmptyState
+            icon={Heart}
+            title="No saved providers yet"
+            message="Save providers you like to find them quickly later. Browse our network to get started."
+            ctaLabel="Explore Providers"
+            ctaHref="/providers"
+          />
+        ) : (
+          <div className="space-y-3">
+            <AnimatePresence>
+              {savedProviders.map((provider: ProviderData) => (
+                <SavedProviderCard
+                  key={provider._id}
+                  provider={provider}
+                  onRemove={() => setSavedProviders(provider._id)}
                 />
-              ) : (
-                <div className="space-y-3">
-                  <AnimatePresence>
-                    {savedProviders.map((provider: ProviderData) => (
-                      <SavedProviderCard
-                        key={provider._id}
-                        provider={provider}
-                        onRemove={() => setSavedProviders(provider._id)}
-                      />
-                    ))}
-                  </AnimatePresence>
-                </div>
-              )}
-            </motion.div>
-          )}
-
-          {activeTab === "jobs" && (
-            <motion.div
-              key="jobs"
-              initial={{ opacity: 0, x: 8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -8 }}
-              transition={{ duration: 0.18 }}
-            >
-              {savedJobs.length === 0 ? (
-                <EmptyState
-                  icon={Bookmark}
-                  title="No saved jobs yet"
-                  message="Find and save jobs in the CompaniesCenter app."
-                />
-              ) : (
-                <div className="space-y-3">
-                  <AnimatePresence>
-                    {savedJobs.map((job: JobData) => (
-                      <SavedJobCard
-                        key={job._id}
-                        job={job}
-                        onRemove={() => setSavedJobs(job)}
-                      />
-                    ))}
-                  </AnimatePresence>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
     </div>
   );

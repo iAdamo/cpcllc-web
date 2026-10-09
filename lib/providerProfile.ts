@@ -12,3 +12,15 @@ export function providerProfileOf(user: { activeRoleId?: unknown } | null | unde
   const role = user?.activeRoleId as Partial<ProviderData> | null | undefined;
   return role && typeof role === "object" && role._id ? (role as ProviderData) : null;
 }
+
+/**
+ * The owner's user id, whether `owner` is the id (the owner's own account) or
+ * the populated user (the public page by slug). Regression: the business page
+ * sent `/users/[object Object]/followers` after moving to the slug lookup.
+ */
+export function ownerIdOf(provider: { owner?: unknown } | null | undefined): string | null {
+  const owner = provider?.owner as { _id?: unknown } | string | null | undefined;
+  if (!owner) return null;
+  if (typeof owner === "string") return owner;
+  return owner._id ? String(owner._id) : null;
+}

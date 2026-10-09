@@ -14,7 +14,6 @@ import {
   TimeSeriesData,
   DashboardView,
   ProviderData,
-  JobData,
 } from "@/types";
 
 // ── Unified search filters ─────────────────────────────────────────────────────
@@ -134,8 +133,6 @@ export interface ProviderState {
   toggleSubcategory: (sub: Subcategory) => void;
   clearSelectedSubcategories: () => void;
   savedProviders: ProviderData[];
-  savedJobs: JobData[];
-  setSavedJobs: (job: JobData) => void;
   setSavedProviders: (providerId: string) => Promise<ProviderData[] | void>;
 }
 
