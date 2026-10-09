@@ -28,3 +28,12 @@ export const APP_SCHEME = "companiescenterllc";
  */
 export const appLink = (pathname: string): string =>
   `${APP_SCHEME}://${pathname.replace(/^\/+/, "")}`;
+
+/**
+ * A business's public page, /c/<slug> (the API finds a business by its slug
+ * only), or null when it has none, so no link is drawn to a page that 404s.
+ * Regression: search, the map and Favorites linked /providers/<id>, which
+ * doesn't exist on the website.
+ */
+export const providerPath = (provider: { slug?: string | null }): string | null =>
+  provider.slug ? `/c/${encodeURIComponent(provider.slug)}` : null;

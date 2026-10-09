@@ -247,12 +247,7 @@ export const getAdminReferrals = async (params?: {
   };
 }> => (await axiosInstance.get("admin/referrals", { params })).data;
 
-export const setAdminJobStatus = async (id: string, status: string) =>
-  (
-    await axiosInstance.patch(`admin/marketplace/jobs/${id}/status`, {
-      status,
-    })
-  ).data;
+/** Take down a job nobody is hired for (cancelled by staff); restore puts it back. */
 export const archiveAdminJob = async (id: string) =>
   (await axiosInstance.patch(`admin/marketplace/jobs/${id}/archive`)).data;
 export const restoreAdminJob = async (id: string) =>
@@ -452,8 +447,9 @@ export const createNote = async (payload: {
 
 /* ───────── Trust & Safety (service lifecycle + review moderation) ───────── */
 
+/** Hired jobs per status (lib/jobs.ts ENGAGED_STATUSES), plus totals. */
 export interface AdminLifecycleStats {
-  accepted: number;
+  hired: number;
   in_progress: number;
   awaiting_confirmation: number;
   completed: number;

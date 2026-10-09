@@ -12,29 +12,16 @@ import {
   X,
   Briefcase,
   Calendar,
-  Zap,
   ArrowRight,
 } from "lucide-react";
 import useGlobalStore from "@/stores";
 import { ProviderData, JobData, MediaItem } from "@/types";
+import { budgetText, neededByText, statusLabel } from "@/lib/jobs";
+import { providerPath } from "@/lib/sharePages";
 
 type Tab = "providers" | "jobs";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatBudget(n: number): string {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `$${(n / 1000).toFixed(0)}K`;
-  return `$${n.toLocaleString()}`;
-}
-
-function formatDeadline(deadline: string | Date): string {
-  const days = Math.ceil(
-    (new Date(deadline).getTime() - Date.now()) / 86400000
-  );
-  if (days < 0) return "Expired";
-  return `${days}d left`;
-}
 
 function getProviderLogoUrl(provider: ProviderData): string | null {
   const logo = provider.providerLogo;
@@ -54,22 +41,19 @@ function getProviderCity(provider: ProviderData): string {
 }
 
 const STATUS_COLOR: Record<string, string> = {
-  Active:
-    "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400",
-  "In Progress":
+  open: "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400",
+  hired: "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
+  in_progress:
     "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
-  Completed:
+  awaiting_confirmation:
     "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
-  Cancelled: "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400",
-  Expired: "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400",
+  completed:
+    "bg-brand-100 text-brand-700 dark:bg-brand-950/40 dark:text-brand-400",
+  disputed: "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400",
+  cancelled: "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400",
 };
-
-const URGENCY_COLOR: Record<string, string> = {
-  Immediate:
-    "bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400",
-  Urgent:
-    "bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
-};
+const STATUS_COLOR_OTHER =
+  "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400";
 
 // ── Provider Card ─────────────────────────────────────────────────────────────
 
@@ -146,12 +130,14 @@ function SavedProviderCard({
 
       {/* Actions */}
       <div className="flex items-center gap-2 flex-shrink-0">
-        <Link
-          href={`/providers/${provider._id}`}
-          className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
-        >
-          View
-        </Link>
+        {providerPath(provider) && (
+          <Link
+            href={providerPath(provider)!}
+            className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
+          >
+            View
+          </Link>
+        )}
         <button
           type="button"
           aria-label="Remove from favorites"
@@ -174,11 +160,8 @@ function SavedJobCard({
   job: JobData;
   onRemove: () => void;
 }) {
-  const deadline = formatDeadline(job.deadline);
-  const isExpired = deadline === "Expired";
-  const budget = formatBudget(job.budget);
-  const statusColor = STATUS_COLOR[job.status] ?? STATUS_COLOR["Expired"];
-  const urgencyColor = URGENCY_COLOR[job.urgency ?? ""];
+  const budget = budgetText(job);
+  const statusColor = STATUS_COLOR[job.status] ?? STATUS_COLOR_OTHER;
   const city =
     job.location?.address?.city || job.location?.address?.state || "";
 
@@ -202,14 +185,6 @@ function SavedJobCard({
           <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-snug line-clamp-1">
             {job.title}
           </h3>
-          {job.urgency && job.urgency !== "Normal" && urgencyColor && (
-            <span
-              className={`flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${urgencyColor}`}
-            >
-              <Zap size={8} />
-              {job.urgency}
-            </span>
-          )}
         </div>
 
         {job.description && (
@@ -222,14 +197,12 @@ function SavedJobCard({
           <span className="text-sm font-black text-gray-900 dark:text-white">
             {budget}
           </span>
-          <span
-            className={`flex items-center gap-0.5 text-[11px] font-semibold ${
-              isExpired ? "text-red-500" : "text-gray-400 dark:text-gray-500"
-            }`}
-          >
-            <Calendar size={9} />
-            {deadline}
-          </span>
+          {job.neededBy && (
+            <span className="flex items-center gap-0.5 text-[11px] font-semibold text-gray-400 dark:text-gray-500">
+              <Calendar size={9} />
+              {neededByText(job.neededBy)}
+            </span>
+          )}
           {city && (
             <span className="flex items-center gap-0.5 text-[11px] text-gray-400 dark:text-gray-500">
               <MapPin size={9} />
@@ -239,7 +212,7 @@ function SavedJobCard({
           <span
             className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColor}`}
           >
-            {job.status}
+            {statusLabel(job.status)}
           </span>
         </div>
       </div>
@@ -247,7 +220,7 @@ function SavedJobCard({
       {/* Actions */}
       <div className="flex items-center gap-2 flex-shrink-0">
         <Link
-          href={`/jobs/${job._id}`}
+          href={`/j/${job._id}`}
           className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition-colors whitespace-nowrap"
         >
           View
@@ -277,8 +250,8 @@ function EmptyState({
   icon: React.ElementType;
   title: string;
   message: string;
-  ctaLabel: string;
-  ctaHref: string;
+  ctaLabel?: string;
+  ctaHref?: string;
 }) {
   return (
     <motion.div
@@ -295,13 +268,15 @@ function EmptyState({
       <p className="text-sm text-gray-400 dark:text-gray-500 max-w-xs leading-relaxed mb-5">
         {message}
       </p>
-      <Link
-        href={ctaHref}
-        className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl transition-colors"
-      >
-        {ctaLabel}
-        <ArrowRight size={14} />
-      </Link>
+      {ctaHref && ctaLabel ? (
+        <Link
+          href={ctaHref}
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl transition-colors"
+        >
+          {ctaLabel}
+          <ArrowRight size={14} />
+        </Link>
+      ) : null}
     </motion.div>
   );
 }
@@ -438,9 +413,7 @@ export default function FavoritesPage() {
                 <EmptyState
                   icon={Bookmark}
                   title="No saved jobs yet"
-                  message="Save jobs you want to revisit or apply to later. Explore available jobs now."
-                  ctaLabel="Browse Jobs"
-                  ctaHref="/jobs"
+                  message="Find and save jobs in the CompaniesCenter app."
                 />
               ) : (
                 <div className="space-y-3">

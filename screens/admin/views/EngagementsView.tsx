@@ -13,58 +13,29 @@ import {
   useAdminDisputesView,
 } from "@/hooks/admin/useAdminQueries";
 import { caseStatusLabel, isOpenCase } from "@/lib/disputeCase";
+import { ENGAGED_STATUSES, STATUS_TONES, statusLabel, type JobStatus } from "@/lib/jobs";
 
-const STAGES = [
-  { key: "accepted", label: "Accepted" },
-  { key: "in_progress", label: "In Progress" },
-  { key: "awaiting_confirmation", label: "Awaiting Confirmation" },
-  { key: "completed", label: "Completed" },
-  { key: "disputed", label: "Disputed" },
-  { key: "cancelled", label: "Cancelled" },
-] as const;
-
-function stageTone(
-  stage: string,
-): "green" | "blue" | "orange" | "rose" | "purple" | "slate" {
-  switch (stage) {
-    case "completed":
-      return "green";
-    case "in_progress":
-      return "blue";
-    case "awaiting_confirmation":
-      return "orange";
-    case "disputed":
-      return "rose";
-    case "accepted":
-      return "purple";
-    default:
-      return "slate";
-  }
-}
-
-function stageLabel(stage?: string) {
-  return STAGES.find((s) => s.key === stage)?.label ?? stage ?? "—";
-}
+const toneOf = (s?: string) => STATUS_TONES[s as JobStatus] ?? "slate";
 
 const fmtDate = (d?: string) =>
   d ? new Date(d).toLocaleDateString() : "—";
 
 /**
- * Service-lifecycle oversight (design §3 / §9, admin side). Every engagement
- * that has an assigned provider, grouped by its lifecycle stage, with a detail
+ * Service-lifecycle oversight (design §3 / §9, admin side). Every job a
+ * business was hired for, by the job's status (lib/jobs.ts), with a detail
  * drawer that shows the completion evidence + verified certificate. A job in
  * dispute can be opened as a dispute case from its drawer; the case itself is
  * worked in the case drawer (also reachable from Disputes).
  */
 export function EngagementsView() {
-  const [stage, setStage] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [openId, setOpenId] = useState<string | null>(null);
   const [caseId, setCaseId] = useState<string | null>(null);
 
   const filter: Record<string, unknown> = { page, limit: 25 };
-  if (stage) filter.stage = stage;
+  if (status) filter.status = status;
   if (search) filter.search = search;
 
   const { data, loading, refresh } = useAdminEngagementsView(filter);
@@ -101,9 +72,13 @@ export function EngagementsView() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
-        <KpiCard label="In Progress" value={stats?.in_progress ?? "—"} tone="blue" />
+        <KpiCard
+          label="Hired / in progress"
+          value={stats ? (stats.hired ?? 0) + (stats.in_progress ?? 0) : "—"}
+          tone="blue"
+        />
         <KpiCard label="Awaiting" value={stats?.awaiting_confirmation ?? "—"} tone="orange" />
-        <KpiCard label="Disputed" value={stats?.disputed ?? "—"} tone="rose" />
+        <KpiCard label="Problem reported" value={stats?.disputed ?? "—"} tone="rose" />
         <KpiCard label="Completed" value={stats?.completed ?? "—"} tone="green" />
         <KpiCard label="Certificates" value={stats?.certificates ?? "—"} tone="purple" />
         <KpiCard label="Total" value={stats?.total ?? "—"} tone="blue" />
@@ -127,18 +102,18 @@ export function EngagementsView() {
               className="text-sm border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-3 py-1.5 outline-none focus:border-brand-400"
             />
             <select
-              aria-label="Filter by stage"
-              value={stage}
+              aria-label="Filter by status"
+              value={status}
               onChange={(e) => {
                 setPage(1);
-                setStage(e.target.value);
+                setStatus(e.target.value);
               }}
               className="text-sm border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-3 py-1.5"
             >
-              <option value="">All stages</option>
-              {STAGES.map((s) => (
-                <option key={s.key} value={s.key}>
-                  {s.label}
+              <option value="">All statuses</option>
+              {ENGAGED_STATUSES.map((s) => (
+                <option key={s} value={s}>
+                  {statusLabel(s)}
                 </option>
               ))}
             </select>
@@ -151,7 +126,7 @@ export function EngagementsView() {
                 <th className="px-5 py-2.5 font-medium">Job</th>
                 <th className="px-5 py-2.5 font-medium">Client</th>
                 <th className="px-5 py-2.5 font-medium">Provider</th>
-                <th className="px-5 py-2.5 font-medium">Stage</th>
+                <th className="px-5 py-2.5 font-medium">Status</th>
                 <th className="px-5 py-2.5 font-medium">Marked</th>
                 <th className="px-5 py-2.5 font-medium">Auto-confirm</th>
                 <th className="px-5 py-2.5 font-medium" />
@@ -186,10 +161,7 @@ export function EngagementsView() {
                     {t.providerId?.providerName ?? "—"}
                   </td>
                   <td className="px-5 py-2.5">
-                    <StatusPill
-                      label={stageLabel(t.lifecycle?.stage)}
-                      tone={stageTone(t.lifecycle?.stage)}
-                    />
+                    <StatusPill label={statusLabel(t.status)} tone={toneOf(t.status)} />
                   </td>
                   <td className="px-5 py-2.5 text-slate-500 text-xs">
                     {fmtDate(t.lifecycle?.markedCompleteAt)}
@@ -275,7 +247,7 @@ function EngagementDrawer({
       open={!!id}
       onClose={onClose}
       title={job?.title || (loading ? "Loading…" : "Engagement")}
-      subtitle={lc ? `Stage: ${stageLabel(lc.stage)}` : undefined}
+      subtitle={job ? `Status: ${statusLabel(job.status)}` : undefined}
     >
       {loading && <p className="text-sm text-slate-500">Loading…</p>}
       {job && (
@@ -286,7 +258,8 @@ function EngagementDrawer({
               : "—"
           } />
           <Row label="Provider" value={job.providerId?.providerName ?? "—"} />
-          <Row label="Stage" value={stageLabel(lc?.stage)} />
+          <Row label="Status" value={statusLabel(job.status)} />
+          <Row label="Hired" value={fmtDate(lc?.acceptedAt)} />
           <Row label="Started" value={fmtDate(lc?.startedAt)} />
           <Row label="Expected" value={fmtDate(lc?.expectedCompletionAt)} />
           <Row label="Marked complete" value={fmtDate(lc?.markedCompleteAt)} />
@@ -339,7 +312,7 @@ function EngagementDrawer({
               </ul>
             )}
             {!hasOpenCase && job.providerId && (
-              <details className="mt-2" open={lc?.stage === "disputed"}>
+              <details className="mt-2" open={job.status === "disputed"}>
                 <summary className="cursor-pointer text-xs text-rose-600 dark:text-rose-300 py-1">
                   Open a dispute case
                 </summary>

@@ -6,9 +6,10 @@
  * Behaviour:
  *   - **iOS / Android (Universal Link / App Link)**: OS intercepts and
  *     opens the app directly. Web content is the fallback.
- *   - **Web preview**: only when `visibility === "Public"` AND `isActive`.
- *     Private / archived jobs return `null` from the backend, which we
- *     render as a gated "Open in App" CTA without revealing details.
+ *   - **Web preview**: only an open job (status `open`) everyone can see
+ *     (`visibility === "Public"`) that wasn't sent to one business. Anything
+ *     else returns `null` from the backend, which we render as a gated
+ *     "Open in App" CTA without revealing details.
  *
  * Backend gate: `GET /jobs/public/:id` returns the lean job
  * only if it's publicly shareable. Anything else (including not-found)
@@ -17,19 +18,13 @@
 import type { Metadata } from "next";
 import { getPublicJobById } from "@/axios/public";
 import { OpenInAppButton } from "@/components/share/OpenInAppButton";
+import { PRICING_LABELS, budgetText, neededByText, statusLabel } from "@/lib/jobs";
 
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL || "https://companiescenter.com";
 
 // Next.js 15 — `params` is a Promise. Await before accessing properties.
 type Params = Promise<{ id: string }>;
-
-function formatBudget(n?: number): string {
-  if (n == null) return "—";
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
-  return `$${n.toLocaleString()}`;
-}
 
 export async function generateMetadata({
   params,
@@ -89,23 +84,22 @@ export default async function JobShareLanding({
             {job ? (
               <>
                 <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
-                  {job.status ?? "Open"}
+                  {statusLabel(job.status ?? "open")}
                 </span>
                 <h1 className="mt-3 text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
                   {job.title}
                 </h1>
                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
                   <span className="font-semibold text-slate-700 dark:text-slate-200">
-                    {formatBudget(job.budget)}
+                    {budgetText(job)}
+                    {typeof job.budget === "number" && job.budget > 0 && job.pricing && job.pricing !== "fixed"
+                      ? ` · ${PRICING_LABELS[job.pricing]}`
+                      : null}
                   </span>
                   {job.subcategoryId?.name && (
                     <span>{job.subcategoryId.name}</span>
                   )}
-                  {job.urgency && job.urgency !== "Normal" && (
-                    <span className="text-amber-600 dark:text-amber-400 font-semibold">
-                      {job.urgency}
-                    </span>
-                  )}
+                  {job.neededBy && <span>Needed by {neededByText(job.neededBy)}</span>}
                 </div>
 
                 {job.description && (

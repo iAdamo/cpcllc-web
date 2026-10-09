@@ -3,19 +3,32 @@
 import { useState } from "react";
 import { ClipboardList, Archive, RotateCcw, RefreshCw } from "lucide-react";
 import { KpiCard } from "@/components/admin/KpiCard";
-import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
+import { StatusPill } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
-import {
-  archiveAdminJob,
-  restoreAdminJob,
-  setAdminJobStatus,
-} from "@/axios/admin";
+import { archiveAdminJob, restoreAdminJob } from "@/axios/admin";
 import {
   useAdminJobsView,
   useAdminJobDetail,
 } from "@/hooks/admin/useAdminQueries";
+import {
+  JOB_STATUSES,
+  PRICING_LABELS,
+  STATUS_TONES,
+  budgetText,
+  canRestore,
+  canTakeDown,
+  engagedCount,
+  neededByText,
+  statusLabel,
+  type JobStatus,
+} from "@/lib/jobs";
+import { notify } from "@/lib/notify";
 
-const STATUS_OPTIONS = ["Active", "In_progress", "Completed", "Cancelled", "Expired"] as const;
+const CANCELLED_BY: Record<string, string> = {
+  client: "The client",
+  provider: "The business",
+  staff: "Staff (taken down)",
+};
 
 export function JobsView() {
   const [search, setSearch] = useState("");
@@ -58,10 +71,14 @@ export function JobsView() {
 
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
         <KpiCard label="Total" value={stats?.total ?? "—"} tone="blue" />
-        <KpiCard label="Active" value={stats?.byStatus?.active ?? "—"} tone="green" />
-        <KpiCard label="In Progress" value={stats?.byStatus?.inProgress ?? "—"} tone="orange" />
+        <KpiCard label="Open" value={stats?.byStatus?.open ?? "—"} tone="green" />
+        <KpiCard
+          label="In progress"
+          value={stats?.byStatus ? engagedCount(stats.byStatus) : "—"}
+          tone="orange"
+        />
         <KpiCard label="Completed" value={stats?.byStatus?.completed ?? "—"} tone="purple" />
-        <KpiCard label="Cancelled" value={stats?.byStatus?.cancelled ?? "—"} tone="rose" />
+        <KpiCard label="Drafts" value={stats?.byStatus?.draft ?? "—"} tone="rose" />
         <KpiCard label="New (30d)" value={stats?.newLast30Days ?? "—"} tone="blue" />
       </div>
 
@@ -92,9 +109,9 @@ export function JobsView() {
               className="text-sm border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-3 py-1.5"
             >
               <option value="">All statuses</option>
-              {STATUS_OPTIONS.map((s) => (
+              {JOB_STATUSES.map((s) => (
                 <option key={s} value={s}>
-                  {s.replace("_", " ")}
+                  {statusLabel(s)}
                 </option>
               ))}
             </select>
@@ -145,10 +162,13 @@ export function JobsView() {
                   {t.subcategoryId?.name ?? "—"}
                 </td>
                 <td className="px-5 py-2.5 text-slate-900 dark:text-white">
-                  ${t.budget?.toLocaleString?.() ?? "—"}
+                  {budgetText(t)}
                 </td>
                 <td className="px-5 py-2.5">
-                  <StatusPill label={t.status} tone={statusToTone(t.status)} />
+                  <StatusPill
+                    label={statusLabel(t.status)}
+                    tone={STATUS_TONES[t.status as JobStatus] ?? "slate"}
+                  />
                 </td>
                 <td className="px-5 py-2.5 text-slate-500 text-xs">
                   {t.createdAt ? new Date(t.createdAt).toLocaleDateString() : "—"}
@@ -211,8 +231,19 @@ function JobDetailDrawer({
 }) {
   const { data: t, loading, refresh: refetch } = useAdminJobDetail(id);
 
-  const run = async (fn: () => Promise<unknown>) => {
-    await fn();
+  const [busy, setBusy] = useState(false);
+
+  const run = async (fn: () => Promise<unknown>, done: string) => {
+    setBusy(true);
+    try {
+      await fn();
+      notify.success(done);
+    } catch (err) {
+      // e.g. a business was hired meanwhile: the API says to open a dispute.
+      notify.error(err, { module: "admin", feature: "job-takedown" });
+    } finally {
+      setBusy(false);
+    }
     await refetch();
     onMutated();
   };
@@ -222,39 +253,31 @@ function JobDetailDrawer({
       open={!!id}
       onClose={onClose}
       title={t?.title || (loading ? "Loading…" : "Job")}
-      subtitle={t ? `Status: ${t.status}` : undefined}
+      subtitle={t ? `Status: ${statusLabel(t.status)}` : undefined}
       footer={
         t && (
-          <div className="flex flex-wrap gap-2">
-            <select
-              aria-label="Change job status"
-              value={t.status}
-              onChange={(e) =>
-                run(() => setAdminJobStatus(id!, e.target.value))
-              }
-              className="text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-md px-2 py-1.5"
-            >
-              {STATUS_OPTIONS.map((s) => (
-                <option key={s} value={s}>
-                  {s.replace("_", " ")}
-                </option>
-              ))}
-            </select>
-            {t.isActive ? (
+          <div className="flex flex-wrap items-center gap-2">
+            {canTakeDown(t) ? (
               <button
-                onClick={() => run(() => archiveAdminJob(id!))}
-                className="text-xs px-3 py-1.5 rounded-md bg-rose-600 text-white hover:bg-rose-700 flex items-center gap-1"
+                onClick={() => run(() => archiveAdminJob(id!), "Job taken down.")}
+                disabled={busy}
+                className="text-xs px-3 py-1.5 rounded-md bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-50 flex items-center gap-1"
               >
-                <Archive size={14} /> Archive
+                <Archive size={14} /> Take down
               </button>
-            ) : (
+            ) : canRestore(t) ? (
               <button
-                onClick={() => run(() => restoreAdminJob(id!))}
-                className="text-xs px-3 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 flex items-center gap-1"
+                onClick={() => run(() => restoreAdminJob(id!), "Job restored.")}
+                disabled={busy}
+                className="text-xs px-3 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-1"
               >
                 <RotateCcw size={14} /> Restore
               </button>
-            )}
+            ) : t.providerId ? (
+              <span className="text-xs text-slate-500">
+                A business is hired. Open a dispute to act on this job.
+              </span>
+            ) : null}
           </div>
         )
       }
@@ -267,21 +290,23 @@ function JobDetailDrawer({
             <span className="text-slate-500 block text-xs mb-1">Description</span>
             <span className="text-slate-900 dark:text-white">{t.description}</span>
           </div>
-          <Row label="Budget" value={`$${t.budget?.toLocaleString?.() ?? "—"}`} />
-          <Row label="Negotiable" value={t.negotiable ? "Yes" : "No"} />
-          <Row label="Status" value={t.status} />
-          <Row label="Urgency" value={t.urgency ?? "—"} />
-          <Row label="Visibility" value={t.visibility ?? "—"} />
-          <Row label="Active" value={t.isActive ? "Yes" : "No (archived)"} />
+          <Row label="Budget" value={budgetText(t)} />
+          <Row label="Pricing" value={PRICING_LABELS[t.pricing ?? "fixed"] ?? "—"} />
+          <Row label="Status" value={statusLabel(t.status)} />
+          {t.lifecycle?.cancelledBy ? (
+            <Row label="Cancelled by" value={CANCELLED_BY[t.lifecycle.cancelledBy] ?? t.lifecycle.cancelledBy} />
+          ) : null}
+          <Row label="Needed by" value={neededByText(t.neededBy)} />
           <Row
-            label="Deadline"
-            value={t.deadline ? new Date(t.deadline).toLocaleDateString() : "—"}
+            label="Who can see it"
+            value={t.visibility === "Verified_Only" ? "Verified businesses only" : "Everyone"}
           />
           <Row label="Category" value={t.subcategoryId?.name ?? "—"} />
-          {t.tags?.length > 0 && (
-            <Row label="Tags" value={t.tags.join(", ")} />
-          )}
           <Row label="Created" value={t.createdAt ? new Date(t.createdAt).toLocaleString() : "—"} />
+          <Row
+            label="Published"
+            value={t.publishedAt ? new Date(t.publishedAt).toLocaleString() : "Not yet"}
+          />
           {t.userId && (
             <div className="mt-4 p-3 rounded-md bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
               <p className="text-xs font-medium text-slate-700 dark:text-slate-200">Client</p>

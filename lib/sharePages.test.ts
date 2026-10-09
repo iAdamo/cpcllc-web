@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { APP_SCHEME, SHARE_PAGES, appLink, isSharePage } from "@/lib/sharePages";
+import { APP_SCHEME, SHARE_PAGES, appLink, isSharePage, providerPath } from "@/lib/sharePages";
 
 /**
  * Shared links must open for everyone. Regression: no route guard listed the
@@ -89,5 +89,14 @@ describe("opening the same page in the app", () => {
     );
     for (const p of SHARE_PAGES) expect(prefixes, p).toContain(`${p}/`);
     expect(JSON.parse(readFileSync(appJson, "utf8")).expo.scheme).toBe(APP_SCHEME);
+  });
+});
+
+describe("a business's page", () => {
+  it("is /c/<slug>, or no link at all when the business has no slug", () => {
+    expect(providerPath({ slug: "acme-plumbing" })).toBe("/c/acme-plumbing");
+    expect(providerPath({ slug: "a b" })).toBe("/c/a%20b");
+    expect(providerPath({})).toBeNull();
+    expect(providerPath({ slug: "" })).toBeNull();
   });
 });

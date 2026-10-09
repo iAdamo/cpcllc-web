@@ -6,6 +6,8 @@
  * key builders in `hooks/admin/adminQueryKeys.ts`.
  */
 
+import type { JobStatus } from "@/lib/jobs";
+
 /** Admin invalidation scope — the keys the websocket bridge dispatches on.
  *  Mirrors the backend's `stats.invalidated` domain event payload. Phase 4
  *  of the WS upgrade moved this here from the now-deleted
@@ -133,12 +135,17 @@ export interface AdminProviderStatsShape {
 export interface AdminJobRow {
   _id: string;
   title: string;
-  budget: number;
-  status: string;
-  urgency?: string;
-  visibility?: string;
-  isActive: boolean;
+  budget?: number | null;
+  currency?: "USD" | "NGN";
+  pricing?: "fixed" | "offers" | "estimates";
+  /** The one job status (lib/jobs.ts). */
+  status: JobStatus;
+  /** Calendar day, "YYYY-MM-DD". */
+  neededBy?: string | null;
+  visibility?: "Public" | "Verified_Only";
+  publishedAt?: string | null;
   createdAt: string;
+  lifecycle?: { cancelledBy?: "client" | "provider" | "staff"; cancelledAt?: string } | null;
   userId?: {
     _id: string;
     firstName?: string;
@@ -151,11 +158,6 @@ export interface AdminJobRow {
 
 export interface AdminJobDetail extends AdminJobRow {
   description: string;
-  negotiable: boolean;
-  deadline?: string;
-  contactPreference: string[];
-  tags: string[];
-  anonymous: boolean;
   updatedAt: string;
   userId?: AdminJobRow["userId"] & { phoneNumber?: string };
   providerId?: AdminJobRow["providerId"] & { providerEmail?: string };
@@ -164,13 +166,8 @@ export interface AdminJobDetail extends AdminJobRow {
 export interface AdminJobStatsShape {
   total: number;
   newLast30Days: number;
-  byStatus: {
-    active: number;
-    inProgress: number;
-    completed: number;
-    cancelled: number;
-    expired: number;
-  };
+  /** Jobs per status, every status present (0 when none). */
+  byStatus: Partial<Record<JobStatus, number>>;
 }
 
 export interface AdminUsersBundle {

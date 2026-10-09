@@ -25,6 +25,7 @@ import type { OverviewRange } from "@/axios/admin";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { PanelCard } from "@/components/admin/PanelCard";
 import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
+import { STATUS_CHART_COLORS, statusLabel, type JobStatus } from "@/lib/jobs";
 import {
   AreaChart,
   Area,
@@ -39,14 +40,6 @@ import {
   Legend,
 } from "recharts";
 
-const JOB_STATUS_COLORS: Record<string, string> = {
-  Active: "#3B82F6",
-  In_progress: "#10B981",
-  Completed: "#8B5CF6",
-  Cancelled: "#F59E0B",
-  Expired: "#EF4444",
-  Open: "#3B82F6",
-};
 
 const RANGES: { key: OverviewRange; label: string }[] = [
   { key: "1D", label: "24 hours" },
@@ -114,7 +107,8 @@ export default function DashboardView() {
   }, [rangeSeries, overview?.series, range]);
 
   const donut = (overview?.jobStatusBreakdown ?? []).map((s: any) => ({
-    name: s.status,
+    name: statusLabel(s.status),
+    status: s.status as JobStatus,
     value: s.count,
   }));
 
@@ -307,7 +301,7 @@ export default function DashboardView() {
                     {donut.map((entry: any, i: number) => (
                       <Cell
                         key={i}
-                        fill={JOB_STATUS_COLORS[entry.name] ?? "#94a3b8"}
+                        fill={STATUS_CHART_COLORS[entry.status as JobStatus] ?? "#94a3b8"}
                       />
                     ))}
                   </Pie>

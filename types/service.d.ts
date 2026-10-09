@@ -1,6 +1,7 @@
 import { ProviderData } from "./provider";
 import { UserData } from "./user";
 import { FileType, MediaItem } from "./media";
+import type { JobStatus } from "@/lib/jobs";
 // export interface SubcategoryData {
 //   _id: string;
 //   id: string;
@@ -64,19 +65,22 @@ export interface ServiceData {
   providerId: ProviderData;
 }
 
+/** A marketplace job, as the API sends it (cpcllc-backend docs/job-cycle.md). */
 export interface JobData {
   _id: string;
-  id: string;
+  id?: string;
   title: string;
   description: string;
-  budget: number;
-  deadline: string | Date;
-  negotiable: boolean;
-  urgency: "Normal" | "Urgent" | "Immediate" | "";
+  /** Absent when the client asked for estimates. */
+  budget?: number | null;
+  currency?: "USD" | "NGN";
+  pricing?: "fixed" | "offers" | "estimates";
+  /** Calendar day, "YYYY-MM-DD". */
+  neededBy?: string | null;
   subcategoryId: SubcategoryData;
-  isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  publishedAt?: string | null;
   location: {
     coordinates: number[];
     address?: {
@@ -89,16 +93,11 @@ export interface JobData {
   };
   coordinates?: number[];
   media: MediaItem[] | FileType[];
-  visibility: "Public" | "Verified" | "Private";
-  proposalsCount: number;
-  applicants: string[];
+  visibility: "Public" | "Verified_Only";
   proposals: ProposalData[];
-  // tags: string[];
-  anonymous: boolean;
   userId: UserData;
   providerId: ProviderData;
-  status: "Active" | "In Progress" | "Completed" | "Cancelled" | "Expired";
-  createdAt: Date;
+  status: JobStatus;
 }
 
 export interface ProposalData {
@@ -106,7 +105,10 @@ export interface ProposalData {
   id: string;
   message: string;
   proposedPrice: number;
-  estimatedDuration: string;
+  /** Working days the business expects the job to take. */
+  estimatedDays: number;
+  note?: string | null;
+  status: "pending" | "accepted" | "rejected" | "withdrawn";
   createdAt: string;
   updatedAt: string;
   jobId: JobData;
