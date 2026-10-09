@@ -116,7 +116,7 @@ export default function Welcome({ onNext }: { onNext: () => void }) {
               Already have an account?{" "}
               <button
                 type="button"
-                onClick={() => router.push("/login")}
+                onClick={() => router.push("/auth/signin")}
                 className="text-brand-400 hover:text-brand-300 font-semibold underline-offset-2 hover:underline transition-colors"
               >
                 Sign in

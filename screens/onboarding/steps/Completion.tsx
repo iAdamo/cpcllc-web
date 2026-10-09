@@ -31,8 +31,8 @@ export default function Completion() {
       if (cancelled) return;
       if (ok) {
         completeOnboarding();
+        // Stay on this screen: its button goes home.
         setSubmitted(true);
-        router.replace("/jobs");
       } else {
         setFailed(true);
       }

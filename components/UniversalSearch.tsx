@@ -19,6 +19,7 @@ import useGlobalStore from "@/stores";
 import { ProviderData } from "@/types";
 import { globalSearch } from "@/axios/search";
 import { resolveSearchCountry } from "@/lib/country";
+import { providerPath } from "@/lib/sharePages";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -252,7 +253,8 @@ export function HeroSearch({
                 onMouseDown={(e) => {
                   e.preventDefault();
                   setShowSuggestions(false);
-                  router.push(`/providers/${p._id}`);
+                  const path = providerPath(p);
+                  if (path) router.push(path);
                 }}
                 className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-left transition-colors"
               >

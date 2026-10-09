@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Clock,
@@ -15,7 +14,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getServicesByProvider } from "@/axios/service";
 import { ServiceData, ProviderData, MediaItem } from "@/types";
-import useGlobalStore from "@/stores";
+import { appLink } from "@/lib/sharePages";
 
 function resolveMedia(media: ServiceData["media"]): string | null {
   const first = (media ?? [])[0];
@@ -114,7 +113,7 @@ function ServiceCard({
               onClick={onBook}
               className="ml-auto flex items-center gap-1 text-xs font-bold text-brand-700 hover:underline"
             >
-              Post a job <ChevronRight size={11} />
+              Request in the app <ChevronRight size={11} />
             </button>
           </div>
         </div>
@@ -133,9 +132,6 @@ export default function ServiceSection({
   provider,
   isCurrentUser,
 }: ServiceSectionProps) {
-  const router = useRouter();
-  const isAuthenticated = useGlobalStore((s) => s.isAuthenticated);
-
   const {
     data: services = [],
     isLoading,
@@ -147,13 +143,10 @@ export default function ServiceSection({
     staleTime: 60 * 1000,
   });
 
-  // Hiring flows through jobs — the provider bids like everywhere else.
+  // Hiring happens in the app (the website is admin and marketing): open
+  // this business there, where Request Service sends it a job.
   const handleBook = () => {
-    if (!isAuthenticated) {
-      router.push(`/auth/signin?next=/jobs/create`);
-      return;
-    }
-    router.push("/jobs/create");
+    window.location.href = appLink(window.location.pathname);
   };
 
   if (isLoading) {

@@ -21,6 +21,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { ProviderData, MediaItem } from "@/types";
+import { providerPath } from "@/lib/sharePages";
 
 const LIBRARIES: ("places" | "geometry")[] = ["places"];
 
@@ -354,12 +355,14 @@ export default function MapPanel({
                     </div>
                   </div>
                 </div>
-                <Link
-                  href={`/providers/${selectedProvider._id}`}
-                  className="mt-2.5 block text-center py-1.5 bg-brand-900 hover:bg-brand-800 text-white text-[11px] font-bold rounded-lg transition-colors"
-                >
-                  View Profile
-                </Link>
+                {providerPath(selectedProvider) && (
+                  <Link
+                    href={providerPath(selectedProvider)!}
+                    className="mt-2.5 block text-center py-1.5 bg-brand-900 hover:bg-brand-800 text-white text-[11px] font-bold rounded-lg transition-colors"
+                  >
+                    View Profile
+                  </Link>
+                )}
               </div>
             </InfoWindow>
           )}
