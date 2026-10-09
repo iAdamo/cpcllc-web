@@ -18,7 +18,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import useGlobalStore from "@/stores";
-import { ActiveRole, MediaItem, ProviderData } from "@/types";
+import { ActiveRole, MediaItem } from "@/types";
+import { providerProfileOf } from "@/lib/providerProfile";
 
 type AvatarVariant = "sm" | "md";
 
@@ -39,10 +40,7 @@ function Avatar({ variant = "sm" }: { variant?: AvatarVariant }) {
   if (!user) return null;
 
   const cls = AVATAR_CLASSES[variant];
-  const provider =
-    switchRole === "Provider"
-      ? (user.activeRoleId as ProviderData | null)
-      : null;
+  const provider = switchRole === "Provider" ? providerProfileOf(user) : null;
   const isProvider = Boolean(provider);
   const logoSrc = isProvider
     ? typeof (provider?.providerLogo as MediaItem | undefined)?.thumbnail ===
@@ -104,10 +102,8 @@ export default function ProfileMenu() {
   if (!user) return null;
 
   const isProvider = user.activeRole === "Provider";
-  const hasProviderProfile = !!(user.activeRoleId as ProviderData)._id;
-  const providerData = hasProviderProfile
-    ? (user.activeRoleId as Partial<ProviderData> | undefined)
-    : undefined;
+  const providerData = providerProfileOf(user);
+  const hasProviderProfile = !!providerData;
 
   const displayName = isProvider
     ? providerData?.providerName || "Your Business"
@@ -241,14 +237,6 @@ export default function ProfileMenu() {
 
             {/* ── Menu items ── */}
             <div className="py-1.5">
-              <MenuItem
-                icon={User}
-                label="My Profile"
-                onClick={() => {
-                  router.push(`/profile/${user._id}`);
-                  setOpen(false);
-                }}
-              />
               {/* <MenuItem
                 icon={CreditCard}
                 label="Membership & Billing"
