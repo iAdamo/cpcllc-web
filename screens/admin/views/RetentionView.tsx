@@ -246,7 +246,7 @@ export function RetentionView() {
                 {(overview.data?.rules ?? []).map((r) => (
                   <tr key={r.kind} className="border-b border-slate-50 dark:border-slate-800/60">
                     <td className="py-2 pr-4 text-slate-800 dark:text-slate-100">{r.label}</td>
-                    <td className="py-2 pr-4 tabular-nums text-slate-700 dark:text-slate-200">{periodLabel(r.years)}</td>
+                    <td className="py-2 pr-4 tabular-nums text-slate-700 dark:text-slate-200">{periodLabel(r)}</td>
                     <td className="py-2 text-slate-500">{r.from}</td>
                   </tr>
                 ))}

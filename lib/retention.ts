@@ -15,14 +15,18 @@ export type RetentionKind =
   | "legal_request"
   | "pro_purchase"
   | "estimate"
-  | "invoice";
+  | "invoice"
+  | "team_invite";
 
 export type HoldKind = RetentionKind | "account";
 
 export interface RetentionRule {
   kind: RetentionKind;
   label: string;
+  /** 0 for a rule counted in days. */
   years: number;
+  /** When set, the period is this many days instead of years. */
+  days?: number;
   from: string;
 }
 
@@ -78,15 +82,17 @@ export const HOLD_KIND_OPTIONS: { value: HoldKind; label: string }[] = [
   { value: "fraud_event", label: "Fraud event" },
   { value: "account_action", label: "Account action" },
   { value: "audit_log", label: "Audit log entry" },
+  { value: "team_invite", label: "Team invite" },
 ];
 
 export function holdKindLabel(kind: HoldKind): string {
   return HOLD_KIND_OPTIONS.find((o) => o.value === kind)?.label ?? kind;
 }
 
-/** "7 years" / "1 year" */
-export function periodLabel(years: number): string {
-  return `${years} year${years === 1 ? "" : "s"}`;
+/** "7 years", "1 year", or "90 days" for a rule counted in days. */
+export function periodLabel(rule: Pick<RetentionRule, "years" | "days">): string {
+  if (rule.days) return `${rule.days} day${rule.days === 1 ? "" : "s"}`;
+  return `${rule.years} year${rule.years === 1 ? "" : "s"}`;
 }
 
 /** Totals across record types for one run. */
