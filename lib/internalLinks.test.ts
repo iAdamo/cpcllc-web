@@ -7,7 +7,8 @@ import { fileURLToPath } from "node:url";
  * Every link the website writes to one of its own pages points at a page
  * that exists. The /jobs pages were removed in June while onboarding, the
  * provider page and Favorites kept sending people there (a 404 right after
- * sign-up). This reads the source, so a new dead link fails here, not in
+ * sign-up), and 29 footer and menu links went to pages never built (removed
+ * 2026-10-09). This reads the source, so a new dead link fails here, not in
  * front of a user.
  */
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
@@ -61,48 +62,6 @@ function normalise(raw: string): string | null {
   return path || "/";
 }
 
-/**
- * Links to pages that were never built (marketing footer, the old user
- * profile). Each needs a decision: build the page or remove the link. Listed
- * so a NEW dead link still fails; an entry that gets fixed must come off.
- */
-const KNOWN_DEAD: Record<string, string[]> = {
-  "components/layout/Footer.tsx": [
-    "/companies/home-services",
-    "/requests",
-    "/profile",
-    "/about",
-    "/blog",
-    "/careers",
-    "/cookies",
-  ],
-  "components/layout/NavBar.tsx": ["/profile"],
-  "components/ProfileMenu.tsx": ["/profile/:dynamic"],
-  "components/layout/PreFooter.tsx": [
-    "/industries/e-commerce",
-    "/industries/healthcare",
-    "/industries/real-estate",
-    "/industries/tech-startups",
-    "/industries/education",
-    "/industries/hospitality",
-    "/client-portal",
-    "/service-packages",
-    "/project-tracker",
-    "/billing",
-    "/feedback-support",
-    "/company-support",
-    "/blog",
-    "/case-studies",
-    "/resources/webinars",
-    "/resources/marketing-guides",
-    "/resources/tools-templates",
-    "/about",
-    "/team",
-    "/careers",
-  ],
-};
-const isKnownDead = (l: { file: string; path: string }) => KNOWN_DEAD[l.file]?.includes(l.path) ?? false;
-
 /** Commented-out code isn't a link anyone can follow. */
 const withoutComments = (src: string) =>
   src.replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, "").replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
@@ -142,19 +101,9 @@ describe("links to the website's own pages", () => {
 
   it("every one points at a page that exists", () => {
     const dead = internalLinks()
-      .filter((l) => !routeExists(l.path) && !isKnownDead(l))
+      .filter((l) => !routeExists(l.path))
       .map((l) => `${l.file}: ${l.path}`);
     expect(dead).toEqual([]);
-  });
-
-  it("the known-dead list holds only links that are still there and still dead", () => {
-    const links = internalLinks();
-    const stale = Object.entries(KNOWN_DEAD).flatMap(([file, paths]) =>
-      paths
-        .filter((path) => routeExists(path) || !links.some((l) => l.file === file && l.path === path))
-        .map((path) => `${file}: ${path}`),
-    );
-    expect(stale).toEqual([]);
   });
 
   it("ignores links in commented-out code", () => {

@@ -13,9 +13,7 @@ const footerLinks = [
     title: "For Clients",
     links: [
       { label: "Find Providers", href: "/providers" },
-      { label: "Service Categories", href: "/companies/home-services" },
       { label: "Client Portal", href: "/clients" },
-      { label: "My Requests", href: "/requests" },
       { label: "Favorites", href: "/favorites" },
     ],
   },
@@ -23,18 +21,11 @@ const footerLinks = [
     title: "For Companies",
     links: [
       { label: "Join as a Provider", href: "/onboarding" },
-      { label: "Company Profile", href: "/profile" },
-      { label: "Find Jobs", href: "/providers" },
-      { label: "Membership Plans", href: "/profile" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Help Center", href: "/contact" },
-      { label: "About Us", href: "/about" },
-      { label: "Blog", href: "/blog" },
-      { label: "Careers", href: "/careers" },
       { label: "Contact Us", href: "/contact" },
     ],
   },
@@ -46,7 +37,6 @@ const footerLinks = [
       { label: "Privacy Requests", href: "/privacy-request" },
       { label: "Copyright (DMCA)", href: "/dmca" },
       { label: "Legal Notices", href: "/legal-notice" },
-      { label: "Cookie Policy", href: "/cookies" },
     ],
   },
 ];

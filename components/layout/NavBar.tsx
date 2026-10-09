@@ -340,16 +340,6 @@ const NavBar = () => {
                     <>
                       <button
                         type="button"
-                        onClick={() => {
-                          router.push("/profile");
-                          setMobileOpen(false);
-                        }}
-                        className="w-full py-3.5 text-center font-semibold text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl"
-                      >
-                        {t("profile")}
-                      </button>
-                      <button
-                        type="button"
                         onClick={async () => {
                           await logout();
                           // Hard navigation resets all in-memory state.
