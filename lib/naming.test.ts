@@ -15,7 +15,10 @@ import { fileURLToPath } from "node:url";
  */
 const ROOT = fileURLToPath(new URL("../", import.meta.url));
 const DIRS = ["app", "components", "screens", "hooks", "axios", "lib", "context", "types", "utils", "stores", "constants"];
-const isTeam = (file: string) => /[\\/]teams?[\\/]|[\\/]Team[A-Za-z]*\.tsx?$/.test(file);
+// Team code: a team/, teams/ or team-invite/ folder, or a file named Team*,
+// team*, teams* or useTeam* (TeamsView.tsx, lib/teams.ts, useTeams.ts).
+const isTeam = (file: string) =>
+  /[\\/]teams?(-invite)?[\\/]|[\\/](use)?[Tt]eams?[A-Za-z]*(\.test)?\.tsx?$/.test(file);
 const SELF = fileURLToPath(import.meta.url);
 
 function filesUnder(dir: string): string[] {

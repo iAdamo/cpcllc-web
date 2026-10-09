@@ -127,7 +127,7 @@ export default async function JobShareLanding({
             )}
 
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <OpenInAppButton path={`/t/${id}`} />
+              <OpenInAppButton />
               <span className="text-xs text-slate-500 sm:ml-2">
                 Don't have the app? It'll open in your browser.
               </span>

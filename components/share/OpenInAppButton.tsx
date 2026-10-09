@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { appLink } from "@/lib/sharePages";
 
 /**
  * Triggers a deep link into the mobile app via the custom scheme.
@@ -10,15 +11,15 @@ import { useCallback } from "react";
  * web page directly — the OS doesn't re-intercept. That's what this
  * button is for: an explicit "Open in App" click.
  *
- * Custom scheme path mirrors the web path (`/c/slug`, `/t/id`, `/post/id`)
- * so Expo Router consumes it identically regardless of entry vector.
+ * It opens the page's own path in the app (the app's routes mirror the
+ * share pages: /j/<id>, /c/<slug>, /post/<id>, /team-invite/<token>), so a
+ * page never hand-writes an app path that can drift from the app's routes.
  */
-export function OpenInAppButton({ path }: { path: string }) {
+export function OpenInAppButton({ label = "Open in CompaniesCenter app" }: { label?: string }) {
   const handleClick = useCallback(() => {
     if (typeof window === "undefined") return;
-    // Custom scheme from mobile app.json
-    window.location.href = `companiescenterllc://${path.replace(/^\//, "")}`;
-  }, [path]);
+    window.location.href = appLink(window.location.pathname);
+  }, []);
 
   return (
     <button
@@ -26,7 +27,7 @@ export function OpenInAppButton({ path }: { path: string }) {
       onClick={handleClick}
       className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition"
     >
-      Open in CompaniesCenter app
+      {label}
     </button>
   );
 }

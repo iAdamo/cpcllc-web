@@ -148,7 +148,7 @@ export default async function PostShareLanding({
             )}
 
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <OpenInAppButton path={`/post/${id}`} />
+              <OpenInAppButton />
               <span className="text-xs text-slate-500 sm:ml-2">
                 Don&apos;t have the app? It&apos;ll open in your browser.
               </span>

@@ -13,8 +13,10 @@
  *   - BUNDLE_ID: from app.json → ios.bundleIdentifier
  *     = "com.sanuxtech.companiescenterllc"
  *
- * Paths: matched against the URL path Apple intercepts. We claim `/c/*`
- * (provider profile shares — mnemonic: company) and `/j/*` (job shares).
+ * Paths: matched against the URL path Apple intercepts: every share page in
+ * lib/sharePages.ts (`/c/*` businesses, `/j/*` jobs, `/post/*` posts,
+ * `/team-invite/*` team invite emails). Android's list is the intent
+ * filters in the app's app.json. sharePages.test.ts checks this list.
  *
  * To update without redeploying everything, change the constants below.
  * iOS only re-fetches the AASA when the app is reinstalled or via the
@@ -38,7 +40,7 @@ export async function GET() {
       details: [
         {
           appID: `${APPLE_TEAM_ID}.${BUNDLE_ID}`,
-          paths: ["/c/*", "/j/*"],
+          paths: ["/c/*", "/j/*", "/post/*", "/team-invite/*"],
         },
       ],
     },
