@@ -1,4 +1,4 @@
-**Last Updated:** October 8, 2026
+**Last Updated:** October 10, 2026
 
 Companies Center LLC provides a local services marketplace through its mobile
 applications, website, administrative systems, and related services. This Privacy
@@ -64,8 +64,11 @@ financial account information, government identification information if a future
 verification feature lawfully collects it, and other information treated as sensitive
 under applicable law.
 
-**Task** means a service request created through Companies Center. A Task may be visible
-to eligible Service Providers generally or directed to a particular Service Provider.
+**Job** means a service request a Client creates through Companies Center. A Job may be
+visible to eligible Service Providers generally or directed to a particular Service Provider.
+
+**Team Job** means a to-do a business gives the people in its team through the Team feature
+described in Section 13A. A Team Job is not a Job and is never shown in the marketplace.
 
 ## 3. Eligibility and Minimum Age
 
@@ -96,7 +99,7 @@ stores the business information needed for provider functions.
 Switching roles changes the interface and functions available to the user. Role switching
 does not authorize access to another person's information and does not change the server
 permissions required for an action. Companies Center verifies identity, account ownership,
-role, status, and participation in the relevant Task, Booking, conversation, document, or
+role, status, and participation in the relevant Job, Booking, conversation, document, or
 location session before returning restricted information.
 
 Administrator and staff accounts are used through restricted administrative systems and
@@ -131,7 +134,7 @@ requires it, we do not collect a complete date of birth.
 ### 5.3 Client Profile Information
 
 A Client profile may include name, profile photograph, general location, interests or
-service categories, saved Tasks, saved Service Providers, companies previously hired
+service categories, saved Jobs, saved Service Providers, companies previously hired
 through the Platform, follows, reviews, recommendations, and marketplace activity.
 
 Certain basic profile information and user generated content may be visible to other
@@ -171,7 +174,7 @@ not verify that they are correct.
 ### 5.6 Addresses and General Location
 
 Companies Center maintains separate information fields and access rules for a private
-residential address, an optional public business address, a service area, a Task or job
+residential address, an optional public business address, a service area, a Job
 site address, and a temporary live location session.
 
 A private residential address is used only for account or service functions that require
@@ -180,22 +183,22 @@ when a Service Provider affirmatively chooses to publish it. Providers operating
 home may publish a city, ZIP code, county, service radius, or general coverage area
 instead of a street address.
 
-A service area describes where a provider is willing to work. A Task may initially display
-only an approximate area, including in browse and search results. The exact Task address
+A service area describes where a provider is willing to work. A Job may initially display
+only an approximate area, including in browse and search results. The exact Job address
 is restricted to the Client and to the particular Service Provider selected or otherwise
 expressly authorized by the Client. Temporary live location is governed separately by
 Section 11.
 
-### 5.7 Tasks Proposals and Bookings
+### 5.7 Jobs Proposals and Bookings
 
-We may collect a Task title, description, category, budget, negotiability, requested date
-or deadline, urgency, approximate location, exact job site address, visibility choice,
-contact preference, photographs, videos, files, tags, whether an estimate is requested,
-the Service Provider to whom a Task is directed, proposals, proposal messages, proposed
-prices, acceptance records, Booking details, scheduling information, cancellation
-information, start and completion times, and status history.
+We may collect a Job title, description, category, pricing choice (a fixed price, open to
+offers, or estimates requested), budget and its currency, the date the work is needed by,
+approximate location, exact job site address, visibility choice, photographs, videos, files,
+the Service Provider to whom a Job is directed, proposals, proposal messages, proposed prices
+and the number of days proposed, acceptance records, Booking details, scheduling information,
+cancellation information, start and completion times, and status history.
 
-Proposals and their prices are private to the Client who created the Task and the Service
+Proposals and their prices are private to the Client who created the Job and the Service
 Provider who submitted the proposal, except where access is needed for authorized support,
 safety, dispute resolution, fraud prevention, or legal compliance. Competing providers are
 not permitted to view one another's proposal details.
@@ -263,7 +266,7 @@ money unless a future, separately disclosed payment feature expressly states oth
 
 Companies Center may offer paid digital or business tools to Service Providers. Companies
 Center Pro is intended for Service Providers and does not provide a Client membership,
-priority for Client Tasks, guaranteed leads, guaranteed visibility, guaranteed income, or
+priority for Client Jobs, guaranteed leads, guaranteed visibility, guaranteed income, or
 guaranteed results.
 
 When a paid provider tool is enabled, the checkout page identifies the payment processor
@@ -338,10 +341,26 @@ analytics cookies. Embedded mapping services may receive technical information a
 their own cookies under their policies. Companies Center will request any consent required
 before enabling nonessential cookies.
 
+The app may store on the device which team a person last opened, and, while the device is
+offline, a completion the person made, until it is sent.
+
+### 5.18 Team Information
+
+When a business uses the Team feature, we collect the business's team membership records:
+who belongs to the team, each person's role in that business (Owner, Manager, Supervisor or
+Employee), who they report to, and when they joined, left or were removed. We collect the
+email address and role a business enters when it invites someone, who sent the invite, when
+it was sent and whether it was accepted, declined, cancelled or expired. We collect Team
+Tasks: the title, notes, optional due date, who created and edited them, and who they were
+sent to. For each person a Team Task was sent to, we collect whether they completed it,
+when, an optional comment they write, and whether the app sent the completion after the
+device was offline. We keep a record of changes to a Team Task (created, edited, sent,
+completed, reopened, archived) and who made them.
+
 ## 6. Sources of Information
 
 We collect information directly from users when they create an account, complete a profile,
-publish content, create a Task, send a proposal, request a Booking, send a message, share
+publish content, create a Job, send a proposal, request a Booking, send a message, share
 location, create a document, contact support, submit a report, purchase a provider tool, or
 otherwise use Companies Center.
 
@@ -364,7 +383,7 @@ information, enforce age eligibility, provide Client and Service Provider experi
 preserve user preferences across devices.
 
 We use information to publish provider services, help Clients discover relevant providers,
-display approximate service areas, create Tasks, deliver proposals, schedule Bookings,
+display approximate service areas, create Jobs, deliver proposals, schedule Bookings,
 support completion confirmation, enable reviews, and maintain marketplace records.
 
 We use information to deliver direct messages, support tickets, notifications, announcements,
@@ -418,7 +437,7 @@ does not guarantee immediate deletion from search engine caches, screenshots, ex
 archives, or copies made by other people. Companies Center may request removal from systems
 under its control but cannot control independent copies.
 
-Public Tasks display only information selected for marketplace visibility and an approximate
+Public Jobs display only information selected for marketplace visibility and an approximate
 area. Exact job site addresses are excluded from public pages, browse and search results,
 sitemaps, OpenGraph previews, notifications, logs intended for general access, and
 preauthentication APIs.
@@ -439,8 +458,8 @@ publish it. Companies Center provides a coarse location option for home based bu
 county, radius, or other general coverage description. It does not need to reveal the
 provider's residence.
 
-**Job site address** belongs to a particular Task or Booking. Before a Client authorizes a
-particular Service Provider, other providers — in browse, search, and the Task detail —
+**Job site address** belongs to a particular Job or Booking. Before a Client authorizes a
+particular Service Provider, other providers — in browse, search, and the Job detail —
 receive only an approximate area reasonably sufficient to decide whether to respond. The
 exact address becomes available only to the Client who posted it and the selected or
 expressly authorized Service Provider.
@@ -461,8 +480,8 @@ recipient's location. If both participants share, each must consent to sharing t
 device location.
 
 The person sharing can stop sharing at any time through a visible control in the application.
-This right applies to ad hoc sessions and to sessions connected to a Booking or Task. Stopping
-live location sharing does not end the underlying Booking or Task; the other participant is
+This right applies to ad hoc sessions and to sessions connected to a Booking or Job. Stopping
+live location sharing does not end the underlying Booking or Job; the other participant is
 notified that sharing ended and may request live location again. A participant may also revoke
 device location permission through operating system settings at any time.
 
@@ -498,7 +517,7 @@ known location.
 
 ## 12. Photographs Videos Files and Metadata
 
-Users may choose to upload profile images, service media, Task media, post media, review
+Users may choose to upload profile images, service media, Job media, post media, review
 media, message attachments, support evidence, and document files. Companies Center processes
 uploaded content to provide the requested feature.
 
@@ -512,9 +531,9 @@ Uploads are not automatically scanned. Prohibited content is handled through use
 review by a moderation team, which can remove content, restrict features, or suspend accounts.
 
 Public media and private media are stored separately. Public profile, service, and post media
-use public addresses. Message attachments, support attachments, Task photos, and proposal
+use public addresses. Message attachments, support attachments, Job photos, and proposal
 attachments are private: they open only through authenticated requests or links that expire
-within two hours, issued to people permitted to see the related conversation, ticket, Task, or
+within two hours, issued to people permitted to see the related conversation, ticket, Job, or
 proposal. Estimates and invoices open only for the provider who created them or through a
 document link (Section 15).
 
@@ -522,14 +541,14 @@ Users should still review photographs and videos for visible house numbers, lice
 faces, documents, reflections, or other information that may reveal identity or location.
 Removing technical metadata cannot remove information visible inside the image itself.
 
-## 13. Tasks Proposals and Booking Privacy
+## 13. Jobs Proposals and Booking Privacy
 
-Clients control whether a Task is directed to one provider or opened to eligible providers. A
-public or market visible Task may show its description, category, budget, timing, approximate
+Clients control whether a Job is directed to one provider or opened to eligible providers. A
+public or market visible Job may show its description, category, budget, timing, approximate
 area, selected media, and other information the Client chooses to publish. It does not show
 the Client's private residential address or exact job site address. Until the Client selects
 a provider, other providers and visitors see the Client's first name and last initial, without
-a profile photograph. A provider to whom the Task is directed, and the provider the Client
+a profile photograph. A provider to whom the Job is directed, and the provider the Client
 selects, see the Client's name and photograph.
 
 Proposals, proposal prices, and proposal messages are visible to the Client and the provider
@@ -537,9 +556,42 @@ who submitted them. Companies Center does not make competing proposals public. O
 selects or expressly authorizes a provider, Companies Center may reveal contact and exact job
 site information reasonably necessary to perform the service.
 
-Task, proposal, Booking, cancellation, completion, and dispute history may be retained as
+Job, proposal, Booking, cancellation, completion, and dispute history may be retained as
 described in Section 26. Users should not place passwords, payment card details, government
-identification, or unrelated sensitive information in a Task description or proposal.
+identification, or unrelated sensitive information in a Job description or proposal.
+
+## 13A. Team Privacy
+
+A role in a team belongs to one person in one business. A person's account remains their
+own, and a person may belong to several businesses' teams.
+
+**What the business sees.** The Owner and Managers of a team see its members' names,
+profile photographs and roles, the Team Tasks of the business, and, for each person, whether
+they completed a Team Task, when, and their comment. A Supervisor sees the same for the
+members who report to them. An Employee sees the Team Tasks sent to them and who sent them.
+Before a person accepts an invite, the app tells them what the business will see.
+
+**What the business does not see.** Joining a team does not give the business access to
+the person's messages, Jobs, Bookings, contact details, location or any other part of
+their account.
+
+**Invites.** An invite is sent by email to the address the business enters, and can be
+accepted only by an account whose verified email address matches. The link expires after
+seven days. We store a fingerprint of the link, not the link itself.
+
+**Leaving.** A person may leave a team at any time, and the Owner or a Manager may remove
+them. Their pending Team Tasks are withdrawn. Team Tasks they completed, with their
+comments, remain in the business's history.
+
+**Notifications.** We notify a person when a Team Task is sent to them, the creator of a
+Team Task when everyone has completed it, the Owner and Managers when someone joins or
+leaves, and a person when a business removes them. Notifications show the Team Task title
+and the business name.
+
+**Staff access.** Authorized Companies Center staff may see which businesses use the Team
+feature, their members' names, email addresses, roles and membership dates, invite email
+addresses and statuses, and counts, to provide support. Staff tools do not display Team
+Task titles, notes or completion comments.
 
 ## 14. Messages Presence and Blocking
 
@@ -632,7 +684,7 @@ ordinary support without using the assistant.
 ## 18. Notifications Email and Other Communications
 
 Companies Center may send in app, push, email, and web push communications. These may include
-account verification, password reset, security, Booking, Task, message, support, dispute,
+account verification, password reset, security, Booking, Job, message, support, dispute,
 subscription, service update, and marketing communications. Companies Center does not send SMS
 messages and does not make marketing calls.
 
@@ -725,7 +777,7 @@ Client information to the provider. Featured placement is kept separate from Com
 and is labeled so users can distinguish paid placement from organic results.
 
 Companies Center Pro does not buy or guarantee organic ranking, leads, Clients, bookings, income,
-or results. Client membership and paid priority for Client Tasks are not offered.
+or results. Client membership and paid priority for Client Jobs are not offered.
 
 If Companies Center later introduces targeted advertising, cross context tracking, or a materially
 different use of personal information, Companies Center will update this Policy and obtain consent
@@ -793,7 +845,7 @@ and until a secure verification feature is activated with a specific notice.
 Companies Center periodically reviews fields, logs, files, vendors, and dormant features.
 Information and permissions that are no longer necessary are removed or disabled. Test data and
 development accounts are kept out of production or clearly isolated and are not presented as real
-users, reviews, Tasks, or locations.
+users, reviews, Jobs, or locations.
 
 ## 26. Retention
 
@@ -830,12 +882,17 @@ retained until the user deletes them or the account is deleted. Deleting a post 
 comments and media at once; deleting a service deletes its media. A file that another item of the
 same user still shows is kept with that item.
 
-**Tasks, proposals, and Bookings.** Tasks, including the job site address and photos, are retained
+**Jobs, proposals, and Bookings.** Jobs, including the job site address and photos, are retained
 until the Client deletes them or the Client's account is deleted; their proposals and proposal
 attachments are deleted with them. A proposal sent by a provider whose account is deleted remains
-on the Client's Task without its attachments. Bookings are deleted one year after the appointment,
+on the Client's Job without its attachments. Bookings are deleted one year after the appointment,
 unless the work is linked to an estimate, invoice, or dispute, in which case they are kept as long
 as that record.
+
+**Team information.** Team membership records, Team Tasks, completion records and comments,
+and the record of changes are retained while the business's team exists, so the business
+keeps its history. Team Tasks the business archives are hidden from lists and retained with
+the team. An invite that is declined, cancelled or expires is deleted 90 days later.
 
 **Reviews.** Reviews written by a deleted account remain with their star rating and completion
 mark, but their text and photos are removed.
@@ -900,6 +957,13 @@ Section 26. If a legal hold applies to the account, deletion waits until the hol
 Where the user signed in with Apple, Companies Center also asks Apple to revoke its access. Companies
 Center sends deletion instructions to other service providers where technically available and
 legally appropriate.
+
+When a team member's account is deleted, their memberships end, their pending Team Tasks are
+withdrawn, open invites to their email address are cancelled, and the comments they wrote on
+completed Team Tasks are erased. The business keeps the record that a former member
+completed a Team Task and when, without the comment. When the account that owns a business is
+deleted, that business's team information is deleted with it: members, invites, Team Tasks,
+completion records, the record of changes and team settings.
 
 Information may be retained after deletion when necessary for tax or accounting obligations, fraud
 and abuse prevention, security, exercise or defense of legal claims, enforcement of agreements,
