@@ -31,6 +31,7 @@ import {
   deleteBroadcast,
   estimateAudience,
   searchUsersForBroadcast,
+  uploadBroadcastImage,
   type Broadcast,
   type BroadcastStatus,
   type BroadcastChannel,
@@ -38,6 +39,30 @@ import {
   type PickableUser,
   type BroadcastSlide,
 } from "@/axios/broadcast";
+import { ImageField } from "@/components/admin/ImageField";
+import {
+  BroadcastPopupSection,
+  PopupPreview,
+} from "@/screens/admin/sections/BroadcastPopupSection";
+import {
+  PLACEMENTS,
+  isLegacyOverlay,
+  popupImageOf,
+  surfacesOf,
+  upgradeLegacyOverlay,
+  withPlacement,
+  withPopup,
+} from "@/lib/broadcastPopup";
+import { userMessageOf } from "@/lib/errorService";
+
+/** Upload for every image field here; failures carry the API's words. */
+async function uploadImage(file: File): Promise<string> {
+  try {
+    return await uploadBroadcastImage(file);
+  } catch (e) {
+    throw new Error(userMessageOf(e, "Upload failed. Try again."));
+  }
+}
 
 const TABS: { key: BroadcastStatus | "ALL"; label: string }[] = [
   { key: "ALL", label: "All" },
@@ -207,8 +232,8 @@ export function BroadcastCenterView() {
                     <StatusPill label={b.status} tone={statusTone(b.status)} />
                   </div>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    {b.category} · {b.channels?.join(", ")} ·{" "}
-                    {b.audience?.type?.toLowerCase()}
+                    {b.category} · {surfacesOf(b).join(", ")} ·{" "}
+                    {b.audience?.type?.toLowerCase().replace(/_/g, " ")}
                   </p>
                 </div>
                 {b.status === "PUBLISHED" && (
@@ -263,6 +288,9 @@ function BroadcastBuilder({
 }) {
   const [form, setForm] = useState<Partial<Broadcast>>({ ...EMPTY });
   const [saving, setSaving] = useState(false);
+  // Set once a new draft exists, so a retry after a refused submit updates
+  // that draft instead of creating a second one.
+  const [savedId, setSavedId] = useState<string | null>(id === "new" ? null : id);
   const [estimate, setEstimate] = useState<number | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
@@ -277,7 +305,8 @@ function BroadcastBuilder({
       import("@/axios/broadcast").then(({ getBroadcast }) =>
         getBroadcast(id)
           .then((b) => {
-            setForm(b);
+            // An "Overlay modal" banner from before popups opens as a popup.
+            setForm(upgradeLegacyOverlay(b));
             // Preserve an existing hand-picked set so adding more doesn't drop
             // it (names fill in as the admin re-searches; ids are kept).
             const ids = b.audience?.userIds ?? [];
@@ -366,14 +395,14 @@ function BroadcastBuilder({
     setSaving(true);
     setErr(null);
     try {
-      const saved =
-        id === "new"
-          ? await createBroadcast(form)
-          : await updateBroadcast(id, form);
+      const saved = savedId
+        ? await updateBroadcast(savedId, form)
+        : await createBroadcast(form);
+      setSavedId(saved._id);
       if (thenSubmit) await submitBroadcast(saved._id);
       onSaved();
     } catch (e: any) {
-      setErr(e?.response?.data?.message ?? e?.message ?? "Save failed");
+      setErr(userMessageOf(e, "Save failed. Try again."));
     } finally {
       setSaving(false);
     }
@@ -431,17 +460,32 @@ function BroadcastBuilder({
               ))}
             </select>
           </Field>
-          <Field label="Placement">
+          <Field label="Where it shows">
             <select
               className={input}
-              value={form.placement}
-              onChange={(e) => set("placement", e.target.value)}
+              value={form.placement ?? "NOTIFICATION_CENTER"}
+              onChange={(e) =>
+                setForm((f) => withPlacement(f, e.target.value as any))
+              }
             >
-              <option value="NOTIFICATION_CENTER">Notification Center</option>
-              <option value="HOME_BANNER">Home banner</option>
+              {PLACEMENTS.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
             </select>
           </Field>
         </div>
+        <p className="text-[11px] text-slate-400 -mt-2">
+          {PLACEMENTS.find((p) => p.value === (form.placement ?? "NOTIFICATION_CENTER"))?.hint}
+        </p>
+
+        <BroadcastPopupSection
+          form={form}
+          onToggle={(on) => setForm((f) => withPopup(f, on))}
+          onChange={(patch) => setForm((f) => ({ ...f, ...patch }))}
+          onUpload={uploadImage}
+        />
 
         {isBanner && (
           <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3 space-y-3">
@@ -482,26 +526,14 @@ function BroadcastBuilder({
               </label>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              <Field label="Display as">
-                <select
-                  className={input}
-                  value={form.displayMode ?? "INLINE"}
-                  onChange={(e) => set("displayMode", e.target.value)}
-                >
-                  <option value="INLINE">Inline (home feed)</option>
-                  <option value="OVERLAY">Overlay modal (blocking)</option>
-                </select>
-              </Field>
-              <label className="flex items-center gap-2 text-xs text-slate-500 mt-6">
-                <input
-                  type="checkbox"
-                  checked={form.autoSlide === true}
-                  onChange={(e) => set("autoSlide", e.target.checked)}
-                />
-                Auto-slide carousel
-              </label>
-            </div>
+            <label className="flex items-center gap-2 text-xs text-slate-500">
+              <input
+                type="checkbox"
+                checked={form.autoSlide === true}
+                onChange={(e) => set("autoSlide", e.target.checked)}
+              />
+              Auto-slide carousel
+            </label>
             {form.autoSlide && (
               <Field label="Auto-slide every (seconds)">
                 <input
@@ -518,14 +550,6 @@ function BroadcastBuilder({
                 />
               </Field>
             )}
-            {form.displayMode === "OVERLAY" && (
-              <p className="text-[11px] text-amber-600">
-                Overlay shows as a blocking modal with a compulsory close. The
-                whole card is tappable (opens the CTA), and the CTA button shows
-                when a label is set.
-              </p>
-            )}
-
             {slides.length === 0 && (
               <p className="text-xs text-rose-500">
                 Add at least one slide (image or colour required).
@@ -557,16 +581,19 @@ function BroadcastBuilder({
                     )}
                   </div>
                 </div>
+                <ImageField
+                  compact
+                  id={`slide-${i}-image`}
+                  label={`Slide ${i + 1} image`}
+                  value={s.image ?? ""}
+                  onChange={(url) => updateSlide(i, { image: url })}
+                  onUpload={uploadImage}
+                />
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     className={input}
-                    placeholder="Image URL"
-                    value={s.image ?? ""}
-                    onChange={(e) => updateSlide(i, { image: e.target.value })}
-                  />
-                  <input
-                    className={input}
                     type="color"
+                    aria-label={`Slide ${i + 1} background colour`}
                     value={s.backgroundColor ?? "#7c3aed"}
                     onChange={(e) =>
                       updateSlide(i, { backgroundColor: e.target.value })
@@ -630,22 +657,21 @@ function BroadcastBuilder({
             onChange={(e) => set("body", e.target.value)}
           />
         </Field>
-        <div className="grid grid-cols-2 gap-3">
-          <Field label="Cover image URL">
-            <input
-              className={input}
-              value={form.coverImage ?? ""}
-              onChange={(e) => set("coverImage", e.target.value)}
-            />
-          </Field>
-          <Field label="CTA label">
-            <input
-              className={input}
-              value={form.ctaLabel ?? ""}
-              onChange={(e) => set("ctaLabel", e.target.value)}
-            />
-          </Field>
-        </div>
+        <ImageField
+          id="cover-image"
+          label="Cover image"
+          value={form.coverImage ?? ""}
+          onChange={(url) => set("coverImage", url)}
+          onUpload={uploadImage}
+          hint="Shown on the update's page, in the notification and the email."
+        />
+        <Field label="CTA label">
+          <input
+            className={input}
+            value={form.ctaLabel ?? ""}
+            onChange={(e) => set("ctaLabel", e.target.value)}
+          />
+        </Field>
         <Field label="CTA link (deep link or URL)">
           <input
             className={input}
@@ -682,9 +708,11 @@ function BroadcastBuilder({
 
         <Field label="Delivery channels">
           <div className="flex flex-wrap gap-2">
-            <span className="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
-              In-app · always on
-            </span>
+            {(form.placement ?? "NOTIFICATION_CENTER") === "NOTIFICATION_CENTER" && (
+              <span className="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
+                In-app · always on
+              </span>
+            )}
             {CHANNELS.map((c) => {
               const on = form.channels?.includes(c);
               return (
@@ -919,7 +947,7 @@ function BroadcastDetail({
       load();
       onChanged();
     } catch (e: any) {
-      alert(e?.response?.data?.message ?? e?.message ?? "Action failed");
+      alert(userMessageOf(e, "That didn't work. Try again."));
     } finally {
       setBusy(false);
     }
@@ -962,8 +990,27 @@ function BroadcastDetail({
             />
           </div>
 
+          {(b.popup || isLegacyOverlay(b)) && (
+            <div className="flex items-center gap-3">
+              <PopupPreview
+                image={b.popup ? popupImageOf(b) : b.slides?.[0]?.image || b.coverImage || ""}
+                size={(b.popup ? b.popupSize : b.bannerSize) ?? (b.popup ? "MD" : "LG")}
+                title={b.title}
+              />
+              <p className="text-[11px] text-slate-500">
+                Shows on top of any screen in the app until each person closes
+                it or taps it{b.ctaUrl ? <> (opens <span className="font-mono">{b.ctaUrl}</span>)</> : null}.
+                {b.status === "PUBLISHED" && (
+                  <span className="block mt-1 text-slate-700 dark:text-slate-300">
+                    {(a?.popupDismissed ?? 0).toLocaleString()} closed it with the X
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
+
           <div className="text-xs text-slate-500 space-y-1">
-            <p>Channels: {b.channels?.join(", ")}</p>
+            <p>Shows as: {surfacesOf(b).join(", ")}</p>
             <p>
               Audience:{" "}
               {b.audience?.type === "SELECTED_USERS"

@@ -40,7 +40,8 @@ export type BroadcastCategory =
 
 export type BroadcastPriority = "LOW" | "NORMAL" | "HIGH" | "URGENT";
 export type BroadcastChannel = "PUSH" | "IN_APP" | "EMAIL" | "WEB";
-export type BroadcastPlacement = "NOTIFICATION_CENTER" | "HOME_BANNER";
+/** POPUP_ONLY: nowhere but its popup (plus push/email when picked). */
+export type BroadcastPlacement = "NOTIFICATION_CENTER" | "HOME_BANNER" | "POPUP_ONLY";
 
 export interface BroadcastSlide {
   image?: string;
@@ -86,12 +87,18 @@ export interface Broadcast {
   audience: Audience;
   placement?: BroadcastPlacement;
   bannerSize?: "SM" | "MD" | "LG";
-  /** INLINE = in the home feed; OVERLAY = a blocking modal on top of the app. */
+  /** INLINE = in the home feed; OVERLAY = an older blocking modal, now
+   *  replaced by `popup` (lib/broadcastPopup.ts upgrades saved drafts). */
   displayMode?: "INLINE" | "OVERLAY";
   dismissible?: boolean;
   autoSlide?: boolean;
   autoSlideInterval?: number;
   slides?: BroadcastSlide[];
+  /** Also show as a full-image popup on any screen until closed or tapped. */
+  popup?: boolean;
+  popupSize?: "SM" | "MD" | "LG";
+  /** Falls back to coverImage. Tapping opens ctaUrl (else the update page). */
+  popupImage?: string;
   scheduledAt?: string;
   expiresAt?: string;
   pinned?: boolean;
@@ -119,6 +126,10 @@ export interface BroadcastAnalytics {
   retryAttempts: number;
   perChannel: Record<string, number>;
   failureReasons: string[];
+  /** Marketing: people who had turned announcements off (not sent). */
+  optedOut?: number;
+  /** People who closed the popup with its X (taps count as clicked). */
+  popupDismissed?: number;
 }
 
 const base = "admin/broadcasts";
@@ -192,5 +203,15 @@ export const cancelBroadcast = async (id: string) =>
   (await axiosInstance.post(`${base}/${id}/cancel`)).data as Broadcast;
 export const archiveBroadcast = async (id: string) =>
   (await axiosInstance.post(`${base}/${id}/archive`)).data as Broadcast;
+/** Upload an image for a popup, slide or cover; returns its public url. */
+export const uploadBroadcastImage = async (file: File): Promise<string> => {
+  const body = new FormData();
+  body.append("file", file);
+  const res = await axiosInstance.post(`${base}/media`, body, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return (res.data as { url: string }).url;
+};
+
 export const deleteBroadcast = async (id: string) =>
   (await axiosInstance.delete(`${base}/${id}`)).data;

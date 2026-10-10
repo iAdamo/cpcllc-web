@@ -314,3 +314,17 @@ export class AppErrorService {
     return USER_MESSAGE_BY_CODE[code] ?? USER_MESSAGE_BY_CODE.UNEXPECTED_ERROR;
   }
 }
+
+/**
+ * The words to show for a failed call: the API's own message when it chose
+ * one (the axios interceptor attaches it as `appError`), else `fallback`.
+ * Reading `response.data.message` misses it: the API nests it under `error`.
+ */
+export function userMessageOf(e: unknown, fallback: string): string {
+  const app = (e as { appError?: NormalizedAppError } | null)?.appError;
+  if (app?.userMessage) return app.userMessage;
+  if (isAxiosLike(e) && e.response) {
+    return AppErrorService.fromApiError(e).userMessage;
+  }
+  return fallback;
+}
