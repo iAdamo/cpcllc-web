@@ -1,4 +1,4 @@
-**Last Updated:** October 8, 2026
+**Last Updated:** October 10, 2026
 
 These Terms of Service form a binding agreement between you and Companies Center LLC concerning
 your access to and use of the Companies Center mobile applications, companiescenter.com, and
@@ -68,17 +68,17 @@ these Terms.
 service.
 
 **Service Provider or Provider** means a business or independent service professional using the
-Platform to publish services, respond to Tasks, communicate with Clients, schedule work, or use
+Platform to publish services, respond to Jobs, communicate with Clients, schedule work, or use
 provider tools.
 
 **User** means a Client, Service Provider, visitor, or other person who accesses or uses the Platform.
 
-**Task** means a request for real world services created through Companies Center. A Task may be made
+**Job** means a request for real world services created through Companies Center. A Job may be made
 visible to eligible Providers or directed to a specific Provider.
 
 **Booking** means a scheduling record or service appointment managed through the Platform.
 
-**User Content** means text, photographs, videos, files, messages, service descriptions, Tasks,
+**User Content** means text, photographs, videos, files, messages, service descriptions, Jobs,
 proposals, reviews, comments, profile material, and other content submitted by a User.
 
 **Companies Center Pro or Pro** means paid or promotional business tools that may be made available
@@ -105,7 +105,7 @@ problem. Those functions do not make Companies Center responsible for the underl
 Companies Center may moderate Platform conduct and enforce these Terms without assuming responsibility
 for a User's work or promises.
 
-Companies Center does not guarantee that a Task will receive a proposal, that a Provider will be
+Companies Center does not guarantee that a Job will receive a proposal, that a Provider will be
 selected, that a Booking will occur, that work will be completed, that payment will be made, or that
 any User will earn income.
 
@@ -142,7 +142,7 @@ account or Provider profile.
 
 Client membership is not offered. Companies Center Pro and free Pro rewards are limited to eligible
 Service Providers. A Client's payment, former membership status, or referral activity does not
-purchase priority for a Task or guarantee attention from Providers.
+purchase priority for a Job or guarantee attention from Providers.
 
 Administrative and staff accounts are separate from ordinary marketplace participation and may be
 restricted from public listings or mobile login.
@@ -158,7 +158,7 @@ A Provider must describe services, prices, availability, credentials, experience
 information truthfully. A Provider may not claim to be licensed, insured, bonded, background checked,
 identity verified, or otherwise approved unless that statement is accurate and can be substantiated.
 
-Providers are responsible for evaluating each Task and worksite, communicating scope and exclusions,
+Providers are responsible for evaluating each Job and worksite, communicating scope and exclusions,
 giving accurate estimates, obtaining Client approval for material changes, performing safely,
 protecting property, supervising personnel, following applicable codes and manufacturer instructions,
 and correcting or addressing their own work as required by their agreement and applicable law.
@@ -211,19 +211,19 @@ determined between the Client and Provider under their agreement and applicable 
 does not inspect the worksite, control the work, insure the parties, or decide legal liability merely
 because the parties met or communicated through the Platform.
 
-## 10. Services Tasks and Proposals
+## 10. Services Jobs and Proposals
 
 A Provider may publish services under available categories and subcategories. Service listings must
 accurately describe what is offered and must not contain false pricing, unavailable offers,
 misleading media, copied material without permission, or prohibited content.
 
-A Client may create a Task for eligible Providers generally or direct it to a particular Provider.
+A Client may create a Job for eligible Providers generally or direct it to a particular Provider.
 The Client controls the information submitted but must not include passwords, payment card
 information, government identification, unnecessary medical information, or unrelated sensitive
 information.
 
 A proposal is an offer from a Provider to a Client and may include a proposed price, scope, message,
-conditions, or schedule. Unless the parties expressly agree otherwise, posting a Task or proposal does
+conditions, or schedule. Unless the parties expressly agree otherwise, posting a Job or proposal does
 not by itself create a completed service contract. The parties are responsible for confirming the
 final scope, price, schedule, materials, change orders, payment method, warranties, cancellation
 terms, and other important terms.
@@ -232,7 +232,7 @@ Proposals and proposal prices are private to the Client and the Provider who sub
 may not obtain, disclose, scrape, or use another Provider's proposal to manipulate bidding or compete
 unfairly.
 
-Companies Center may archive, restore, restrict, or remove Tasks or proposals to enforce these Terms,
+Companies Center may archive, restore, restrict, or remove Jobs or proposals to enforce these Terms,
 respond to a report, protect safety, or maintain the Platform. Companies Center is not required to
 preserve a listing indefinitely.
 
@@ -348,7 +348,7 @@ Featured Placement is separate from Companies Center Pro. If offered, it may pla
 designated sponsored or featured area for a disclosed period. It will be labeled so users can
 distinguish paid placement from ordinary results.
 
-Featured Placement does not guarantee impressions, clicks, contacts, Tasks, bookings, revenue, or a
+Featured Placement does not guarantee impressions, clicks, contacts, Jobs, bookings, revenue, or a
 particular position. Availability may depend on location, category, technical limits, safety status,
 and inventory. Companies Center may refuse, suspend, or remove a placement that violates these Terms
 or misleads users.
@@ -451,7 +451,7 @@ participant's location does not authorize Companies Center to transmit the viewe
 parties share, each party must separately consent on their own device.
 
 The person sharing may stop at any time by using the visible stop control or revoking device
-permission. This right applies to time limited sessions and sessions associated with an active Task
+permission. This right applies to time limited sessions and sessions associated with an active Job
 or Booking. No Provider is required to continue transmitting live location merely because work has
 started. Stopping location does not by itself cancel the underlying service agreement, but the live
 map and related functions may stop.
@@ -812,7 +812,7 @@ availability, security, and course of dealing.
 
 Companies Center does not warrant that the Platform will be uninterrupted, error free, secure,
 accurate, complete, compatible with every device, or free of harmful components. Companies Center does
-not warrant any User, Provider, Client, service, Task, proposal, price, review, recommendation, badge,
+not warrant any User, Provider, Client, service, Job, proposal, price, review, recommendation, badge,
 credential, license, insurance status, completion record, estimate, invoice, message, location signal,
 artificial intelligence output, or third party service.
 

@@ -52,4 +52,14 @@ describe.each(DOCS)("%s", (file) => {
   it("says nothing about Upon Publication or an Effective Date of its own", () => {
     expect(source).not.toMatch(/Upon Publication|Effective Date/);
   });
+
+  // Marketplace work is a Job; "Task" means only a Team Task (Privacy Policy
+  // 13A). Both documents said Task for jobs until 2026-10-10.
+  it("calls marketplace work a Job, never a Task", () => {
+    const stray = [...doc.body.matchAll(/\bTasks?\b/g)]
+      .filter((m) => !/\bTeam[\s*_]*$/.test(doc.body.slice(Math.max(0, m.index - 12), m.index)))
+      .map((m) => doc.body.slice(Math.max(0, m.index - 20), m.index + 10).replace(/\s+/g, " "));
+    expect(stray).toEqual([]);
+    expect(readLegalDoc("**Task** means x").body.match(/\bTask\b/)).not.toBeNull(); // the check sees bold too
+  });
 });

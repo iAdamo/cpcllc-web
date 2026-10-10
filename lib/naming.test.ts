@@ -10,8 +10,9 @@ import { fileURLToPath } from "node:url";
  * The website called jobs "tasks" (admin "Tasks" listing "All job posts",
  * the share page /t/<id>, a /tasks page titled "Tasks" rendering JobsPage).
  * Outside team code nothing says "task"; inside it nothing says "job".
- * The legal documents (policy.md, terms.md) are Adam's to change, and only
- * .ts/.tsx files are scanned.
+ * Only .ts/.tsx files are scanned; the legal documents (policy.md, terms.md)
+ * have their own check in lib/legalDoc.test.ts (renamed 2026-10-10), which has
+ * to name the word it forbids.
  */
 const ROOT = fileURLToPath(new URL("../", import.meta.url));
 const DIRS = ["app", "components", "screens", "hooks", "axios", "lib", "context", "types", "utils", "stores", "constants"];
@@ -20,12 +21,13 @@ const DIRS = ["app", "components", "screens", "hooks", "axios", "lib", "context"
 const isTeam = (file: string) =>
   /[\\/]teams?(-invite)?[\\/]|[\\/](use)?[Tt]eams?[A-Za-z]*(\.test)?\.tsx?$/.test(file);
 const SELF = fileURLToPath(import.meta.url);
+const NAMES_THE_WORD = /[\\/]lib[\\/]legalDoc\.test\.ts$/;
 
 function filesUnder(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
     const path = join(dir, name);
     if (statSync(path).isDirectory()) return filesUnder(path);
-    return /\.(ts|tsx)$/.test(name) && path !== SELF ? [path] : [];
+    return /\.(ts|tsx)$/.test(name) && path !== SELF && !NAMES_THE_WORD.test(path) ? [path] : [];
   });
 }
 
