@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  BANNER_CARD,
   POPUP_SIZES,
+  bannerFallbackImage,
+  withBanner,
   imageFileProblem,
   isLegacyOverlay,
   popupHint,
@@ -74,5 +77,33 @@ describe("broadcast popups in the composer", () => {
     expect(imageFileProblem({ type: "image/png", size: 1000 })).toBeNull();
     expect(imageFileProblem({ type: "application/pdf", size: 1000 })).toBe("Use a JPG, PNG, WebP or GIF image");
     expect(imageFileProblem({ type: "image/jpeg", size: 5 * 1024 * 1024 + 1 })).toBe("Images can be up to 5 MB");
+  });
+});
+
+describe("also a home banner, in one go", () => {
+  it("on: the home banner too, popup kept; off: back to the popup alone", () => {
+    const popup = { placement: "POPUP_ONLY" as const, popup: true, popupImage: "https://cdn/p.jpg" };
+    const both = withBanner(popup, true);
+    expect([both.placement, both.popup, both.displayMode, both.bannerSize]).toEqual([
+      "HOME_BANNER",
+      true,
+      "INLINE",
+      "LG",
+    ]);
+    expect(withBanner(both, false).placement).toBe("POPUP_ONLY");
+    expect(withBanner({ placement: "HOME_BANNER" }, false).placement).toBe("NOTIFICATION_CENTER");
+    expect(withBanner({ bannerSize: "SM" }, true).bannerSize).toBe("SM");
+  });
+
+  it("a banner without slides shows the popup image (the API's rule), else the cover", () => {
+    expect(bannerFallbackImage({ popup: true, popupImage: "https://cdn/p.jpg", coverImage: "https://cdn/c.jpg" })).toBe(
+      "https://cdn/p.jpg",
+    );
+    expect(bannerFallbackImage({ popup: false, coverImage: "https://cdn/c.jpg" })).toBe("https://cdn/c.jpg");
+    expect(bannerFallbackImage({})).toBe("");
+  });
+
+  it("banner card heights match the app's (companiescenterllc HomeBanner SIZE_H)", () => {
+    expect(BANNER_CARD.height).toEqual({ SM: 92, MD: 124, LG: 160 });
   });
 });

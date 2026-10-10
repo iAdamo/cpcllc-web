@@ -118,3 +118,30 @@ export function imageFileProblem(file: { type: string; size: number }): string |
   if (file.size > IMAGE_MAX_BYTES) return "Images can be up to 5 MB";
   return null;
 }
+
+/** The app's home-banner card: full width less 16 on each side (358 on a
+ *  390-wide phone), and its height per banner size (HomeBanner.tsx SIZE_H). */
+export const BANNER_CARD = {
+  width: 358,
+  height: { SM: 92, MD: 124, LG: 160 },
+} as const;
+
+/** "Also show as a home banner": on puts it on the home screen too (the
+ *  popup stays on); off takes it back to the popup alone. */
+export function withBanner(b: Draft, on: boolean): Draft {
+  if (on) {
+    return {
+      ...b,
+      placement: "HOME_BANNER",
+      displayMode: "INLINE",
+      bannerSize: b.bannerSize ?? "LG",
+    };
+  }
+  return { ...b, placement: b.popup ? "POPUP_ONLY" : "NOTIFICATION_CENTER" };
+}
+
+/** The picture a home banner without slides shows (the API's
+ *  bannerSlidesOf): the popup image when the popup is on, else the cover. */
+export function bannerFallbackImage(b: Draft): string {
+  return b.popup ? popupImageOf(b) : b.coverImage || "";
+}

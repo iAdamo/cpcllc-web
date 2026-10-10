@@ -11,6 +11,7 @@ const render = (form: Partial<Broadcast>) =>
       onToggle={() => {}}
       onChange={() => {}}
       onUpload={async () => ""}
+      onBannerToggle={() => {}}
     />,
   );
 
@@ -72,8 +73,39 @@ describe("popup card", () => {
 describe("hidden inputs stay inside their control", () => {
   it("every label wrapping an sr-only input is positioned", () => {
     const html = render({ popup: true });
-    const labels = [...html.matchAll(/<label class="([^"]*)"[^>]*>(?:(?!<\/label>).)*?class="sr-only"/gs)].map((m) => m[1]);
+    const labels = [
+      ...html.matchAll(/<label class="([^"]*)"[^>]*>(?:(?!<\/label>)[\s\S])*?class="sr-only"/g),
+    ].map((m) => m[1]);
     expect(labels).toHaveLength(4); // three sizes + Upload
     for (const cls of labels) expect(cls.split(/\s+/)).toContain("relative");
+  });
+});
+
+describe("popup and home banner in one go", () => {
+  it("the switch is there once the popup is on, and says whether it is a banner too", () => {
+    expect(render({ popup: false })).not.toContain("Also show as a home banner");
+    const off = render({ popup: true, placement: "POPUP_ONLY" });
+    expect(off).toContain('role="switch" aria-checked="false" aria-label="Also show as a home banner"');
+    const on = render({ popup: true, placement: "HOME_BANNER", popupImage: "https://cdn.test/a.jpg", bannerSize: "LG" });
+    expect(on).toContain('role="switch" aria-checked="true" aria-label="Also show as a home banner"');
+  });
+
+  it("with no slides, previews the popup image cropped to the banner's shape", () => {
+    const html = render({ popup: true, placement: "HOME_BANNER", popupImage: "https://cdn.test/a.jpg", bannerSize: "MD" });
+    expect(html).toContain('aria-label="Banner preview, medium"');
+    expect(html).toContain("aspect-ratio:358 / 124");
+    expect(html.match(/src="https:\/\/cdn.test\/a.jpg"/g)).toHaveLength(2); // popup and banner
+    expect(html).toContain("Cropped to the banner");
+  });
+
+  it("with slides of its own, the banner shows those instead", () => {
+    const html = render({
+      popup: true,
+      placement: "HOME_BANNER",
+      popupImage: "https://cdn.test/a.jpg",
+      slides: [{ image: "https://cdn.test/wide.jpg" }],
+    });
+    expect(html).not.toContain("Banner preview");
+    expect(html).toContain("The banner shows your slides");
   });
 });

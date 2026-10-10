@@ -4,30 +4,67 @@ import { X } from "lucide-react";
 import type { Broadcast } from "@/axios/broadcast";
 import { ImageField } from "@/components/admin/ImageField";
 import {
+  BANNER_CARD,
   POPUP_SIZES,
   POPUP_SIZE_KEYS,
+  bannerFallbackImage,
   popupHint,
   popupImageOf,
   type PopupSize,
 } from "@/lib/broadcastPopup";
 
+/** An on/off switch with its own name. */
+function Toggle({
+  on,
+  label,
+  onChange,
+}: {
+  on: boolean;
+  label: string;
+  onChange: (on: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      onClick={() => onChange(!on)}
+      className={`relative shrink-0 h-6 w-11 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 ${
+        on ? "bg-fuchsia-600" : "bg-slate-300 dark:bg-slate-600"
+      }`}
+    >
+      <span
+        className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+          on ? "translate-x-5" : ""
+        }`}
+      />
+    </button>
+  );
+}
+
 /**
  * The composer's popup card: on/off, size, image and a phone preview. A popup
  * is a full image on top of any screen in the app, with an X to close it; a
- * tap opens the broadcast's CTA link.
+ * tap opens the broadcast's CTA link. "Also show as a home banner" puts the
+ * same picture on the home screen in one go.
  */
 export function BroadcastPopupSection({
   form,
   onToggle,
   onChange,
   onUpload,
+  onBannerToggle,
 }: {
   form: Partial<Broadcast>;
   onToggle: (on: boolean) => void;
   onChange: (patch: Partial<Broadcast>) => void;
   onUpload: (file: File) => Promise<string>;
+  onBannerToggle: (on: boolean) => void;
 }) {
   const on = !!form.popup;
+  const banner = form.placement === "HOME_BANNER";
+  const ownSlides = (form.slides?.length ?? 0) > 0;
   const size: PopupSize = form.popupSize ?? "MD";
   const spec = POPUP_SIZES[size];
   const hint = popupHint(form);
@@ -54,22 +91,7 @@ export function BroadcastPopupSection({
             taps it. Shown once per person.
           </p>
         </div>
-        <button
-          type="button"
-          role="switch"
-          aria-checked={on}
-          aria-label="Show as a popup"
-          onClick={() => onToggle(!on)}
-          className={`relative shrink-0 h-6 w-11 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 ${
-            on ? "bg-fuchsia-600" : "bg-slate-300 dark:bg-slate-600"
-          }`}
-        >
-          <span
-            className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
-              on ? "translate-x-5" : ""
-            }`}
-          />
-        </button>
+        <Toggle on={on} label="Show as a popup" onChange={onToggle} />
       </div>
 
       {on && (
@@ -145,6 +167,42 @@ export function BroadcastPopupSection({
               . The X is always visible.
             </p>
           </div>
+
+          <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 space-y-2">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                  Also show as a home banner
+                </p>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  The same picture on the home screen, until the person
+                  dismisses it. Closing the popup leaves the banner.
+                </p>
+              </div>
+              <Toggle
+                on={banner}
+                label="Also show as a home banner"
+                onChange={onBannerToggle}
+              />
+            </div>
+            {banner &&
+              (ownSlides ? (
+                <p className="text-[11px] text-slate-500">
+                  The banner shows your slides (Home banner, below).
+                </p>
+              ) : (
+                <>
+                  <BannerPreview
+                    image={bannerFallbackImage(form)}
+                    size={form.bannerSize ?? "LG"}
+                  />
+                  <p className="text-[11px] text-slate-500">
+                    Cropped to the banner&apos;s shape. For a wide picture
+                    instead, add a slide under Home banner.
+                  </p>
+                </>
+              ))}
+          </div>
         </>
       )}
     </section>
@@ -196,6 +254,35 @@ export function PopupPreview({
           </span>
         </div>
       </div>
+    </div>
+  );
+}
+
+/** The home-banner card as the app draws it: full width, the size's
+ *  height, the picture cropped to fill. */
+export function BannerPreview({
+  image,
+  size,
+}: {
+  image: string;
+  size: "SM" | "MD" | "LG";
+}) {
+  const height = BANNER_CARD.height[size];
+  return (
+    <div
+      role="img"
+      aria-label={`Banner preview, ${size === "SM" ? "small" : size === "MD" ? "medium" : "large"}`}
+      className="relative w-full max-w-[358px] rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-700"
+      style={{ aspectRatio: `${BANNER_CARD.width} / ${height}` }}
+    >
+      {image ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={image} alt="" className="h-full w-full object-cover" />
+      ) : (
+        <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-600 dark:text-slate-300">
+          Your image
+        </span>
+      )}
     </div>
   );
 }

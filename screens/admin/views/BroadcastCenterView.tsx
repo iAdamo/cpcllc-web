@@ -50,8 +50,10 @@ import {
   popupImageOf,
   surfacesOf,
   upgradeLegacyOverlay,
+  withBanner,
   withPlacement,
   withPopup,
+  bannerFallbackImage,
 } from "@/lib/broadcastPopup";
 import { userMessageOf } from "@/lib/errorService";
 
@@ -483,6 +485,7 @@ function BroadcastBuilder({
         <BroadcastPopupSection
           form={form}
           onToggle={(on) => setForm((f) => withPopup(f, on))}
+          onBannerToggle={(on) => setForm((f) => withBanner(f, on))}
           onChange={(patch) => setForm((f) => ({ ...f, ...patch }))}
           onUpload={uploadImage}
         />
@@ -550,11 +553,18 @@ function BroadcastBuilder({
                 />
               </Field>
             )}
-            {slides.length === 0 && (
-              <p className="text-xs text-rose-500">
-                Add at least one slide (image or colour required).
-              </p>
-            )}
+            {slides.length === 0 &&
+              (bannerFallbackImage(form) ? (
+                <p className="text-[11px] text-slate-500">
+                  No slides: the banner shows{" "}
+                  {form.popup ? "the popup image" : "the cover image"}. Add a
+                  slide for a different picture.
+                </p>
+              ) : (
+                <p className="text-xs text-rose-500">
+                  Add at least one slide (image or colour required).
+                </p>
+              ))}
             {slides.map((s, i) => (
               <div
                 key={i}
