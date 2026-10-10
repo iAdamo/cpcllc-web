@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   ANDROID_PACKAGE,
@@ -77,5 +78,23 @@ describe("Safari's App Store banner", () => {
     expect(appStoreId(APPLE)).toBe("6475066332");
     expect(appStoreId("")).toBeNull();
     expect(appStoreId("https://apps.apple.com/app/id-your-app-id")).toBeNull();
+  });
+});
+
+describe("no page writes the App Store banner by hand", () => {
+  it("only appStoreBannerMeta builds apple-itunes-app (the share pages sent app-id=0000000000)", () => {
+    const root = near("..");
+    const walk = (d: string, out: string[] = []): string[] => {
+      for (const n of readdirSync(d)) {
+        const p = join(d, n);
+        if (statSync(p).isDirectory()) walk(p, out);
+        else if (/\.tsx?$/.test(n)) out.push(p);
+      }
+      return out;
+    };
+    const offenders = ["app", "components", "screens"]
+      .flatMap((d) => walk(join(root, d)))
+      .filter((f) => readFileSync(f, "utf8").includes("apple-itunes-app"));
+    expect(offenders).toEqual([]);
   });
 });
