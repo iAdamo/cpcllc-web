@@ -1,7 +1,8 @@
 /**
- * Privacy requests, appeals, copyright notices and counter-notices: the
- * public forms (app/privacy-request, app/dmca) and the admin view
- * (screens/admin/views/LegalRequestsView). Types for the API
+ * Privacy requests, appeals, copyright notices, counter-notices and legal
+ * notices: the public forms (app/privacy-request, app/dmca,
+ * app/legal-notice) and the admin view, where staff also record what came
+ * by email or post (screens/admin/views/LegalRequestsView). Types for the API
  * (modules/legal-requests) and the pure bits, unit-tested: each form turns
  * into a payload here, or into the errors to show beside its fields.
  */
@@ -512,6 +513,175 @@ export function legalNoticePayload(f: LegalNoticeForm): Result<LegalNoticePayloa
   }));
 }
 
+// ── Recording an email or a letter (admin) ───────────────────────────────
+
+/** How a request came when staff recorded it; absent when filed on the
+ *  website. */
+export type ReceivedBy = "email" | "post";
+
+/** Admin > Privacy & Copyright Requests > Record an email or letter. The
+ *  Terms accept notices by email and post (Sections 39.2, 39.11, 43); staff
+ *  record them so they are worked and kept like a website filing. Dates are
+ *  "2026-10-08", as a date input gives them. */
+export interface RecordForm {
+  kind: LegalRequestKind | "";
+  receivedBy: ReceivedBy;
+  sentAt: string;
+  receivedAt: string;
+  name: string;
+  email: string;
+  address: string;
+  /** Someone sent it for them: a lawyer, an agent, an officer of a business. */
+  byRepresentative: boolean;
+  repName: string;
+  repEmail: string;
+  repAddress: string;
+  title: string;
+  details: string;
+  rights: PrivacyRight[];
+  region: Region | "";
+  appealOf: string;
+  urls: string;
+  sendReceipt: boolean;
+}
+
+export const emptyRecordForm = (today: string): RecordForm => ({
+  kind: "",
+  receivedBy: "email",
+  sentAt: today,
+  receivedAt: today,
+  name: "",
+  email: "",
+  address: "",
+  byRepresentative: false,
+  repName: "",
+  repEmail: "",
+  repAddress: "",
+  title: "",
+  details: "",
+  rights: [],
+  region: "",
+  appealOf: "",
+  urls: "",
+  sendReceipt: true,
+});
+
+type RecordParty = { name: string; email?: string; address?: string };
+
+/** What POST admin/legal-requests takes (RecordRequestDto in the API). */
+export interface RecordPayload {
+  kind: LegalRequestKind;
+  receivedBy: ReceivedBy;
+  sentAt: string;
+  receivedAt: string;
+  person: RecordParty;
+  representative?: RecordParty;
+  title?: string;
+  details: string;
+  rights?: PrivacyRight[];
+  region?: Region;
+  appealOf?: string;
+  urls?: string[];
+  sendReceipt: boolean;
+}
+
+/** "2026-10-11": a day in UTC, as date inputs and the API use them. */
+export const isoDay = (d: Date) => d.toISOString().slice(0, 10);
+
+const DAY = /^\d{4}-\d{2}-\d{2}$/;
+const isDay = (v: string) => DAY.test(v) && !Number.isNaN(Date.parse(`${v}T00:00:00Z`));
+
+/** A name, and an email or a postal address. Errors go under `keys`. */
+function checkParty(
+  e: FieldErrors,
+  keys: { name: string; email: string; address: string },
+  p: { name: string; email: string; address: string },
+  nameError: string,
+): RecordParty {
+  if (blank(p.name)) e[keys.name] = nameError;
+  if (!blank(p.email) && !isEmail(p.email)) e[keys.email] = "Enter a valid email address, or leave it empty.";
+  else if (blank(p.email) && blank(p.address)) e[keys.email] = "Give an email address or a postal address.";
+  if (p.address.length > 500) e[keys.address] = "Keep the address under 500 characters.";
+  return {
+    name: p.name.trim(),
+    ...(blank(p.email) ? {} : { email: p.email.trim() }),
+    ...(blank(p.address) ? {} : { address: p.address.trim() }),
+  };
+}
+
+/**
+ * The record form as the payload the API validates, or the errors to show.
+ * `today` is the staff member's day: nothing arrives after it, and nothing
+ * is sent after it arrived (the API checks both again).
+ */
+export function recordPayload(f: RecordForm, today: string): Result<RecordPayload> {
+  const e: FieldErrors = {};
+  if (!f.kind) e.kind = "Choose what it is.";
+  if (!isDay(f.receivedAt)) e.receivedAt = "Enter the day it arrived.";
+  else if (f.receivedAt > today) e.receivedAt = "It can't arrive in the future.";
+  if (!isDay(f.sentAt))
+    e.sentAt = f.receivedBy === "post" ? "Enter the postmark date." : "Enter the day it was sent.";
+  else if (isDay(f.receivedAt) && f.sentAt > f.receivedAt) e.sentAt = "It can't have been sent after it arrived.";
+
+  const person = checkParty(
+    e,
+    { name: "name", email: "email", address: "address" },
+    { name: f.name, email: f.email, address: f.address },
+    "Enter their full name.",
+  );
+  const rep = f.byRepresentative
+    ? checkParty(
+        e,
+        { name: "repName", email: "repEmail", address: "repAddress" },
+        { name: f.repName, email: f.repEmail, address: f.repAddress },
+        "Enter the name of whoever sent it for them.",
+      )
+    : undefined;
+
+  if (blank(f.details)) e.details = "Paste the email, or summarise the letter.";
+  else if (f.details.length > 5000) e.details = "Keep it under 5,000 characters.";
+  if (f.title.length > 200) e.title = "Keep the subject under 200 characters.";
+  if (f.kind === "privacy" && !f.rights.length) e.rights = "Choose at least one request.";
+  if (f.kind === "appeal" && !/^[A-Za-z]{2}-?[A-Za-z0-9]{6}$/.test(f.appealOf.trim().replace(/\s+/g, "")))
+    e.appealOf = "Enter the reference of the decided request, like PR-7K3Q9X.";
+  const linked = (f.kind === "copyright" || f.kind === "counter_notice") && !blank(f.urls);
+  const urls = linked ? checkUrls(f.urls, e) : [];
+  const receiptTo = rep ? rep.email : person.email;
+  if (f.sendReceipt && !receiptTo)
+    e.sendReceipt = "There is no email address to send it to. Untick this and answer by post.";
+
+  return done(e, () => ({
+    kind: f.kind as LegalRequestKind,
+    receivedBy: f.receivedBy,
+    sentAt: f.sentAt,
+    receivedAt: f.receivedAt,
+    person,
+    ...(rep ? { representative: rep } : {}),
+    ...(blank(f.title) ? {} : { title: f.title.trim() }),
+    details: f.details.trim(),
+    ...(f.kind === "privacy" ? { rights: f.rights } : {}),
+    ...(f.kind === "privacy" && f.region ? { region: f.region } : {}),
+    ...(f.kind === "appeal" ? { appealOf: f.appealOf.trim() } : {}),
+    ...(urls.length ? { urls } : {}),
+    sendReceipt: f.sendReceipt,
+  }));
+}
+
+/** "By post, postmarked October 3, 2026; arrived October 8, 2026" for a
+ *  recorded request; "Website form" for one filed on the site. */
+export function howItCame(r: Pick<LegalRequestDetail, "receivedBy" | "sentAt" | "history" | "createdAt">): string {
+  if (!r.receivedBy) return "Website form";
+  const arrived = r.history[0]?.at ?? r.createdAt;
+  const sent = r.sentAt ? `, ${r.receivedBy === "post" ? "postmarked" : "sent"} ${longDate(r.sentAt)}` : "";
+  return `By ${r.receivedBy}${sent}; arrived ${longDate(arrived)}`;
+}
+
+/** When it arrived: the first history entry (the real day for a recorded
+ *  email or letter; the moment of filing on the website). */
+export function arrivedAt(r: Pick<LegalRequestDetail, "history" | "createdAt">): string {
+  return r.history[0]?.at ?? r.createdAt;
+}
+
 /** What the API returns after filing. */
 export interface Filed {
   reference: string;
@@ -537,9 +707,11 @@ export interface LegalRequestSummary {
   reference: string;
   kind: LegalRequestKind;
   status: LegalRequestStatus;
-  requester: { name: string; email: string };
+  /** A recorded letter may give no email address. */
+  requester: { name: string; email?: string };
   subject?: { name: string };
   rights?: PrivacyRight[];
+  receivedBy?: ReceivedBy;
   dueAt: string;
   closedAt?: string;
   createdAt: string;
@@ -558,12 +730,14 @@ export interface LegalRequestDetail extends LegalRequestSummary {
   relationship?: "self" | "agent" | "owner";
   requester: {
     name: string;
-    email: string;
+    email?: string;
     phone?: string;
     address?: string;
     organization?: string;
   };
-  subject?: { name: string; email: string };
+  subject?: { name: string; email?: string; address?: string };
+  /** The day the email was sent or the letter postmarked (recorded only). */
+  sentAt?: string;
   region?: Region;
   usState?: string;
   details?: string;

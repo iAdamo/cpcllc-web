@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertTriangle, Loader2, RefreshCw, Scale, Search, X } from "lucide-react";
+import { AlertTriangle, Loader2, Mail, RefreshCw, Scale, Search, X } from "lucide-react";
 import { PanelCard } from "@/components/admin/PanelCard";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { notify } from "@/lib/notify";
@@ -12,9 +12,12 @@ import {
   useMoveLegalRequest,
   useNoteLegalRequest,
 } from "@/hooks/admin/useLegalRequests";
+import { RecordRequestForm } from "@/screens/admin/views/legal-requests/RecordRequestForm";
 import {
   KIND_LABELS,
   STATUS_LABELS,
+  arrivedAt,
+  howItCame,
   isAccountId,
   isOpen,
   isOverdue,
@@ -58,10 +61,11 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 /**
- * Privacy requests, appeals, copyright notices and counter-notices filed on
- * /privacy-request and /dmca (docs/legal-requests.md in the API). Reading
- * needs compliance:read; steps, notes and decisions need compliance:act
- * (the API checks).
+ * Privacy requests, appeals, copyright notices, counter-notices and legal
+ * notices filed on /privacy-request, /dmca and /legal-notice, and the ones
+ * staff record from an email or a letter (docs/legal-requests.md in the
+ * API). Reading needs compliance:read; recording, steps, notes and
+ * decisions need compliance:act (the API checks).
  */
 export function LegalRequestsView() {
   const [kind, setKind] = useState("");
@@ -69,7 +73,12 @@ export function LegalRequestsView() {
   const [q, setQ] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [openId, setOpenId] = useState<string | null>(null);
+  const [openId, setOpenIdState] = useState<string | null>(null);
+  const [recording, setRecording] = useState(false);
+  const setOpenId = (id: string | null) => {
+    setRecording(false);
+    setOpenIdState(id);
+  };
 
   const list = useLegalRequests({ kind, status, q: search, page });
   const filtered = !!kind || status !== "open" || !!search;
@@ -78,17 +87,28 @@ export function LegalRequestsView() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center">
           <Scale size={20} aria-hidden />
         </div>
-        <div>
+        <div className="flex-1 min-w-[240px]">
           <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Privacy &amp; Copyright Requests</h1>
           <p className="text-sm text-slate-500">
-            Filed on the website&apos;s Privacy requests, DMCA and Legal notices pages. Each person was emailed their
-            reference.
+            Filed on the website&apos;s Privacy requests, DMCA and Legal notices pages, or recorded here from an email or
+            a letter.
           </p>
         </div>
+        <button
+          type="button"
+          onClick={() => {
+            setOpenIdState(null);
+            setRecording(true);
+          }}
+          aria-pressed={recording}
+          className="inline-flex items-center gap-2 h-9 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
+        >
+          <Mail size={15} aria-hidden /> Record an email or letter
+        </button>
       </div>
 
       {/* Open counts */}
@@ -220,7 +240,7 @@ export function LegalRequestsView() {
                         <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
                           <span>{KIND_LABELS[r.kind]}</span>
                           <span>{r.subject ? `${r.requester.name} for ${r.subject.name}` : r.requester.name}</span>
-                          <span>Filed {when(r.createdAt)}</span>
+                          <span>{r.receivedBy ? `Recorded ${when(r.createdAt)} (by ${r.receivedBy})` : `Filed ${when(r.createdAt)}`}</span>
                           {isOpen(r.status) ? (
                             <span className={late ? "font-semibold text-rose-600 dark:text-rose-400" : ""}>
                               {late ? "Overdue: was due" : "Answer by"} {longDate(r.dueAt)}
@@ -259,7 +279,9 @@ export function LegalRequestsView() {
           )}
         </PanelCard>
 
-        {openId ? (
+        {recording ? (
+          <RecordRequestForm onRecorded={(doc) => setOpenId(doc._id)} onCancel={() => setRecording(false)} />
+        ) : openId ? (
           <RequestPanel id={openId} onClose={() => setOpenId(null)} onOpen={setOpenId} />
         ) : (
           <div className="hidden xl:flex items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 text-sm text-slate-500 p-10">
@@ -309,7 +331,7 @@ function RequestPanel({
   );
 }
 
-function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string) => void }) {
+export function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string) => void }) {
   const open = isOpen(r.status);
   return (
     <div className="space-y-6">
@@ -323,12 +345,16 @@ function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string
       </div>
 
       <dl className="grid gap-4 sm:grid-cols-2">
-        <Field label={r.subject ? "Filed by (agent)" : "Filed by"}>
+        <Field label={`${r.receivedBy ? "Sent by" : "Filed by"}${r.subject ? (r.receivedBy ? " (for them)" : " (agent)") : ""}`}>
           {r.requester.name}
-          <br />
-          <a href={`mailto:${r.requester.email}`} className="text-brand-700 dark:text-gold-400 hover:underline">
-            {r.requester.email}
-          </a>
+          {r.requester.email ? (
+            <>
+              <br />
+              <a href={`mailto:${r.requester.email}`} className="text-brand-700 dark:text-gold-400 hover:underline">
+                {r.requester.email}
+              </a>
+            </>
+          ) : null}
           {r.requester.phone ? (
             <>
               <br />
@@ -339,14 +365,29 @@ function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string
         {r.subject ? (
           <Field label="About">
             {r.subject.name}
-            <br />
-            {r.subject.email}
+            {r.subject.email ? (
+              <>
+                <br />
+                {r.subject.email}
+              </>
+            ) : null}
+            {r.subject.address ? (
+              <>
+                <br />
+                <span className="whitespace-pre-wrap">{r.subject.address}</span>
+              </>
+            ) : null}
           </Field>
         ) : null}
         {r.requester.organization ? <Field label="Acting for">{r.requester.organization}</Field> : null}
-        {r.requester.address ? <Field label="Postal address">{r.requester.address}</Field> : null}
+        {r.requester.address ? (
+          <Field label="Postal address">
+            <span className="whitespace-pre-wrap">{r.requester.address}</span>
+          </Field>
+        ) : null}
         {r.region ? <Field label="Lives in">{regionLabel(r)}</Field> : null}
-        <Field label="Filed">{when(r.createdAt)}</Field>
+        <Field label="How it came">{howItCame(r)}</Field>
+        <Field label={r.receivedBy ? "Recorded" : "Filed"}>{when(r.createdAt)}</Field>
         {r.kind === "privacy" || r.kind === "appeal" ? (
           <Field label="Account">{r.userId ? <span className="font-mono text-xs">{r.userId}</span> : "No account with this email"}</Field>
         ) : null}
@@ -396,8 +437,8 @@ function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string
       ) : null}
       {r.kind === "dispute_notice" ? (
         <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 px-3 py-2 text-sm text-amber-800 dark:text-amber-200">
-          The 60-day informal resolution period (Terms Section 39.2) runs from {when(r.createdAt)} if the notice is
-          complete. Contact the person to try to resolve it.
+          The informal resolution period of up to 60 days (Terms Section 39.2) runs from {longDate(arrivedAt(r))}, when
+          it arrived; missing information doesn&apos;t restart it. Contact the person to try to resolve it.
         </div>
       ) : null}
       {r.optOutCheck ? <OptOutCheck check={r.optOutCheck} /> : null}
@@ -421,7 +462,12 @@ function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string
         </div>
       ) : null}
       {r.claimReference ? <Field label="Answers notice">{r.claimReference}</Field> : null}
-      {r.signature ? <Field label="Signed">{r.signature} (sworn statements ticked)</Field> : null}
+      {r.signature ? (
+        <Field label="Signed">
+          {r.signature}
+          {r.kind === "copyright" || r.kind === "counter_notice" || r.kind === "dispute_notice" ? " (sworn statements ticked)" : ""}
+        </Field>
+      ) : null}
       {r.restoreWindow ? (
         <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 px-3 py-2 text-sm text-amber-800 dark:text-amber-200">
           Send a copy to whoever filed the notice. Restore the material between {longDate(r.restoreWindow.from)} and{" "}
@@ -429,7 +475,7 @@ function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string
         </div>
       ) : null}
       {r.details ? (
-        <Field label={r.kind === "appeal" ? "Why they disagree" : "In their words"}>
+        <Field label={r.kind === "appeal" ? "Why they disagree" : r.receivedBy === "post" ? "What the letter says" : "In their words"}>
           <span className="whitespace-pre-wrap">{r.details}</span>
         </Field>
       ) : null}
@@ -458,8 +504,9 @@ function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string
         <ol className="mt-1 space-y-1 text-xs text-slate-600 dark:text-slate-300">
           {r.history.map((h, i) => (
             <li key={i}>
-              {when(h.at)}: {STATUS_LABELS[h.status as LegalRequestStatus] ?? h.status}
-              {h.by ? " (staff)" : " (filed)"}
+              {/* A recorded email or letter arrived on a day, not at an hour. */}
+              {i === 0 && r.receivedBy ? longDate(h.at) : when(h.at)}: {STATUS_LABELS[h.status as LegalRequestStatus] ?? h.status}
+              {h.by ? (i === 0 ? " (recorded by staff)" : " (staff)") : " (filed)"}
             </li>
           ))}
         </ol>
@@ -473,9 +520,9 @@ function RequestBody({ r, onOpen }: { r: LegalRequestDetail; onOpen: (id: string
 function OptOutCheck({ check }: { check: NonNullable<LegalRequestDetail["optOutCheck"]> }) {
   const verdict =
     check.inTime === true
-      ? { tone: "bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-200", text: "In time: received within 30 days of first accepting the Terms in force." }
+      ? { tone: "bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-200", text: "In time: sent within 30 days of first accepting the Terms in force." }
       : check.inTime === false
-        ? { tone: "bg-rose-50 dark:bg-rose-950/30 text-rose-800 dark:text-rose-200", text: "Late: received more than 30 days after first accepting the Terms in force." }
+        ? { tone: "bg-rose-50 dark:bg-rose-950/30 text-rose-800 dark:text-rose-200", text: "Late: sent more than 30 days after first accepting the Terms in force." }
         : { tone: "bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-200", text: "Can't tell: no account with this email, or no acceptance of the Terms in force on record. Check the facts before deciding." };
   return (
     <div className={`rounded-lg px-3 py-2 text-sm ${verdict.tone}`}>
@@ -494,8 +541,9 @@ function OptOutCheck({ check }: { check: NonNullable<LegalRequestDetail["optOutC
         </ul>
       ) : null}
       <p className="mt-1 text-xs">
-        The window starts when the person first accepted the version in force. Opt-outs sent by email or post,
-        including by a representative (Terms Section 39.11), are not in this list: keep them in the inbox.
+        The window starts when the person first accepted the version in force, and counts to the day the opt-out
+        was sent: on the website, when it arrived; by email, the day it was sent; by post, the postmark (Terms
+        Section 39.11).
       </p>
     </div>
   );
@@ -532,7 +580,9 @@ function Steps({ r }: { r: LegalRequestDetail }) {
           notify.success(
             doc.kind === "copyright" && doc.strikes != null && doc.strikes >= doc.repeatInfringerStrikes
               ? `That account now has ${doc.strikes} upheld notices: the repeat-infringer policy says to close it (Users, then account actions).`
-              : "The outcome is being emailed to the person.",
+              : doc.requester.email
+                ? "The outcome is being emailed to the person."
+                : "Saved. There is no email address: send the outcome by post.",
             { title: "Decision sent" },
           );
           setMessage("");
@@ -593,7 +643,9 @@ function Steps({ r }: { r: LegalRequestDetail }) {
             className="mt-1 w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-slate-800 dark:text-slate-100"
           />
           <span id={`message-hint-${r._id}`} className="block font-normal text-slate-400">
-            Sent word for word, by email.
+            {r.requester.email
+              ? "Sent word for word, by email."
+              : "There is no email address: nothing is emailed. Send it by post, and keep it here as the record."}
           </span>
         </div>
         {r.kind === "copyright" ? (

@@ -7,6 +7,7 @@ import CopyrightForms from "./CopyrightForms";
 import LegalNoticeForms from "./LegalNoticeForms";
 import DmcaPage from "@/app/dmca/page";
 import { DMCA_AGENT, dmcaAgentComplete } from "@/lib/dmcaAgent";
+import { expectNamedOnce } from "@/lib/testing/labelledControls";
 
 /**
  * The /privacy-request and /dmca pages as first rendered. Regression guard
@@ -15,27 +16,6 @@ import { DMCA_AGENT, dmcaAgentComplete } from "@/lib/dmcaAgent";
  */
 const render = (ui: ReactNode) =>
   renderToStaticMarkup(<QueryClientProvider client={new QueryClient()}>{ui}</QueryClientProvider>);
-
-/** The visible label text of each labelled control, by id. */
-function labels(html: string): string[] {
-  const out: string[] = [];
-  for (const m of html.matchAll(/<label[^>]*for="([^"]+)"[^>]*>([\s\S]*?)<\/label>/g)) {
-    out.push(m[2].replace(/<span[^>]*id="[^"]*-hint"[\s\S]*?<\/span>/g, "").replace(/<[^>]+>/g, "").trim());
-  }
-  return out;
-}
-
-function controlIds(html: string): string[] {
-  return [...html.matchAll(/<(?:input|textarea|select)[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
-}
-
-function expectNamedOnce(html: string) {
-  const names = labels(html);
-  expect(names.length).toBeGreaterThan(2);
-  expect(new Set(names).size).toBe(names.length);
-  const forIds = [...html.matchAll(/<label[^>]*for="([^"]+)"/g)].map((m) => m[1]);
-  for (const id of controlIds(html)) expect(forIds).toContain(id);
-}
 
 describe("privacy request page", () => {
   it("opens on the request form; every control labelled, no two alike", () => {

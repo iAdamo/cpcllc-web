@@ -8,6 +8,7 @@ import {
   getLegalRequests,
   moveLegalRequest,
   noteLegalRequest,
+  recordLegalRequest,
   type LegalRequestFilters,
 } from "@/axios/legalRequests";
 import type { LegalRequestDetail } from "@/lib/legalRequests";
@@ -41,6 +42,7 @@ function useRequestAction<T>(fn: (input: T) => Promise<LegalRequestDetail>) {
   });
 }
 
+export const useRecordLegalRequest = () => useRequestAction(recordLegalRequest);
 export const useMoveLegalRequest = () => useRequestAction(moveLegalRequest);
 export const useNoteLegalRequest = () => useRequestAction(noteLegalRequest);
 export const useDecideLegalRequest = () => useRequestAction(decideLegalRequest);

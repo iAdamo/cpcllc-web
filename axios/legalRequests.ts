@@ -10,6 +10,7 @@ import type {
   LegalRequestDetail,
   LegalRequestList,
   PrivacyPayload,
+  RecordPayload,
 } from "@/lib/legalRequests";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
@@ -72,6 +73,12 @@ export async function getLegalRequests(f: LegalRequestFilters): Promise<LegalReq
 
 export async function getLegalRequest(id: string): Promise<LegalRequestDetail> {
   const { data } = await axiosInstance.get(`admin/legal-requests/${id}`);
+  return data;
+}
+
+/** A request or notice that came by email or post. */
+export async function recordLegalRequest(body: RecordPayload): Promise<LegalRequestDetail> {
+  const { data } = await axiosInstance.post("admin/legal-requests", body);
   return data;
 }
 

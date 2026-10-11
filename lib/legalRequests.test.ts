@@ -18,7 +18,13 @@ import {
   parseUrls,
   privacyPayload,
   regionLabel,
+  arrivedAt,
+  emptyRecordForm,
+  howItCame,
+  isoDay,
+  recordPayload,
   type PrivacyForm,
+  type RecordForm,
 } from "@/lib/legalRequests";
 import { DMCA_AGENT, dmcaAgentComplete } from "@/lib/dmcaAgent";
 
@@ -250,5 +256,116 @@ describe("legal notice forms (Terms of Service 39.2, 39.11, 43)", () => {
     expect("errors" in r && Object.keys(r.errors).sort()).toEqual(["details", "title"]);
     const ok = legalNoticePayload({ name: "Lee", email: "lee@firm.test", organization: "", title: "Subpoena", details: "x" });
     expect(ok.ok && "organization" in ok.payload).toBe(false);
+  });
+});
+
+/**
+ * Admin > Record an email or letter. Regression (2026-10-11): the Terms
+ * accept a Notice of Dispute and an arbitration opt-out by email or post,
+ * from the person or someone they authorise, but staff could only keep
+ * those in the inbox. The form becomes the payload POST admin/legal-requests
+ * validates, or the errors beside its fields.
+ */
+describe("recording an email or letter", () => {
+  const TODAY = "2026-10-11";
+  const form = (over: Partial<RecordForm> = {}): RecordForm => ({ ...emptyRecordForm(TODAY), ...over });
+  const errorsOf = (f: RecordForm) => {
+    const r = recordPayload(f, TODAY);
+    return "errors" in r ? r.errors : {};
+  };
+
+  it("an empty form says what is missing; dates start at today", () => {
+    expect(emptyRecordForm(TODAY)).toMatchObject({ sentAt: TODAY, receivedAt: TODAY, sendReceipt: true });
+    expect(errorsOf(form())).toEqual({
+      kind: "Choose what it is.",
+      name: "Enter their full name.",
+      email: "Give an email address or a postal address.",
+      details: "Paste the email, or summarise the letter.",
+      sendReceipt: "There is no email address to send it to. Untick this and answer by post.",
+    });
+  });
+
+  it("a posted opt-out from a representative: no email anywhere, nothing empty sent", () => {
+    const r = recordPayload(
+      form({
+        kind: "arbitration_opt_out",
+        receivedBy: "post",
+        sentAt: "2026-10-01",
+        receivedAt: "2026-10-06",
+        name: " Ada Obi ",
+        address: "9 Palm Ave\nTampa, FL",
+        byRepresentative: true,
+        repName: "Lee Counsel",
+        repAddress: "1 Law St, Tampa, FL",
+        details: " Ada Obi rejects the arbitration agreement. ",
+        sendReceipt: false,
+        rights: ["copy"],
+        urls: "https://companiescenter.com/x",
+      }),
+      TODAY,
+    );
+    expect(r).toEqual({
+      ok: true,
+      payload: {
+        kind: "arbitration_opt_out",
+        receivedBy: "post",
+        sentAt: "2026-10-01",
+        receivedAt: "2026-10-06",
+        person: { name: "Ada Obi", address: "9 Palm Ave\nTampa, FL" },
+        representative: { name: "Lee Counsel", address: "1 Law St, Tampa, FL" },
+        details: "Ada Obi rejects the arbitration agreement.",
+        sendReceipt: false,
+      },
+    });
+  });
+
+  it("dates must be possible, in words that fit how it came", () => {
+    const ok = { kind: "dispute_notice" as const, name: "Ada", email: "ada@x.test", details: "x" };
+    expect(errorsOf(form({ ...ok, sentAt: "2026-10-09", receivedAt: "2026-10-08" }))).toEqual({
+      sentAt: "It can't have been sent after it arrived.",
+    });
+    expect(errorsOf(form({ ...ok, sentAt: "2026-10-09", receivedAt: "2026-10-12" }))).toEqual({
+      receivedAt: "It can't arrive in the future.",
+    });
+    expect(errorsOf(form({ ...ok, receivedBy: "post", sentAt: "" }))).toEqual({ sentAt: "Enter the postmark date." });
+    expect(errorsOf(form({ ...ok, sentAt: "2026-13-40" }))).toEqual({ sentAt: "Enter the day it was sent." });
+    expect(errorsOf(form({ ...ok, sentAt: TODAY, receivedAt: TODAY }))).toEqual({});
+  });
+
+  it("the receipt goes to whoever sent it, so it needs their email address", () => {
+    const base = { kind: "legal_notice" as const, name: "Ada", email: "ada@x.test", details: "x", byRepresentative: true, repName: "Lee" };
+    expect(errorsOf(form({ ...base, repAddress: "1 Law St" }))).toEqual({
+      sendReceipt: "There is no email address to send it to. Untick this and answer by post.",
+    });
+    const r = recordPayload(form({ ...base, repEmail: "lee@firm.test" }), TODAY);
+    expect(r.ok && r.payload.representative).toEqual({ name: "Lee", email: "lee@firm.test" });
+    expect(errorsOf(form({ ...base, repEmail: "lee@" }))).toEqual({ repEmail: "Enter a valid email address, or leave it empty." });
+  });
+
+  it("each kind asks for its own: rights, the appealed reference, links", () => {
+    const base = { name: "Ada", email: "ada@x.test", details: "x" };
+    expect(errorsOf(form({ ...base, kind: "privacy" }))).toEqual({ rights: "Choose at least one request." });
+    const privacy = recordPayload(form({ ...base, kind: "privacy", rights: ["delete"], region: "ng" }), TODAY);
+    expect(privacy.ok && [privacy.payload.rights, privacy.payload.region]).toEqual([["delete"], "ng"]);
+    expect(errorsOf(form({ ...base, kind: "appeal", appealOf: "nope" }))).toEqual({
+      appealOf: "Enter the reference of the decided request, like PR-7K3Q9X.",
+    });
+    const appeal = recordPayload(form({ ...base, kind: "appeal", appealOf: " pr-7k3q9x " }), TODAY);
+    expect(appeal.ok && appeal.payload.appealOf).toBe("pr-7k3q9x");
+    expect(errorsOf(form({ ...base, kind: "copyright", urls: "ftp://x" }))).toEqual({
+      urls: "Each link must start with https:// (or http://).",
+    });
+    const copyright = recordPayload(form({ ...base, kind: "copyright" }), TODAY);
+    expect(copyright.ok && "urls" in copyright.payload).toBe(false);
+  });
+
+  it("how it came, and when it arrived, for the request panel", () => {
+    const history = [{ status: "received", by: "s1", at: "2026-10-06T00:00:00.000Z" }];
+    const recorded = { receivedBy: "post" as const, sentAt: "2026-10-01T00:00:00.000Z", history, createdAt: "2026-10-11T15:00:00.000Z" };
+    expect(howItCame(recorded)).toBe("By post, postmarked October 1, 2026; arrived October 6, 2026");
+    expect(howItCame({ ...recorded, receivedBy: "email" })).toBe("By email, sent October 1, 2026; arrived October 6, 2026");
+    expect(arrivedAt(recorded)).toBe("2026-10-06T00:00:00.000Z");
+    expect(howItCame({ history: [], createdAt: "2026-10-11T15:00:00.000Z" })).toBe("Website form");
+    expect(isoDay(new Date("2026-10-11T23:59:00Z"))).toBe("2026-10-11");
   });
 });
