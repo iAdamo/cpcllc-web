@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import TermsAcceptancePage from "@/screens/auth/TermsAcceptancePage";
 
 export const metadata: Metadata = {
-  title: "Review our policies — CompaniesCenter",
+  title: "Review our policies",
   robots: { index: false, follow: false },
 };
 

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import FavoritesPage from "@/screens/favorites";
 
 export const metadata: Metadata = {
-  title: "Your Favorites — CompaniesCenterLLC",
+  title: "Your Favorites",
   description: "Saved providers and jobs you love",
 };
 

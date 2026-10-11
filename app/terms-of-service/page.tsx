@@ -6,7 +6,7 @@ import Markdown from "@/components/legal/Markdown";
 import { readLegalDoc } from "@/lib/legalDoc";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Companies Center",
+  title: "Terms of Service",
   description:
     "The agreement between you and Companies Center LLC for using the Companies Center mobile applications and website.",
 };

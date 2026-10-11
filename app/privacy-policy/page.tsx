@@ -6,7 +6,7 @@ import Markdown from "@/components/legal/Markdown";
 import { readLegalDoc } from "@/lib/legalDoc";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | CompaniesCenter",
+  title: "Privacy Policy",
   description:
     "How Companies Center collects, uses, shares, and protects your information across the marketplace mobile app and website.",
 };

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ForgotPasswordPage from "@/screens/auth/ForgotPasswordPage";
 
 export const metadata: Metadata = {
-  title: "Forgot password — CompaniesCenter",
+  title: "Forgot password",
   robots: { index: false, follow: false },
 };
 
