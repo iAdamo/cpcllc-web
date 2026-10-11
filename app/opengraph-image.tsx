@@ -2,12 +2,15 @@ import { ImageResponse } from "next/og";
 
 // Branded social-share card, generated at build/edge (no static asset needed).
 // Next wires this into og:image + twitter:image for every page that doesn't
-// override it.
+// override it. Text only in characters the built-in font has: anything else
+// (a "●") makes the build try to download a font, which fails offline and
+// printed "Failed to load dynamic font" on every build. Shapes are drawn.
 export const alt = "Companies Center — find trusted local service providers";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 const NAVY = "#162660";
+const GOLD = "#DEAE60";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -52,20 +55,21 @@ export default function OpengraphImage() {
             Find trusted local service providers
           </div>
           <div style={{ fontSize: 30, color: "rgba(255,255,255,0.72)", maxWidth: 820 }}>
-            Verified plumbers, electricians, cleaners, movers and more near you —
-            compare reviews, ratings and locations.
+            Plumbers, electricians, cleaners, movers and more near you. Compare
+            reviews, ratings and locations.
           </div>
         </div>
 
         <div
           style={{
             display: "flex",
-            gap: 8,
+            alignItems: "center",
+            gap: 10,
             fontSize: 22,
             color: "rgba(255,255,255,0.6)",
           }}
         >
-          <span style={{ color: "#f5b301" }}>●</span>
+          <div style={{ width: 12, height: 12, borderRadius: 6, background: GOLD }} />
           companiescenter.com
         </div>
       </div>

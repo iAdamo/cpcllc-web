@@ -32,7 +32,7 @@ const steps = [
     Icon: CheckCircle,
     step: "04",
     title: "Job Done Right",
-    desc: "Get the job done with confidence. Every provider is verified before they can take jobs, and reviews come from real completed work.",
+    desc: "Agree the work directly with the business. Reviews come from jobs completed through Companies Center, so you can see how others got on.",
     color: "from-gold-400 to-gold-500",
     glow: "shadow-gold-500/30",
   },

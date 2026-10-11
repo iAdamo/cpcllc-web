@@ -23,7 +23,7 @@ const jsonLd = {
       url: SITE_URL,
       image: `${SITE_URL}/opengraph-image`,
       description:
-        "Marketplace connecting people with verified local service providers — plumbers, electricians, cleaners, movers and more.",
+        "Marketplace connecting people with local service providers — plumbers, electricians, cleaners, movers and more.",
     },
     {
       "@type": "WebSite",

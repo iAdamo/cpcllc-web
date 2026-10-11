@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: "%s | Companies Center",
   },
   description:
-    "Hire verified plumbers, electricians, cleaners, movers and more near you. Compare reviews, ratings and locations — or grow your business by reaching new clients.",
+    "Hire plumbers, electricians, cleaners, movers and more near you. Compare reviews, ratings and locations — or grow your business by reaching new clients.",
   applicationName: "Companies Center",
   keywords: [
     "local services",
@@ -29,14 +29,14 @@ export const metadata: Metadata = {
     siteName: "Companies Center",
     title: "Companies Center — Find Trusted Local Service Providers",
     description:
-      "Hire verified plumbers, electricians, cleaners, movers and more near you. Compare reviews, ratings and locations.",
+      "Hire plumbers, electricians, cleaners, movers and more near you. Compare reviews, ratings and locations.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
     title: "Companies Center — Find Trusted Local Service Providers",
     description:
-      "Hire verified local service providers near you. Compare reviews, ratings and locations.",
+      "Hire local service providers near you. Compare reviews, ratings and locations.",
   },
   robots: {
     index: true,
