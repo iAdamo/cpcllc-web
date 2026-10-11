@@ -20,7 +20,7 @@ const fadeUp = {
 };
 
 const trustBadges = [
-  { Icon: Shield, label: "Verified Providers" },
+  { Icon: Shield, label: "Verified Badges" },
   { Icon: CheckCircle, label: "Real Reviews" },
   { Icon: Clock, label: "Fast Response" },
 ];
@@ -83,7 +83,7 @@ export default function HeroSection() {
               custom={0.3}
               className="text-white/60 text-lg max-w-lg leading-relaxed mb-10"
             >
-              Connect with verified professionals near you. Fast quotes, real
+              Connect with local professionals near you. Fast quotes, real
               reviews from completed jobs, direct messaging.
             </motion.p>
 

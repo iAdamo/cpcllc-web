@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import useGlobalStore from "@/stores";
 
 const FEATURES = [
-  { icon: ShieldCheck, label: "Verified providers, clearly marked" },
+  { icon: ShieldCheck, label: "Verified badges, clearly marked" },
   { icon: Star, label: "Real reviews & verified ratings" },
   { icon: Zap, label: "Local providers near you" },
 ];
@@ -67,8 +67,8 @@ export default function Welcome({ onNext }: { onNext: () => void }) {
           </h1>
 
           <p className="text-white/50 text-lg leading-relaxed max-w-sm mx-auto pt-2">
-            Connect with verified service professionals across Florida — fast,
-            local, and trusted.
+            Connect with local service professionals: compare profiles,
+            reviews and quotes.
           </p>
         </motion.div>
 

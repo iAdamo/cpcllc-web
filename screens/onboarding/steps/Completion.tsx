@@ -136,7 +136,7 @@ export default function Completion() {
               <p className="text-brand-200/70 text-sm leading-relaxed">
                 {isProvider
                   ? "Your provider profile is live. Clients in your area can now find and book you."
-                  : "Your account is all set. Browse verified professionals and book your first service."}
+                  : "Your account is all set. Browse local professionals and book your first service."}
               </p>
             </motion.div>
 
@@ -154,7 +154,7 @@ export default function Completion() {
                     "Respond to enquiries and grow your business",
                   ]
                 : [
-                    "Search verified professionals near you",
+                    "Search professionals near you",
                     "Compare quotes, reviews, and availability",
                     "Book appointments with ease",
                   ]

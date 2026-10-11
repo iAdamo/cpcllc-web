@@ -46,7 +46,7 @@ const LEFT_CONTENT: Record<
   { headline: string; sub: string; badge?: string }
 > = {
   1: {
-    headline: "Join verified\nlocal professionals.",
+    headline: "Join local\nservice professionals.",
     sub: "Whether you're looking for help or ready to offer your skills, CompaniesCenterLLC connects the right people.",
     badge: "Serving the US and Nigeria",
   },

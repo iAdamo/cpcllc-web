@@ -6,24 +6,24 @@ import { Plus, Minus } from "lucide-react";
 
 const faqs = [
   {
-    q: "How are providers verified?",
-    a: "Every provider goes through identity and business verification before their profile can accept work. Verified profiles carry a badge, and reviews come only from clients on jobs completed through the platform.",
+    q: "Are providers checked?",
+    a: "Businesses create their own profiles. A business can ask our team to review it, and one we have reviewed carries a Verified badge. The badge shows our review only: it is not a licence, insurance or background check, so confirm those with the business before you hire. Reviews come only from clients whose job was confirmed complete in the app.",
   },
   {
-    q: "Is there a fee to use CompaniesCenterLLC as a homeowner?",
-    a: "No, it's completely free for homeowners to search, browse, and contact service providers. You only pay the provider directly for the work they perform.",
+    q: "Is there a fee to use CompaniesCenterLLC as a client?",
+    a: "No. Searching, browsing and contacting businesses is free. You pay the business directly for the work they do; Companies Center doesn't handle that payment.",
   },
   {
     q: "How do I become a listed provider?",
-    a: "Click 'Get Started' and complete our onboarding process. You'll submit your credentials, undergo our verification process, and once approved, your profile goes live to clients searching in your area.",
+    a: "Create an account in the app and set up your business profile with your services and service area. Clients can find you once your profile is complete. You can also ask for a Verified badge from the app.",
   },
   {
     q: "What areas do you serve?",
-    a: "We currently serve all major cities and surrounding areas throughout Florida, including Tampa, Orlando, Miami, Jacksonville, St. Petersburg, Clearwater, and more.",
+    a: "We're starting in Tampa and the rest of Hillsborough County, Florida, and we also serve Nigeria. Open the app to see the businesses near you; more areas open as local businesses join.",
   },
   {
     q: "How do I know the reviews are authentic?",
-    a: "All reviews are tied to verified jobs completed through our platform. We use a combination of automated checks and manual review to ensure authenticity and prevent fake ratings.",
+    a: "A review can only be left by the client of a job that was confirmed complete in the app, once per job. Anyone can report a review, and our team removes reviews that break our rules.",
   },
   {
     q: "What if I'm not satisfied with a service?",

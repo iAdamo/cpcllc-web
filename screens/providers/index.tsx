@@ -245,7 +245,7 @@ export default function ServiceProvidersPage() {
             <br /> near you
           </h1>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-            Quality services from verified professionals.
+            Local services from businesses near you.
           </p>
         </div>
 

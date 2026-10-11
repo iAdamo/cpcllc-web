@@ -22,7 +22,7 @@ const ROLES: {
     title: "I need services",
     subtitle: "Browse and hire trusted professionals",
     perks: [
-      "Search verified providers near you",
+      "Search providers near you",
       "Compare quotes & reviews",
       "Book appointments that suit you",
     ],

@@ -24,8 +24,8 @@ const STAT_META: Record<
 const pillars = [
   {
     Icon: ShieldCheck,
-    label: "Verified Providers",
-    line: "Every company is identity-checked before it can take jobs.",
+    label: "Verified Badges",
+    line: "A badge shows our team reviewed that business, not a licence or background check.",
     color: "text-gold-400",
     bg: "bg-brand-500/15",
   },

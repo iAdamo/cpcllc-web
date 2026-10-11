@@ -21,8 +21,8 @@ import { getFeaturedReviews, type FeaturedReview } from "@/axios/stats";
 const commitments = [
   {
     Icon: BadgeCheck,
-    title: "Verified before they're visible",
-    text: "Every provider on the platform goes through identity and business verification before their profile can accept work. What you see is who shows up.",
+    title: "Verified means we reviewed them",
+    text: "A Verified badge shows our team reviewed that business. It isn't a licence, insurance or background check, and businesses without it are listed too, so you can always tell which is which.",
     color: "from-brand-700 to-brand-900",
   },
   {

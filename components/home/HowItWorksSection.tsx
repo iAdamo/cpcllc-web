@@ -8,7 +8,7 @@ const steps = [
     Icon: Search,
     step: "01",
     title: "Search & Discover",
-    desc: "Enter your service type and city to instantly browse hundreds of verified professionals in your area.",
+    desc: "Enter your service type and city to browse the professionals in your area.",
     color: "from-brand-700 to-brand-900",
     glow: "shadow-brand-900/40",
   },
