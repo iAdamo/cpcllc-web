@@ -7,7 +7,7 @@ import { useTranslation } from "@/context/TranslationContext";
 import { usePublicAppConfig } from "@/hooks/usePublicAppConfig";
 import SocialIcon from "@/components/SocialIcon";
 import { SOCIAL_META, shownSocialLinks } from "@/lib/socialLinks";
-import { CONTACT } from "@/lib/contact";
+import { phoneHref, shownContact } from "@/lib/contact";
 
 const footerLinks = [
   {
@@ -45,7 +45,10 @@ const footerLinks = [
 const Footer = () => {
   const { t } = useTranslation();
   // Set in Admin > Settings > Social links; only the ones set are shown.
-  const socials = shownSocialLinks(usePublicAppConfig().data?.socialLinks);
+  const appConfig = usePublicAppConfig().data;
+  const socials = shownSocialLinks(appConfig?.socialLinks);
+  // Admin > Settings > Contact details; today's details until it loads.
+  const contact = shownContact(appConfig?.contact);
 
   return (
     <footer className="bg-[#050d2e] text-white">
@@ -88,24 +91,30 @@ const Footer = () => {
           {/* Contact info */}
           <div className="text-sm space-y-3">
             <p className="text-white font-bold text-base mb-4">Contact Us</p>
-            <p className="flex items-center gap-2.5 text-white/60">
-              <Phone size={15} aria-hidden className="shrink-0 text-gold-400" />
-              <a href={CONTACT.phoneHref} className="hover:text-white transition-colors">
-                {CONTACT.phone}
-              </a>
-            </p>
+            {contact.phone ? (
+              <p className="flex items-center gap-2.5 text-white/60">
+                <Phone size={15} aria-hidden className="shrink-0 text-gold-400" />
+                <a href={phoneHref(contact.phone)} className="hover:text-white transition-colors">
+                  {contact.phone}
+                </a>
+              </p>
+            ) : null}
             <p className="flex items-start gap-2.5 text-white/60">
               <MapPin size={15} aria-hidden className="mt-0.5 shrink-0 text-gold-400" />
               <span>
-                {CONTACT.address[0]}
-                <br />
-                {CONTACT.address[1]}
+                {contact.address[0]}
+                {contact.address[1] ? (
+                  <>
+                    <br />
+                    {contact.address[1]}
+                  </>
+                ) : null}
               </span>
             </p>
             <p className="flex items-center gap-2.5 text-white/60">
               <Mail size={15} aria-hidden className="shrink-0 text-gold-400" />
-              <a href={`mailto:${CONTACT.email}`} className="hover:text-white transition-colors">
-                {CONTACT.email}
+              <a href={`mailto:${contact.email}`} className="hover:text-white transition-colors">
+                {contact.email}
               </a>
             </p>
           </div>

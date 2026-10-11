@@ -1,8 +1,9 @@
 "use client";
 
-import { Settings, ShieldCheck, Share2, Smartphone } from "lucide-react";
+import { Mail, Settings, ShieldCheck, Share2, Smartphone } from "lucide-react";
 import { MfaSection } from "@/screens/admin/sections/MfaSection";
 import { SocialLinksSection } from "@/screens/admin/sections/SocialLinksSection";
+import { ContactDetailsSection } from "@/screens/admin/sections/ContactDetailsSection";
 import { AppReleaseSection } from "@/screens/admin/sections/AppReleaseSection";
 
 export function SettingsView() {
@@ -35,6 +36,22 @@ export function SettingsView() {
           password. Required for any admin handling sensitive operations.
         </p>
         <MfaSection />
+      </section>
+
+      {/* Contact details: website footer and /contact, the app, the emails */}
+      <section>
+        <div className="flex items-center gap-2 mb-3">
+          <Mail size={18} className="text-slate-400" />
+          <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+            Contact details
+          </h3>
+        </div>
+        <p className="text-sm text-slate-500 mb-4">
+          How people reach Companies Center. They appear in the website footer
+          and Contact page, on the app&apos;s Customer Support screen, and in
+          emails. Changes show without a new release.
+        </p>
+        <ContactDetailsSection />
       </section>
 
       {/* Social links: website footer + the app's Customer Support screen */}

@@ -1,5 +1,6 @@
 import { ApiClientSingleton } from "@/axios/conf";
 import type { SocialLinks } from "@/lib/socialLinks";
+import type { ContactDetails } from "@/lib/contact";
 import { appStoreId, type AppRelease } from "@/lib/appRelease";
 
 const { axiosInstance } = ApiClientSingleton.getInstance();
@@ -7,6 +8,8 @@ const { axiosInstance } = ApiClientSingleton.getInstance();
 /** The parts of GET app/config the website uses. */
 export interface PublicAppConfig extends AppRelease {
   socialLinks?: SocialLinks;
+  /** Contact email, phone and address (Admin > Settings > Contact details). */
+  contact?: ContactDetails;
 }
 
 /** Public: the footer reads the social links from here. */
@@ -37,6 +40,12 @@ export async function getAdminAppConfig(): Promise<PublicAppConfig> {
 /** Store links and version numbers (Admin > Settings > App release). */
 export async function updateAppRelease(release: AppRelease): Promise<PublicAppConfig> {
   const { data } = await axiosInstance.patch("admin/app-config", release);
+  return data;
+}
+
+/** Contact details (Admin > Settings > Contact details). */
+export async function updateContact(contact: ContactDetails): Promise<PublicAppConfig> {
+  const { data } = await axiosInstance.patch("admin/app-config", { contact });
   return data;
 }
 
