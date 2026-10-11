@@ -1,98 +1,113 @@
-**Last Updated:** October 10, 2026
+**Last Updated:** October 11, 2026
 
-These Terms of Service form a binding agreement between you and Companies Center LLC concerning
-your access to and use of the Companies Center mobile applications, companiescenter.com, and
-related services. Companies Center provides technology that helps Clients and Service Providers
-find one another, communicate, exchange proposals, schedule work, track voluntary live location,
-document completion, and use business tools. Companies Center ordinarily does not perform the
-services listed by users and does not process payment for real world work between Clients and
-Service Providers.
+These Terms of Service form an agreement between you and Companies Center LLC governing the Companies
+Center mobile applications, companiescenter.com, and related services. Companies Center provides tools
+for Clients and independent Service Providers to discover services, exchange proposals, schedule work,
+communicate, share optional live location, document completion, and manage business records. Clients and
+Providers contract and pay one another outside Companies Center. Companies Center is responsible for its
+own Platform and any provider tools it sells, as described in these Terms.
 
-Please read these Terms carefully before using Companies Center. By creating an account, clicking
-an acceptance control, accessing an authenticated feature, or otherwise using the Platform after
-these Terms are presented, you agree to these Terms and the Privacy Policy. If you do not agree, do
-not create an account or use the Platform.
+Please read these Terms before accepting them. You accept through the registration checkbox or another
+affirmative acceptance control that presents these Terms. Merely visiting a public page or receiving a
+link does not, by itself, establish acceptance of this agreement. If you do not agree, do not create or
+continue using an account; the external contact and statutory request methods remain available.
 
 ## Important Dispute Notice
 
-**Section 39 contains a binding arbitration agreement, a waiver of jury trial, and a waiver of
-class and representative proceedings. Unless you timely opt out as described in Section 39, most
-disputes between you and Companies Center must be resolved through individual arbitration rather
-than in court. Small claims matters and certain requests for temporary injunctive relief are
-excluded as described there.**
+**SECTION 39 PROVIDES FOR BINDING INDIVIDUAL ARBITRATION OF COVERED DISPUTES INSTEAD OF A COURT TRIAL
+AND LIMITS CLASS OR REPRESENTATIVE PROCEEDINGS WHERE LAWFUL.**
+
+You can reject that agreement within 30 days after accepting this version by emailing
+companiescenterserv@gmail.com or writing to the address in Section 43. Small claims, legally protected
+claims, regulatory complaints, and other exceptions are preserved. There is no separate jury-trial
+waiver for a dispute that properly proceeds in court.
 
 ## 1. Agreement and Electronic Acceptance
 
-These Terms include the provisions below, the Companies Center Privacy Policy, any feature specific
-rules displayed before use, any subscription or purchase terms shown at checkout, and any additional
-written agreement that expressly states that it supplements these Terms. If a specific written
-agreement conflicts with these Terms, the more specific agreement controls only for the subject it
-addresses.
+These Terms govern Platform use. The Privacy Policy at https://companiescenter.com/privacy-policy
+governs our handling of personal information and remains part of our commitments to you. Acknowledging
+that Policy is not consent to every data use. Optional or sensitive processing that requires separate
+permission remains subject to its own notice and choice. Additional purchase or feature terms apply only
+when presented before the relevant action and accepted where required.
 
-Companies Center records acceptance using information such as the account identifier, version
-accepted, date, time, and affirmative action taken. You consent to receive these Terms, notices,
-disclosures, and records electronically. You may save or print a copy. If applicable law requires a
-different form of consent or notice, Companies Center will use that form.
+Mandatory law controls. Section 29 controls any conflict necessary to satisfy Apple's applicable minimum
+license terms. The Privacy Policy controls descriptions of personal-information handling. A specific
+purchase agreement controls the price, included functions, period, and transaction terms for that
+purchase; it does not silently replace Section 39 or waive a mandatory right.
 
-A person who does not accept the current version may not use authenticated Platform functions.
-Publishing a new material version may require the user to review and accept it before continuing.
+Companies Center records the document version, decision, time, platform, and account associated with the
+acceptance action. You may save or print these Terms. You agree to receive ordinary Platform notices
+electronically, subject to any separate consent or delivery method required by law. We use the notice
+procedures in Sections 34 and 43.
+
+Account functions require acceptance of the current Terms and acknowledgment of the current Privacy
+Policy through the presented screens. A person who declines can use external contact, deletion,
+complaint, and statutory privacy-request channels without accepting a new agreement merely to exercise
+those rights.
 
 ## 2. Eligibility and Age Requirement
 
-You must be at least 18 years old and legally capable of entering a binding agreement to create or
-use a Companies Center account. By registering or continuing to use an account, you represent that
-you satisfy these requirements.
+You must be at least 18 years old and legally capable of entering a binding agreement to register or use
+the marketplace, including Sanux. By affirmatively completing registration, you represent that you meet
+these requirements. The age affirmation is not an independent age or identity verification.
 
-Registration requires an affirmative confirmation that the user is at least 18. A person who
-indicates that they are under 18 may not complete registration. Companies Center may suspend or
-delete an account if it reasonably believes that the account belongs to a minor or that the
-eligibility representation was false.
+Registration requires a separate affirmative statement that you are at least 18. An account is not
+created without that statement. If we learn of an underage account, we investigate, restrict access as
+appropriate, and address removal under Section 3 of the Privacy Policy. The ordinary account-deletion
+cancellation period does not override obligations concerning children's information. There is no
+parental-consent option for a minor to join this adult marketplace.
 
-If you use Companies Center for a business, company, partnership, organization, or other entity,
-you represent that you have authority to bind that entity. In that situation, you and the entity are
-each responsible for compliance with these Terms, and references to you include the entity where
-appropriate.
+If you use Companies Center for a business, company, partnership, organization, or other entity, you
+represent that you have authority to bind that entity. In that situation, you and the entity are each
+responsible for compliance with these Terms, and references to you include the entity where appropriate.
 
-The Platform may be unavailable in certain locations. You may use it only where the Platform and the
-services you seek or offer are lawful.
+The marketplace is directed to the United States and Nigeria. In the United States, its initial focus is
+Hillsborough County, Florida. Availability depends on location, participating Providers, and enabled
+features. You may offer or request services only where they and your use of the Platform are lawful.
+Access to a public website from another country does not establish that local marketplace services are
+offered there or remove mandatory legal rights.
 
 ## 3. Definitions
 
 **Companies Center, we, us, and our** mean Companies Center LLC.
 
 **Platform** means the Companies Center mobile applications, companiescenter.com, the application
-programming interface, administrative systems, communications, and related services that link to
-these Terms.
+programming interface, administrative systems, communications, and related services that link to these
+Terms.
 
 **Client** means a user acting in the role of a person seeking, requesting, scheduling, or managing a
 service.
 
-**Service Provider or Provider** means a business or independent service professional using the
-Platform to publish services, respond to Jobs, communicate with Clients, schedule work, or use
-provider tools.
+**Service Provider or Provider** means a business or independent service professional using the Platform
+to publish services, respond to Jobs, communicate with Clients, schedule work, or use provider tools.
 
 **User** means a Client, Service Provider, visitor, or other person who accesses or uses the Platform.
 
 **Job** means a request for real world services created through Companies Center. A Job may be made
 visible to eligible Providers or directed to a specific Provider.
 
+**Team Task** means an internal to-do item that a Provider sends to members of its own team through the
+Team feature described in Section 6. A Team Task is not a Job.
+
 **Booking** means a scheduling record or service appointment managed through the Platform.
 
 **User Content** means text, photographs, videos, files, messages, service descriptions, Jobs,
 proposals, reviews, comments, profile material, and other content submitted by a User.
 
-**Companies Center Pro or Pro** means paid or promotional business tools that may be made available
-only to eligible Service Providers.
+**Companies Center Pro or Pro** means paid or promotional business tools that may be made available only
+to eligible Service Providers.
 
-**Featured Placement** means a separately identified paid or promotional placement that may affect
-where a Provider appears in designated discovery areas.
+**Featured Placement** means a separately identified paid or promotional placement that may affect where
+a Provider appears in designated discovery areas.
 
 ## 4. Companies Center Role
 
-Companies Center provides a marketplace and supporting technology. Unless Companies Center expressly
-enters a separate written service agreement, Companies Center is not the employer, employee,
-contractor, subcontractor, partner, joint venturer, agent, representative, franchisee, franchisor,
-broker, staffing agency, insurer, licensing authority, or guarantor of any Client or Provider.
+Companies Center supplies the marketplace software and its own business tools. Providers supply the
+underlying real-world services independently. Companies Center does not engage Providers as its
+employees or agents through ordinary marketplace use, and an account does not establish a partnership,
+franchise, staffing arrangement, insurance relationship, or authority to bind Companies Center. Legal
+status depends on applicable law and the actual relationship; a label in these Terms does not override
+either.
 
 Clients decide whom to contact, hire, or permit onto a property. Providers decide which services to
 offer, whether to respond, what price to propose, what tools and personnel to use, and how to perform
@@ -100,73 +115,85 @@ the work. A contract for real world services is formed directly between the Clie
 Companies Center is not a party to that contract and does not control the method, quality, legality,
 safety, timing, price, or result of the work.
 
-The Platform may help users communicate, schedule, exchange documents, record completion, or report a
-problem. Those functions do not make Companies Center responsible for the underlying service.
-Companies Center may moderate Platform conduct and enforce these Terms without assuming responsibility
-for a User's work or promises.
+Communication, scheduling, documents, completion records, and support do not make Companies Center a
+party to a Client's service agreement with a Provider. Companies Center remains responsible for its own
+commitments, conduct, and duties imposed by law, including the Platform products it sells. Moderation of
+Platform conduct is distinct from supervising a Provider's work.
 
 Companies Center does not guarantee that a Job will receive a proposal, that a Provider will be
-selected, that a Booking will occur, that work will be completed, that payment will be made, or that
-any User will earn income.
+selected, that a Booking will occur, that work will be completed, that payment will be made, or that any
+User will earn income.
 
 ## 5. Accounts and Account Security
 
-You must provide accurate, current, and complete account information. You may not create an account
-for another person without authorization, impersonate another person or entity, use a misleading
-identity, or create multiple accounts to evade restrictions, manipulate reviews, or obtain referral or
-promotional benefits.
+You must provide accurate, current, and complete account information. You may not create an account for
+another person without authorization, impersonate another person or entity, use a misleading identity,
+or create multiple accounts to evade restrictions, manipulate reviews, or obtain referral or promotional
+benefits.
 
-You are responsible for maintaining the confidentiality of your password, verification codes,
-devices, and sessions. Use a unique password and promptly notify Companies Center through the support
-methods in Section 43 if you suspect unauthorized access. You may not sell, rent, transfer,
-sublicense, or share an account in a way that defeats identity, security, or role controls.
+You are responsible for maintaining the confidentiality of your password, verification codes, devices,
+and sessions. Use a unique password and promptly notify Companies Center through the support methods in
+Section 43 if you suspect unauthorized access. You may not sell, rent, transfer, sublicense, or share an
+account in a way that defeats identity, security, or role controls.
 
-Companies Center may require email verification, reauthentication, or another reasonable security
-step before allowing a sensitive action. A displayed telephone verification status is valid only if
-the Platform has actually completed the stated verification process.
+Companies Center may require email verification, reauthentication, or another reasonable security step
+before allowing a sensitive action. A displayed telephone verification status is valid only if the
+Platform has actually completed the stated verification process.
 
-You are responsible for activity performed through your account unless applicable law provides
-otherwise. Companies Center may revoke sessions, reset credentials, temporarily restrict access, or
-require additional verification when necessary to protect the account or Platform.
+You are responsible for actions you authorize and for taking reasonable steps to protect your account.
+This does not make you automatically liable for unauthorized activity caused by Companies Center's
+breach of duty or remove a protection provided by law. Companies Center may revoke sessions, reset
+credentials, temporarily restrict access, or require proportionate verification to protect the account
+or Platform.
 
 ## 6. Client and Provider Roles
 
-One personal account may support both the Client and Service Provider roles. Switching roles changes
-the available interface and functions but does not create a separate identity or allow access to
-information belonging to another person.
+One personal account may support both the Client and Service Provider roles. Switching roles changes the
+available interface and functions but does not create a separate identity or allow access to information
+belonging to another person.
 
-A Provider profile is associated with the account owner. Unless Companies Center later introduces an
-expressly authorized team feature, account credentials may not be shared among employees,
-contractors, or other workers. The account owner remains responsible for anyone acting through the
-account or Provider profile.
+A Provider profile is associated with its account owner. Credentials must not be shared among employees,
+contractors, or other workers, including through the Team feature, where each person uses their own
+account. An owner who authorizes another person to act for the business remains responsible for that
+authorized conduct, subject to Section 5 and applicable law.
+
+**Team feature.** A Provider may invite the people it works with to a team and send them Team Tasks,
+which are internal to-do items and are not Jobs. Each person joins with their own account, holds a role
+in that business only (Owner, Manager, Supervisor or Employee), and may leave at any time. The business
+sees a member's name, profile photograph, role, and the Team Tasks they complete with their comments and
+photos; it does not see their messages, Jobs, Bookings, contact details, location or any other part of
+their account. The business is responsible for the people it invites, for what it asks them to do, and
+for its relationship with them. Companies Center is not their employer and does not supervise, schedule,
+or pay for their work. A business may not use the Team feature to collect information it has no lawful
+basis to collect, and a member may not add photos of people or places they have no right to photograph.
 
 Client membership is not offered. Companies Center Pro and free Pro rewards are limited to eligible
-Service Providers. A Client's payment, former membership status, or referral activity does not
-purchase priority for a Job or guarantee attention from Providers.
+Service Providers. A Client's payment, former membership status, or referral activity does not purchase
+priority for a Job or guarantee attention from Providers.
 
-Administrative and staff accounts are separate from ordinary marketplace participation and may be
-restricted from public listings or mobile login.
+Staff and administrative accounts use restricted administrative systems and are not ordinary mobile
+marketplace profiles.
 
 ## 7. Provider Responsibilities
 
-A Provider is solely responsible for determining and maintaining all licenses, registrations,
-permits, certifications, insurance, bonds, tax accounts, equipment, training, qualifications, and
-authorizations required for the services offered. Companies Center does not provide legal, licensing,
-tax, safety, or professional advice.
+A Provider is solely responsible for determining and maintaining all licenses, registrations, permits,
+certifications, insurance, bonds, tax accounts, equipment, training, qualifications, and authorizations
+required for the services offered. Companies Center does not provide legal, licensing, tax, safety, or
+professional advice.
 
 A Provider must describe services, prices, availability, credentials, experience, and business
 information truthfully. A Provider may not claim to be licensed, insured, bonded, background checked,
 identity verified, or otherwise approved unless that statement is accurate and can be substantiated.
 
 Providers are responsible for evaluating each Job and worksite, communicating scope and exclusions,
-giving accurate estimates, obtaining Client approval for material changes, performing safely,
-protecting property, supervising personnel, following applicable codes and manufacturer instructions,
-and correcting or addressing their own work as required by their agreement and applicable law.
+giving accurate estimates, obtaining Client approval for material changes, performing safely, protecting
+property, supervising personnel, following applicable codes and manufacturer instructions, and
+correcting or addressing their own work as required by their agreement and applicable law.
 
 Providers determine their own prices and collect payment directly from Clients outside the Platform.
 They are responsible for receipts, taxes, refunds, warranties, chargebacks, liens, permits,
-subcontractors, employees, classification, payroll, insurance, and all other obligations connected
-with their business.
+subcontractors, employees, classification, payroll, insurance, and all other obligations connected with
+their business.
 
 A Provider may not use the Platform to offer an unlawful, fraudulent, dangerous, discriminatory,
 sexually exploitative, or prohibited service. Companies Center may require evidence supporting a
@@ -176,13 +203,13 @@ credential or service claim and may remove unsupported claims.
 
 A Client must provide accurate information reasonably necessary for a Provider to evaluate and perform
 requested work. This includes the desired scope, timing, budget information if used, access
-restrictions, known hazards, occupancy conditions, and the appropriate approximate or exact location
-at the stage when it is needed.
+restrictions, known hazards, occupancy conditions, and the appropriate approximate or exact location at
+the stage when it is needed.
 
-The Client is responsible for having authority to request work at the property or location. The
-Client must obtain any owner, tenant, association, municipal, utility, or other permission for which
-the Client is responsible and must not direct a Provider to enter property or perform work without
-lawful authorization.
+The Client is responsible for having authority to request work at the property or location. The Client
+must obtain any owner, tenant, association, municipal, utility, or other permission for which the Client
+is responsible and must not direct a Provider to enter property or perform work without lawful
+authorization.
 
 The Client must provide a reasonably safe worksite and disclose known conditions that could affect
 safety or performance, including aggressive or loose animals, children in the work area, electrical
@@ -190,9 +217,9 @@ hazards, unstable structures, hazardous materials, concealed utilities, pools, s
 irrigation, property boundaries, valuable or fragile items, and access limitations.
 
 The Client must evaluate Providers independently, confirm material qualifications, agree on scope and
-payment terms, inspect completed work when appropriate, and pay amounts lawfully due under the
-agreement with the Provider. The Platform does not replace contracts, permits, inspections,
-insurance, or professional advice.
+payment terms, inspect completed work when appropriate, and pay amounts lawfully due under the agreement
+with the Provider. The Platform does not replace contracts, permits, inspections, insurance, or
+professional advice.
 
 ## 9. Pets Property and Worksite Conditions
 
@@ -202,8 +229,8 @@ work, or require special precautions. Providers may pause or refuse work when a 
 reasonable safety risk.
 
 Before work begins, the Client and Provider should document existing damage, fragile areas, access
-paths, landscaping, gates, fences, vehicles, utilities, and other material conditions. Any allegation
-of new property damage should be reported promptly to the other party and, when relevant, through the
+paths, landscaping, gates, fences, vehicles, utilities, and other material conditions. Any allegation of
+new property damage should be reported promptly to the other party and, when relevant, through the
 Platform dispute or support function.
 
 Responsibility for injury, animal escape, property damage, repair, insurance, or reimbursement is
@@ -214,58 +241,63 @@ because the parties met or communicated through the Platform.
 ## 10. Services Jobs and Proposals
 
 A Provider may publish services under available categories and subcategories. Service listings must
-accurately describe what is offered and must not contain false pricing, unavailable offers,
-misleading media, copied material without permission, or prohibited content.
+accurately describe what is offered and must not contain false pricing, unavailable offers, misleading
+media, copied material without permission, or prohibited content.
 
-A Client may create a Job for eligible Providers generally or direct it to a particular Provider.
-The Client controls the information submitted but must not include passwords, payment card
-information, government identification, unnecessary medical information, or unrelated sensitive
-information.
+A Client may create a Job for eligible Providers generally or direct it to a particular Provider. The
+Client controls the information submitted but must not include passwords, payment card information,
+government identification, unnecessary medical information, or unrelated sensitive information.
 
-A proposal is an offer from a Provider to a Client and may include a proposed price, scope, message,
-conditions, or schedule. Unless the parties expressly agree otherwise, posting a Job or proposal does
-not by itself create a completed service contract. The parties are responsible for confirming the
-final scope, price, schedule, materials, change orders, payment method, warranties, cancellation
-terms, and other important terms.
+Publishing a Job invites responses; sending a proposal communicates the Provider's proposed terms.
+Neither action alone binds the other party. The parties can form a direct service agreement when they
+communicate acceptance of sufficiently definite terms, including through a hire, accept, or other
+affirmative action in the Platform, subject to applicable law. A status label alone does not establish
+that all material terms were agreed. Before work or payment, confirm the scope, price, schedule,
+materials, changes, payment method, warranties, and cancellation terms. Companies Center is not a party
+to that agreement.
 
-Proposals and proposal prices are private to the Client and the Provider who submitted them. Users
-may not obtain, disclose, scrape, or use another Provider's proposal to manipulate bidding or compete
-unfairly.
+Proposal contents and prices are available to the Client and submitting Provider, with authorized staff
+access for support, safety, disputes, and legal requirements under the Privacy Policy. Competing
+Providers do not receive one another's private proposals through ordinary marketplace access. Users may
+not bypass those controls or disclose another person's confidential proposal without authority.
 
-Companies Center may archive, restore, restrict, or remove Jobs or proposals to enforce these Terms,
-respond to a report, protect safety, or maintain the Platform. Companies Center is not required to
-preserve a listing indefinitely.
+Companies Center may restrict or remove Jobs or proposals for the reasons in Section 32. Job audiences
+and address disclosures follow Sections 10 and 13 of the Privacy Policy: an open Job reveals its exact
+address to the hired Provider, while a directed Job reveals it to the selected recipient when submitted,
+before a later hiring decision. Do not place a private street address or unnecessary personal
+information in public descriptions or photos.
 
 ## 11. Bookings Availability and Cancellations
 
 A Booking records requested or agreed scheduling information. The Platform may support states such as
-requested, accepted, scheduled, started, completed, canceled, or disputed. A Platform status is a
-record of an action taken through the Platform; it does not independently prove that a person
-arrived, performed work, obtained a permit, or satisfied a contract.
+requested, accepted, scheduled, started, completed, canceled, or disputed. A Platform status is a record
+of an action taken through the Platform; it does not independently prove that a person arrived,
+performed work, obtained a permit, or satisfied a contract.
 
 Providers are responsible for keeping availability reasonably current. Clients are responsible for
-providing accurate scheduling and access information. Each party must communicate delays, inability
-to attend, or a requested change as soon as reasonably possible.
+providing accurate scheduling and access information. Each party must communicate delays, inability to
+attend, or a requested change as soon as reasonably possible.
 
-Any cancellation fee, deposit, travel charge, minimum charge, weather rule, missed appointment policy,
-or rescheduling condition for real world work must be agreed directly between the Client and
-Provider. Companies Center does not collect or decide those charges unless a future feature expressly
-states otherwise.
+A cancellation fee, deposit, travel charge, minimum charge, weather rule, missed-appointment policy, or
+rescheduling condition for real-world work must be disclosed and lawfully agreed between the Client and
+Provider before it is incurred. The Platform does not create or collect an undisclosed fee. Changing a
+Booking or stopping location sharing does not automatically cancel the parties' separate service
+agreement; communicate that decision directly.
 
-Exporting a Booking to a device calendar creates a file or local calendar entry for convenience.
-Users remain responsible for checking the current Booking status inside the Platform.
+Exporting a Booking to a device calendar creates a file or local calendar entry for convenience. Users
+remain responsible for checking the current Booking status inside the Platform.
 
 ## 12. Agreements Between Users
 
-Clients and Providers contract directly with one another. Their agreement may be written, electronic,
-or oral, subject to applicable law. Companies Center recommends a written scope for work involving
-material cost, property access, permits, deposits, warranties, recurring service, subcontractors, or
-significant risk.
+Clients and Providers contract directly with one another. Their agreement may be written, electronic, or
+oral, subject to applicable law. Companies Center recommends a written scope for work involving material
+cost, property access, permits, deposits, warranties, recurring service, subcontractors, or significant
+risk.
 
 A user may not represent that Companies Center approved or became a party to a service agreement. Any
-form, suggested field, status, completion record, or communication tool supplied by Companies Center
-is provided for convenience and does not constitute legal advice or a warranty that the parties'
-agreement is complete or enforceable.
+form, suggested field, status, completion record, or communication tool supplied by Companies Center is
+provided for convenience and does not constitute legal advice or a warranty that the parties' agreement
+is complete or enforceable.
 
 Each party is responsible for keeping records needed to establish scope, authorization, changes,
 delivery, acceptance, payment, damage, taxes, or another material fact.
@@ -281,9 +313,10 @@ Users should confirm the recipient before sending money and should not send pass
 codes, remote access credentials, or unnecessary financial information through messages. A payment
 request that appears suspicious should be reported.
 
-Companies Center is not responsible for the privacy, security, fees, holds, reversals, exchange rates,
-availability, or decisions of a bank, card terminal, cash application, transfer service, or other
-payment provider independently selected by the parties.
+A bank or payment service independently chosen by the Client and Provider controls its own fees,
+security, holds, reversals, and payment decisions. Companies Center does not operate that transaction.
+This allocation does not exclude responsibility for Companies Center's own conduct or a nonwaivable
+legal obligation.
 
 Nothing in this Section prevents Companies Center from separately charging an eligible Provider for
 Companies Center Pro, Featured Placement, or another Companies Center product when that product is
@@ -296,82 +329,95 @@ convert, download, print, email, or share estimates and invoices. These document
 Provider. Companies Center does not verify their accuracy, tax treatment, legal sufficiency, payment
 instructions, or collectability.
 
-The Provider is responsible for having authority to enter a Client's or non-user customer's
-information, providing any required notice, protecting the information, and using it only for a
-lawful business purpose. The Provider must not use invoicing tools to send spam, false bills,
-deceptive charges, or documents for services not authorized or performed.
+The Provider is responsible for having authority to enter a Client's or non-user customer's information,
+providing any required notice, protecting the information, and using it only for a lawful business
+purpose. The Provider must not use invoicing tools to send spam, false bills, deceptive charges, or
+documents for services not authorized or performed.
 
-Labels such as paid, unpaid, overdue, collected, accepted, sent, or similar terms are manual
-recordkeeping statuses unless the interface expressly states that a payment processor confirmed the
-event. A manual paid status is not proof that a bank transferred funds or that the Provider received
-money.
+Invoice labels such as paid, unpaid, and overdue are manual recordkeeping statuses entered by an
+authorized user. They are not confirmations from Companies Center, a bank, or a payment processor that a
+marketplace job has been paid.
 
-An unlisted document link may be opened by a person who possesses it. The Provider must send links
-only to intended recipients, revoke a link when appropriate, and avoid placing unnecessary sensitive
-information in a document. Users may not index, publish, guess, harvest, or share another person's
-document link without authorization.
+A valid estimate or invoice share link can be opened without a marketplace account by anyone who has it.
+The page and PDF can include customer information and any bank instructions the Provider entered. Links
+expire 90 days after the Provider last saves or sends the document. To revoke a link, open the document,
+choose Send, then Turn off shared links, and confirm. Revocation does not recall a downloaded or
+forwarded copy.
 
-Marketplace invoice pay links are not active. No dormant field, endpoint, or future-facing interface
-authorizes Companies Center to process payment for a Client's real world service.
+Providers must share documents only with intended recipients and avoid unnecessary sensitive
+information. Removing bank instructions from a profile does not erase them from earlier documents.
+Estimates, invoices, and their PDFs follow the retention schedule in Section 26 of the Privacy Policy,
+including the stated financial-record exceptions after account deletion. Users may not harvest or access
+another person's document without authority.
+
+These tools do not transfer payment for a marketplace job. Companies Center does not validate a bank
+account, guarantee collection, or act as escrow. Review payment instructions with the intended recipient
+before sending money.
 
 ## 15. Companies Center Pro
 
-Companies Center may offer Companies Center Pro only to eligible Service Providers. Pro may include
-business tools, expanded limits, administrative conveniences, or other benefits identified on the
-purchase screen. Pro does not create a Client membership and does not guarantee leads, Clients,
-proposals, bookings, ranking, revenue, work, or any result.
+Companies Center Pro is an optional Provider product. When offered, it supplies the business tools or
+limits identified before purchase. The marketplace has no Client membership. Pro does not purchase
+guaranteed organic ranking, priority for Client Jobs, leads, bookings, income, or results. Featured
+Placement is separate under Section 16.
 
-The price, currency, billing period, taxes, renewal terms, trial terms if any, included functions,
-cancellation method, and refund rules will be disclosed before a Provider confirms a purchase. No
-purchase is authorized merely because plan records or entitlement code exists in the Platform.
+Pro is sold through the website as a prepaid period. It does not renew automatically, does not save a
+payment method for renewal, and has no purchase channel inside the iOS or Android releases covered by
+these Terms. A new paid period requires a new purchase. A free promotional entitlement does not itself
+authorize a later charge.
 
-If a subscription renews automatically, the Provider authorizes recurring charges until cancellation.
-Companies Center will present the renewal terms clearly and provide a cancellation method consistent
-with applicable law and the rules of the processor or application store. Cancellation normally
-prevents a future renewal and does not retroactively erase charges already incurred, subject to the
-terms shown at checkout and applicable law.
+Before payment, the offer identifies Companies Center as the seller, the included functions, total price
+and currency, applicable taxes or charges, paid period, and refund conditions. For an enabled USD
+purchase, Stripe Checkout receives payment credentials on its hosted page; for an enabled purchase in
+Nigerian naira, Paystack's hosted checkout does. Companies Center receives limited payment and
+entitlement records described in the Privacy Policy. A checkout that is not offered cannot charge you.
 
-A purchase made through Apple, Google, or another application store is also governed by that store's
-billing, cancellation, restoration, and refund rules. A direct web purchase is governed by the
-processor and checkout terms identified for that transaction.
+At the end of a prepaid period, the associated paid access ends unless a new period or disclosed
+promotion applies. There is no recurring payment to cancel. You may stop using Pro at any time.
+Voluntary nonuse or account deletion does not automatically generate a refund; any refund offered at
+purchase and any mandatory right still apply. Send billing questions to companiescenterserv@gmail.com or
+in-app Customer Support and include the transaction reference, without card credentials.
 
-Companies Center may add, remove, or modify Pro functions. A material change affecting a current paid
-period will be handled through reasonable notice, continued access, credit, cancellation, refund, or
-another remedy as required by the purchase terms and applicable law.
+We will not increase the price of an already purchased period. If we discontinue a purchased function or
+materially reduce the promised paid service during that period for reasons unrelated to your breach, we
+will provide the service owed, an equivalent remedy you accept, or a proportionate refund for the
+undelivered portion, as appropriate under the purchase terms and law. A promotional credit is not a
+substitute for a refund that the law requires. Section 32 addresses restrictions for breach.
 
-Pro purchases remain disabled until Companies Center approves the applicable price, trial,
-cancellation, refund, and billing implementation.
+Future trials, recurring billing, or different purchase channels require their own disclosed terms and
+any required informed consent before they apply. Accepting these Terms does not authorize such a change
+or a future charge.
 
 ## 16. Featured Placement
 
 Featured Placement is separate from Companies Center Pro. If offered, it may place a Provider in a
 designated sponsored or featured area for a disclosed period. It will be labeled so users can
-distinguish paid placement from ordinary results.
+distinguish paid placement from ordinary results. Featured listings can appear before other results in
+discovery. Unless the specific offer promises otherwise, purchasing a placement does not guarantee a
+particular position, impressions, clicks, contacts, bookings, or revenue.
 
-Featured Placement does not guarantee impressions, clicks, contacts, Jobs, bookings, revenue, or a
-particular position. Availability may depend on location, category, technical limits, safety status,
-and inventory. Companies Center may refuse, suspend, or remove a placement that violates these Terms
-or misleads users.
-
-Payment for Featured Placement, if activated, is governed by the price, duration, refund terms, and
-processor information shown at purchase. Expiration of the purchased period ends the placement
-without affecting the Provider's ordinary profile eligibility.
+Availability depends on location, category, inventory, and account eligibility. Restrictions must follow
+Section 32 and any remedies due for a paid service. If sold, the placement offer states the price,
+duration, scope, applicable charges, processor, and refund conditions before payment. Placement ends at
+the disclosed expiration. Companies Center must provide the purchased placement or the applicable remedy
+for an undelivered portion. Removing or ending a placement does not, by itself, determine eligibility
+for an ordinary profile. These Terms do not authorize a purchase channel that the relevant app-store
+rules prohibit.
 
 ## 17. Provider Referrals and Invitations
 
-Companies Center may allow eligible Providers to invite other Providers and earn promotional Pro time
-or another disclosed benefit. Client referral rewards for Pro are not offered.
+Companies Center may allow eligible Providers to invite other Providers and earn promotional Pro time or
+another disclosed benefit. Client referral rewards for Pro are not offered. The referral interface or
+separate program terms identify eligibility, qualification events, reward amount, expiration, limits,
+and any payment condition.
 
-The referral interface or separate program terms identify eligibility, qualification events, reward
-amount, expiration, limits, and any payment condition. A referral reward has no cash value, may not be
-sold or transferred, and may be withdrawn if obtained through mistake, fraud, self-referral, duplicate
-accounts, fabricated activity, or violation of these Terms.
+A referral reward has no cash value, may not be sold or transferred, and may be withdrawn if obtained
+through mistake, fraud, self-referral, duplicate accounts, fabricated activity, or violation of these
+Terms. Qualification steps must be disclosed by the program before participation.
 
-Companies Center may require the referred Provider to create a legitimate Provider profile, satisfy
-eligibility requirements, or complete another disclosed qualifying step. Companies Center may
-investigate patterns involving accounts, devices, contact information, payment methods, or other
-lawful fraud indicators.
-
+We may examine relevant referral, account, device, and purchase-reference records to prevent repeated or
+fraudulent claims, as described in the Privacy Policy. This does not mean we store a card number or
+create an advertising profile. Any legally required financial-incentive notice applies separately.
 Ending or changing a referral program does not create a right to future rewards. Companies Center will
 honor an earned reward as required by the applicable program terms and law.
 
@@ -396,244 +442,313 @@ opinion. Users may not:
 - threaten or retaliate against a person for an honest review;
 - coordinate review manipulation or buy fake followers, likes, or helpful votes.
 
-Companies Center may investigate, delay, label, restrict, or remove content that violates these rules,
-is tied to suspected manipulation, or creates a legal or safety risk. Moderation is based on these
-Terms and not merely on whether a review is favorable or unfavorable.
+Companies Center may investigate, delay, label, restrict, or remove reviews for fraud, prohibited
+content, or another documented legal or safety reason. Moderation is not based merely on whether a
+review is favorable. These Terms do not prohibit an honest review of Companies Center or another
+business, impose a penalty for it, or require transfer of the reviewer's intellectual-property rights as
+a condition of expressing it. Reviews still must comply with lawful rules against threats, unlawful
+disclosure, and other prohibited content.
 
 ## 19. Provider Verification and Badges
 
-A badge or status means only that the specific check described beside it was completed. Email
-verification means control of an email address was demonstrated. It does not establish identity,
-character, licensing, insurance, work quality, background, ownership, safety, or legal compliance.
+Email verification means control of an email address was demonstrated. It does not establish identity,
+licensing, insurance, background, ownership, competence, or safety. A staff-assigned status or badge is
+not proof of an identity or professional check. A badge must identify the particular check actually
+completed, if any; a generic label does not establish that a Provider was vetted.
 
 Companies Center does not currently perform criminal background checks, work authorization checks,
-employment eligibility checks, insurance verification, or automatic official license verification.
-Users must not rely on a badge as a substitute for independent due diligence.
+employment eligibility checks, insurance verification, or automatic official license verification. Users
+must not rely on a badge as a substitute for independent due diligence.
 
-Provider document verification may remain unavailable until Companies Center has secure private
-storage, defined review standards, access controls, retention rules, and a specific notice. Submitting
-an empty form or receiving manual administrative approval without the stated evidence does not
-qualify a Provider for a misleading badge.
+Identity-document submission and identity verification are currently disabled. No integrated
+identity-verification service accepts documents for this feature. A future verification program requires
+a clear explanation of its actual check and an appropriate privacy notice before collection begins.
+Manual administrative approval is not a substitute for that check.
 
-Companies Center may refuse, reject, expire, suspend, or remove a badge when information is
-incomplete, outdated, false, disputed, or no longer satisfies the displayed standard. Unless an appeal
-process is expressly offered, a badge decision does not create a contractual right to verification.
+We may correct, refuse, suspend, or remove an inaccurate or unsupported badge. A Provider can request
+review through Customer Support. Requesting review does not guarantee a badge, and any decision must not
+misrepresent the checks actually performed or limit an applicable legal remedy.
 
 ## 20. Messaging Presence and Support
 
-The Platform may provide direct messages, file attachments, delivery and read status, typing
-indicators, mute controls, block controls, online presence, and last seen information. Messages are
-not end to end encrypted. Users should not send passwords, full payment card details, government
-identification, or other unnecessary sensitive information through ordinary messages.
+The Platform may provide direct messages, file attachments, delivery and read status, typing indicators,
+mute controls, block controls, online presence, and last seen information. Messages are not end to end
+encrypted. Users should not send passwords, full payment card details, government identification, or
+other unnecessary sensitive information through ordinary messages.
 
 You may use messages only for lawful Platform-related communication. Harassment, threats,
-discrimination, sexual exploitation, spam, phishing, malware, unauthorized advertising,
-impersonation, and attempts to obtain credentials are prohibited.
+discrimination, sexual exploitation, spam, phishing, malware, unauthorized advertising, impersonation,
+and attempts to obtain credentials are prohibited.
 
-Either participant may block a conversation. While it is blocked, neither participant can send
-messages in it. You may not use another account, another conversation, or another Platform function
-to contact a person who has blocked you. Historical records may remain available when needed for an
-existing Booking, invoice, report, dispute, safety matter, or legal obligation.
+Either participant can block a conversation, which prevents both participants from sending messages in
+it. Blocking does not by itself prevent the other person from viewing public content, sending a Job
+through another feature, or using other Platform functions. Report harassment or other misuse to
+Customer Support for review. The message and record-retention rules are in Sections 14 and 26 of the
+Privacy Policy.
 
-Support tickets are communications with Companies Center staff, not private conversations with
-another marketplace user. Companies Center may review account, technical, transaction, content, or
-safety information reasonably necessary to answer a ticket. Support cannot provide emergency, legal,
-medical, tax, licensing, or law enforcement services.
+Support tickets are communications with Companies Center staff, not private conversations with another
+marketplace user. Companies Center may review account, technical, transaction, content, or safety
+information reasonably necessary to answer a ticket. Support cannot provide emergency, legal, medical,
+tax, licensing, or law enforcement services.
 
 ## 21. Live Location
 
-Live location is optional and off by default. One participant may request another participant's
-location for an appropriate service, but collection and sharing begin only after the person asked to
-share receives a clear request and affirmatively accepts.
+Live location is optional and off by default. One participant may request another participant's location
+for an appropriate service, but collection and sharing begin only after the person asked to share
+receives a clear request and affirmatively accepts.
 
 Each participant independently controls whether to share their own location. Seeing another
 participant's location does not authorize Companies Center to transmit the viewer's location. If both
 parties share, each party must separately consent on their own device.
 
-The person sharing may stop at any time by using the visible stop control or revoking device
-permission. This right applies to time limited sessions and sessions associated with an active Job
-or Booking. No Provider is required to continue transmitting live location merely because work has
-started. Stopping location does not by itself cancel the underlying service agreement, but the live
-map and related functions may stop.
+Either participant may stop a session by opening Profile > Live location, or the live indicator at the
+top of the screen, and selecting Stop. A pending request can be cancelled with Cancel. A person sharing
+can also revoke device permission. These controls apply to standalone and Booking-linked sessions. A
+Provider may turn off Allow live-location requests. Stopping sharing does not itself complete or cancel
+the underlying work, and no Provider must continue sharing merely because work has started.
 
-The Platform may enforce a selected duration and a maximum safety period. Background sharing may
-display an operating system notification and an in-application indicator. Device conditions,
-permission settings, poor reception, battery restrictions, operating system behavior, or service
-interruptions may delay, reduce, or stop updates.
+Standalone sessions have selected durations of 15 minutes, 1 hour, or 8 hours. Booking-linked sessions
+stop when ended by a participant, when the Booking is completed or cancelled, or at a 12-hour maximum,
+with the processing intervals described in Section 11 of the Privacy Policy. The app displays active
+sharing and the relevant system indicator. Refusing background permission limits sharing to operation
+while the app is open. Device, battery, network, and operating-system conditions can delay or stop
+updates.
 
 Live location is provided for coordination and convenience. It is not an emergency service, safety
-guarantee, dispatch service, proof of identity, proof of arrival, timekeeping system, or substitute
-for calling emergency services. Users may not use live location to stalk, threaten, harass,
-discriminate against, surveil, or endanger another person.
+guarantee, dispatch service, proof of identity, proof of arrival, timekeeping system, or substitute for
+calling emergency services. Users may not use live location to stalk, threaten, harass, discriminate
+against, surveil, or endanger another person.
 
-Companies Center may terminate a session when consent is withdrawn, the session expires, the related
-work ends, an account is blocked or suspended, or continued operation presents a security or safety
-concern. Location handling is further described in the Privacy Policy.
+Deactivation or suspension stops active sharing; account deletion removes sessions subject to lawful
+preservation. Conversation blocking alone should not be treated as a location-stop control. Use Stop to
+end an active session. The Privacy Policy explains the separate retention of live coordinates, session
+metadata, saved locations, and job addresses.
 
 ## 22. Posts Follows and Public Profiles
 
 Providers may publish profiles, services, media, and posts. Users may follow eligible Providers,
 comment, react, save, or share public content where the Platform permits. The audience shown by the
-interface controls Platform visibility, but anyone who receives public content may copy, photograph,
-or redistribute it outside Companies Center.
+interface controls Platform visibility, but anyone who receives public content may copy, photograph, or
+redistribute it outside Companies Center.
 
 Public content must not disclose another person's private address, exact location, financial
-information, credentials, identification documents, private messages, or confidential material
-without lawful authority. A User who posts a photograph or video is responsible for visible faces,
-house numbers, license plates, documents, property, music, artwork, and other protected material
-inside it.
+information, credentials, identification documents, private messages, or confidential material without
+lawful authority. A User who posts a photograph or video is responsible for visible faces, house
+numbers, license plates, documents, property, music, artwork, and other protected material inside it.
 
 Companies Center may use categories, location, follows, reputation information, and other disclosed
-factors to organize content. Unless expressly stated, a feed label such as For You or Following does
-not promise a specific ranking method or audience size.
+factors to organize content. Unless expressly stated, a feed label such as For You or Following does not
+promise a specific ranking method or audience size.
 
-Users may not scrape public profiles, build unauthorized directories, collect contact information for
-spam, or use Platform content to train a model or create a competing database without written
-permission.
+You may not scrape profiles, harvest contact information for spam, or use Platform content to create an
+unauthorized database or train a model without the necessary rights and permission. This restriction
+does not remove an activity that applicable law expressly permits notwithstanding a contractual
+restriction, or a right granted by an applicable open-source license.
 
 ## 23. User Content Ownership and License
 
-As between you and Companies Center, you retain ownership of User Content that you lawfully own. You
-grant Companies Center a nonexclusive, worldwide, royalty free, transferable, and sublicensable license
-to host, store, reproduce, process, adapt for technical formatting, transmit, display, distribute, and
-otherwise use User Content as reasonably necessary to operate, secure, improve, and provide the
-Platform.
+You retain ownership of User Content that you lawfully own. You grant Companies Center a nonexclusive,
+worldwide, royalty-free license only to host, store, reproduce technically, format, transmit, display,
+and distribute that content as needed to provide the feature you request, protect the Platform, and
+address support, disputes, and legal obligations described in the Privacy Policy. The audience remains
+the audience permitted for the feature you select.
 
-For content that you intentionally make public, the license also permits Companies Center to display
-and promote that public content and the associated public profile within or in marketing for
-Companies Center. Companies Center will not use private messages, exact live location, verification
-documents, private proposals, or private financial information as promotional content without
-separate permission.
+For example, this license allows us to show a public service listing, deliver a private message to its
+participants, resize an uploaded image, or provide a shared invoice to its authorized recipients or
+valid link holders. Sublicenses are limited to providers helping perform those functions. A permitted
+successor under Section 43 may receive this license only subject to the same purpose and privacy limits.
 
-This license begins when you submit the content and ends when the content is deleted from active
-systems, except to the extent the content remains in another user's lawful record, a dispute or safety
-file, a backup pending rotation, a legal hold, or a prior authorized use that cannot reasonably be
-withdrawn. Deidentified or aggregated information that no longer identifies you may be retained.
+A public post may appear in public Platform pages and discovery for the service you use. This license
+does not authorize unrelated external advertising using your content or imply your endorsement. Separate
+permission is required for a promotional use outside that scope. It does not authorize training a
+Companies Center AI model on your private content. Sanux submissions are governed by the separate notice
+and the processing described in Section 26 and the Privacy Policy.
 
-You represent that you own or have all rights needed for your User Content and that Companies
-Center's permitted use will not violate law, contract, intellectual property, privacy, publicity, or
-other rights. You remain responsible for the content and consequences of submitting it.
+The license ends when the content is deleted from active systems, except for copies that are lawfully
+retained for the specific purposes and periods in the Privacy Policy, including another participant's
+records, dispute evidence, backups pending rotation, or a justified legal hold. A retained copy may be
+used only for its permitted purpose. A copy already downloaded by an independent recipient cannot be
+recalled by terminating this license.
+
+You must own or have the rights necessary to submit the content and authorize the limited use above. You
+are responsible for your own unlawful content and authorized disclosures. This does not excuse Companies
+Center's own misuse of information or override the limitations on indemnification in Section 41.
 
 ## 24. Content and Conduct Rules
 
-You may use the Platform only for lawful purposes consistent with its marketplace functions. You may
-not submit, offer, request, promote, arrange, or engage in content or conduct that:
+You may use the Platform only for lawful purposes consistent with its marketplace functions. You may not
+submit, offer, request, promote, arrange, or engage in content or conduct that:
 
 - is false, fraudulent, deceptive, defamatory, obscene, threatening, harassing, discriminatory,
-exploitative, or unlawfully invasive of privacy;
-- promotes violence, sexual exploitation, trafficking, abuse, illegal drugs, unlawful weapons
-activity, or another illegal service;
+  exploitative, or unlawfully invasive of privacy;
+- promotes violence, sexual exploitation, trafficking, abuse, illegal drugs, unlawful weapons activity,
+  another illegal service, or a real or synthetic intimate depiction distributed without the depicted
+  person's lawful consent;
 - impersonates another person, misstates affiliation, or uses stolen account or payment information;
 - infringes copyright, trademark, patent, trade secret, publicity, privacy, or another right;
 - contains malware, destructive code, credential theft, phishing, or unauthorized tracking;
-- publishes a private address, live coordinate, financial account number, identification document,
-or private communication without authority;
+- publishes a private address, live coordinate, financial account number, identification document, or
+  private communication without authority;
 - manipulates reviews, recommendations, follows, referrals, ranking, engagement, availability,
-completion, or billing records;
+  completion, or billing records;
 - discriminates unlawfully in offering, selecting, pricing, or performing services;
 - endangers a person, animal, property, utility, structure, vehicle, or public area;
-- attempts to evade a suspension, block, age requirement, market restriction, feature limit, or
-security control.
+- attempts to evade a suspension, block, age requirement, market restriction, feature limit, or security
+  control.
 
-You may not use an automated system to access the Platform beyond ordinary search engine indexing
-authorized by Companies Center. Prohibited automation includes scraping, bulk account creation,
-credential testing, spam, artificial engagement, denial of service, reverse engineering, extraction of
-source code, unauthorized API use, or probing for vulnerabilities without written authorization.
+Unauthorized scraping, bulk account creation, credential attacks, spam, artificial engagement, denial of
+service, extraction of nonpublic data, evasion of technical controls, and unauthorized vulnerability
+probing are prohibited. Restrictions on reverse engineering, interoperability, security research, or
+other activities apply only to the extent permitted by law and do not override a controlling open-source
+license. Report a suspected security problem privately through Section 43; this clause does not itself
+authorize testing another person's account or data.
 
-You may not interfere with another User's access, copy the Platform's design or nonpublic data, remove
-proprietary notices, bypass rate limits, misuse deep links or document tokens, or use the Platform to
-develop a substantially similar marketplace or dataset.
+You may not interfere with another User's access, remove proprietary notices, bypass rate limits, or
+misuse account credentials, deep links, or document tokens. The restrictions protect the Platform and
+others' information; they do not transfer ownership of your original content or prohibit lawful
+competition using independently developed material.
 
 ## 25. Reports Moderation Fraud and Disputes
 
-Users may report suspected violations, unsafe conduct, fraudulent activity, inappropriate content, or
-a service dispute. Reports must be made in good faith and must not be used to harass, retaliate,
-obtain leverage, or submit information known to be false.
+Report suspected fraud, unsafe conduct, harassment, prohibited content, or a service problem through
+in-app Customer Support, https://companiescenter.com/contact, or companiescenterserv@gmail.com. Identify
+the content or account, explain the concern, and provide information you are authorized to share.
+Reports must be made in good faith. Do not publish another person's sensitive information to support a
+public accusation.
 
-Companies Center may review reports, User Content, account records, completion records,
-communications submitted as evidence, risk indicators, and other relevant information. Companies
-Center may use automated rules to flag activity for review, but the Platform's artificial
-intelligence assistant does not make final suspension, verification, or dispute decisions.
+Staff review reports and relevant account, content, completion, and communication records within the
+access and purpose limits in the Privacy Policy. Current fraud indicators are based on events entered by
+staff. Account warnings and suspensions are staff decisions. Sanux does not decide moderation,
+verification, suspension, or service disputes. Uploads are not universally scanned before publication.
 
-Companies Center may remove content, limit visibility, freeze a function, cancel a live-location
-session, restrict communication, withhold a promotional benefit, require verification, suspend an
-account, or permanently terminate access when reasonably necessary to enforce these Terms or protect
-the Platform. In urgent cases, action may occur before notice.
+We may remove prohibited content, restrict visibility or a feature, stop a live session, or suspend an
+account for the reasons and with the review procedure in Section 32. Urgent action can precede notice
+where necessary to protect people, information, or the service. The availability of a report does not
+guarantee a particular investigative result, but it does not reduce a legally required response.
 
-An internal dispute record is a support and safety function. Companies Center is not a court,
-arbitrator, insurer, collection agency, licensing board, or guarantor, and an internal decision does
-not determine legal liability between a Client and Provider. The parties retain any rights and
-remedies available under their direct agreement and applicable law.
+An internal service-dispute process addresses Platform records and safety. It is not a legal
+arbitration, insurance claim, debt-collection service, or binding determination of the Client's or
+Provider's liability. The parties retain their direct contractual and legal remedies. Companies Center
+may preserve relevant evidence and respond to lawful process under the Privacy Policy.
 
-Companies Center may preserve evidence, cooperate with lawful process, or refer suspected criminal or
-dangerous conduct to appropriate authorities. The Platform does not promise to investigate every
-report or achieve a particular outcome.
+A person depicted in an intimate image shared without consent, or their authorized representative, may
+request removal without a Platform account by emailing companiescenterserv@gmail.com with the subject
+Intimate image removal, or using https://companiescenter.com/contact. Include a physical or electronic
+signature, information reasonably sufficient to locate the material, a brief statement of a good-faith
+belief that it was published without the depicted person's consent, and contact information for the
+request. A typed signature can be electronic. Do not send unnecessary identity documents or additional
+copies of the image when a location link is sufficient.
 
-## 26. Artificial Intelligence Assistant
+Where the TAKE IT DOWN Act applies, we remove covered material as soon as possible and no later than 48
+hours after receiving a valid removal request, and make reasonable efforts to identify and remove known
+identical copies on the Platform. This procedure also accepts reports about synthetic intimate
+depictions. It is separate from copyright notices, does not require the depicted person to own
+copyright, and does not require the informal dispute process in Section 39. Other legally required
+removal and preservation duties continue to apply. For immediate danger, contact emergency services.
 
-Companies Center may offer an informational assistant powered by a third party artificial
-intelligence provider. The assistant may explain Platform functions and provide general guidance, but
-it does not act on a User's behalf, enter contracts, send messages, approve Providers, change
-rankings, make payments, or decide disputes.
+## 26. Sanux Artificial Intelligence Assistant
 
-Artificial intelligence output may be incomplete, inaccurate, outdated, offensive, or unsuitable. It is
-not legal, medical, financial, tax, safety, emergency, licensing, engineering, or other professional
-advice. You must independently review any output before relying on it.
+Sanux is an optional informational chat assistant powered by Google LLC's Gemini API. It explains
+Platform functions and responds to the questions you choose to submit. You can use the marketplace,
+contact Customer Support, and exercise privacy rights without using it.
 
-Do not submit passwords, authentication codes, complete payment details, government identification,
-exact addresses, live location, private messages, confidential business information, or other
-sensitive information to the assistant. You are responsible for the prompts you submit and for how you
-use generated material.
+Before a first submission, the app or website presents a separate notice naming Google Gemini and
+explaining the disclosure of submitted text. Nothing is sent to Gemini until you select Continue.
+Accepting these Terms does not itself authorize an AI submission. Updated notices require renewed
+acceptance as described in Section 17 of the Privacy Policy.
 
-Use of the assistant is also subject to the applicable provider's terms and policies. Companies Center
-may limit, suspend, monitor for abuse, or discontinue the assistant. Ordinary support remains
-available without using the assistant.
+Companies Center sends the conversation text and relevant earlier assistant responses through its server
+to Google. The code does not automatically add private account records, job records, financial
+information, location, marketplace messages, or uploaded files. Personal information you type is
+nevertheless part of the submitted text and is not automatically removed. Do not enter passwords, codes,
+payment credentials, identity documents, exact private addresses, confidential business records, or
+other people's private information.
 
-## 27. Third Party Services and Links
+Companies Center does not use Sanux prompts or responses to train its own models and does not save the
+conversation in its application database. Google's processing, retention, possible human review, and
+product or model improvement depend on the applicable service terms, as explained in Section 17 of the
+Privacy Policy. These Terms do not promise paid-service protections for every submission,
+confidentiality from Google, or deletion of Google's copies when an account is deleted. Google's terms
+are at https://ai.google.dev/gemini-api/terms.
 
-The Platform may rely on or link to maps, navigation, app stores, payment processors, email, push
-notifications, artificial intelligence, social media, websites, and other third party services. A
-third party may collect or process information under its own terms and privacy policy.
+Signed-in users can turn Sanux off at Profile > Account > Sanux assistant, withdrawing the recorded
+permission and stopping further requests from that account. Turning it back on presents the notice
+again. Guests can close the assistant and manage stored notice acceptance through the browser's
+site-data controls or by clearing the app's data. Stopping submissions does not recall material already
+sent. Privacy requests follow Section 31 and the Privacy Policy.
 
-Companies Center does not control a third party's availability, accuracy, security, content, pricing,
-refunds, routing, decisions, or business practices. A link, map result, integration, or compatibility
-statement does not constitute an endorsement or warranty.
+Sanux cannot hire a Provider, create a Booking, send marketplace messages, enter an agreement, alter an
+account, or make a payment for you. It does not decide verification, moderation, suspension, search
+ranking, prices, or eligibility. An answer does not verify a Provider, review, license, insurance
+policy, or service, and does not itself modify a contract or purchase offer.
 
-You must comply with applicable third party terms, including wireless data, application store,
-mapping, payment, and device operating system terms. Your carrier or service provider may charge data,
-messaging, roaming, transaction, or other fees.
+Generated answers may be inaccurate, incomplete, outdated, or inappropriate. They are not professional,
+legal, medical, financial, engineering, licensing, safety, or emergency advice. Review an answer before
+using it and consult the relevant professional where needed. You remain responsible for your own
+unlawful submissions or use; Companies Center remains responsible for its own conduct and duties. The
+availability of Sanux can change under Section 33.
+
+## 27. Third Party Services and Communications
+
+Platform functions use or link to maps, navigation, app stores, hosted checkout, email, push delivery,
+social sign-in, AI, and other services identified in the Privacy Policy. A service can process
+information under its own terms. A link does not make Companies Center the operator of an independently
+selected service.
+
+We do not control an independent service's content, pricing, routing, availability, or decisions. We
+remain responsible for our own selection, integration, disclosures, and other obligations to the extent
+required by law and the Privacy Policy. You must comply with applicable device, wireless-data,
+app-store, mapping, and processor terms. Your independent service provider may charge its disclosed
+fees.
+
+Companies Center sends account, security, Job, Booking, Team Task, message, support, policy, and
+purchase communications through available in-app, push, and email channels. It does not currently send
+SMS or make marketing calls. Accepting these Terms is not consent to marketing, including a future
+marketing call or text.
+
+Offers and news about Companies Center are marketing. They reach you by push notification or email only
+if you agree, by ticking the optional box at sign-up, which starts unticked, or by turning on
+Announcements and offers later. Announcements inside the app, such as the updates list, home banners,
+and pop-up announcements, are part of the app and are shown whatever your marketing choice.
+
+Manage optional notifications in the app at Profile > Notifications. Announcements and offers controls
+marketing by push and email; marketing email also contains a free unsubscribe link that needs no
+sign-in. Necessary account, security, job, and legal communications can continue after a marketing
+opt-out. Section 18 of the Privacy Policy explains the applicable choices and unsubscribe handling.
 
 ## 28. Mobile Application License
 
-Subject to your compliance with these Terms, Companies Center grants you a limited, personal,
-revocable, nonexclusive, nontransferable, and nonsublicensable license to install and use the mobile
-application on devices you own or control for its intended purpose and as permitted by the applicable
-application store rules.
+Subject to these Terms, Companies Center grants you a limited, nonexclusive, nontransferable, and
+nonsublicensable license to install and use the application on devices you own or control for its
+intended personal or business functions, as permitted by the applicable app-store rules. Revocation or
+suspension follows Section 32. Apple-specific permitted sharing is addressed in Section 29.
 
-The license does not transfer ownership. You may not copy, modify, distribute, sell, lease,
-sublicense, reverse engineer, decompile, disassemble, extract source code, create derivative works, or
-circumvent technical protections except to the limited extent a restriction is prohibited by
-applicable law.
+The license does not transfer ownership. You may not copy, modify, distribute, sell, lease, sublicense,
+reverse engineer, decompile, disassemble, extract source code, create derivative works, or circumvent
+technical protections except to the limited extent a restriction is prohibited by applicable law.
 
 Companies Center may issue updates, patches, corrections, or new versions. Certain updates may be
-required for security or compatibility. An older version may lose access when continued operation
-would create a security, legal, or technical risk.
+required for security or compatibility. An older version may lose access when continued operation would
+create a security, legal, or technical risk.
 
 ## 29. Apple Specific Terms
 
-If you obtain or use the mobile application through Apple, the following terms apply in addition to
-the remainder of these Terms.
+If you obtain or use the mobile application through Apple, the following terms apply in addition to the
+remainder of these Terms.
 
 These Terms are between you and Companies Center LLC, not Apple. Companies Center, not Apple, is
-responsible for the application and its content. The license is limited to use on Apple branded
-products that you own or control and as permitted by the Apple Media Services Usage Rules, including
-any permitted Family Sharing or volume purchase use.
+responsible for the application and its content. The license is limited to use on Apple branded products
+that you own or control and as permitted by the Apple Media Services Usage Rules, including any
+permitted Family Sharing or volume purchase use.
 
-Companies Center is responsible for maintenance and support required under these Terms or applicable
-law. Apple has no obligation to provide maintenance or support. If the application fails to conform to
-an applicable warranty that cannot lawfully be disclaimed, you may notify Apple, and Apple may refund
-the purchase price paid for the application, if any. To the maximum extent permitted by law, Apple has
-no other warranty obligation.
+Companies Center is responsible for maintenance and support specified in these Terms or required by law.
+Apple has no obligation to provide maintenance or support. Companies Center is solely responsible for
+applicable product warranties to the extent not effectively disclaimed. If the application fails to
+conform to an applicable warranty, you may notify Apple, and Apple will refund the purchase price paid
+for the application, if any. To the maximum extent permitted by law, Apple has no other warranty
+obligation for the application; other losses, liabilities, damages, costs, or expenses attributable to a
+failure to conform to warranty are Companies Center's responsibility under these Terms and applicable
+law.
 
 Companies Center, not Apple, is responsible for addressing claims relating to the application or your
 possession or use of it, including product liability, legal or regulatory compliance, consumer
@@ -645,383 +760,522 @@ You represent that you are not located in a country subject to a United States g
 designated by the United States government as supporting terrorism and that you are not listed on a
 United States government prohibited or restricted party list.
 
-You must comply with applicable third party terms when using the application. Apple and its
-subsidiaries are third party beneficiaries of these Terms and may enforce the Apple specific
-provisions against you upon your acceptance.
+You must comply with applicable third-party terms when using the application. Apple and its subsidiaries
+are third-party beneficiaries of this application license and, upon your acceptance, have the right to
+enforce it against you as third-party beneficiaries. These Terms do not impose obligations on Apple
+beyond Apple's applicable terms.
 
-Questions, complaints, or claims about the application must be directed to Companies Center using the
-contact methods in Section 43.
+The developer and contact for questions, complaints, and claims about the application is Companies
+Center LLC, 400 N Ashley Dr, Suite 1900, Tampa, FL 33602, United States; telephone +1 (813) 897-1727;
+email companiescenterserv@gmail.com. The support, privacy, and legal channels in Section 43 also apply.
+Nothing here narrows your remedies beyond what applicable law or Apple's minimum license terms permit.
 
 ## 30. Privacy Permissions and Data Use
 
-The Companies Center Privacy Policy explains how Companies Center collects, uses, discloses, protects,
-retains, and deletes information. By using the Platform, you acknowledge that the Privacy Policy
-applies. Consent is requested separately where required.
+The Privacy Policy at https://companiescenter.com/privacy-policy explains the information we collect,
+its purposes, recipients, retention, security, and privacy rights. Acknowledgment of that notice does
+not replace separate permission for Sanux, live location, covered sensitive information, or any other
+processing that requires it. These Terms do not waive statutory privacy rights.
 
-Device permissions may include camera, microphone, notifications, approximate location, precise
-location, and background location. Photographs, videos, and files are chosen through the device's own
-picker, which requires no permission. Permissions are requested for the related function and may be
-denied or revoked through device settings. Refusing an optional permission may disable that function
-but should not prevent unrelated use where technically feasible.
+Device permissions support the function you choose: camera capture, microphone for video sound,
+location, background sharing during a live session, and notifications. System photo and document pickers
+provide only the selected items without general library access. Older Android camera capture can also
+require storage permission. Section 32 of the Privacy Policy explains the device-specific details.
 
-A User may manually enter an address without granting current device location. Private residential
-addresses, exact job site addresses, private proposals, messages, financial information, and live
-coordinates are subject to the access controls described in the Privacy Policy.
+You may decline or revoke optional permissions in device settings and type an address instead of
+granting current-device location. An affected function may stop, while unrelated functions remain
+available where technically feasible. Stopping live sharing does not remove a saved address used by a
+different feature. Visibility of job addresses, proposals, messages, documents, and financial
+instructions follows the Privacy Policy.
 
-You may not use information obtained through the Platform for an unrelated purpose, unlawful
-discrimination, stalking, harassment, identity theft, spam, data brokerage, targeted advertising, or
-creation of an unauthorized profile or database.
+You may use another person's information received through the Platform only for the authorized
+interaction and other lawful purposes for which you have authority. Do not use it for stalking,
+harassment, discrimination, identity theft, spam, data brokerage, unrelated targeted advertising, or an
+unauthorized profile or database. Providers remain responsible for their independent customer records
+and required notices.
 
 ## 31. Deactivation Account Deletion and Data Requests
 
-Deactivation temporarily limits an account while preserving information for possible return. It is not
-deletion. Account deletion may be requested through the mobile application and, after signing in, at
-companiescenter.com/settings/account-control/deletion.
+Deactivation temporarily limits an account and preserves information for a possible return. Deletion
+removes or reduces account information under the Privacy Policy. Uninstalling the app does not request
+either action.
 
-A deletion request begins a 30 day cancellation period. During that period, Companies Center may hide
-the public profile, restrict new activity, stop active live-location sessions, revoke unnecessary
-sessions, and disable marketing. Signing in again during that period cancels the deletion and restores
-the account.
+In iOS or Android, open Profile > Account > Deactivation and deletion. Select Delete permanently,
+complete account verification, type DELETE, and select Delete my account. The profile photo menu also
+provides access to these settings. Password accounts use their password; available social-only flows use
+the signed-in session and Apple confirmation where applicable.
 
-After the cancellation period, Companies Center deletes, deidentifies, or restricts account information
-according to the Privacy Policy and applicable law. Limited records may remain for another User's
-legitimate record, payment or tax obligations, fraud prevention, safety, dispute resolution,
-enforcement, or legal claims.
+Without reinstalling the app, visit https://companiescenter.com/settings/account-control/deletion. This
+settings route requires sign-in; a social-only account can set a website password through Forgot
+password. Alternatively, submit a deletion request at https://companiescenter.com/privacy-request
+without creating an account. We verify control proportionately before completing a destructive request.
+Section 43 supplies assistance if access is difficult.
 
-Deleting a Companies Center account does not automatically cancel an application store or third party
-subscription unless the deletion flow expressly confirms that cancellation. A User must follow the
-cancellation instructions of the payment source, and Companies Center will provide reasonable
-information about the effect of deletion on an active paid Provider tool.
+A submitted account-deletion request deactivates and hides the account, stops active sharing, and starts
+a 30-day cancellation period. Signing in again during that period cancels deletion and restores the
+account. The app also offers Cancel deletion and keep my account. To ask about a pending request without
+cancelling it, use its reference through the public privacy-request page or contact us instead of
+signing in.
 
-Deletion does not cancel an agreement, debt, warranty, dispute, tax duty, or other obligation between
-a Client and Provider. Rights and duties that arose before deletion may continue.
+After the cancellation period, the next daily purge ordinarily completes removal within one additional
+day, for a total of up to 31 days from the verified request, unless a specific lawful preservation
+exception applies. We send a completion email. A shorter mandatory deadline or an obligation concerning
+children's information takes priority over this cancellation period.
 
-Privacy access, correction, portability, and deletion requests may be submitted at
-companiescenter.com/privacy-request and through the other methods described in the Privacy Policy and
-Section 43.
+Section 26 of the Privacy Policy identifies retained records and their periods. Deletion is not a
+promise that every invoice, dispute record, recipient copy, or backup disappears immediately. A reduced
+account identifier linked to retained records is not necessarily anonymous. Retention must remain
+limited to its justified purpose, and privacy requests remain available during any lawful hold.
+
+Deleting an account ends its remaining Pro access. The current prepaid model has no recurring payment or
+in-app subscription to cancel. Refunds follow Section 15, the purchase terms, and applicable law.
+Deleting an account does not extinguish a lawful debt, warranty, claim, or other obligation between a
+Client and Provider.
+
+Submit access, correction, portability, deletion, consent, and other applicable privacy requests at
+https://companiescenter.com/privacy-request or through Section 43. The public route also accepts
+nonusers and authorized agents. Decisions, verification, deadlines, and appeals follow Sections 28 and
+29 of the Privacy Policy. Neither an account restriction nor rejection of revised Terms removes these
+rights.
 
 ## 32. Suspension and Termination
 
-You may stop using the Platform at any time. Companies Center may warn, restrict, suspend, deactivate,
-or terminate an account or feature if it reasonably believes that the User violated these Terms,
-created risk or harm, engaged in fraud or abuse, failed a required verification, infringed rights,
-exposed the Platform to legal liability, or used the Platform in a way inconsistent with its purpose.
+You may stop using the Platform and request deletion at any time. We may warn, restrict, suspend, or
+terminate access for a material breach of these Terms, fraud, threats, exploitation, unlawful content or
+services, infringement, evasion of security or age controls, account compromise, or a legal requirement.
+A restriction must be reasonably connected to the issue and its risk.
 
-Companies Center may act immediately when necessary for safety, security, fraud prevention, legal
-compliance, protection of another User, or preservation of evidence. Where appropriate, Companies
-Center may provide the reason and an available method to request review.
+We can act before notice where reasonably necessary to protect safety, security, another person's
+rights, evidence, or compliance with law. Otherwise, we provide notice explaining the material reason
+and an opportunity to request review. We may withhold particular details when disclosure would violate
+law, compromise security, or expose another person's protected information.
 
-Suspension or termination may prevent access to User Content, messages, documents, bookings, benefits,
-or other information. Users should retain copies of records they are legally required to keep.
-Companies Center may provide limited access to information when required by law or reasonably
-necessary to resolve an existing matter.
+Request review through in-app Customer Support, https://companiescenter.com/contact, or
+companiescenterserv@gmail.com. Explain the challenged action and relevant facts. Staff assess the
+request; Sanux does not decide it. A request for review does not automatically lift a restriction, but
+an identified error must be addressed. No account login or new Terms acceptance is required merely to
+contact us about a restriction or exercise a statutory right.
 
-A User suspended for violation is not automatically entitled to a refund for a Platform purchase,
-subject to applicable law and the purchase terms. Termination does not affect accrued payment
-obligations, direct agreements between Users, licenses needed for retained content, disclaimers,
-limitations, indemnities, dispute terms, or provisions that by their nature should survive.
+A restriction may limit access to content, messages, documents, or paid functions. Keep copies of
+records you need for your business. Through the external contact channels, we provide information or
+access required by law and address requests for receipts or records reasonably needed for an existing
+matter, subject to appropriate identity and safety checks.
+
+A restriction for your material breach does not automatically create a right to a refund, but it cannot
+confiscate a refund required by law or promised at purchase. If we terminate paid access for reasons
+unrelated to your breach or fail to supply the paid service, the remedy in Section 15 applies.
+Suspension does not authorize indefinite retention of unrelated information.
+
+Accrued lawful payment duties, claims, and rights under direct agreements between users can survive
+termination. The limited license for lawfully retained content lasts only for its retained purpose and
+period. Dispute terms govern only claims within their scope; warranty, liability, and indemnity clauses
+apply only to events and claims they validly cover. Privacy, deletion, and nonwaivable rights continue
+under the Privacy Policy and law.
 
 ## 33. Platform Changes and Availability
 
-Companies Center may add, modify, limit, suspend, or discontinue a feature, category, market,
-interface, integration, or technical requirement. Availability may vary by location, account role,
-device, application version, safety status, feature flag, or operating system.
+Companies Center may change free functions, interfaces, categories, integrations, or technical
+requirements, and may discontinue a feature for legitimate business, security, or legal reasons.
+Availability can differ by location, role, device, and app release. Changes affecting purchased access
+are subject to Sections 15, 16, and 32; a general reservation to change the Platform does not eliminate
+the paid service or remedy owed.
 
 Companies Center does not promise uninterrupted or error free operation. Maintenance, outages, network
 conditions, third party failures, security incidents, legal requirements, or events beyond reasonable
 control may affect access.
 
-Companies Center will not activate a feature that materially changes data collection, payment
-processing, or User obligations until the applicable policy, notice, consent, and purchase terms are
-updated as required. Inactive or planned functions, including a future Store, do not create a right to
-launch, availability, or continued development.
+A material new data use, payment model, or contractual obligation requires the relevant updated notice,
+terms, and permission before it applies. A planned function does not establish that it is available.
+Companies Center will not treat acceptance of these Terms as authorization to activate a materially
+different collection, AI use, or charge without the required disclosure and choice.
 
-The Companies Center Store is not currently offered under these Terms. If it is launched, Companies
-Center will present the applicable service scope, pricing, payment, cancellation, refund, intellectual
-property, project, and privacy terms before accepting an order. A dormant screen, label, database
-field, or code path does not constitute an offer or authorize collection or payment.
+A Companies Center Store selling separate web-development, app-development, or marketing projects is not
+offered under these Terms. If introduced, those services require a specific scope, price, payment,
+cancellation, refund, ownership, and privacy agreement before an order is accepted. They are distinct
+from the current marketplace and prepaid provider tools.
 
 ## 34. Changes to These Terms
 
-Companies Center may update these Terms to reflect changes in the Platform, law, security, billing,
-vendors, or business operations. The Last Updated date identifies the current version.
+The Last Updated date identifies this revision. We may revise these Terms for changes to the service,
+law, security, or business operations. The app and website present a newly published version for review
+and record your affirmative decision before further account use. Publication alone does not establish
+acceptance by a person who has not agreed.
 
-For a material change, Companies Center may provide advance or contemporaneous notice through the
-application, email, account message, or a prominent website notice. If law requires affirmative
-consent, Companies Center will request it. Continued use after a nonmaterial change becomes effective
-constitutes acceptance to the extent permitted by law.
+For a material change, we provide notice through the service, email, or another appropriate channel
+before it applies to you, subject to any legally permitted urgent change. We obtain separate consent
+when required. An internal policy announcement is not a substitute for consent required for a new data
+use or charge.
 
-A change will not retroactively alter a dispute already asserted in writing or materially reduce
-rights for a completed transaction unless the User agrees or law permits. Changes to Section 39 are
-governed by the special rule stated there.
+A revision does not retroactively remove accrued rights, change a completed purchase, or impose a new
+dispute restriction on an existing claim without a legally effective agreement. The special protections
+in Section 39 govern arbitration changes. The Privacy Policy governs notices and permission for changes
+to data processing.
 
-If you do not agree to an updated version, you must stop using the Platform and may request account
-deletion, subject to obligations that already arose.
+If you decline revised Terms, account functions may be unavailable. External support, legal complaints,
+receipts, account-deletion requests, and statutory privacy rights remain available. Previously accrued
+obligations continue only to the extent valid. Any paid service affected by our change remains subject
+to the applicable purchase remedies.
 
 ## 35. Companies Center Intellectual Property
 
 The Platform, software, source code, design, interfaces, databases, selection and arrangement of
 content, trademarks, logos, graphics, and other materials supplied by Companies Center are owned by
-Companies Center or its licensors and are protected by intellectual property and other laws.
+Companies Center or its licensors and are protected by intellectual property and other laws. Except for
+the limited licenses expressly granted in these Terms, no right, title, or interest is transferred to
+you.
 
-Except for the limited licenses expressly granted in these Terms, no right, title, or interest is
-transferred to you. You may not use the Companies Center name, logo, trade dress, domain, or
-confusingly similar branding without written permission. You may not falsely suggest sponsorship,
-certification, affiliation, or endorsement.
-
-Companies Center may use open source and third party software subject to separate licenses. Those
-licenses control where they expressly grant rights that differ from these Terms.
+You may not use the Companies Center name, logo, trade dress, domain, or confusingly similar branding
+without written permission. You may not falsely suggest sponsorship, certification, affiliation, or
+endorsement. Companies Center may use open source and third party software subject to separate licenses.
+Those licenses control where they expressly grant rights that differ from these Terms.
 
 ## 36. Copyright and Intellectual Property Complaints
 
-Companies Center respects intellectual property rights. A copyright owner or authorized agent may
-submit a notice of claimed infringement, and a User whose material was removed may submit a
-counter-notice, under the procedure at companiescenter.com/dmca. Other intellectual property
-complaints may be submitted through the Contact page at companiescenter.com/contact.
+Our copyright notice, counter-notice, and repeat-infringer procedure is available at
+https://companiescenter.com/dmca. A copyright owner or authorized agent may submit a notice through that
+page or directly to the designated agent below. Other intellectual-property concerns can be sent through
+Section 43.
 
-A complaint should identify the protected work, identify the material claimed to infringe and its
-location, provide the complainant's contact information, state the basis for the claim, include a good
-faith statement that the disputed use is not authorized, and include a statement that the information
-is accurate and that the complainant is authorized to act.
+A copyright notice must include a physical or electronic signature; identification of the work claimed
+to be infringed; identification and location of the material to be removed; sufficient contact
+information; a good-faith statement that the disputed use is not authorized by the owner, its agent, or
+law; and a statement that the information is accurate and, under penalty of perjury, that the sender is
+authorized to act for the owner of the exclusive right involved.
 
-Companies Center may remove or restrict material, notify the submitting User, request additional
-information, restore material when appropriate, and terminate repeat infringers. A person who
-knowingly makes a material misrepresentation may be responsible for resulting harm under applicable
-law.
+Designated DMCA agent: Alejandro de Armas Perez, Companies Center LLC, 400 N Ashley Dr, Suite 1900,
+Tampa, FL 33602, United States. Telephone: +1 (813) 897-1727. Email: companiescenterserv@gmail.com. U.S.
+Copyright Office designation number: DMCA-1081484. This designation identifies the recipient of
+copyright notices; it is not a copyright registration of the Platform or user content.
 
-This procedure does not constitute a representation that Companies Center has completed any
-registration or designation required for a particular statutory safe harbor.
+We address compliant notices by expeditiously removing or disabling access to the identified material as
+appropriate under the DMCA and notifying the person who supplied it. That person may submit a
+counter-notice with a physical or electronic signature; identification and former location of the
+removed material; a statement under penalty of perjury of a good-faith belief that removal resulted from
+mistake or misidentification; and their name, address, telephone number, consent to the applicable
+federal district court's jurisdiction, and agreement to accept service of process from the notifying
+party or its agent. For a person outside the United States, the jurisdiction statement concerns a
+federal district where Companies Center may be found. The form at the DMCA page provides the required
+statements.
+
+We forward a valid counter-notice to the notifying party and follow the statutory restoration procedure,
+ordinarily between 10 and 14 business days after receiving the counter-notice unless we receive notice
+that the claimant filed the qualifying court action. Independent lawful grounds for restricting content
+remain available. Notices and counter-notices, including contact information, may be shared with the
+affected party as described in the Privacy Policy.
+
+Companies Center terminates accounts of repeat infringers in appropriate circumstances. Its
+repeat-infringer procedure includes closure after three upheld infringement notices; that threshold does
+not prevent earlier action warranted by the facts or require a court judgment before a qualifying
+infringement is addressed. Counter-notices, mistakes, and relevant evidence must be considered in
+applying the procedure. Knowingly making a material misrepresentation in a notice or counter-notice can
+result in liability under applicable law.
+
+Nothing in this section guarantees statutory immunity. The copyright procedure is separate from
+intimate-image removal under Section 25, general safety reports, and privacy requests.
 
 ## 37. Feedback
 
-If you voluntarily provide an idea, suggestion, improvement, or other feedback about Companies Center,
-you grant Companies Center a perpetual, irrevocable, worldwide, royalty free, transferable, and
-sublicensable right to use, reproduce, modify, commercialize, and incorporate the feedback without
-restriction or compensation.
+If you voluntarily send product suggestions as feedback, you permit Companies Center to use and
+incorporate those suggestions into its products without compensation, subject to any different written
+agreement. This permission covers implementation and continued use of the suggestion, not ownership of
+all information in your account.
 
-Do not submit feedback that you do not have authority to share or that is subject to a duty of
-confidentiality. This Section applies to feedback about the Platform and does not transfer ownership
-of ordinary User Content.
+Do not submit suggestions you lack authority to share or that require confidential treatment under
+another agreement. This clause does not expand the license to ordinary User Content, authorize use of
+private messages or Sanux prompts for advertising or training, or waive rights in a support complaint,
+privacy request, or honest review. Those materials remain governed by their applicable sections and the
+Privacy Policy.
 
 ## 38. Disclaimers of Warranties
 
-To the maximum extent permitted by law, the Platform is provided as is and as available. Companies
-Center disclaims express, implied, and statutory warranties, including warranties of merchantability,
-fitness for a particular purpose, title, noninfringement, quiet enjoyment, accuracy, reliability,
-availability, security, and course of dealing.
+**EXCEPT FOR OUR EXPRESS COMMITMENTS AND RIGHTS THAT CANNOT LAWFULLY BE EXCLUDED, THE PLATFORM IS
+PROVIDED AS IS AND AS AVAILABLE.** To the extent permitted by applicable law, Companies Center disclaims
+implied warranties of merchantability, fitness for a particular purpose, and noninfringement. This
+clause does not exclude an express promise, a mandatory statutory warranty, or our duty to supply a
+product or service that you purchased.
 
-Companies Center does not warrant that the Platform will be uninterrupted, error free, secure,
-accurate, complete, compatible with every device, or free of harmful components. Companies Center does
-not warrant any User, Provider, Client, service, Job, proposal, price, review, recommendation, badge,
-credential, license, insurance status, completion record, estimate, invoice, message, location signal,
-artificial intelligence output, or third party service.
+We do not promise uninterrupted or error-free operation, compatibility with every device, absolute
+security, or a particular commercial result. Service descriptions, paid entitlements, the Privacy
+Policy, and legally binding representations remain subject to the obligations they actually create. A
+general disclaimer does not cancel a specific promise merely because it appeared in an interface,
+purchase screen, or authorized communication rather than a separately signed paper.
 
-Companies Center does not inspect every Provider, verify every claim, supervise work, guarantee
-payment, or guarantee safety. Users must make independent decisions and take reasonable precautions.
-No statement by support, an administrator, marketing material, or another User creates a warranty
-unless Companies Center expressly states the warranty in a signed written agreement.
+We do not independently inspect marketplace work, verify payment for it, or guarantee a Client,
+Provider, review, badge, credential, price, estimate, invoice, location signal, or generated AI answer.
+Users must assess qualifications and material information for their own transactions. These limits do
+not excuse our own misrepresentation, negligence, or other conduct for which the law imposes
+responsibility.
 
-Some jurisdictions do not allow certain warranty exclusions. In those jurisdictions, exclusions apply
-only to the extent permitted, and nonwaivable rights remain in effect.
+Where a jurisdiction restricts a disclaimer, that restriction controls. The Apple-specific warranty
+provisions in Section 29 and the exceptions in Section 40 remain applicable. Nothing in these Terms
+reduces mandatory consumer remedies.
 
-## 39. Arbitration Jury Trial and Class Action Waiver
+## 39. Arbitration and Dispute Resolution
 
-### 39.1 Agreement to Arbitrate
+### 39.1 Agreement and Scope
 
-Except for matters excluded below, you and Companies Center agree that any dispute, claim, or
-controversy arising out of or relating to the Platform, these Terms, the Privacy Policy, an account, a
-Platform purchase, communications, or the relationship between you and Companies Center will be
-resolved by binding individual arbitration.
+Unless you reject this Section under Section 39.11, you and Companies Center agree to binding individual
+arbitration of covered disputes arising from the Platform, these Terms, an account, a Platform purchase,
+or our relationship. Arbitration replaces a court trial and jury for those covered disputes. This
+agreement is mutual and is subject to all exceptions below. It does not arbitrate a dispute solely
+between a Client and Provider unless they separately agree to that process.
 
-The Federal Arbitration Act governs the interpretation and enforcement of this Section. The
-arbitrator, rather than a court, has authority to decide disputes concerning the interpretation,
-applicability, enforceability, or formation of this arbitration agreement, except that a court decides
-a dispute concerning the class action waiver or the validity of an arbitration opt out.
+The Federal Arbitration Act governs this Section where applicable. A court decides whether an agreement
+to arbitrate was formed, whether a valid rejection applies, the enforceability of the class waiver, and
+every issue that law reserves to a court. Subject to those reservations, the arbitrator decides other
+matters assigned under the applicable rules. This revision does not impose new arbitration restrictions
+retroactively on an already accrued claim without a legally effective separate agreement.
 
-### 39.2 Informal Resolution First
+### 39.2 Informal Notice
 
-Before filing arbitration, the claimant must send a written Notice of Dispute through the Notice of
-Dispute form at companiescenter.com/legal-notice. The notice must include the claimant's name, account
-email, description of the dispute, supporting facts, requested relief, and a personally signed
-statement that the information is accurate.
+Before starting an ordinary arbitration, either party should send a Notice of Dispute. Send yours by
+email to companiescenterserv@gmail.com with that subject, or by mail to Companies Center LLC, Attn Legal
+Notices, 400 N Ashley Dr, Suite 1900, Tampa, FL 33602, United States. You may instead use the optional
+Notice of Dispute form at https://companiescenter.com/legal-notice. We send ours to your known account
+or other appropriate contact. Include your name, a way to contact you, the relevant account or
+transaction if any, a description, and the relief requested. You may use an authorized representative.
+No special website function, new account, or notarization is required.
 
-The parties will attempt in good faith to resolve the matter for 60 days after receipt. Any applicable
-limitations period is tolled during that period. If the required information is missing, the 60 day
-period begins when a complete notice is received. Neither party may begin arbitration before
-completing this process unless immediate temporary relief is necessary to prevent imminent and
-irreparable harm.
+The parties will try in good faith to resolve the matter for up to 60 days from receipt. We may request
+relevant clarification, but missing information does not restart or indefinitely delay that period.
+Applicable limitation periods are suspended during this process to the extent law permits, and neither
+party will rely on this agreed period to defeat an otherwise timely claim. Either party may file sooner
+to preserve a deadline or seek urgent relief. This process is not a condition for small claims,
+regulatory reports, statutory privacy requests, or legally required content-removal requests.
 
-### 39.3 Arbitration Administrator and Rules
+### 39.3 Administrator and Rules
 
-Arbitration will be administered by the American Arbitration Association under its applicable Consumer
-Arbitration Rules for an individual consumer claim or its applicable Commercial Arbitration Rules for a
-business claim, as modified by this Section. If the selected rules conflict with this Section, this
-Section controls to the extent permitted by the administrator and law.
+The American Arbitration Association administers arbitration under its applicable Consumer Arbitration
+Rules and Consumer Due Process Protocol for a covered consumer dispute, or Commercial Arbitration Rules
+for a qualifying business dispute. The character of the transaction and applicable rules determine
+classification; selecting the Provider role alone does not waive consumer safeguards. Current rules,
+forms, and fees are available at https://www.adr.org, including
+https://www.adr.org/rules-forms-and-fees/consumer/.
 
-If the American Arbitration Association cannot or will not administer the matter, the parties will
-attempt to agree on another nationally recognized administrator. If they cannot agree, a court with
-authority may appoint an administrator or arbitrator under applicable law.
+Mandatory law and the administrator's required fairness standards control any conflict. This Section
+does not remove protections under applicable rules for related or multiple filings. Companies Center
+will satisfy the applicable business filing, clause-review, registration, and fee requirements. If AAA
+declines because Companies Center has not complied with its requirements, you may proceed in a competent
+court. Otherwise, if AAA is unavailable, the parties may agree in writing on an alternative; absent
+agreement, either may ask a competent court for the relief available under the Federal Arbitration Act.
+No substitute may reduce mandatory consumer protections.
 
 ### 39.4 Filing and Notice
 
-After the informal period, a claimant may file a demand with the administrator and must provide a copy
-to the other party through the contact method stated in Section 43 or the verified account contact on
-file. The demand must comply with the applicable rules and include a copy of these Terms.
+A claimant may file a demand through AAA under the applicable rules and send a copy to the other party
+using the contact above or the user's appropriate known contact. Include the arbitration agreement and
+the information required by those rules. Ordinary procedural defects should be addressed proportionately
+under the rules; this Section does not create a separate forfeiture of claims for a technical notice
+error.
 
-### 39.5 Fees
+### 39.5 Fees and Remedies
 
-Fees are allocated under the applicable arbitration rules and law. When the Consumer Arbitration Rules
-apply, Companies Center will pay the amounts required of a business and will not require the consumer
-to pay more than the consumer share permitted by those rules. The arbitrator may shift fees only when
-authorized by the rules and applicable law, including for a claim filed for harassment or that is
-patently frivolous.
+For a consumer arbitration, Companies Center pays the business share of administrative fees and
+arbitrator compensation required by AAA. You do not pay more than the consumer share permitted by its
+rules; applicable fee-waiver procedures remain available. For a business arbitration, fees follow the
+applicable rules and law. No fee or cost allocation may prevent exercise of a nonwaivable right.
+Attorneys' fees or sanctions may be awarded only as permitted by the governing law and rules, not merely
+because a party loses.
 
 ### 39.6 Hearing and Location
 
-The arbitration will be conducted by one neutral arbitrator. A consumer may choose a documents only,
-telephone, video, or in person hearing when available under the applicable rules. An in person
-consumer hearing will take place in the county where the consumer resides unless the parties agree
-otherwise. A business hearing may occur in Pinellas County, Florida, remotely, or at another agreed
-location.
+One neutral arbitrator hears the matter. Where permitted by the applicable rules, a consumer may choose
+a documents-only, telephone, video, or in-person procedure. An in-person consumer hearing takes place in
+the consumer's home county unless the consumer agrees otherwise after the dispute arises or the rules
+require a more protective arrangement. A business hearing may be remote or in Hillsborough County,
+Florida, subject to an agreed or legally required alternative. Required accessibility accommodations
+remain available.
 
-### 39.7 Individual Relief
+### 39.7 Award
 
-The arbitrator may award the same individual remedies that a court could award under applicable law,
-including damages, declaratory relief, and individual injunctive relief. The arbitrator may award
-relief only to the individual claimant and only to the extent necessary to resolve that claimant's
-claim.
+The arbitrator may award the individual relief available under applicable law, including damages,
+statutory relief, attorneys' fees where authorized, and individual declaratory or injunctive relief. The
+arbitrator issues the written decision required by the rules. A competent court may enter judgment on
+the award, and statutory review rights remain available. Section 40 does not remove a remedy that cannot
+lawfully be limited.
 
-### 39.8 Small Claims and Temporary Relief
+### 39.8 Exceptions and Protected Rights
 
-Either party may bring an eligible individual claim in small claims court instead of arbitration. A
-party may also seek temporary or preliminary injunctive relief from a court to protect account
-security, confidential information, intellectual property, or a person from imminent harm while
-arbitration proceeds. Seeking that limited relief does not waive arbitration of the remaining issues.
+Either party may bring an eligible claim in small claims court. Either may seek urgent temporary relief
+from a competent court to protect a person, information, or rights from imminent harm without waiving
+arbitration of a remaining covered claim. You may report matters to government agencies, cooperate with
+investigations, and exercise statutory privacy or other administrative rights without arbitration or the
+informal notice process.
 
-### 39.9 Class and Representative Proceedings Waiver
+Nothing in these Terms enforces a predispute arbitration agreement or joint-action waiver against a
+protected person who elects otherwise for a case covered by 9 U.S.C. Section 402 concerning sexual
+assault or sexual harassment. A court decides the applicability and enforceability questions reserved to
+it by that law. Other claims or remedies that applicable law makes nonarbitrable also remain in court.
 
-You and Companies Center agree to bring claims only in an individual capacity. Neither party may bring
-or participate in a class, collective, consolidated, coordinated, private attorney general, or
-representative proceeding in arbitration. The arbitrator may not combine claims of different persons
-without the written consent of all parties.
+### 39.9 Class Proceedings and Public Relief
 
-If a final court decision determines that applicable law prevents waiver of a particular request for
-public injunctive relief, that request will be separated and decided by the court after individual
-arbitrable claims are completed. All other claims remain subject to arbitration.
+For covered claims that may lawfully be subject to this restriction, the parties agree to individual
+arbitration rather than class or representative arbitration. This does not prohibit assistance by
+counsel, lawful coordination of individual claims, or procedures required by the applicable
+administrator. It does not waive a right protected by Section 39.8 or a nonwaivable request for public
+injunctive relief.
 
-### 39.10 Jury Trial Waiver
+If a particular class waiver or restriction on a remedy is unenforceable, a competent court determines
+the treatment of that claim or remedy. Nonwaivable public relief remains available in court when
+required. The court decides whether any stay or sequencing with other proceedings is appropriate; these
+Terms do not automatically postpone that remedy until arbitration ends.
 
-For any dispute heard in court, you and Companies Center knowingly waive trial by jury to the fullest
-extent permitted by law.
+### 39.10 Court Proceedings
 
-### 39.11 Thirty Day Opt Out
+There is no separate waiver of trial by jury for a dispute that properly proceeds in court. Court
+procedures and available jury rights follow applicable law. Rejecting arbitration also rejects the
+individual-arbitration and class restrictions in this Section for claims covered by that rejection.
 
-You may opt out of this arbitration agreement by submitting the Arbitration Opt Out form at
-companiescenter.com/legal-notice within 30 days after you first accept a version of these Terms
-containing this arbitration agreement. The notice must state your name, account email, and an
-unambiguous decision to opt out, and it must be personally submitted by you.
+### 39.11 Thirty Day Rejection Option
 
-Opting out of arbitration does not affect the remaining Terms or your ability to use the Platform. An
-opt out applies only to the person who timely submitted it and does not transfer with an account.
+You may reject this arbitration agreement within 30 calendar days after you affirmatively accept this
+October 11, 2026 version. Email companiescenterserv@gmail.com with the subject Arbitration Opt Out, or
+mail Companies Center LLC, Attn Arbitration Opt Out, at the address in Section 43. You may instead use
+the optional Arbitration Opt Out form at https://companiescenter.com/legal-notice. State your name, the
+account email if you have one, a contact address, and your decision to reject arbitration. An email sent
+or letter postmarked within the period is timely. An authorized representative may submit it for you; no
+special form, fee, or notarization is required.
 
-### 39.12 Changes to Arbitration Terms
+Rejecting arbitration does not prevent Platform use or change the other Terms. We honor a valid earlier
+rejection without requiring it to be repeated. A rejection does not waive either party's substantive
+claims. It applies to the rejecting person or entity; an authorized business representative should
+identify the entity. Any preexisting dispute remains subject to the agreement, if any, lawfully
+governing it, without retroactive expansion by this revision.
 
-If Companies Center makes a material future change to this Section, the change will not apply to a
-dispute for which either party provided written notice before the change. Companies Center will
-provide notice and any new consent required by law. Rejecting a later arbitration change does not
-revoke an earlier valid agreement unless the notice expressly allows it.
+### 39.12 Later Changes
+
+A material later change to this Section requires clear notice and affirmative agreement; continued use
+alone is not agreement to it. It cannot apply retroactively to an accrued dispute without a legally
+effective separate agreement. Any notice proposing a change must explain its effect and any rejection
+option. Declining a later change does not create a new agreement, remove a valid earlier rejection, or
+retroactively enlarge an earlier valid agreement.
 
 ### 39.13 Severability
 
-Except for the class and representative proceedings waiver, if part of this Section is unenforceable,
-it will be severed and the remainder will remain effective. If the class waiver is unenforceable as to
-a claim that cannot lawfully proceed individually, that claim will proceed in court and the remaining
-individual claims will be arbitrated.
+A court may sever an unenforceable part only to the extent permitted by law and without defeating
+mandatory safeguards. A claim that cannot lawfully be arbitrated individually proceeds in a competent
+court unless the parties validly agree otherwise after the dispute arises. Other severable covered
+claims remain subject to a valid arbitration agreement. Section 43 supplies the court rules, subject to
+the exceptions above.
 
 ## 40. Limitation of Liability
 
-To the maximum extent permitted by law, Companies Center and its owners, officers, directors,
-employees, contractors, affiliates, licensors, and service providers will not be liable for indirect,
-incidental, special, exemplary, punitive, or consequential damages; lost profits, revenue, data,
-goodwill, business opportunity, or anticipated savings; personal disputes; service delays; property
-damage; or the acts or omissions of a Client, Provider, or third party, arising out of or relating to
-the Platform, even if advised that damage was possible.
+Subject to the exceptions below and only to the extent permitted by applicable law, Companies Center and
+the persons acting on its behalf are not liable for indirect, incidental, special, or consequential
+damages arising from Platform use, including lost profits, anticipated savings, or business
+opportunities to the extent those losses are consequential. The characterization of a loss depends on
+the facts and law; calling a loss indirect here does not make it so.
 
-To the maximum extent permitted by law, the aggregate liability of Companies Center and the related
-parties for all claims arising from or relating to the Platform will not exceed the greater of one
-hundred United States dollars or the amount you paid directly to Companies Center during the 12
-months before the event giving rise to the claim.
+Subject to the same exceptions, the aggregate monetary liability of Companies Center and those acting on
+its behalf for covered claims will not exceed the greater of US $100 or the amount you paid directly to
+Companies Center during the 12 months before the event giving rise to the claim. The US $100 floor
+applies even if you paid nothing. Payments made to an independent Provider are not payments to Companies
+Center.
 
-The limitations apply regardless of the theory of liability and even if a remedy fails of its
-essential purpose. They do not limit liability that cannot lawfully be limited, including liability
-for intentional misconduct, fraud, or personal injury caused by Companies Center to the extent
-applicable law prohibits limitation.
+Neither the damage exclusion nor the monetary cap applies to Companies Center's fraud, intentional
+misconduct, gross negligence, or death, personal injury, or physical property damage caused by its own
+acts or omissions; a promised or legally required refund; or liability, statutory damages, remedies, and
+other rights that applicable law does not permit us to limit. The cap does not restrict nonwaivable
+privacy or consumer remedies, available injunctive relief, or a regulator's authority.
 
-Some jurisdictions do not permit certain exclusions or caps. In those jurisdictions, liability is
-limited only to the maximum extent permitted.
+These provisions allocate risk only where enforceable and do not relieve Companies Center of its own
+duties or convert another user's conduct into a release of our independent wrongdoing. They do not limit
+the Client's or Provider's direct agreement with each other. Where a limitation is prohibited or would
+defeat a remedy protected by law, the applicable legal rule controls.
 
 ## 41. Indemnification and User Responsibility
 
-To the maximum extent permitted by law, you will defend, indemnify, and hold harmless Companies Center
-and its owners, officers, directors, employees, contractors, affiliates, licensors, and service
-providers from third party claims, losses, liabilities, damages, judgments, penalties, fines, costs,
-and reasonable legal fees arising from:
+To the extent permitted by law, you will indemnify Companies Center and its officers, employees, and
+authorized representatives against reasonable losses, damages, and legal costs arising from a
+third-party claim, but only to the extent caused by your material breach of these Terms, negligence,
+intentional misconduct, violation of law, or infringement of another person's rights. This can include
+unlawful content you submit, services you provide, or misuse of information when the stated causal
+condition is met.
 
-- your User Content, services, work, business, personnel, or property;
-- your breach of these Terms or a representation made through the Platform;
-- your violation of law or another person's rights;
-- a dispute, injury, animal incident, property damage, payment issue, tax, permit, license, insurance,
-warranty, employment, or contractor matter connected with your direct dealings with another User;
-- your misuse of location, messages, documents, personal information, reviews, referrals, or Platform
-access.
+This obligation does not apply merely because a dispute concerns your account, a job, an animal, or
+property. It does not shift losses caused by Companies Center's own negligence, misconduct, unlawful
+processing, or breach of duty, or by another person for whom you are not responsible. It does not
+automatically transfer Companies Center's regulatory fines or penalties to you. Consumer protections and
+statutory limits control.
 
-Companies Center may control the defense of a matter subject to indemnification, and you will
-reasonably cooperate. You may not settle a claim in a way that admits wrongdoing by or imposes an
-obligation on Companies Center without written consent.
+Companies Center must promptly notify you of a claim for which it seeks indemnification and provide
+reasonable cooperation. A delay reduces your obligation to the extent it materially prejudices the
+defense. You may assume the defense through reasonably qualified counsel acceptable to Companies Center,
+with acceptance not unreasonably withheld. Companies Center may participate through its own counsel at
+its own expense unless a conflict or applicable law reasonably requires another arrangement.
 
-This Section does not require a consumer to indemnify Companies Center for Companies Center's own
-unlawful conduct and applies only to the extent permitted by law.
+Neither party may settle an indemnified claim in a way that admits the other's wrongdoing, imposes a
+nonmonetary obligation, or fails to release the other from that claim without that party's written
+consent, not unreasonably withheld. If you decline a defense you are obligated to provide, Companies
+Center may undertake it and seek only reasonable, necessary costs within this Section. Any shared
+responsibility must be allocated according to the actual cause and applicable law.
 
 ## 42. Release Between Users
 
-To the maximum extent permitted by law, you release Companies Center and its related parties from
-claims arising solely from the acts or omissions of another User, a direct service agreement, an off
-Platform payment, work quality, nonpayment, cancellation, property condition, injury, or another User
-dispute.
-
+To the maximum extent permitted by law, you release Companies Center and its related parties from claims
+arising solely from the acts or omissions of another User, a direct service agreement, an off Platform
+payment, work quality, nonpayment, cancellation, property condition, injury, or another User dispute.
 This release does not waive a claim based on Companies Center's own violation of law or an obligation
 that cannot legally be waived. Companies Center may assist with communication or records without
-assuming the underlying liability.
-
-If a jurisdiction limits a general release of unknown claims, the release applies only to the extent
-permitted by that jurisdiction.
+assuming the underlying liability. If a jurisdiction limits a general release of unknown claims, the
+release applies only to the extent permitted by that jurisdiction.
 
 ## 43. Governing Law Notices and Contact
 
-These Terms and any dispute not governed by federal law are governed by the laws of the State of
-Florida, without regard to conflict of law principles, except that mandatory consumer law in a User's
-place of residence continues to apply when it cannot lawfully be waived.
+Florida law governs these Terms except where controlling federal law applies. Mandatory protections of
+the state in which a consumer resides remain applicable when they cannot lawfully be waived. The Federal
+Arbitration Act governs Section 39 where applicable. A choice of law does not remove a statutory privacy
+right or other mandatory protection.
 
-Any court proceeding permitted under Section 39 must be brought in a state court located in Pinellas
-County, Florida, or the United States District Court with jurisdiction over Pinellas County. The
-parties consent to personal jurisdiction and venue in those courts, except that an eligible small
-claims action may be brought where applicable rules permit.
+A court proceeding permitted by Section 39 may be brought in a competent state court in Hillsborough
+County, Florida, or the United States District Court for the Middle District of Florida, Tampa Division.
+Subject to mandatory law, those are the agreed courts for other nonarbitrable Platform disputes. An
+eligible small-claims action may be brought where its rules permit. A consumer retains any nonwaivable
+right to proceed in their home jurisdiction, and urgent relief may be sought in a competent court able
+to provide it.
 
-Legal notices to Companies Center must be submitted through the legal notice form at
-companiescenter.com/legal-notice unless applicable law requires another method. Ordinary support
-requests may be submitted through in application Customer Support or companiescenter.com/contact, and
-privacy requests at companiescenter.com/privacy-request.
+Companies Center LLC, 400 N Ashley Dr, Suite 1900, Tampa, FL 33602, United States.
 
-Notices to a User may be delivered to the account email address, through the application, by push
-notification, or through another contact method the User provided. A User is responsible for
-maintaining current contact information.
+Telephone: +1 (813) 897-1727
 
-Companies Center LLC, Florida, United States. Website: companiescenter.com.
+Email: companiescenterserv@gmail.com
 
-These Terms, the Privacy Policy, and any applicable checkout or feature specific terms constitute the
-entire agreement concerning the Platform. If a provision is unenforceable, it will be limited or
-severed while the remainder continues. Failure to enforce a provision is not a waiver. You may not
-assign these Terms without written consent. Companies Center may assign them in connection with a
-merger, financing, reorganization, sale of assets, or transfer of the Platform. Section titles are for
-organization. The English version controls to the extent permitted by law. Provisions that by their
-nature should survive termination will survive.
+Website: https://companiescenter.com
+
+Support and accessibility assistance: https://companiescenter.com/contact or in-app Customer Support
+
+Legal notices and arbitration rejections may be sent by email or post to the contact above, using the
+subject or attention line in Section 39 where relevant, or through the optional form at
+https://companiescenter.com/legal-notice. Formal service of legal process follows applicable law; an
+ordinary contact form is not a mandatory substitute. You may contact us without opening an account or
+accepting a new policy solely to send a notice.
+
+Privacy requests and appeals: https://companiescenter.com/privacy-request.
+
+Account deletion: https://companiescenter.com/settings/account-control/deletion, with the external
+alternative and cautions in Section 31.
+
+Copyright notices and counter-notices: https://companiescenter.com/dmca and the designated agent in
+Section 36.
+
+Intimate-image removal requests: Section 25.
+
+These channels serve different purposes; a privacy request need not complete the arbitration process. We
+may deliver notices to your account email, through the app, or through another appropriate contact you
+provide, subject to legally required delivery and consent. Keep your contact information current. We do
+not treat a push notification alone as sufficient where the law requires another form of notice. Do not
+send passwords, full payment credentials, or unnecessary sensitive documents in an ordinary request.
+
+These Terms, the Privacy Policy, and properly presented applicable purchase or feature terms form the
+agreement on their respective subjects, with the precedence stated in Section 1. This provision does not
+extinguish an accrued claim, binding express promise, or mandatory right. An unenforceable provision may
+be limited or severed only as law permits; the special rule for arbitration appears in Section 39.
+Failure to enforce a provision once does not waive future enforcement.
+
+You may not assign your account or this agreement without our consent, except where law permits
+otherwise. Companies Center may assign the agreement in a merger, reorganization, or transfer of the
+Platform only with its obligations, privacy commitments, and your accrued rights preserved. An
+assignment does not authorize a materially different use of personal information.
+
+The English text controls to the extent law permits, without displacing a binding translation or a
+mandatory language requirement. Survival of obligations is limited as stated in Section 32.
