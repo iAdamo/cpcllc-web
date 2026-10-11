@@ -21,13 +21,15 @@ export interface DmcaAgent {
   email: string;
 }
 
+// From the designation as Adam confirmed it on 2026-10-11 (also in the
+// Privacy Policy, section 35). Must match the Copyright Office directory.
 export const DMCA_AGENT: DmcaAgent = {
-  name: "",
-  organization: "",
-  registrationNumber: "",
-  address: [],
-  phone: "",
-  email: "",
+  name: "Alejandro de Armas Perez",
+  organization: "Companies Center LLC",
+  registrationNumber: "DMCA-1081484",
+  address: ["400 N Ashley Dr, Suite 1900", "Tampa, FL 33602", "United States"],
+  phone: "+1 (813) 897-1727",
+  email: "companiescenterserv@gmail.com",
 };
 
 /** Every field the page shows is filled in. */

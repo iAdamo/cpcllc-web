@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   acceptedTermsFor,
+  marketingOptInField,
   orderRequired,
   reachedEnd,
   termsPageFor,
@@ -74,5 +75,20 @@ describe("website Terms acceptance", () => {
         "<LegalLayout",
       );
     }
+  });
+});
+
+// The unticked marketing box (2026-10-11): marketing is opt-in. An older API
+// refuses unknown fields, so it goes only to an API that lists it.
+describe("sign-up marketing box", () => {
+  const terms = [{ termsType: "privacy", version: "v1.0" }] as never;
+  it("sends the answer, ticked or not, to an API that takes it", () => {
+    const newer = { terms, signup: { marketingOptIn: true } };
+    expect(marketingOptInField(newer, true)).toEqual({ marketingOptIn: true });
+    expect(marketingOptInField(newer, false)).toEqual({ marketingOptIn: false });
+  });
+  it("sends nothing to an older API or before the versions load", () => {
+    expect(marketingOptInField({ terms }, true)).toEqual({});
+    expect(marketingOptInField(undefined, true)).toEqual({});
   });
 });

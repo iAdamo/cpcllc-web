@@ -37,6 +37,8 @@ export function orderRequired(
 /** GET terms/current: the version of each policy in force now. */
 export interface CurrentTerms {
   terms: RequiredTerms[];
+  /** Sign-up fields the API takes beyond the Terms checkbox (2026-10-11). */
+  signup?: { marketingOptIn?: boolean };
 }
 
 /** What the sign-up checkbox sends ("I agree to the Terms of Service and
@@ -64,6 +66,19 @@ export function acceptedTermsFor(
     ...(privacy ? { privacy } : {}),
     platform: "web",
   };
+}
+
+/**
+ * The unticked marketing box ("Send me offers and news by email and push
+ * notification"): marketing is opt-in. Sent only to an API that lists the
+ * field in GET terms/current; an older one refuses unknown fields, and the
+ * account is then simply not opted in.
+ */
+export function marketingOptInField(
+  current: CurrentTerms | null | undefined,
+  ticked: boolean,
+): { marketingOptIn?: boolean } {
+  return current?.signup?.marketingOptIn === true ? { marketingOptIn: ticked } : {};
 }
 
 /** The acceptance page, coming back to `currentPath` afterwards. */

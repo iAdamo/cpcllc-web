@@ -6,7 +6,7 @@ import PrivacyRequestForm from "./PrivacyRequestForm";
 import CopyrightForms from "./CopyrightForms";
 import LegalNoticeForms from "./LegalNoticeForms";
 import DmcaPage from "@/app/dmca/page";
-import { dmcaAgentComplete } from "@/lib/dmcaAgent";
+import { DMCA_AGENT, dmcaAgentComplete } from "@/lib/dmcaAgent";
 
 /**
  * The /privacy-request and /dmca pages as first rendered. Regression guard
@@ -72,6 +72,8 @@ describe("DMCA page", () => {
       expect(html).not.toMatch(/DMCA-\d/);
     } else {
       expect(html).toContain("U.S. Copyright Office registration");
+      expect(html).toContain(DMCA_AGENT.registrationNumber);
+      expect(html).toContain(DMCA_AGENT.name);
     }
   });
 });

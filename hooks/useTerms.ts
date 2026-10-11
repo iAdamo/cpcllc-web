@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { decideTerms, getCurrentTerms, getTermsStatus } from "@/axios/terms";
-import { acceptedTermsFor } from "@/lib/terms";
+import { acceptedTermsFor, marketingOptInField } from "@/lib/terms";
 
 const STATUS_KEY = ["terms", "status"] as const;
 
@@ -20,7 +20,12 @@ export function useCurrentTerms() {
     retry: false,
     refetchOnWindowFocus: false,
   });
-  return { ...query, acceptedTerms: acceptedTermsFor(query.data) };
+  return {
+    ...query,
+    acceptedTerms: acceptedTermsFor(query.data),
+    /** The marketing box's field (empty when the API doesn't take it). */
+    marketingField: (ticked: boolean) => marketingOptInField(query.data, ticked),
+  };
 }
 
 /** Which current policies this account still has to accept. Never served

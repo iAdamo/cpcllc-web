@@ -105,8 +105,10 @@ export default function SignUpPage({ onBack }: Props) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [ageConfirmed, setAgeConfirmed] = useState(false);
   const [termsAgreed, setTermsAgreed] = useState(false);
+  // Optional and unticked: marketing is opt-in.
+  const [marketingOptIn, setMarketingOptIn] = useState(false);
   // The versions the Terms checkbox agrees to; recorded with the account.
-  const { acceptedTerms } = useCurrentTerms();
+  const { acceptedTerms, marketingField } = useCurrentTerms();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
 
@@ -183,6 +185,7 @@ export default function SignUpPage({ onBack }: Props) {
         // Without it (versions didn't load, or an older API) the documents
         // are shown after the email code instead.
         ...(acceptedTerms ? { acceptedTerms } : {}),
+        ...marketingField(marketingOptIn),
       });
       console.log(pathname);
       pathname === "/onboarding" && setParamsFrom(pathname);
@@ -596,6 +599,20 @@ export default function SignUpPage({ onBack }: Props) {
                   .
                 </label>
               </div>
+
+              {/* Optional, unticked: marketing is opt-in. */}
+              <label className="flex gap-3 items-start cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={marketingOptIn}
+                  onChange={(e) => setMarketingOptIn(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-brand-600 focus:ring-brand-500/30"
+                />
+                <span className="text-sm text-slate-700 dark:text-slate-300">
+                  Send me offers and news by email and push notification (optional). You can change this any time in
+                  the app, under Profile &gt; Notifications.
+                </span>
+              </label>
 
               {/* Submit Button */}
               <button

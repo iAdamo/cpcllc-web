@@ -8,6 +8,8 @@ export interface RegisterUser {
   ageConfirmed?: boolean;
   /** The Terms checkbox: the versions the form showed (lib/terms). */
   acceptedTerms?: import("@/lib/terms").AcceptedTerms;
+  /** The optional marketing box (lib/terms marketingOptInField). */
+  marketingOptIn?: boolean;
 }
 
 export interface LoginUser {
