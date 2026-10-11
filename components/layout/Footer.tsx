@@ -7,6 +7,7 @@ import { useTranslation } from "@/context/TranslationContext";
 import { usePublicAppConfig } from "@/hooks/usePublicAppConfig";
 import SocialIcon from "@/components/SocialIcon";
 import { SOCIAL_META, shownSocialLinks } from "@/lib/socialLinks";
+import { CONTACT } from "@/lib/contact";
 
 const footerLinks = [
   {
@@ -89,22 +90,22 @@ const Footer = () => {
             <p className="text-white font-bold text-base mb-4">Contact Us</p>
             <p className="flex items-center gap-2.5 text-white/60">
               <Phone size={15} aria-hidden className="shrink-0 text-gold-400" />
-              <a href="tel:+18138971727" className="hover:text-white transition-colors">
-                +1 (813) 897-1727
+              <a href={CONTACT.phoneHref} className="hover:text-white transition-colors">
+                {CONTACT.phone}
               </a>
             </p>
             <p className="flex items-start gap-2.5 text-white/60">
               <MapPin size={15} aria-hidden className="mt-0.5 shrink-0 text-gold-400" />
               <span>
-                30190 US Highway 19N #1064
+                {CONTACT.address[0]}
                 <br />
-                Clearwater, Florida 33761
+                {CONTACT.address[1]}
               </span>
             </p>
             <p className="flex items-center gap-2.5 text-white/60">
               <Mail size={15} aria-hidden className="shrink-0 text-gold-400" />
-              <a href="mailto:support@companiescenter.com" className="hover:text-white transition-colors">
-                support@companiescenter.com
+              <a href={`mailto:${CONTACT.email}`} className="hover:text-white transition-colors">
+                {CONTACT.email}
               </a>
             </p>
           </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import CopyrightForms from "@/components/legal/CopyrightForms";
 import { DMCA_AGENT, dmcaAgentComplete } from "@/lib/dmcaAgent";
+import { CONTACT } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "Copyright and DMCA Policy",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 /** The company's published mailing address (also on /contact). */
-const MAILING_ADDRESS = ["30190 US Highway 19N #1064", "Clearwater, Florida 33761", "United States"];
+const MAILING_ADDRESS = CONTACT.address;
 
 function AgentDetails() {
   if (dmcaAgentComplete()) {
