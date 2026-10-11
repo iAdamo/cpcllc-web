@@ -87,9 +87,22 @@ describe("legal notices page", () => {
     }
   });
 
-  it("the opt-out form states the 30-day rule and asks for self-submission", () => {
+  // Terms of Service 39.11 (2026-10-11): 30 days from accepting the current
+  // version, and a representative may opt out for someone by email or post.
+  // The form had said "first accept a version" and "only you can submit".
+  it("the opt-out form states the 30-day rule, asks for self-submission, and names the representative route", () => {
     const html = render(<LegalNoticeForms initial="opt-out" />);
-    expect(html).toContain("within 30 days");
+    expect(html).toContain("within 30 days after you accept the current version");
     expect(html).toContain("I am submitting this opt-out myself");
+    expect(html).toContain("someone you have authorized can opt out for you by email or post");
+    expect(html).not.toMatch(/Only you can submit|first accept a version/);
+  });
+
+  // Terms of Service 39.2: up to 60 days from receipt; no special website
+  // function is required, so the form says it is optional.
+  it("the dispute form counts 60 days from receipt and says it is optional", () => {
+    const html = render(<LegalNoticeForms initial="dispute" />);
+    expect(html).toContain("up to 60 days from when we receive it");
+    expect(html).toContain("This form is optional");
   });
 });

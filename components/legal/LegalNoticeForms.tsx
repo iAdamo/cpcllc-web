@@ -22,10 +22,11 @@ import {
 import { CheckField, Filed, FormTabs, SubmitButton, TextArea, TextField } from "@/components/legal/FormFields";
 
 /**
- * /legal-notice: the written notices the Terms of Service require. Notice of
- * Dispute (Section 39.2), Arbitration opt-out (Section 39.11), and any other
- * legal notice (Section 43). Each is recorded with the time received and a
- * reference, and the sender gets an email receipt.
+ * /legal-notice: the optional online way to send the notices in the Terms of
+ * Service (email and post work too). Notice of Dispute (Section 39.2),
+ * Arbitration opt-out (Section 39.11), and any other legal notice (Section
+ * 43). Each is recorded with the time received and a reference, and the
+ * sender gets an email receipt.
  */
 export default function LegalNoticeForms({ initial = "dispute" }: { initial?: NoticeTab }) {
   const [tab, setTab] = useState<NoticeTab>(initial);
@@ -91,8 +92,9 @@ function DisputeNotice() {
   return (
     <form onSubmit={submit} noValidate className="space-y-6">
       <p className="text-sm text-gray-600 dark:text-gray-300">
-        Before starting arbitration, Section 39.2 of the Terms of Service asks you to send this notice and give us
-        60 days to try to resolve the dispute with you.
+        Before starting arbitration, Section 39.2 of the Terms of Service asks you to send a Notice of Dispute and
+        allow up to 60 days from when we receive it to try to resolve the dispute with you. This form is optional:
+        email and post work too, and someone you have authorized can send it for you.
       </p>
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField id="dn-name" label="Your full name" value={form.name} onChange={(v) => set("name", v)} error={errors.name} autoComplete="name" maxLength={120} required />
@@ -145,8 +147,8 @@ function OptOut() {
       >
         <p>
           It was received on <strong>{longDate(filed.receivedAt)}</strong>. An opt-out received within 30 days
-          after you first accepted a version of the Terms of Service containing the arbitration agreement is
-          effective. We will confirm by email once we have checked the date. Keep the email as your record.
+          after you accepted the current version of the Terms of Service is effective. We will confirm by email
+          once we have checked the date. Keep the email as your record.
         </p>
       </Filed>
     );
@@ -156,8 +158,9 @@ function OptOut() {
     <form onSubmit={submit} noValidate className="space-y-6">
       <p className="text-sm text-gray-600 dark:text-gray-300">
         You can opt out of the arbitration agreement in Section 39 of the Terms of Service within 30 days after you
-        first accept a version of the Terms that contains it. Opting out does not affect the rest of the Terms or your
-        use of Companies Center. Only you can submit your own opt-out.
+        accept the current version of the Terms. Opting out does not affect the rest of the Terms or your use of
+        Companies Center. This form is for your own account; someone you have authorized can opt out for you by
+        email or post, as Section 39.11 describes.
       </p>
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField id="oo-name" label="Your full name" value={form.name} onChange={(v) => set("name", v)} error={errors.name} autoComplete="name" maxLength={120} required />

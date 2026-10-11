@@ -462,7 +462,7 @@ export function optOutPayload(f: OptOutForm): Result<OptOutPayload> {
   if (blank(f.name)) e.name = "Enter your full name.";
   if (!isEmail(f.email)) e.email = "Enter the email address on your account.";
   if (!f.optOut) e.optOut = "Tick this box to opt out.";
-  if (!f.personal) e.personal = "An opt-out must be submitted by you personally.";
+  if (!f.personal) e.personal = "Tick this box to confirm the opt-out is for your own account.";
   if (blank(f.signature)) e.signature = "Type your full name to sign.";
   else if (!blank(f.name) && !signs(f.signature, f.name))
     e.signature = "Type the same full name you entered above.";

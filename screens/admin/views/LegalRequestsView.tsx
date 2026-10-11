@@ -494,7 +494,8 @@ function OptOutCheck({ check }: { check: NonNullable<LegalRequestDetail["optOutC
         </ul>
       ) : null}
       <p className="mt-1 text-xs">
-        The window starts at the first acceptance of a version that contains the arbitration agreement.
+        The window starts when the person first accepted the version in force. Opt-outs sent by email or post,
+        including by a representative (Terms Section 39.11), are not in this list: keep them in the inbox.
       </p>
     </div>
   );
