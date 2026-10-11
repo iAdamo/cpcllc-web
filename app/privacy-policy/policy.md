@@ -1,4 +1,4 @@
-**Last Updated:** October 11, 2026
+**Last Updated:** October 12, 2026
 
 Companies Center LLC operates a local services marketplace through the Companies Center mobile
 applications and companiescenter.com. This Policy explains the personal information we collect, its
@@ -15,9 +15,9 @@ Team Tasks, as described in Section 13A.
 ## 1. Scope of This Policy
 
 This Policy covers our iOS and Android applications, public website, account features, marketplace
-records, messages, the Team feature, support, privacy and copyright requests, and administrative
-processing that supports those services. The website and applications can use the same account and
-backend records. Features may differ by platform and release.
+records, messages, the Team feature, support, privacy and copyright requests, legal notices, and
+administrative processing that supports those services. The website and applications can use the same
+account and backend records. Features may differ by platform and release.
 
 This Policy does not govern another user's independent business records, a bank or payment application
 chosen to pay for a job, or an external website. A provider who receives customer information has
@@ -203,8 +203,10 @@ controls, including short-lived links that can be forwarded; Section 12 explains
 
 We process support requests, messages, evidence, attachments, ratings, reports, dispute decisions,
 appeals, staff notes, account restrictions, and audit records. A fraud risk score can be calculated from
-events entered by staff for human review. Account restrictions are staff decisions. Sanux does not
-decide suspensions, identity verification, prices, or marketplace ranking.
+events entered by staff for human review. Account restrictions are staff decisions. Reports include
+requests to remove an intimate image shared without consent, which anyone can send without an account
+(Section 25 of the Terms of Service). Sanux does not decide suspensions, identity verification, prices,
+or marketplace ranking.
 
 ### 5.11 Completion Records and Reviews
 
@@ -302,14 +304,29 @@ re-encodes these photos before sending them, which removes location and camera d
 stored privately. We keep a record of changes to a Team Task (created, edited, sent, completed, reopened,
 archived) and who made them.
 
+### 5.19 Requests, Notices, and Filings
+
+When someone sends a privacy request, an appeal, a copyright notice or counter-notice, a Notice of
+Dispute, an arbitration opt-out, or another legal notice, we process their name, their email address or
+postal address, what they ask for or state, any statements and typed signature, links to the material
+concerned, and the reference we give it. When an agent or representative sends it for someone, we also
+process the representative's name and contact details.
+
+A request or notice can come through a form on the website, by email, or by post. Staff record one that
+came by email or post with how it came, the day it was sent or postmarked, and the day it arrived; the
+Terms of Service count an arbitration opt-out from the day it was sent or postmarked. We may link a
+request to the account whose email address it gives. Staff notes, the steps taken, and the decision are
+kept with it. Section 26 gives how long these records are kept.
+
 ## 6. Sources of Information
 
 Information comes from users and their devices; other users who send messages, documents, reviews, or
 reports; providers who enter customer records; businesses that invite people to their team or give them
 Team Tasks; and services that deliver email, push, maps, sign-in, AI responses, or payment
 confirmations. We derive operational statistics and safety indicators from the records identified above.
-Privacy and copyright filings supply additional contact details, statements, evidence, and
-correspondence used to handle those filings.
+Privacy and copyright filings and legal notices supply additional contact details, statements, evidence,
+and correspondence used to handle them. An agent or representative who sends one supplies information
+about the person they act for.
 
 ## 7. How We Use Information
 
@@ -929,11 +946,12 @@ applicable. A standing ban is retained while it stands; its post-action period s
 ends it. Related dispute or report retention can extend the linked record.
 
 **Privacy and copyright filings, legal notices, and appeals.** Two years after closure, subject to a
-pending linked appeal or justified legal hold. This includes privacy requests, appeals, copyright notices
-and counter-notices, Notices of Dispute, and other legal notices. Records may survive account deletion and
-include filing contact details, statements, evidence, staff history, and the response. An arbitration
-opt-out is kept without a time limit: it records a choice that continues to apply to any later dispute,
-and deleting it would leave no proof that the person opted out.
+pending linked appeal or justified legal hold. This includes privacy requests, appeals, copyright
+notices and counter-notices, Notices of Dispute, and other legal notices. Records may survive account
+deletion and include filing contact details, statements, evidence, how each one arrived (including the
+day an email was sent or a letter postmarked), staff history, and the response. An arbitration opt-out
+is kept without a time limit: it records a choice that continues to apply to any later dispute, and
+deleting it would leave no proof that the person opted out.
 
 **Estimates, invoices, and their PDFs.** Seven years from issue, including after account deletion,
 subject to applicable deletion rights and specific legal holds. The retained document can contain
@@ -1063,8 +1081,9 @@ processing and does not by itself undo an earlier lawful disclosure or a justifi
 Submit a request at https://companiescenter.com/privacy-request, through in-app Customer Support, or
 through the email or postal contact in Section 35. The public form accepts requests from users,
 nonusers, and authorized agents without requiring a new account. It provides a reference and email
-acknowledgment. We aim to respond within 30 days, subject to any shorter mandatory period. That target is
-not the legal deadline for every right or state.
+acknowledgment. Staff record a request sent by email or post in the same way, with its own reference
+(Section 5.19). We aim to respond within 30 days, subject to any shorter mandatory period. That target
+is not the legal deadline for every right or state.
 
 When California's CCPA applies, we acknowledge requests to know, correct, or delete within 10 business
 days and ordinarily respond within 45 calendar days from receipt, including verification time. If a
