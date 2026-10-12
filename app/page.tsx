@@ -5,9 +5,9 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://companiescenter.com";
 
 export const metadata: Metadata = {
-  title: "Companiescenter | Find the Best Businesses in Your Area",
+  title: "Companies Center | Find Local Service Businesses",
   description:
-    "Discover top-rated service providers near you with Companiescenter. Explore reviews, ratings, and locations to make informed decisions.",
+    "Find local service businesses near you, starting in Hillsborough County, Florida. Compare profiles and reviews from completed jobs, then contact the business directly.",
   alternates: { canonical: "/" },
 };
 

@@ -1,33 +1,41 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, Star, CheckCircle } from "lucide-react";
+import { MapPin, Star, MessageSquare, type LucideIcon } from "lucide-react";
 
+/**
+ * An illustration of the map, not data: pins name kinds of service, and the
+ * cards say how the marketplace works. No business names, ratings or review
+ * counts here (FTC: a made-up rating or review count reads as a real one).
+ */
 const pins = [
-  { x: "22%", y: "38%", name: "Pro Plumbing", rating: 4.9, delay: 0 },
-  { x: "55%", y: "25%", name: "Elite Electric", rating: 4.8, delay: 0.15 },
-  { x: "70%", y: "55%", name: "Cool Air HVAC", rating: 4.9, delay: 0.3 },
-  { x: "35%", y: "65%", name: "CleanPro", rating: 5.0, delay: 0.45 },
-  { x: "78%", y: "30%", name: "SunSolar", rating: 4.7, delay: 0.6 },
+  { x: "22%", y: "38%", name: "Plumbing", delay: 0 },
+  { x: "55%", y: "25%", name: "Electrical", delay: 0.15 },
+  { x: "70%", y: "55%", name: "Heating and cooling", delay: 0.3 },
+  { x: "35%", y: "65%", name: "Cleaning", delay: 0.45 },
+  { x: "78%", y: "30%", name: "Landscaping", delay: 0.6 },
 ];
 
-const floatingCards = [
+const floatingCards: {
+  Icon: LucideIcon;
+  title: string;
+  line: string;
+  x: string;
+  y: string;
+  delay: number;
+}[] = [
   {
-    name: "Tampa Plumbers",
-    service: "Plumbing",
-    rating: 4.9,
-    reviews: 312,
-    badge: "Top Rated",
+    Icon: Star,
+    title: "Ratings from real jobs",
+    line: "Only clients of completed jobs can review.",
     x: "-left-4 md:-left-8",
     y: "top-8",
     delay: 0.4,
   },
   {
-    name: "Elite Electrical",
-    service: "Electrical",
-    rating: 4.8,
-    reviews: 189,
-    badge: "Verified",
+    Icon: MessageSquare,
+    title: "Talk to the business",
+    line: "Agree the work and the price directly.",
     x: "-right-4 md:-right-8",
     y: "bottom-16",
     delay: 0.6,
@@ -36,7 +44,7 @@ const floatingCards = [
 
 export default function MapPreview() {
   return (
-    <div className="relative w-full h-full min-h-[480px] select-none">
+    <div className="relative w-full h-full min-h-[480px] select-none" aria-hidden="true">
       {/* Map background */}
       <div className="absolute inset-0 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
         {/* Dark map base */}
@@ -94,10 +102,6 @@ export default function MapPreview() {
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                 <div className="bg-white rounded-xl px-3 py-2 shadow-xl text-xs whitespace-nowrap">
                   <p className="font-bold text-gray-900">{pin.name}</p>
-                  <div className="flex items-center gap-1 mt-0.5">
-                    <Star size={9} fill="#f59e0b" color="#f59e0b" />
-                    <span className="text-gray-600">{pin.rating}</span>
-                  </div>
                 </div>
                 <div className="w-2 h-2 bg-white rotate-45 mx-auto -mt-1 shadow" />
               </div>
@@ -112,13 +116,10 @@ export default function MapPreview() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
         >
-          <button
-            type="button"
-            className="px-5 py-2.5 bg-white text-gray-900 text-xs font-bold rounded-full shadow-xl hover:bg-brand-900 hover:text-white transition-all flex items-center gap-2 border border-gray-200"
-          >
+          <span className="px-5 py-2.5 bg-white text-gray-900 text-xs font-bold rounded-full shadow-xl flex items-center gap-2 border border-gray-200">
             <MapPin size={12} />
             Search this area
-          </button>
+          </span>
         </motion.div>
       </div>
 
@@ -135,22 +136,12 @@ export default function MapPreview() {
             y: { delay: card.delay + 0.5, duration: 3, repeat: Infinity, ease: "easeInOut" },
           }}
         >
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-3.5 shadow-2xl border border-gray-100 w-44">
-            <div className="flex items-center justify-between mb-1.5">
-              <div className="w-8 h-8 bg-brand-900 rounded-lg flex items-center justify-center">
-                <CheckCircle size={14} className="text-white" />
-              </div>
-              <span className="text-[9px] font-black px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full uppercase tracking-wide">
-                {card.badge}
-              </span>
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-3.5 shadow-2xl border border-gray-100 w-48">
+            <div className="w-8 h-8 bg-brand-900 rounded-lg flex items-center justify-center mb-1.5">
+              <card.Icon size={14} className="text-white" />
             </div>
-            <p className="text-xs font-black text-gray-900 leading-tight">{card.name}</p>
-            <p className="text-[10px] text-gray-400 mb-1.5">{card.service}</p>
-            <div className="flex items-center gap-1">
-              <Star size={10} fill="#f59e0b" color="#f59e0b" />
-              <span className="text-[11px] font-bold text-gray-900">{card.rating}</span>
-              <span className="text-[10px] text-gray-400">({card.reviews})</span>
-            </div>
+            <p className="text-xs font-black text-gray-900 leading-tight">{card.title}</p>
+            <p className="text-[10px] text-gray-500 mt-0.5 leading-snug">{card.line}</p>
           </div>
         </motion.div>
       ))}

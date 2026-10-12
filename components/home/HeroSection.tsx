@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, Shield, Clock } from "lucide-react";
+import { CheckCircle, ArrowRight, Shield, MessageSquare } from "lucide-react";
 import dynamic from "next/dynamic";
 import UniversalSearch from "@/components/UniversalSearch";
 
@@ -22,7 +22,7 @@ const fadeUp = {
 const trustBadges = [
   { Icon: Shield, label: "Verified Badges" },
   { Icon: CheckCircle, label: "Real Reviews" },
-  { Icon: Clock, label: "Fast Response" },
+  { Icon: MessageSquare, label: "Direct Messaging" },
 ];
 
 export default function HeroSection() {
@@ -67,12 +67,12 @@ export default function HeroSection() {
               custom={0.2}
               className="text-5xl md:text-[68px] font-black text-white leading-[1.02] tracking-tight mb-6"
             >
-              Find Trusted
+              Find Home
               <br />
-              Home Service
+              Service Pros
               <br />
               <span className="bg-gradient-to-r from-gold-300 to-gold-500 bg-clip-text text-transparent">
-                Pros Near You.
+                Near You.
               </span>
             </motion.h1>
 
@@ -83,8 +83,8 @@ export default function HeroSection() {
               custom={0.3}
               className="text-white/60 text-lg max-w-lg leading-relaxed mb-10"
             >
-              Connect with local professionals near you. Fast quotes, real
-              reviews from completed jobs, direct messaging.
+              Ask local professionals for quotes, read reviews from completed
+              jobs, and message businesses directly.
             </motion.p>
 
             {/* Universal search — hero variant (includes popular tags) */}

@@ -12,7 +12,7 @@ const STAT_META: Record<
 > = {
   verifiedProviders: { label: "Verified providers", format: (v) => `${v.toLocaleString()}+` },
   servicesCompleted: { label: "Services completed", format: (v) => `${v.toLocaleString()}+` },
-  reviews: { label: "Verified reviews", format: (v) => `${v.toLocaleString()}+` },
+  reviews: { label: "Reviews from completed jobs", format: (v) => `${v.toLocaleString()}+` },
   avgRating: { label: "Average rating", format: (v) => v.toFixed(1) },
 };
 

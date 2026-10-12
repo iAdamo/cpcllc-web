@@ -7,7 +7,7 @@ import useGlobalStore from "@/stores";
 
 const FEATURES = [
   { icon: ShieldCheck, label: "Verified badges, clearly marked" },
-  { icon: Star, label: "Real reviews & verified ratings" },
+  { icon: Star, label: "Reviews from completed jobs" },
   { icon: Zap, label: "Local providers near you" },
 ];
 
@@ -50,7 +50,7 @@ export default function Welcome({ onNext }: { onNext: () => void }) {
           <div className="inline-flex items-center gap-2 bg-white/8 border border-white/15 px-4 py-1.5 rounded-full mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-white/80 text-xs font-semibold">
-              Your #1 Home Service Network
+              Starting in Hillsborough County, FL
             </span>
           </div>
 

@@ -35,7 +35,7 @@ const configs = {
     bg: "bg-brand-50",
     iconColor: "text-brand-700",
     title: "Discover providers",
-    desc: "Search for a service or browse by category to find the best professionals near you.",
+    desc: "Search for a service or browse by category to find professionals near you.",
     suggestions: ["Plumbing", "HVAC", "Electrical", "Cleaning", "Roofing"],
   },
 };

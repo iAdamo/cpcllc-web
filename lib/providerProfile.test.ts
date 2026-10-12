@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ownerIdOf, providerProfileOf } from "@/lib/providerProfile";
+import { isTopRated, ownerIdOf, providerProfileOf } from "@/lib/providerProfile";
 
 /** Every shape `activeRoleId` arrives in on the website. */
 describe("providerProfileOf", () => {
@@ -24,5 +24,15 @@ describe("ownerIdOf", () => {
     expect(ownerIdOf({ owner: null })).toBeNull();
     expect(ownerIdOf({ owner: {} })).toBeNull();
     expect(ownerIdOf(null)).toBeNull();
+  });
+});
+
+describe("isTopRated", () => {
+  it("needs 4.8 or more on at least five reviews", () => {
+    expect(isTopRated(4.8, 5)).toBe(true);
+    expect(isTopRated(5, 12)).toBe(true);
+    expect(isTopRated(5, 1)).toBe(false); // one review is not a top rating
+    expect(isTopRated(4.7, 50)).toBe(false);
+    expect(isTopRated(undefined, undefined)).toBe(false);
   });
 });

@@ -238,7 +238,7 @@ export default function ServiceProvidersPage() {
         {/* ── Page heading ── */}
         <div className="flex-shrink-0 px-4 pt-4 pb-2 space-y-3">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight">
-            Find trusted{" "}
+            Find a{" "}
             <span className="bg-gradient-to-r from-brand-700 to-gold-500 bg-clip-text text-transparent dark:from-brand-300 dark:to-gold-400">
               business
             </span>

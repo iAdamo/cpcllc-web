@@ -15,7 +15,15 @@ import { describe, expect, it } from "vitest";
  * verified professionals", "all major cities ... throughout Florida",
  * "automated checks" on reviews, "Join verified local professionals",
  * and "Verified plumbers, electricians, cleaners" on the share card and in
- * the site's search and link-preview description.
+ * the site's search and link-preview description. 2026-10-12: "Your #1 Home
+ * Service Network" on the welcome screen, "Find the Best Businesses" and
+ * "Discover top-rated service providers" in the home page's search text, and
+ * the home page map's made-up businesses with ratings and review counts
+ * ("Tampa Plumbers", 4.9, 312 reviews). Also "Find Trusted Home Service Pros"
+ * (the site title, share card, hero and provider search: "trusted" says the
+ * platform vouches for them, Terms 19 says it doesn't), "Fast quotes" and
+ * "Fast Response", and "verified ratings" / "Verified reviews" (a review is
+ * tied to a completed job, not verified: Privacy Policy 5.11).
  * A real figure belongs in the API, not in the source.
  */
 const BANNED: Array<[RegExp, string]> = [
@@ -34,6 +42,15 @@ const BANNED: Array<[RegExp, string]> = [
   [/\bevery (provider|business|company|professional|pro)\b[^."]{0,40}\bverified\b/i, "an identity check the platform doesn't do (Terms 19)"],
   [/\ball major cities\b|\b(across|throughout) Florida\b/i, "a service area wider than the policy's (Hillsborough County first)"],
   [/\bautomated checks?\b/i, "a review check the platform doesn't run"],
+  [/#1\b|\bnumber one\b|\bno\.\s?1\b/i, "a ranking nobody measured"],
+  [/\bthe best (businesses|companies|professionals|providers|pros)\b/i, "a ranking claim"],
+  [/\btop[- ]rated (service )?(businesses|companies|professionals|providers|pros)\b/i, "says the listed businesses are top-rated"],
+  // A rating or review count written into the source is made up: real ones
+  // come from the API.
+  [/\brating:\s*[1-5](\.\d)?\s*,|\breviews:\s*\d+\s*,/, "a made-up rating or review count"],
+  [/\btrusted\b(\s+local)?\s+(home service |service )?(pros|professionals|providers|businesses|business|companies|experts)\b|\bfind trusted\b/i, "says the platform vouches for businesses (Terms 19)"],
+  [/\bfast (quotes|response|responses|replies|matches)\b/i, "a speed nobody measured"],
+  [/\bverified (ratings|reviews)\b/i, "a review check the platform doesn't do (policy 5.11)"],
 ];
 
 const ROOTS = ["app", "components", "screens"];
@@ -93,6 +110,25 @@ describe("marketing copy", () => {
     expect(hits("all major cities and surrounding areas throughout Florida")).toBe(true);
     expect(hits("verified service professionals across Florida")).toBe(true);
     expect(hits("We use a combination of automated checks")).toBe(true);
+    // 2026-10-12: the welcome screen, the home page's search text, the map.
+    expect(hits("Your #1 Home Service Network")).toBe(true);
+    expect(hits("the number one marketplace")).toBe(true);
+    expect(hits('title: "Companiescenter | Find the Best Businesses in Your Area",')).toBe(true);
+    expect(hits("Discover top-rated service providers near you")).toBe(true);
+    expect(hits('    rating: 4.9,')).toBe(true);
+    expect(hits('    reviews: 312,')).toBe(true);
+    expect(hits('{ x: "22%", y: "38%", name: "Pro Plumbing", rating: 4.9, delay: 0 },')).toBe(true);
+    expect(hits('default: "Companies Center — Find Trusted Local Service Providers",')).toBe(true);
+    expect(hits('subtitle: "Browse and hire trusted professionals",')).toBe(true);
+    expect(hits("Find Trusted")).toBe(true);
+    expect(hits('{ Icon: Clock, label: "Fast Response" },')).toBe(true);
+    expect(hits("Connect with local professionals near you. Fast quotes, real")).toBe(true);
+    expect(hits('{ icon: Star, label: "Real reviews & verified ratings" },')).toBe(true);
+    expect(hits('reviews: { label: "Verified reviews", format: (v) => `${v}+` },')).toBe(true);
+    // Sorting or filtering by rating names no business.
+    expect(hits('{ value: "Top Rated", label: "Top Rated" },')).toBe(false);
+    expect(hits('const rating = provider.averageRating ?? 0;')).toBe(false);
+    expect(hits('color: "#1e293b",')).toBe(false);
     // Ordinary copy passes, including the badge itself and the real count.
     expect(hits("Starting in Hillsborough County, FL")).toBe(false);
     expect(hits('{ Icon: Shield, label: "Verified Badges" }')).toBe(false);

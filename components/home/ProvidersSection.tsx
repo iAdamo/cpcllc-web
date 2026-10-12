@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { isTopRated } from "@/lib/providerProfile";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
@@ -189,7 +190,7 @@ export default function ProvidersSection() {
   const displayed = useMemo(() => {
     switch (activeFilter) {
       case "Top Rated":
-        return providers.filter((p) => (p.averageRating ?? 0) >= 4);
+        return providers.filter((p) => isTopRated(p.averageRating, p.reviewCount));
       case "Verified":
         return providers.filter((p) => p.isVerified);
       default:

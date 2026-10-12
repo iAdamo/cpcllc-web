@@ -4,7 +4,7 @@ import ServiceProviderPage from "@/screens/providers";
 
 export const metadata: Metadata = {
   title: "Service Providers",
-  description: "Find the Best Companies in Your Area",
+  description: "Find local service businesses near you and compare their profiles and reviews.",
 };
 
 export default function Page() {

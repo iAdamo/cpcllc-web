@@ -5,7 +5,7 @@ import { ImageResponse } from "next/og";
 // override it. Text only in characters the built-in font has: anything else
 // (a "●") makes the build try to download a font, which fails offline and
 // printed "Failed to load dynamic font" on every build. Shapes are drawn.
-export const alt = "Companies Center — find trusted local service providers";
+export const alt = "Companies Center — find local service providers";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -52,7 +52,7 @@ export default function OpengraphImage() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div style={{ fontSize: 68, fontWeight: 800, lineHeight: 1.05, letterSpacing: -1.5, maxWidth: 900 }}>
-            Find trusted local service providers
+            Find local service providers
           </div>
           <div style={{ fontSize: 30, color: "rgba(255,255,255,0.72)", maxWidth: 820 }}>
             Plumbers, electricians, cleaners, movers and more near you. Compare

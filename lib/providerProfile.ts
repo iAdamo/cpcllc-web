@@ -24,3 +24,14 @@ export function ownerIdOf(provider: { owner?: unknown } | null | undefined): str
   if (typeof owner === "string") return owner;
   return owner._id ? String(owner._id) : null;
 }
+
+/**
+ * "Top Rated" is a claim about a business, so it needs a rating that rests
+ * on enough reviews: one 5-star review is not a top rating (FTC: a badge
+ * must mean what it says).
+ */
+export const TOP_RATED = { minRating: 4.8, minReviews: 5 } as const;
+
+export function isTopRated(rating?: number | null, reviewCount?: number | null): boolean {
+  return (rating ?? 0) >= TOP_RATED.minRating && (reviewCount ?? 0) >= TOP_RATED.minReviews;
+}

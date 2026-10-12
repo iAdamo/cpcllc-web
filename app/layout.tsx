@@ -8,7 +8,7 @@ const SITE_URL =
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Companies Center — Find Trusted Local Service Providers",
+    default: "Companies Center — Find Local Service Providers",
     template: "%s | Companies Center",
   },
   description:
@@ -27,14 +27,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Companies Center",
-    title: "Companies Center — Find Trusted Local Service Providers",
+    title: "Companies Center — Find Local Service Providers",
     description:
       "Hire plumbers, electricians, cleaners, movers and more near you. Compare reviews, ratings and locations.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Companies Center — Find Trusted Local Service Providers",
+    title: "Companies Center — Find Local Service Providers",
     description:
       "Hire local service providers near you. Compare reviews, ratings and locations.",
   },

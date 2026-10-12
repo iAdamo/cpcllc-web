@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { getFeaturedReviews, type FeaturedReview } from "@/axios/stats";
 
-// Honest launch content. This section shows REAL verified reviews (from the
+// Honest launch content. This section shows REAL reviews (from the
 // reviews API, each tied to a completed job) as soon as at least three exist.
 // Until then it falls back to these commitment cards — never fabricated named
 // testimonials (FTC 16 CFR Part 465).

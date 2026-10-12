@@ -20,7 +20,7 @@ const ROLES: {
     id: "Client",
     icon: Briefcase,
     title: "I need services",
-    subtitle: "Browse and hire trusted professionals",
+    subtitle: "Browse and hire local professionals",
     perks: [
       "Search providers near you",
       "Compare quotes & reviews",

@@ -13,6 +13,7 @@ import {
   Phone,
 } from "lucide-react";
 import { ProviderData, MediaItem } from "@/types";
+import { isTopRated } from "@/lib/providerProfile";
 import useGlobalStore from "@/stores";
 
 interface ProviderCardProps {
@@ -97,7 +98,7 @@ const ProviderCard = memo(function ProviderCard({
                 <Award size={9} /> Featured
               </span>
             )}
-            {rating >= 4.8 && (
+            {isTopRated(rating, reviewCount) && (
               <span className="inline-flex items-center gap-0.5 text-brand-600 dark:text-brand-300 text-[10px] font-bold">
                 <Zap size={9} /> Top Rated
               </span>
