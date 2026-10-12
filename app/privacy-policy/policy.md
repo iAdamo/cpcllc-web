@@ -25,10 +25,10 @@ responsibilities for its independent use of that information. Employment and app
 separate notice where applicable; this scope distinction does not remove privacy rights that a law gives
 employees, applicants, or business contacts.
 
-Companies Center serves the United States and Nigeria. In the United States, its initial local-services
-focus is Hillsborough County, Florida. Availability can vary by locality and feature. Processing by an
-overseas service provider or contractor does not by itself mean that the marketplace is offered in that
-country. Section 31 describes the service territory and the additional disclosures for Nigeria.
+Companies Center offers its marketplace only in the United States, with its initial local-services focus
+in Hillsborough County, Florida. Availability can vary by locality and feature. Processing by an overseas
+service provider or contractor does not by itself mean that the marketplace is offered in that country.
+Section 31 describes the service territory and preserves applicable mandatory rights.
 
 ## 2. Definitions
 
@@ -233,12 +233,11 @@ does not renew automatically and does not save a payment method for later renewa
 membership and no in-app purchase channel for Pro in the mobile releases covered by this Policy.
 
 For USD purchases offered through Stripe Checkout, the hosted checkout identifies Stripe before payment.
-For purchases in Nigerian naira offered through Paystack, the hosted checkout identifies Paystack before
-payment. We send the processor the purchaser's email, amount, currency, plan and transaction references,
+We send the processor the purchaser's email, amount, currency, plan and transaction references,
 and relevant account or plan identifiers. We receive and retain the processor reference,
 successful-payment status, amount, currency, plan, paid-period dates, and processor name. We do not
 receive or store card numbers, security codes, last four digits, expiry dates, card brand, or billing
-address through these integrations. If checkout is not offered, this payment flow does not occur.
+address through this integration. If checkout is not offered, this payment flow does not occur.
 
 ### 5.14 Devices, Diagnostics, and Operational Records
 
@@ -252,8 +251,7 @@ Our internal systems record request method, path and time, notification delivery
 were delivered to an account and whether it read, opened, or closed them, presence, support actions, and
 staff audit events. Request-path collection does not imply that every path is free of identifiers. Error
 reports exclude query parameter values under the described configuration. Staff access to diagnostics is
-restricted. We use an on-server IP lookup to choose a search market when no country is supplied; that
-lookup result is not itself retained as a separate search record.
+restricted.
 
 The releases covered here do not use an advertising identifier, advertising SDK, third-party behavioral
 analytics SDK, session-replay tool, or third-party crash-reporting service. Operational diagnostics and
@@ -764,10 +762,10 @@ separate retention.
 exchanges tokens or authorization codes and permitted identity or profile information, including name and
 email where provided. It is separate from our own password authentication.
 
-**Stripe Checkout for enabled USD purchases, and Paystack for enabled NGN purchases.** When offered and
-selected, hosted checkout receives payment credentials directly, plus email, plan, amount, currency,
-reference, and account or plan metadata from us. We retain the limited returned records described in
-Section 5.13. Each processor can have separate fraud-prevention and legal purposes.
+**Stripe Checkout for enabled USD purchases.** When offered and selected, hosted checkout receives
+payment credentials directly, plus email, plan, amount, currency, reference, and account or plan metadata
+from us. We retain the limited returned records described in Section 5.13. Stripe can have separate
+fraud-prevention and legal purposes.
 
 **Browser web push services.** When web push is enabled and accepted, the browser delivery service
 processes the subscription and notification payload needed to deliver web alerts.
@@ -832,9 +830,8 @@ protections and government-access rules may differ by country.
 
 Authorized staff and contractors may access information remotely for their assigned responsibilities,
 subject to access restrictions and confidentiality requirements. Where applicable law requires
-safeguards for international processing, those requirements continue to apply. Section 31 describes the
-transfer of personal data from Nigeria and preserves any mandatory rights outside the stated service
-territory.
+safeguards for international processing, those requirements continue to apply. Section 31 preserves any
+mandatory rights outside the stated service territory.
 
 ## 24. Data Security
 
@@ -1070,7 +1067,7 @@ limiting certain sensitive-information uses; withdrawing consent; using an autho
 a refusal. Where a state law grants them, you may request a list of specific third-party recipients and an
 explanation or review of a qualifying profiling decision, challenge its result, or correct information
 supporting it. These rights depend on the law and processing involved; Sanux itself does not make those
-decisions. Section 31 describes the rights available under Nigerian law.
+decisions.
 
 We do not penalize a user for exercising a protected right. A feature that needs specific information may
 become unavailable when that information or permission is withdrawn. Withdrawal stops applicable future
@@ -1092,8 +1089,8 @@ exceed 45 calendar days. A covered opt-out of sale or sharing is processed as so
 later than 15 business days. These periods do not authorize a sale or sharing practice otherwise
 prohibited by law.
 
-Other state requests, requests under Nigerian law, and appeals follow their applicable deadlines and
-permitted extensions. We explain any lawful extension or refusal and the available appeal process.
+Other applicable privacy requests and appeals follow their applicable deadlines and permitted
+extensions. We explain any lawful extension or refusal and the available appeal process.
 Identity verification does not restart a statutory clock where the law counts from receipt. A request may
 cover older retained information where the applicable right is not limited to the preceding 12 months.
 
@@ -1107,8 +1104,7 @@ If a request is denied, we explain the reason and applicable appeal route. The d
 https://companiescenter.com/privacy-request?appeal= followed by the request reference. Supply the
 reference and filing email. The form supports one appeal of a decision; technical limits do not prevent a
 new request based on changed facts, any further remedy required by law, or a complaint to a regulator. A
-denied appeal identifies the relevant authority: in the United States, the state Attorney General or other
-applicable authority; in Nigeria, the Nigeria Data Protection Commission.
+denied appeal identifies the relevant state Attorney General or other applicable authority.
 
 We use verification information to authenticate, process, document, and protect the request. Requests and
 appeals have the retention schedule in Section 26. We do not require a new marketplace account merely to
@@ -1144,45 +1140,22 @@ applicable terms and privacy disclosures. Participation does not authorize an ot
 sensitive-data use. Public availability of information does not automatically remove every privacy
 protection.
 
-## 31. Service Territory and Nigeria Privacy Disclosures
+## 31. Service Territory and Mandatory Rights
 
-The marketplace described in this Policy is directed to adults using the service in the United States
-and in Nigeria. Local availability depends on the participating providers and enabled features. Access to
-a public webpage, or to the app from a store, in another country does not establish that local
-marketplace services are available there. Nothing in the stated service territory removes mandatory
-rights that applicable law gives an individual or changes our responsibilities for information we
-actually process. Requests remain available through Section 29.
+The marketplace described in this Policy is offered only in the United States. Local availability depends
+on the participating providers and enabled features. Access to a public webpage, or to the app from a
+store, in another country does not establish that local marketplace services are offered there.
+Processing by overseas providers or authorized personnel remains governed by Section 23.
 
-The rest of this section applies when Companies Center processes personal data subject to the Nigeria
-Data Protection Act 2023 and applicable directives of the Nigeria Data Protection Commission.
+Nothing in the stated service territory removes mandatory rights that applicable law gives an individual
+or changes our responsibilities for information we actually process. Privacy requests, complaints, and
+other applicable remedies remain available through Sections 29 and 35.
 
-For processing carried out for its own Platform purposes, Companies Center LLC acts as the data
-controller. A Service Provider who independently enters or uses a customer's information for the
-provider's own business, invoicing, tax, or service purposes may separately act as a data controller for
-that independent processing, as may a business for its own use of Team information.
-
-Depending on the activity, Companies Center relies on performance of a contract or steps requested before
-entering a contract, the person's consent, compliance with a legal obligation, protection of vital
-interests, a permitted public interest, or a legitimate interest that is not overridden by the person's
-rights and interests. Consent is requested separately when required, including for voluntary precise or
-background live location, Sanux, and direct marketing. A person may refuse or withdraw consent as easily as
-it was given, without losing unrelated Platform functions.
-
-Personal data may be processed in the United States or another country, as described in Section 23. When
-Nigerian personal data is transferred internationally, Companies Center uses a transfer mechanism or
-other safeguard permitted by applicable law and provides any additional notice or obtains any consent
-that is legally required.
-
-Subject to applicable conditions and exceptions, an individual may request to be informed about
-processing; access personal data; correct inaccurate or incomplete data; object to certain processing;
-withdraw consent; obtain eligible data in a portable format; request erasure; and seek review of a
-decision. Companies Center does not use Sanux to make a decision based solely on automated processing that
-produces legal or similarly significant effects.
-
-An individual may first submit a request through the methods in Sections 29 and 35. The individual also
-has the right to lodge a complaint with the Nigeria Data Protection Commission through ndpc.gov.ng.
-Companies Center does not restrict a person's right to contact the Commission or seek another remedy
-available under applicable law.
+Companies Center remains responsible for processing carried out for its own Platform purposes. A Service
+Provider is responsible for its independent use of customer information for its own business, invoicing,
+tax, or service purposes. A business is likewise responsible for its own decisions about the Team
+information it requests and uses, including any notices or permissions required for that use. These
+responsibilities do not remove Companies Center's obligations for information it processes.
 
 ## 32. Permissions and Device Controls
 

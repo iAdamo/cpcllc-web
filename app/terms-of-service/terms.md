@@ -1,4 +1,4 @@
-**Last Updated:** October 11, 2026
+**Last Updated:** October 12, 2026
 
 These Terms of Service form an agreement between you and Companies Center LLC governing the Companies
 Center mobile applications, companiescenter.com, and related services. Companies Center provides tools
@@ -61,9 +61,8 @@ If you use Companies Center for a business, company, partnership, organization, 
 represent that you have authority to bind that entity. In that situation, you and the entity are each
 responsible for compliance with these Terms, and references to you include the entity where appropriate.
 
-The marketplace is directed to the United States and Nigeria. In the United States, its initial focus is
-Hillsborough County, Florida. Availability depends on location, participating Providers, and enabled
-features. You may offer or request services only where they and your use of the Platform are lawful.
+The marketplace is offered only in the United States, with an initial focus in Hillsborough County,
+Florida. Availability depends on location, participating Providers, and enabled features. You may offer or request services only where they and your use of the Platform are lawful.
 Access to a public website from another country does not establish that local marketplace services are
 offered there or remove mandatory legal rights.
 
@@ -368,9 +367,8 @@ authorize a later charge.
 
 Before payment, the offer identifies Companies Center as the seller, the included functions, total price
 and currency, applicable taxes or charges, paid period, and refund conditions. For an enabled USD
-purchase, Stripe Checkout receives payment credentials on its hosted page; for an enabled purchase in
-Nigerian naira, Paystack's hosted checkout does. Companies Center receives limited payment and
-entitlement records described in the Privacy Policy. A checkout that is not offered cannot charge you.
+purchase, Stripe Checkout receives payment credentials on its hosted page. Companies Center receives
+limited payment and entitlement records described in the Privacy Policy. A checkout that is not offered cannot charge you.
 
 At the end of a prepaid period, the associated paid access ends unless a new period or disclosed
 promotion applies. There is no recurring payment to cancel. You may stop using Pro at any time.
@@ -1129,7 +1127,7 @@ individual-arbitration and class restrictions in this Section for claims covered
 ### 39.11 Thirty Day Rejection Option
 
 You may reject this arbitration agreement within 30 calendar days after you affirmatively accept this
-October 11, 2026 version. Email companiescenterserv@gmail.com with the subject Arbitration Opt Out, or
+October 12, 2026 version. Email companiescenterserv@gmail.com with the subject Arbitration Opt Out, or
 mail Companies Center LLC, Attn Arbitration Opt Out, at the address in Section 43. You may instead use
 the optional Arbitration Opt Out form at https://companiescenter.com/legal-notice. State your name, the
 account email if you have one, a contact address, and your decision to reject arbitration. An email sent

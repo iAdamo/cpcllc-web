@@ -91,9 +91,17 @@ describe.each(DOCS)("%s", (file) => {
   });
 
   // Adam, 2026-10-11: the documents are the Terms of Service everywhere, as
-  // the website and the app name them; the Terms PDF said "Terms of Use".
+  // the website and the app name them; the Terms PDF said "Terms of Use", and
+  // the 2026-10-12 one "Terms and Conditions of Use" (kept as Terms of Service).
   it("calls the Terms the Terms of Service", () => {
-    expect(source).not.toMatch(/Terms of Use/i);
+    expect(source).not.toMatch(/Terms of Use|Terms and Conditions/i);
+  });
+
+  // Adam, 2026-10-12: the marketplace is US only. Nigeria came out of both
+  // documents (and the API, website and app) the same day: the territory, the
+  // naira checkout, the Nigerian regulator and law.
+  it("names no country but the United States as part of the marketplace", () => {
+    expect(source).not.toMatch(/nigeria|naira|\bNGN\b|paystack|flutterwave|\+234|₦|\bNDPA\b|\bNDPC\b/i);
   });
 
   it("says nothing about Upon Publication or an Effective Date of its own", () => {
@@ -165,10 +173,10 @@ describe("Terms of Service", () => {
     }
   });
 
-  // Adam, 2026-10-11: Nigeria is part of the marketplace (Privacy Policy
-  // Section 31); the PDF directed it to the United States only.
-  it("Section 2 directs the marketplace to the United States and Nigeria", () => {
-    expect(section(2)).toContain("directed to the United States and Nigeria");
+  it("Section 2 offers the marketplace only in the United States", () => {
+    expect(section(2)).toContain(
+      "The marketplace is offered only in the United States, with an initial focus in Hillsborough County, Florida.",
+    );
   });
 });
 
