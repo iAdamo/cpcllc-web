@@ -33,13 +33,6 @@ import {
   type AccountActionType,
 } from "@/lib/accountActions";
 
-/** Country is derived server-side from the phone prefix (+1 / +234). */
-function countryLabel(country?: string | null): string {
-  if (country === "United States") return "🇺🇸 United States";
-  if (country === "Nigeria") return "🇳🇬 Nigeria";
-  return "—";
-}
-
 export function UsersView() {
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("");
@@ -128,7 +121,6 @@ export function UsersView() {
               <th className="px-5 py-2.5 font-medium">Name</th>
               <th className="px-5 py-2.5 font-medium">Email</th>
               <th className="px-5 py-2.5 font-medium">Phone</th>
-              <th className="px-5 py-2.5 font-medium">Country</th>
               <th className="px-5 py-2.5 font-medium">Role</th>
               <th className="px-5 py-2.5 font-medium">Provider</th>
               <th className="px-5 py-2.5 font-medium">Verified</th>
@@ -140,14 +132,14 @@ export function UsersView() {
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {loading && items.length === 0 && (
               <tr>
-                <td className="px-5 py-8 text-center text-slate-400" colSpan={10}>
+                <td className="px-5 py-8 text-center text-slate-400" colSpan={9}>
                   Loading users…
                 </td>
               </tr>
             )}
             {!loading && items.length === 0 && (
               <tr>
-                <td className="px-5 py-8 text-center text-slate-400" colSpan={10}>
+                <td className="px-5 py-8 text-center text-slate-400" colSpan={9}>
                   No users found.
                 </td>
               </tr>
@@ -173,9 +165,6 @@ export function UsersView() {
                 </td>
                 <td className="px-5 py-2.5 text-slate-600 dark:text-slate-300">{u.email}</td>
                 <td className="px-5 py-2.5 text-slate-600 dark:text-slate-300">{u.phoneNumber}</td>
-                <td className="px-5 py-2.5 text-slate-600 dark:text-slate-300 whitespace-nowrap">
-                  {countryLabel(u.country)}
-                </td>
                 <td className="px-5 py-2.5">
                   <StatusPill label={u.activeRole} tone="blue" />
                 </td>
@@ -364,7 +353,6 @@ function UserDetailBody({ user: u }: { user: any }) {
         value={`${u.phoneNumber ?? "—"} ${u.isPhoneVerified ? "(verified)" : "(unverified)"}`}
       />
       <Row label="Language" value={u.language ?? "—"} />
-      <Row label="Country" value={countryLabel(u.country)} />
       <Row label="Address" value={u.address ?? "—"} />
       <Row label="Average rating" value={u.averageRating ?? 0} />
       <Row label="Reviews" value={u.reviewCount ?? 0} />

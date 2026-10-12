@@ -7,8 +7,7 @@ export interface PublicStatItem {
     | "verifiedProviders"
     | "servicesCompleted"
     | "reviews"
-    | "avgRating"
-    | "countriesCovered";
+    | "avgRating";
   value: number;
 }
 
@@ -17,7 +16,6 @@ export interface PlatformStats {
   servicesCompleted: number;
   reviews: number;
   avgRating: number;
-  countriesCovered: number;
   /** The subset of stats worth showing (already floor-filtered by the API). */
   meaningful: PublicStatItem[];
 }

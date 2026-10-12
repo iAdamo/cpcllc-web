@@ -48,12 +48,12 @@ const LEFT_CONTENT: Record<
   1: {
     headline: "Join local\nservice professionals.",
     sub: "Whether you're looking for help or ready to offer your skills, CompaniesCenterLLC connects the right people.",
-    badge: "Serving the US and Nigeria",
+    badge: "Starting in Hillsborough County, FL",
   },
   2: {
     headline: "Create account",
     sub: "Join our platform and start connecting with services, CompaniesCenterLLC connects the right people.",
-    badge: "Serving the US and Nigeria",
+    badge: "Starting in Hillsborough County, FL",
   },
   3: {
     headline: "Your profile is your\nfirst impression.",

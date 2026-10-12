@@ -226,7 +226,6 @@ export function RecordRequestForm({
             <SelectField id="rec-region" label="Where they live" value={form.region} onChange={(v) => set("region", v as RecordForm["region"])}>
               <option value="">Not stated</option>
               <option value="us">United States</option>
-              <option value="ng">Nigeria</option>
               <option value="other">Elsewhere</option>
             </SelectField>
           </>

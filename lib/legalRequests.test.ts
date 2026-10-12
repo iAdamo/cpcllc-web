@@ -76,13 +76,13 @@ describe("privacy request form", () => {
     const r = privacyPayload(
       privacy({
         relationship: "agent",
-        region: "ng",
+        region: "other",
         subjectName: "Ben",
         subjectEmail: "ben@example.test",
       }),
     );
     expect(r.ok && r.payload).toMatchObject({
-      region: "ng",
+      region: "other",
       subject: { name: "Ben", email: "ben@example.test" },
     });
     expect(r.ok && "usState" in r.payload).toBe(false);
@@ -182,7 +182,10 @@ describe("helpers", () => {
 
   it("where they live, in words", () => {
     expect(regionLabel({ region: "us", usState: "FL" })).toBe("United States (Florida)");
-    expect(regionLabel({ region: "ng" })).toBe("Nigeria");
+    expect(regionLabel({ region: "other" })).toBe("Elsewhere");
+    // A request filed before the list changed still reads as elsewhere.
+    expect(regionLabel({ region: "gb" as never })).toBe("Elsewhere");
+    expect(regionLabel({})).toBe("");
   });
 });
 
@@ -345,8 +348,8 @@ describe("recording an email or letter", () => {
   it("each kind asks for its own: rights, the appealed reference, links", () => {
     const base = { name: "Ada", email: "ada@x.test", details: "x" };
     expect(errorsOf(form({ ...base, kind: "privacy" }))).toEqual({ rights: "Choose at least one request." });
-    const privacy = recordPayload(form({ ...base, kind: "privacy", rights: ["delete"], region: "ng" }), TODAY);
-    expect(privacy.ok && [privacy.payload.rights, privacy.payload.region]).toEqual([["delete"], "ng"]);
+    const privacy = recordPayload(form({ ...base, kind: "privacy", rights: ["delete"], region: "other" }), TODAY);
+    expect(privacy.ok && [privacy.payload.rights, privacy.payload.region]).toEqual([["delete"], "other"]);
     expect(errorsOf(form({ ...base, kind: "appeal", appealOf: "nope" }))).toEqual({
       appealOf: "Enter the reference of the decided request, like PR-7K3Q9X.",
     });

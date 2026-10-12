@@ -25,7 +25,8 @@ import type { OverviewRange } from "@/axios/admin";
 import { KpiCard } from "@/components/admin/KpiCard";
 import { PanelCard } from "@/components/admin/PanelCard";
 import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
-import { STATUS_CHART_COLORS, statusLabel, type JobStatus } from "@/lib/jobs";
+import { STATUS_CHART_COLORS, budgetText, statusLabel, type JobStatus } from "@/lib/jobs";
+import { formatMoney } from "@/lib/money";
 import {
   AreaChart,
   Area,
@@ -182,7 +183,7 @@ export default function DashboardView() {
           value={
             loading
               ? "—"
-              : `₦${((subs?.mrrCents ?? 0) / 100 || 0).toLocaleString("en-US")}`
+              : formatMoney(subs?.mrrCents ?? 0, "USD", { cents: true })
           }
           icon={TrendingUp}
           tone="rose"
@@ -341,7 +342,7 @@ export default function DashboardView() {
                       {t.clientName ?? "—"}
                     </td>
                     <td className="px-5 py-2 text-slate-600 dark:text-slate-300">
-                      ₦{(t.budget ?? 0).toLocaleString("en-US")}
+                      {budgetText(t)}
                     </td>
                     <td className="px-5 py-2">
                       <StatusPill

@@ -216,7 +216,7 @@ function PlanFormModal({
         description: form.description?.trim() || undefined,
         audience: form.audience,
         priceCents: Math.round(parseFloat(priceMajor || "0") * 100),
-        currency: "USD", // single currency — Paystack charges the NGN equivalent
+        currency: "USD", // the one currency; Stripe Checkout charges it
         interval: form.interval,
         features: featuresText
           .split("\n")
@@ -277,7 +277,7 @@ function PlanFormModal({
                 className={inputCls}
               />
             </Field>
-            <Field label="Currency" hint="charged via Paystack">
+            <Field label="Currency" hint="charged via Stripe">
               <input
                 value="USD"
                 disabled

@@ -16,20 +16,12 @@ import {
 import useGlobalStore from "@/stores";
 import {
   getProviderPlans,
-  getPaymentProviders,
   startCheckout,
   type BillingPlan,
-  type PaymentProvider,
 } from "@/axios/billing";
-import { payWithPaystack } from "@/lib/paystack";
 
 const NAVY = "#162660";
 const GOLD = "#DEAE60";
-
-const PROVIDER_LABEL: Record<PaymentProvider, string> = {
-  stripe: "Card",
-  paystack: "Paystack",
-};
 
 /** Cents → display string. Whole amounts drop the ".00". Always USD. */
 const money = (cents: number) => {
@@ -56,7 +48,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How do I pay?",
-    a: "Pay by card, or with the options shown at checkout. You always see the exact amount before you confirm.",
+    a: "By card, on Stripe's secure checkout page. You always see the exact amount before you confirm.",
   },
   {
     q: "Can I change plans later?",
@@ -111,24 +103,17 @@ export default function UpgradePage() {
   const router = useRouter();
   const isAuthenticated = useGlobalStore((s) => s.isAuthenticated);
   const [plans, setPlans] = useState<BillingPlan[]>([]);
-  const [providers, setProviders] = useState<PaymentProvider[]>([]);
-  const [method, setMethod] = useState<PaymentProvider | undefined>();
   const [loading, setLoading] = useState(true);
   const [checkingId, setCheckingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
-      const [list, provs] = await Promise.all([
-        getProviderPlans().catch(() => {
-          setError("Couldn't load plans. Please try again.");
-          return [] as BillingPlan[];
-        }),
-        getPaymentProviders().catch(() => [] as PaymentProvider[]),
-      ]);
+      const list = await getProviderPlans().catch(() => {
+        setError("Couldn't load plans. Please try again.");
+        return [] as BillingPlan[];
+      });
       setPlans(list);
-      setProviders(provs);
-      setMethod(provs[0]);
       setLoading(false);
     })();
   }, []);
@@ -146,27 +131,9 @@ export default function UpgradePage() {
     setCheckingId(planId);
     setError(null);
     try {
-      const { accessCode, reference, url, provider } = await startCheckout(
-        planId,
-        method,
-      );
-      if (provider === "paystack" && accessCode) {
-        // Complete payment in the in-page popup (no hosted redirect).
-        const res = await payWithPaystack(accessCode);
-        if (res.status === "success") {
-          router.push(
-            `/billing/callback?reference=${encodeURIComponent(
-              res.reference ?? reference,
-            )}`,
-          );
-        } else {
-          setCheckingId(null);
-        }
-      } else if (url) {
-        window.location.href = url; // hosted checkout (card)
-      } else {
-        throw new Error("no-checkout");
-      }
+      const { url } = await startCheckout(planId);
+      if (!url) throw new Error("no-checkout");
+      window.location.href = url; // Stripe's hosted checkout
     } catch (e: any) {
       setError(
         e?.response?.data?.message ||
@@ -238,29 +205,6 @@ export default function UpgradePage() {
 
       {/* ── Body: plans pulled up over the hero's bottom edge ── */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-24 -mt-14">
-        {/* Payment method — only when there's a real choice */}
-        {providers.length > 1 && method && (
-          <div className="mb-6 flex items-center justify-center">
-            <div className="inline-flex items-center gap-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 shadow-sm">
-              {providers.map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setMethod(p)}
-                  aria-pressed={method === p}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
-                    method === p
-                      ? "bg-brand-900 text-white"
-                      : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
-                  }`}
-                >
-                  {PROVIDER_LABEL[p]}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
         {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
             {[0, 1, 2].map((i) => (

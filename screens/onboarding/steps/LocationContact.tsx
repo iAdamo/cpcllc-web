@@ -1,29 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Mail, Phone, MapPin, Check, ChevronDown, Loader2 } from "lucide-react";
+import { Mail, Phone, MapPin, Check, Loader2 } from "lucide-react";
 import useGlobalStore from "@/stores";
 import StepShell from "./StepShell";
+import { US_DIAL_CODE, formatUsDigits, usPhoneFromDigits } from "@/utils/phone";
 
-const COUNTRIES = [
-  {
-    code: "NG" as const,
-    flag: "🇳🇬",
-    dialCode: "+234",
-    name: "Nigeria",
-    placeholder: "801 234 5678",
-    maxLen: 10,
-  },
-  {
-    code: "US" as const,
-    flag: "🇺🇸",
-    dialCode: "+1",
-    name: "United States",
-    placeholder: "(201) 555-0123",
-    maxLen: 10,
-  },
-];
-type CountryCode = "NG" | "US";
 
 function parseAddressComponents(
   components: { types?: string[]; long_name?: string }[]
@@ -53,11 +35,7 @@ export default function LocationContact({ onNext, onBack }: Props) {
   } = useGlobalStore();
 
   const [email, setEmail] = useState(onboardingData.providerEmail ?? "");
-  const [selectedCountry, setSelectedCountry] = useState<CountryCode>(
-    (onboardingData.phoneCountry as CountryCode) ?? "NG"
-  );
   const [localNumber, setLocalNumber] = useState("");
-  const [showCountryDrop, setShowCountryDrop] = useState(false);
   const [addressQuery, setAddressQuery] = useState("");
   const [confirmedAddress, setConfirmedAddress] = useState<
     | {
@@ -78,31 +56,16 @@ export default function LocationContact({ onNext, onBack }: Props) {
   const [loadingPlace, setLoadingPlace] = useState(false);
 
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const country = COUNTRIES.find((c) => c.code === selectedCountry)!;
-
   useEffect(() => {
     const existing = onboardingData.providerPhoneNumber;
-    if (existing) {
-      const matched = COUNTRIES.find((c) => existing.startsWith(c.dialCode));
-      if (matched) {
-        setSelectedCountry(matched.code);
-        setLocalNumber(existing.slice(matched.dialCode.length));
-      }
+    if (existing?.startsWith(US_DIAL_CODE)) {
+      setLocalNumber(formatUsDigits(existing.slice(US_DIAL_CODE.length)));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleNumberChange = (text: string) => {
-    const digits = text.replace(/\D/g, "").slice(0, country.maxLen);
-    let display = digits;
-    if (country.code === "US" && digits.length >= 6) {
-      display = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}${
-        digits.length > 6 ? `-${digits.slice(6)}` : ""
-      }`;
-    } else if (country.code === "NG" && digits.length >= 4) {
-      display = `${digits.slice(0, 4)} ${digits.slice(4)}`;
-    }
-    setLocalNumber(display);
+    setLocalNumber(formatUsDigits(text));
   };
 
   const handleAddressSearch = (q: string) => {
@@ -136,8 +99,7 @@ export default function LocationContact({ onNext, onBack }: Props) {
     const digits = localNumber.replace(/\D/g, "");
     updateOnboardingData({
       providerEmail: email.trim(),
-      providerPhoneNumber: digits ? `${country.dialCode}${digits}` : undefined,
-      phoneCountry: selectedCountry,
+      providerPhoneNumber: digits ? usPhoneFromDigits(digits) : undefined,
       location: confirmedAddress ?? undefined,
     });
     onNext();
@@ -178,61 +140,23 @@ export default function LocationContact({ onNext, onBack }: Props) {
         {/* Phone */}
         <div>
           <FieldLabel icon={<Phone size={12} />} label="Business Phone" />
-          <div className="relative">
-            <div className="flex border-2 border-gray-200 rounded-xl overflow-visible focus-within:border-brand-600 transition-colors">
-              <button
-                type="button"
-                onClick={() => setShowCountryDrop((v) => !v)}
-                className="flex items-center gap-1.5 px-3 py-3 bg-gray-50 hover:bg-gray-100 border-r border-gray-200 transition-colors shrink-0"
-              >
-                <span className="text-lg leading-none">{country.flag}</span>
-                <span className="text-sm font-semibold text-gray-700">
-                  {country.dialCode}
-                </span>
-                <ChevronDown
-                  size={12}
-                  className={`text-gray-400 transition-transform duration-200 ${
-                    showCountryDrop ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              <input
-                type="tel"
-                value={localNumber}
-                onChange={(e) => handleNumberChange(e.target.value)}
-                placeholder={country.placeholder}
-                className="flex-1 px-4 py-3 bg-transparent text-gray-900 text-sm placeholder-gray-300 focus:outline-none"
-              />
-            </div>
-            {showCountryDrop && (
-              <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-20">
-                {COUNTRIES.map((c) => (
-                  <button
-                    key={c.code}
-                    type="button"
-                    onClick={() => {
-                      setSelectedCountry(c.code);
-                      setLocalNumber("");
-                      setShowCountryDrop(false);
-                    }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0 ${
-                      c.code === selectedCountry ? "bg-brand-50" : ""
-                    }`}
-                  >
-                    <span className="text-2xl leading-none">{c.flag}</span>
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold text-gray-800">
-                        {c.name}
-                      </p>
-                      <p className="text-xs text-gray-400">{c.dialCode}</p>
-                    </div>
-                    {c.code === selectedCountry && (
-                      <Check size={14} className="text-brand-600" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="flex border-2 border-gray-200 rounded-xl overflow-hidden focus-within:border-brand-600 transition-colors">
+            <span
+              aria-hidden="true"
+              className="flex items-center px-3 py-3 bg-gray-50 border-r border-gray-200 text-sm font-semibold text-gray-700 shrink-0"
+            >
+              {US_DIAL_CODE}
+            </span>
+            <input
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel-national"
+              aria-label="Business phone"
+              value={localNumber}
+              onChange={(e) => handleNumberChange(e.target.value)}
+              placeholder="(201) 555-0123"
+              className="flex-1 px-4 py-3 bg-transparent text-gray-900 text-sm placeholder-gray-300 focus:outline-none"
+            />
           </div>
         </div>
 

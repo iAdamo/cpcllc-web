@@ -816,19 +816,6 @@ function BroadcastBuilder({
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-2">
-              <select
-                className={input}
-                value={audience.filters?.country ?? ""}
-                onChange={(e) =>
-                  setAud({
-                    filters: { ...audience.filters, country: e.target.value },
-                  })
-                }
-              >
-                <option value="">Any country</option>
-                <option value="US">United States</option>
-                <option value="NG">Nigeria</option>
-              </select>
               <label className="flex items-center gap-2 text-xs text-slate-500">
                 <input
                   type="checkbox"
@@ -1029,11 +1016,7 @@ function BroadcastDetail({
                   }`
                 : b.audience?.type?.toLowerCase().replace(/_/g, " ")}
               {b.audience?.filters?.country
-                ? ` · ${
-                    b.audience.filters.country === "NG"
-                      ? "Nigeria"
-                      : "United States"
-                  }`
+                ? ` · country ${b.audience.filters.country}`
                 : ""}
             </p>
             <p>Created by {name(b.createdBy)}</p>

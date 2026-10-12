@@ -38,8 +38,6 @@ export interface AdminUserRow {
   email?: string;
   phoneNumber?: string;
   activeRole?: string;
-  /** Derived from the phone prefix (+1 → United States, +234 → Nigeria). */
-  country?: "United States" | "Nigeria" | null;
   isActive: boolean;
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
@@ -136,7 +134,8 @@ export interface AdminJobRow {
   _id: string;
   title: string;
   budget?: number | null;
-  currency?: "USD" | "NGN";
+  /** USD; older records may carry another code (lib/money.ts shows it). */
+  currency?: string;
   pricing?: "fixed" | "offers" | "estimates";
   /** The one job status (lib/jobs.ts). */
   status: JobStatus;

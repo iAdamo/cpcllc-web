@@ -65,8 +65,9 @@ const Footer = () => {
               className="mb-5"
             />
             <p className="text-white/65 text-sm leading-relaxed mb-7">
-              A marketplace for local service professionals in the US and
-              Nigeria. Find a provider, compare reviews, and get the job done.
+              A marketplace for local service professionals, starting in
+              Hillsborough County, Florida. Find a provider, compare reviews,
+              and get the job done.
             </p>
             {/* Socials */}
             {socials.length ? (

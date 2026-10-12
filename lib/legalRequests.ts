@@ -32,7 +32,8 @@ export type PrivacyRight =
   | "withdraw_consent"
   | "object"
   | "other";
-export type Region = "us" | "ng" | "other";
+/** Where the person lives: the US (then a state), or anywhere else. */
+export type Region = "us" | "other";
 
 /** What a person can ask for, in the order the form lists them. Mirrors
  *  RIGHT_LABELS in the API. */
@@ -771,8 +772,7 @@ export function regionLabel(r: Pick<LegalRequestDetail, "region" | "usState">): 
     const state = US_STATES.find(([code]) => code === r.usState)?.[1];
     return state ? `United States (${state})` : "United States";
   }
-  if (r.region === "ng") return "Nigeria";
-  if (r.region === "other") return "Elsewhere";
+  if (r.region) return "Elsewhere";
   return "";
 }
 

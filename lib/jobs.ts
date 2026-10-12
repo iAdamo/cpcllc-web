@@ -2,6 +2,8 @@
  * Jobs on the website (admin Jobs and Job progress, the public /j page): the
  * one job status (cpcllc-backend jobs/job-states.ts), money and dates.
  */
+import { formatMoney } from "./money";
+
 export type JobStatus =
   | "draft"
   | "open"
@@ -81,11 +83,10 @@ export const PRICING_LABELS: Record<string, string> = {
   estimates: "Estimates requested",
 };
 
-/** "$1,250", "₦50,000", or what the client asked for when there's no amount. */
+/** "$1,250", or what the client asked for when there's no amount. */
 export function budgetText(job: { budget?: number | null; currency?: string | null; pricing?: string | null }): string {
   if (typeof job.budget === "number" && job.budget > 0) {
-    const symbol = job.currency === "NGN" ? "₦" : "$";
-    return `${symbol}${job.budget.toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
+    return formatMoney(job.budget, job.currency);
   }
   return job.pricing === "estimates" ? PRICING_LABELS.estimates : "—";
 }

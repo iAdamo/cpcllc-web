@@ -4,7 +4,6 @@ import { useEffect, useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import useGlobalStore from "@/stores";
 import { globalSearch } from "@/axios/search";
-import { getUserCountry } from "@/lib/country";
 import type { SearchFilters, ProviderData, JobData } from "@/types";
 
 const LIMIT = 15;
@@ -59,19 +58,8 @@ export function useGlobalSearch(model?: "providers" | "jobs") {
   const filters = useGlobalStore((s) => s.searchFilters);
   const setSearchFilters = useGlobalStore((s) => s.setSearchFilters);
   const getCurrentLocation = useGlobalStore((s) => s.getCurrentLocation);
-  const user = useGlobalStore((s) => s.user);
 
   const activeModel = model ?? storeModel;
-
-  // If the search has no country yet, seed it from the signed-in user's own
-  // account country — so a Nigerian user searches Nigeria immediately, without
-  // waiting on (or being forced past) geolocation.
-  useEffect(() => {
-    if (filters.country) return;
-    const accountCountry = getUserCountry(user);
-    if (accountCountry) setSearchFilters({ country: accountCountry });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
 
   // Auto-request device location once if the filters carry no coordinates —
   // preserves the old executeSearch behaviour of location-aware first search.

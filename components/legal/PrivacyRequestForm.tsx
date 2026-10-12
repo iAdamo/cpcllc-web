@@ -206,7 +206,6 @@ function RequestForm() {
         >
           <option value="">Choose…</option>
           <option value="us">United States</option>
-          <option value="ng">Nigeria</option>
           <option value="other">Somewhere else</option>
         </SelectField>
         {form.region === "us" ? (

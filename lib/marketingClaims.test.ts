@@ -94,7 +94,7 @@ describe("marketing copy", () => {
     expect(hits("verified service professionals across Florida")).toBe(true);
     expect(hits("We use a combination of automated checks")).toBe(true);
     // Ordinary copy passes, including the badge itself and the real count.
-    expect(hits("Serving the US and Nigeria")).toBe(false);
+    expect(hits("Starting in Hillsborough County, FL")).toBe(false);
     expect(hits('{ Icon: Shield, label: "Verified Badges" }')).toBe(false);
     expect(hits('verifiedProviders: { label: "Verified providers", format: (v) => `${v}` },')).toBe(false);
     expect(hits("one we have reviewed carries a Verified badge")).toBe(false);

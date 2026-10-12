@@ -73,7 +73,8 @@ export interface JobData {
   description: string;
   /** Absent when the client asked for estimates. */
   budget?: number | null;
-  currency?: "USD" | "NGN";
+  /** USD; older records may carry another code (lib/money.ts shows it). */
+  currency?: string;
   pricing?: "fixed" | "offers" | "estimates";
   /** Calendar day, "YYYY-MM-DD". */
   neededBy?: string | null;

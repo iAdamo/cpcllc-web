@@ -14,7 +14,6 @@ const STAT_META: Record<
   servicesCompleted: { label: "Services completed", format: (v) => `${v.toLocaleString()}+` },
   reviews: { label: "Verified reviews", format: (v) => `${v.toLocaleString()}+` },
   avgRating: { label: "Average rating", format: (v) => v.toFixed(1) },
-  countriesCovered: { label: "Countries served", format: (v) => String(v) },
 };
 
 // Honest-by-construction trust tiles. Do NOT put usage numbers here until
@@ -59,7 +58,13 @@ export default function StatsSection() {
   useEffect(() => {
     let cancelled = false;
     getPlatformStats()
-      .then((s) => !cancelled && setStats(s.meaningful ?? []))
+      // Only stats this page knows how to label: an API sending a stat that
+      // was retired (or not yet added here) must not break the home page.
+      .then(
+        (s) =>
+          !cancelled &&
+          setStats((s.meaningful ?? []).filter((x) => x.key in STAT_META)),
+      )
       .catch(() => {});
     return () => {
       cancelled = true;

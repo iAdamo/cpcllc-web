@@ -2,19 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPublicInvoice } from "@/axios/public";
 import Image from "next/image";
+import { formatMoney } from "@/lib/money";
 
 // Next.js 15 — params is a Promise.
 type Params = Promise<{ token: string }>;
 
 const NAVY = "#162660";
 
-const money = (cents = 0, currency = "USD") => {
-  const symbol = currency === "NGN" ? "₦" : "$";
-  return `${symbol}${(cents / 100).toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-};
+const money = (cents = 0, currency = "USD") =>
+  formatMoney(cents, currency, { cents: true });
 
 const fmtDate = (iso?: string | null) =>
   iso

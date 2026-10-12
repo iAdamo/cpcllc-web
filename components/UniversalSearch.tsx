@@ -18,7 +18,6 @@ import {
 import useGlobalStore from "@/stores";
 import { ProviderData } from "@/types";
 import { globalSearch } from "@/axios/search";
-import { resolveSearchCountry } from "@/lib/country";
 import { providerPath } from "@/lib/sharePages";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -48,7 +47,7 @@ export function HeroSearch({
   onSearch,
 }: Pick<UniversalSearchProps, "initialQuery" | "initialLocation" | "onSearch">) {
   const router = useRouter();
-  const { currentLocation, getCurrentLocation, user } = useGlobalStore();
+  const { getCurrentLocation } = useGlobalStore();
 
   const [query, setQuery] = useState(initialQuery);
   const [location, setLocation] = useState(initialLocation);
@@ -85,8 +84,6 @@ export function HeroSearch({
           engine: true,
           searchInput: q || "pass",
           address: l || undefined,
-          // Undefined when unknown → the backend infers country from the IP.
-          country: resolveSearchCountry(user, currentLocation?.country),
         });
         const list = res.data.providers ?? [];
         setSuggestions(list);
@@ -101,7 +98,7 @@ export function HeroSearch({
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [query, location]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [query, location]);
 
   // Close on outside click
   useEffect(() => {

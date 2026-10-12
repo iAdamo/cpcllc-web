@@ -8,11 +8,12 @@ import { Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
 import useGlobalStore from "@/stores";
 import { useCurrentTerms } from "@/hooks/useTerms";
 import { TERMS_DOCS } from "@/lib/terms";
-import PhoneNumberInput, {
-  phoneCountryOptions,
-  type SupportedPhoneCountryCode,
-} from "@/components/auth/PhoneNumberInput";
-import { normalizePhoneNumber, isValidUsOrNgPhoneNumber } from "@/utils/phone";
+import PhoneNumberInput from "@/components/auth/PhoneNumberInput";
+import {
+  US_LOCAL_DIGITS,
+  isValidUsPhoneNumber,
+  usPhoneFromDigits,
+} from "@/utils/phone";
 
 interface PasswordRequirements {
   length: boolean;
@@ -34,22 +35,13 @@ const validateEmail = (email: string): boolean => {
   return re.test(email);
 };
 
-const getSelectedPhoneCountry = (countryCode: string) =>
-  phoneCountryOptions.find((option) => option.code === countryCode) ??
-  phoneCountryOptions[0];
-
-const validatePhone = (phone: string, countryCode: string): boolean => {
-  const selectedCountry = getSelectedPhoneCountry(countryCode);
+/** Ten digits after the +1 the field shows. */
+const validatePhone = (phone: string): boolean => {
   const digits = phone.replace(/\D/g, "");
-
-  if (!digits || digits.length !== selectedCountry.maxLength) {
-    return false;
-  }
-
-  const normalized = normalizePhoneNumber(
-    `${selectedCountry.dialCode}${digits}`
+  return (
+    digits.length === US_LOCAL_DIGITS &&
+    isValidUsPhoneNumber(usPhoneFromDigits(digits))
   );
-  return isValidUsOrNgPhoneNumber(normalized);
 };
 
 const checkPasswordRequirements = (password: string): PasswordRequirements => ({
@@ -97,8 +89,6 @@ export default function SignUpPage({ onBack }: Props) {
 
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneCountry, setPhoneCountry] =
-    useState<SupportedPhoneCountryCode>("US");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -138,7 +128,7 @@ export default function SignUpPage({ onBack }: Props) {
   // Memoized form validation check (doesn't update state)
   const isFormValid = useMemo(() => {
     const emailValid = email && validateEmail(email);
-    const phoneValid = phoneNumber && validatePhone(phoneNumber, phoneCountry);
+    const phoneValid = phoneNumber && validatePhone(phoneNumber);
     const passwordValid =
       password && Object.values(passwordRequirements).every(Boolean);
     const confirmPasswordValid = confirmPassword && passwordsMatch;
@@ -154,7 +144,6 @@ export default function SignUpPage({ onBack }: Props) {
   }, [
     email,
     phoneNumber,
-    phoneCountry,
     password,
     confirmPassword,
     passwordRequirements,
@@ -172,10 +161,7 @@ export default function SignUpPage({ onBack }: Props) {
 
     setLoading(true);
     try {
-      const selectedCountry = getSelectedPhoneCountry(phoneCountry);
-      const dialedPhoneNumber = normalizePhoneNumber(
-        `${selectedCountry.dialCode}${phoneNumber.replace(/\D/g, "")}`
-      );
+      const dialedPhoneNumber = usPhoneFromDigits(phoneNumber);
 
       await signUp({
         email,
@@ -284,26 +270,24 @@ export default function SignUpPage({ onBack }: Props) {
                 <PhoneNumberInput
                   value={phoneNumber}
                   onChange={setPhoneNumber}
-                  countryCode={phoneCountry}
-                  onCountryChange={setPhoneCountry}
                   onBlur={() => handleBlur("phone")}
                   touched={touched.phone}
                   error={Boolean(
                     touched.phone &&
                       phoneNumber &&
-                      !validatePhone(phoneNumber, phoneCountry)
+                      !validatePhone(phoneNumber)
                   )}
                 />
                 {touched.phone &&
                   phoneNumber &&
-                  !validatePhone(phoneNumber, phoneCountry) && (
+                  !validatePhone(phoneNumber) && (
                     <p className="text-xs text-rose-600 dark:text-rose-400 mt-2">
                       Enter a valid phone number.
                     </p>
                   )}
                 {touched.phone &&
                   phoneNumber &&
-                  validatePhone(phoneNumber, phoneCountry) && (
+                  validatePhone(phoneNumber) && (
                     <div className="flex gap-2 mt-2 text-xs text-green-600 dark:text-green-400">
                       <CheckCircle2 size={14} />
                       Valid phone number

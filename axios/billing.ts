@@ -13,27 +13,15 @@ export interface BillingPlan {
   features?: string[];
 }
 
-export type PaymentProvider = "stripe" | "paystack";
-
 /** Provider-facing plans available to subscribe to (auth required). */
 export const getProviderPlans = async (): Promise<BillingPlan[]> =>
   (await axiosInstance.get("billing/plans")).data;
 
-/** Processors that are configured/available to pay with. */
-export const getPaymentProviders = async (): Promise<PaymentProvider[]> =>
-  (await axiosInstance.get("billing/providers")).data?.providers ?? [];
-
 /**
- * Start checkout for a plan on the chosen processor. Stripe returns a hosted
- * `url` (redirect); Paystack returns an `accessCode` for the in-page Inline
- * popup. `reference` and `provider` come back either way.
+ * Start Stripe Checkout for a plan: the API returns the hosted page's `url`
+ * to send the browser to, and the `reference` the callback page checks.
  */
 export const startCheckout = async (
   planId: string,
-  provider?: PaymentProvider,
-): Promise<{
-  accessCode?: string;
-  reference: string;
-  url?: string;
-  provider: PaymentProvider;
-}> => (await axiosInstance.post("billing/checkout", { planId, provider })).data;
+): Promise<{ reference: string; url?: string }> =>
+  (await axiosInstance.post("billing/checkout", { planId })).data;

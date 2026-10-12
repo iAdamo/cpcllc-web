@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: "What areas do you serve?",
-    a: "We're starting in Tampa and the rest of Hillsborough County, Florida, and we also serve Nigeria. Open the app to see the businesses near you; more areas open as local businesses join.",
+    a: "We're starting in Tampa and the rest of Hillsborough County, Florida. Open the app to see the businesses near you; more areas open as local businesses join.",
   },
   {
     q: "How do I know the reviews are authentic?",

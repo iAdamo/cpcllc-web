@@ -35,7 +35,7 @@ describe("jobs", () => {
 
   it("money in the job's currency, or what the client asked for", () => {
     expect(budgetText({ budget: 1250, currency: "USD" })).toBe("$1,250");
-    expect(budgetText({ budget: 50000, currency: "NGN" })).toBe("₦50,000");
+    expect(budgetText({ budget: 50000, currency: "EUR" })).toBe("50,000 EUR");
     expect(budgetText({ budget: null, pricing: "estimates" })).toBe("Estimates requested");
     expect(budgetText({})).toBe("—");
   });

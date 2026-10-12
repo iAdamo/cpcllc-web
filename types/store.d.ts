@@ -167,7 +167,6 @@ export interface OnboardingData {
   providerLogoFile?: File | null;
   providerEmail?: string;
   providerPhoneNumber?: string;
-  phoneCountry?: string;
   subcategories?: Array<{
     _id: string;
     name: string;

@@ -52,7 +52,7 @@ export const useLocationAutocomplete = (
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: apiKey,
     libraries,
-    region: "NG",
+    region: "US",
   });
 
   const [locationData, setLocationData] = useState<LocationData>({
