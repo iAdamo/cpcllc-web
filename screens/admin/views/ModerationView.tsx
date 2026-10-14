@@ -12,10 +12,12 @@ import { StatusPill, statusToTone } from "@/components/admin/StatusPill";
 import { Drawer } from "@/components/admin/Drawer";
 import { notify } from "@/lib/notify";
 import {
-  OUTCOMES,
   SUSPEND_DAYS,
+  actsOnAccount,
   buildDecisionBody,
+  canTakeDown,
   emptyDecision,
+  outcomesFor,
   type DecisionForm,
 } from "@/lib/moderationDecision";
 
@@ -29,6 +31,8 @@ const TARGET_NAMES: Record<string, string> = {
   Message: "Message",
   Chat: "Chat",
   User: "Account",
+  Post: "Post",
+  PostComment: "Comment",
 };
 
 export function ModerationView() {
@@ -152,6 +156,8 @@ function DecisionPanel({ report, onDone }: { report: any; onDone: () => void }) 
   const [busy, setBusy] = useState(false);
   const set = (patch: Partial<DecisionForm>) => setForm((f) => ({ ...f, ...patch }));
   const acting = form.outcome !== "dismiss";
+  const onAccount = actsOnAccount(form.outcome);
+  const takeDownable = canTakeDown(report.targetType);
 
   const submit = async () => {
     const built = buildDecisionBody(form, report.targetType);
@@ -163,7 +169,11 @@ function DecisionPanel({ report, onDone }: { report: any; onDone: () => void }) 
     try {
       await decideModerationReport(report._id, built.body);
       notify.success(
-        acting ? "Decision saved. The person was notified by email." : "Report closed.",
+        onAccount
+          ? "Decision saved. The person was notified by email."
+          : form.outcome === "remove"
+            ? "Taken down. It no longer shows to anyone."
+            : "Report closed.",
       );
       onDone();
     } catch (error) {
@@ -188,7 +198,7 @@ function DecisionPanel({ report, onDone }: { report: any; onDone: () => void }) 
       <fieldset>
         <legend className={label}>Outcome</legend>
         <div className="space-y-2">
-          {OUTCOMES.map((o) => (
+          {outcomesFor(report.targetType).map((o) => (
             <label
               key={o.value}
               className={`flex gap-3 p-3 rounded-lg border cursor-pointer ${
@@ -233,7 +243,18 @@ function DecisionPanel({ report, onDone }: { report: any; onDone: () => void }) 
         </div>
       )}
 
-      {acting && report.targetType === "Chat" && (
+      {onAccount && takeDownable && (
+        <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+          <input
+            type="checkbox"
+            checked={form.takeDown}
+            onChange={(e) => set({ takeDown: e.target.checked })}
+          />
+          Also take the {report.targetType === "Post" ? "post" : "comment"} down
+        </label>
+      )}
+
+      {onAccount && report.targetType === "Chat" && (
         <div>
           <label htmlFor="report-target-user" className={label}>
             User ID the decision applies to
@@ -248,7 +269,7 @@ function DecisionPanel({ report, onDone }: { report: any; onDone: () => void }) 
         </div>
       )}
 
-      {acting && (
+      {onAccount && (
         <div>
           <label htmlFor="report-message" className={label}>
             Message to the user (optional)

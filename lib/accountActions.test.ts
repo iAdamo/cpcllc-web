@@ -8,7 +8,7 @@ import {
   isStaffBlocked,
   reasonLabel,
 } from "./accountActions";
-import { buildDecisionBody, emptyDecision } from "./moderationDecision";
+import { buildDecisionBody, emptyDecision, outcomesFor } from "./moderationDecision";
 
 const now = new Date("2026-10-03T12:00:00Z");
 const message = "You asked clients to pay outside the agreed price.";
@@ -141,6 +141,34 @@ describe("moderation decisions", () => {
     ).toMatchObject({ ok: true, body: { targetUserId: "6650f1c2a9b3e4d5f6a7b8c9" } });
     expect(buildDecisionBody({ ...emptyDecision(), messageToUser: "bad" }, "Job")).toMatchObject({
       ok: false,
+    });
+  });
+
+  // App Store guideline 1.2: a reported post or comment can be taken down.
+  it("a post or comment can be taken down, alone or with an account action", () => {
+    for (const type of ["Post", "PostComment"]) {
+      expect(outcomesFor(type).map((o) => o.value)).toContain("remove");
+      expect(buildDecisionBody({ ...emptyDecision(), outcome: "remove", notes: "spam link" }, type)).toEqual({
+        ok: true,
+        body: { actions: ["remove_content"], finalStatus: "actioned", notes: "spam link" },
+      });
+      expect(buildDecisionBody({ ...emptyDecision(), outcome: "warn" }, type)).toMatchObject({
+        ok: true,
+        body: { actions: ["warn", "remove_content"] },
+      });
+      expect(
+        buildDecisionBody({ ...emptyDecision(), outcome: "warn", takeDown: false }, type),
+      ).toMatchObject({ ok: true, body: { actions: ["warn"] } });
+    }
+  });
+
+  it("nothing else offers or sends a takedown", () => {
+    for (const type of ["Job", "Provider", "Reviews", "Message", "Chat", "User"]) {
+      expect(outcomesFor(type).map((o) => o.value)).not.toContain("remove");
+    }
+    expect(buildDecisionBody({ ...emptyDecision(), outcome: "remove" }, "Job")).toMatchObject({ ok: false });
+    expect(buildDecisionBody({ ...emptyDecision(), outcome: "warn" }, "Job")).toMatchObject({
+      body: { actions: ["warn"] },
     });
   });
 });

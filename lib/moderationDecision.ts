@@ -2,15 +2,30 @@
  * Deciding a moderation report: the outcomes staff choose from and the body
  * each sends to PATCH admin/moderation/reports/:id/decide. Warn / suspend /
  * permanent suspension act on the reported person's account (and email them).
+ * A reported feed post or comment can also be taken down (hidden from
+ * everyone, kept for the case): App Store guideline 1.2 asks for a timely
+ * response to reported content.
  */
 
-export type Outcome = "dismiss" | "warn" | "suspend" | "ban";
+export type Outcome = "dismiss" | "remove" | "warn" | "suspend" | "ban";
+
+/** Report targets the API can take down (moderation REMOVE_CONTENT). */
+export const TAKE_DOWN_TYPES = ["Post", "PostComment"] as const;
+
+export function canTakeDown(targetType: string): boolean {
+  return (TAKE_DOWN_TYPES as readonly string[]).includes(targetType);
+}
 
 export const OUTCOMES: ReadonlyArray<{ value: Outcome; label: string; description: string }> = [
   {
     value: "dismiss",
     label: "No violation",
     description: "Close the report. Nothing happens to the account.",
+  },
+  {
+    value: "remove",
+    label: "Take it down",
+    description: "Hide it from everyone. Nothing happens to the account.",
   },
   {
     value: "warn",
@@ -31,6 +46,16 @@ export const OUTCOMES: ReadonlyArray<{ value: Outcome; label: string; descriptio
 
 export const SUSPEND_DAYS = [1, 3, 7, 30] as const;
 
+/** The outcomes offered for a report: "Take it down" only where it can be. */
+export function outcomesFor(targetType: string) {
+  return OUTCOMES.filter((o) => o.value !== "remove" || canTakeDown(targetType));
+}
+
+/** Whether an outcome acts on the person's account (and emails them). */
+export function actsOnAccount(outcome: Outcome): boolean {
+  return outcome === "warn" || outcome === "suspend" || outcome === "ban";
+}
+
 export interface DecisionForm {
   outcome: Outcome;
   suspendDays: number;
@@ -38,6 +63,8 @@ export interface DecisionForm {
   notes: string;
   /** Needed when the report is about a chat (two people in it). */
   targetUserId: string;
+  /** With a warning or suspension on a post or comment: take it down too. */
+  takeDown: boolean;
 }
 
 export interface DecisionBody {
@@ -49,14 +76,21 @@ export interface DecisionBody {
   targetUserId?: string;
 }
 
-const ACTION: Record<Exclude<Outcome, "dismiss">, string> = {
+const ACTION: Record<Exclude<Outcome, "dismiss" | "remove">, string> = {
   warn: "warn",
   suspend: "suspend_user",
   ban: "ban_user",
 };
 
 export function emptyDecision(): DecisionForm {
-  return { outcome: "warn", suspendDays: 7, messageToUser: "", notes: "", targetUserId: "" };
+  return {
+    outcome: "warn",
+    suspendDays: 7,
+    messageToUser: "",
+    notes: "",
+    targetUserId: "",
+    takeDown: true,
+  };
 }
 
 export function buildDecisionBody(
@@ -68,6 +102,15 @@ export function buildDecisionBody(
     return {
       ok: true,
       body: { actions: ["no_action"], finalStatus: "dismissed", ...(notes ? { notes } : {}) },
+    };
+  }
+  if (form.outcome === "remove") {
+    if (!canTakeDown(targetType)) {
+      return { ok: false, error: "Only a reported post or comment can be taken down." };
+    }
+    return {
+      ok: true,
+      body: { actions: ["remove_content"], finalStatus: "actioned", ...(notes ? { notes } : {}) },
     };
   }
   const message = form.messageToUser.trim();
@@ -87,7 +130,10 @@ export function buildDecisionBody(
   return {
     ok: true,
     body: {
-      actions: [ACTION[form.outcome]],
+      actions: [
+        ACTION[form.outcome],
+        ...(form.takeDown && canTakeDown(targetType) ? ["remove_content"] : []),
+      ],
       finalStatus: "actioned",
       ...(notes ? { notes } : {}),
       ...(message ? { messageToUser: message } : {}),
