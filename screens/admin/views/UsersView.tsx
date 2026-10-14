@@ -32,6 +32,7 @@ import {
   type AccountActionRow,
   type AccountActionType,
 } from "@/lib/accountActions";
+import { blockSummaryRows } from "@/lib/blockSummary";
 
 export function UsersView() {
   const [search, setSearch] = useState("");
@@ -342,6 +343,7 @@ function UserDetailDrawer({
 
 function UserDetailBody({ user: u }: { user: any }) {
   const status = accountStatus(u);
+  const blocks = blockSummaryRows(u.blocks);
   return (
     <div className="space-y-4 text-sm">
       <Row label="ID" value={u._id} />
@@ -358,6 +360,13 @@ function UserDetailBody({ user: u }: { user: any }) {
       <Row label="Reviews" value={u.reviewCount ?? 0} />
       <Row label="Jobs posted" value={u.stats?.jobsPosted ?? 0} />
       <Row label="Jobs completed" value={u.stats?.jobsCompleted ?? 0} />
+      <Row label="Blocked by" value={blocks.blockedBy} />
+      <Row label="Has blocked" value={blocks.blocking} />
+      {blocks.notice && (
+        <p className="text-xs p-2.5 rounded-md bg-amber-50 text-amber-800 border border-amber-100 dark:bg-amber-950/30 dark:text-amber-200 dark:border-amber-900">
+          {blocks.notice}
+        </p>
+      )}
       <Row label="Joined" value={u.createdAt ? new Date(u.createdAt).toLocaleString() : "—"} />
       <Row label="Last login" value={u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString() : "—"} />
       {u.isActive === false && (
