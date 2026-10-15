@@ -1,4 +1,4 @@
-**Last Updated:** October 12, 2026
+**Last Updated:** October 14, 2026
 
 These Terms of Service form an agreement between you and Companies Center LLC governing the Companies
 Center mobile applications, companiescenter.com, and related services. Companies Center provides tools
@@ -478,10 +478,10 @@ You may use messages only for lawful Platform-related communication. Harassment,
 discrimination, sexual exploitation, spam, phishing, malware, unauthorized advertising, impersonation,
 and attempts to obtain credentials are prohibited.
 
-Either participant can block a conversation, which prevents both participants from sending messages in
-it. Blocking does not by itself prevent the other person from viewing public content, sending a Job
-through another feature, or using other Platform functions. Report harassment or other misuse to
-Customer Support for review. The message and record-retention rules are in Sections 14 and 26 of the
+You can block another person. A block stops messages between you, hides each person's posts, comments,
+business, and Jobs from the other in the feed and search, and prevents follows, comments, Jobs,
+proposals, and hiring between you. It does not change existing Jobs, bookings, invoices, reviews, or
+disputes. Report harassment or other misuse in the app or to Customer Support for review. The message and record-retention rules are in Sections 14 and 26 of the
 Privacy Policy.
 
 Support tickets are communications with Companies Center staff, not private conversations with another
@@ -518,7 +518,7 @@ calling emergency services. Users may not use live location to stalk, threaten, 
 against, surveil, or endanger another person.
 
 Deactivation or suspension stops active sharing; account deletion removes sessions subject to lawful
-preservation. Conversation blocking alone should not be treated as a location-stop control. Use Stop to
+preservation. Blocking alone should not be treated as a location-stop control. Use Stop to
 end an active session. The Privacy Policy explains the separate retention of live coordinates, session
 metadata, saved locations, and job addresses.
 
@@ -617,7 +617,9 @@ public accusation.
 Staff review reports and relevant account, content, completion, and communication records within the
 access and purpose limits in the Privacy Policy. Current fraud indicators are based on events entered by
 staff. Account warnings and suspensions are staff decisions. Sanux does not decide moderation,
-verification, suspension, or service disputes. Uploads are not universally scanned before publication.
+verification, suspension, or service disputes. Text posted where others can read it is checked
+automatically for prohibited words: it may be refused, or published and sent to staff for review (a
+review is held until approved). Photos, videos, and files are not scanned before publication.
 
 We may remove prohibited content, restrict visibility or a feature, stop a live session, or suspend an
 account for the reasons and with the review procedure in Section 32. Urgent action can precede notice
@@ -1127,7 +1129,7 @@ individual-arbitration and class restrictions in this Section for claims covered
 ### 39.11 Thirty Day Rejection Option
 
 You may reject this arbitration agreement within 30 calendar days after you affirmatively accept this
-October 12, 2026 version. Email companiescenterserv@gmail.com with the subject Arbitration Opt Out, or
+October 14, 2026 version. Email companiescenterserv@gmail.com with the subject Arbitration Opt Out, or
 mail Companies Center LLC, Attn Arbitration Opt Out, at the address in Section 43. You may instead use
 the optional Arbitration Opt Out form at https://companiescenter.com/legal-notice. State your name, the
 account email if you have one, a contact address, and your decision to reject arbitration. An email sent

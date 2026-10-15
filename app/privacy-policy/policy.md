@@ -1,4 +1,4 @@
-**Last Updated:** October 12, 2026
+**Last Updated:** October 14, 2026
 
 Companies Center LLC operates a local services marketplace through the Companies Center mobile
 applications and companiescenter.com. This Policy explains the personal information we collect, its
@@ -192,7 +192,7 @@ control.
 ### 5.9 Messages and Attachments
 
 We process message content, participant and conversation identifiers, files, times, delivery and read
-state, typing and presence indicators, last-seen information, and mute or block settings. Messages are
+state, typing and presence indicators, last-seen information, mute settings, and blocks. Messages are
 protected in transit but are not end-to-end encrypted. Authorized systems and personnel may technically
 access content for the purposes described in Section 14.
 
@@ -458,8 +458,12 @@ hours. Permission is checked when a link is issued, but anyone receiving a forwa
 open that file until it expires. Share these links only with intended recipients. Estimate and invoice
 access follows Section 15.
 
-Uploads are not universally scanned automatically. Staff review reports and can remove content or
-restrict accounts. Users should check visible faces, addresses, documents, and other identifying details
+Text people post where others can read it (feed posts, comments, Jobs, reviews and replies, and
+recommendations) is checked automatically when it is posted, against a list of prohibited words and
+rules set by staff: some words prevent posting, and others send the item to staff for review, and a
+review held for review is not shown until staff approve it. Private messages and proposals are not
+checked this way. Photos, videos, and files are not scanned automatically. Staff review reports and can
+remove content or restrict accounts. Users should check visible faces, addresses, documents, and other identifying details
 in media: metadata removal cannot remove information visible or audible in the content.
 
 ## 13. Jobs, Proposals, and Booking Privacy
@@ -517,9 +521,13 @@ last-seen information. Messages are not end-to-end encrypted. Authorized access 
 support, abuse or dispute investigations, security, legal compliance, and enforcement of the Terms. We do
 not use private message content for advertising.
 
-Either participant can block a conversation, preventing both from sending messages in that conversation.
-This control does not by itself prevent viewing public content or using other platform features. Users
-can report abuse through Customer Support. Staff have no ordinary screen for opening private chat
+A user can block another person from a conversation, a post, a comment, or a business profile. While a
+block is in place, neither person can message the other, each person's posts, comments, business, and
+Jobs are hidden from the other in the feed and search, and neither can follow, comment on, send a Job to,
+send a proposal to, or hire the other. Existing Jobs, bookings, invoices, reviews, and disputes remain as
+records. The blocked person is not told who blocked them. Staff see how many people have blocked an
+account and how many accounts it has blocked, not who. Users can report abuse in the app or through
+Customer Support. Staff have no ordinary screen for opening private chat
 attachments, although authorized technical access may be possible.
 
 Individual message deletion is not currently offered as a control in the mobile applications covered
@@ -927,6 +935,8 @@ current system.
 attachment from the active conversation. Account deletion removes that account's sent messages and files;
 the other participant's sent messages remain. Mobile interfaces do not currently offer individual message
 deletion.
+
+**Blocks.** Kept until the person who blocked removes the block, or until either account is deleted.
 
 **Support tickets and chat.** One year after the ticket closes. A ticket linked to a retained dispute
 remains with that dispute. Account deletion removes the departing person's attachments but can leave
