@@ -60,7 +60,7 @@ error when it is missing in production and falls back to a dev tunnel otherwise.
   `lib/safeNext.ts`. See cpcllc-backend docs/terms-acceptance.md.
 - **Security headers live in `lib/securityHeaders.mjs`** (next.config applies
   them to every page): a content policy naming every outside origin (API and
-  socket from the env, Google Maps, OpenStreetMap), no framing by other sites,
+  socket from the env, Google Maps, Places API (New)), no framing by other sites,
   HSTS; next/image fetches only from the API and our domains. A new outside
   service goes there or the browser blocks it. The policy is set at build, so
   `NEXT_PUBLIC_API_URL` / `NEXT_PUBLIC_SOCKET_URL` must be set when building.
@@ -72,6 +72,11 @@ error when it is missing in production and falls back to a dev tunnel otherwise.
   render with `components/ui/SvgIcon` (a CSS mask), and no page sets API text
   as HTML (a gate test in `lib/safeContent.test.ts` lists the only fixed
   scripts allowed).
+- **Address search is Places API (New) from the browser** (`lib/googlePlaces.ts`,
+  used by `stores/locationState.ts`), like the app: US only, a session token
+  per search, the public Maps key (limit it to the site's addresses in Google
+  Cloud). There is no server route for it: `/api/places` was an open proxy on
+  our key and is gone (a gate test keeps it gone).
 - **`npm run check:api`** compares every API call here with the API's routes
   (needs `../cpcllc-backend`). Run it after an API route changes.
 - **No made-up numbers, uplifts or credentials in copy** (FTC). A gate test

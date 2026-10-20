@@ -1,8 +1,14 @@
 import { StateCreator } from "zustand";
-import { GlobalStore, LocationState, Place, PlaceDetails, LocationObjectCoords } from "@/types";
+import { GlobalStore, LocationState, PlaceDetails, LocationObjectCoords } from "@/types";
+import { autocompletePlaces, newSessionToken, placeDetails } from "@/lib/googlePlaces";
 
 const GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
+
+// One address search, keystrokes to pick, is one Google session (billing).
+let placesSession: string | null = null;
+// Only the newest search's answer is shown: an older one can land later.
+let placesSeq = 0;
 
 function toCoords(c: GeolocationCoordinates): LocationObjectCoords {
   return {
@@ -67,6 +73,7 @@ export const locationSlice: StateCreator<GlobalStore, [], [], LocationState> = (
   isTracking: false,
   watchId: null,
   places: [],
+  placesSearch: "idle",
   locationError: null,
   selectedPlace: null,
 
@@ -126,26 +133,31 @@ export const locationSlice: StateCreator<GlobalStore, [], [], LocationState> = (
 
   setSelectedPlace: (place: PlaceDetails) => set({ selectedPlace: place }),
 
+  // Places API (New), straight from the browser (lib/googlePlaces).
   searchPlaces: async (query: string) => {
+    const seq = ++placesSeq;
     if (!query) {
-      set({ places: [] });
+      set({ places: [], placesSearch: "idle" });
       return;
     }
+    placesSession ??= newSessionToken();
+    set({ placesSearch: "loading" });
     try {
-      const res = await fetch(`/api/places/autocomplete?input=${encodeURIComponent(query)}`);
-      if (!res.ok) throw new Error("Places search failed");
-      const results: Place[] = await res.json();
-      set({ places: results, locationError: null });
+      const results = await autocompletePlaces(query, { key: MAPS_KEY, sessionToken: placesSession });
+      if (seq !== placesSeq) return;
+      set({ places: results, placesSearch: "done", locationError: null });
     } catch (err) {
-      set({ locationError: (err as Error).message || "Failed to search places" });
+      if (seq !== placesSeq) return;
+      console.error("Address search failed:", (err as Error).message);
+      set({ places: [], placesSearch: "failed" });
     }
   },
 
   getPlaceDetails: async (placeId: string) => {
+    const sessionToken = placesSession ?? undefined;
+    placesSession = null; // the pick ends the session
     try {
-      const res = await fetch(`/api/places/details?place_id=${encodeURIComponent(placeId)}`);
-      if (!res.ok) throw new Error("Failed to fetch place details");
-      const details: PlaceDetails = await res.json();
+      const details = await placeDetails(placeId, { key: MAPS_KEY, sessionToken });
       set({ selectedPlace: details, locationError: null });
       return details;
     } catch (error) {

@@ -32,6 +32,7 @@ export default function LocationContact({ onNext, onBack }: Props) {
     searchPlaces,
     getPlaceDetails,
     places,
+    placesSearch,
   } = useGlobalStore();
 
   const [email, setEmail] = useState(onboardingData.providerEmail ?? "");
@@ -84,6 +85,7 @@ export default function LocationContact({ onNext, onBack }: Props) {
     const details = await getPlaceDetails(place.place_id);
     setLoadingPlace(false);
     if (details) {
+      void searchPlaces(""); // close the list
       const parsed = parseAddressComponents(details.address_components ?? []);
       setConfirmedAddress({
         address: details.formatted_address || place.description,
@@ -208,6 +210,19 @@ export default function LocationContact({ onNext, onBack }: Props) {
                 )}
               </div>
 
+              {addressQuery.trim().length > 2 && placesSearch === "failed" && (
+                <p className="text-xs text-red-600 px-1" role="alert">
+                  Address search isn&apos;t working right now. Please try again
+                  in a moment.
+                </p>
+              )}
+              {addressQuery.trim().length > 2 &&
+                placesSearch === "done" &&
+                places.length === 0 && (
+                  <p className="text-xs text-gray-500 px-1" role="status">
+                    No matching addresses. Check the spelling, or add the city.
+                  </p>
+                )}
               {places.length > 0 && (
                 <div className="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden">
                   {places.map((p: any, i: number) => (

@@ -23,7 +23,8 @@ import Link from "next/link";
 import { ProviderData, MediaItem } from "@/types";
 import { providerPath } from "@/lib/sharePages";
 
-const LIBRARIES: ("places" | "geometry")[] = ["places"];
+// The map only: address search uses Places API (New) directly (lib/googlePlaces).
+const LIBRARIES: ("places" | "geometry")[] = [];
 
 const MAP_STYLES = [
   { featureType: "poi", stylers: [{ visibility: "off" }] },

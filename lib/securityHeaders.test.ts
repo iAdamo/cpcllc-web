@@ -42,7 +42,7 @@ describe("content policy", () => {
       "wss://api.companiescenter.com",
       "https://maps.googleapis.com",
       "https://maps.gstatic.com",
-      "https://nominatim.openstreetmap.org",
+      "https://places.googleapis.com",
     ]);
     const s = csp({ ...prod, socketUrl: "https://rt.companiescenter.com" });
     expect(s["connect-src"]).toContain("wss://rt.companiescenter.com");

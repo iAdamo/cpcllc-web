@@ -142,6 +142,9 @@ export interface LocationState {
   isTracking: boolean;
   watchId: LocationSubscription | null;
   places: Place[];
+  /** Where address search is: "failed" (Google refused) shows differently
+   *  from "done" with no matches. */
+  placesSearch: "idle" | "loading" | "done" | "failed";
   locationError: string | null;
   clearLocationError: () => void;
   selectedPlace: PlaceDetails | null;
