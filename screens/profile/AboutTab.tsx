@@ -7,6 +7,7 @@ import {
   CheckCircle, ChevronDown, Link2,
 } from "lucide-react";
 import { ProviderData } from "@/types";
+import { safeExternalUrl } from "@/lib/safeContent";
 
 interface Props {
   provider: ProviderData;
@@ -37,7 +38,17 @@ export default function AboutTab({
 }: Props) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const addr = provider.location?.primary?.address;
-  const sm = provider.providerSocialMedia;
+  const sm = (provider.providerSocialMedia ?? {}) as Record<string, string | undefined>;
+  // What the business typed, as links that only open a web page
+  // (lib/safeContent). The app saves X as `x`; older profiles have `twitter`.
+  const website = safeExternalUrl(sm.website);
+  const socialLinks = [
+    { label: "Instagram", url: safeExternalUrl(sm.instagram), bg: "bg-gradient-to-br from-pink-500 to-purple-600" },
+    { label: "X", url: safeExternalUrl(sm.x ?? sm.twitter), bg: "bg-sky-500" },
+    { label: "LinkedIn", url: safeExternalUrl(sm.linkedin), bg: "bg-brand-950" },
+    { label: "Facebook", url: safeExternalUrl(sm.facebook), bg: "bg-brand-900" },
+    { label: "Website", url: website, bg: "bg-gray-800" },
+  ].filter((l): l is { label: string; url: string; bg: string } => !!l.url);
 
   return (
     <div className="space-y-4">
@@ -133,15 +144,13 @@ export default function AboutTab({
                 ? <span className="flex items-center gap-1 text-emerald-600 font-semibold text-xs"><CheckCircle size={12} /> Verified ID</span>
                 : <span className="text-xs text-gray-400 dark:text-gray-500">Not verified</span>,
             },
-            { icon: Globe, label: "Languages", value: <span className="text-xs font-medium text-gray-700 dark:text-gray-200">English, Yoruba</span> },
-            { icon: Clock, label: "Working hours", value: <span className="text-xs font-medium text-gray-700 dark:text-gray-200">Mon–Sat, 8am–6pm</span> },
             ...(addr?.city ? [{
               icon: MapPin, label: "Location",
               value: <span className="text-xs font-medium text-gray-700 dark:text-gray-200">{[addr.city, addr.country].filter(Boolean).join(", ")}</span>,
             }] : []),
-            ...(sm?.website ? [{
+            ...(website ? [{
               icon: Globe, label: "Website",
-              value: <a href={sm.website} target="_blank" rel="noopener noreferrer" className="text-xs text-brand-700 font-semibold hover:underline flex items-center gap-1">Visit <ExternalLink size={10} /></a>,
+              value: <a href={website} target="_blank" rel="noopener noreferrer nofollow" className="text-xs text-brand-700 font-semibold hover:underline flex items-center gap-1">Visit <ExternalLink size={10} /></a>,
             }] : []),
           ].map((row, i) => (
             <div key={i} className="flex items-center justify-between py-2.5">
@@ -186,18 +195,12 @@ export default function AboutTab({
       </div>
 
       {/* Social links */}
-      {sm && Object.values(sm).some(Boolean) && (
+      {socialLinks.length > 0 && (
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
           <h2 className="text-base font-black text-gray-900 dark:text-white mb-3">Social Links</h2>
           <div className="flex flex-wrap gap-2.5">
-            {([
-              sm.instagram && { label: "Instagram", url: sm.instagram, bg: "bg-gradient-to-br from-pink-500 to-purple-600" },
-              sm.twitter && { label: "Twitter / X", url: sm.twitter, bg: "bg-sky-500" },
-              sm.linkedin && { label: "LinkedIn", url: sm.linkedin, bg: "bg-brand-950" },
-              sm.facebook && { label: "Facebook", url: sm.facebook, bg: "bg-brand-900" },
-              sm.website && { label: "Website", url: sm.website, bg: "bg-gray-800" },
-            ].filter(Boolean) as { label: string; url: string; bg: string }[]).map((item) => (
-              <a key={item.label} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={item.label}
+            {socialLinks.map((item) => (
+              <a key={item.label} href={item.url} target="_blank" rel="noopener noreferrer nofollow" aria-label={item.label}
                 className={`flex items-center gap-1.5 px-3 py-1.5 ${item.bg} text-white text-xs font-bold rounded-xl hover:opacity-90 hover:scale-105 transition-all shadow-sm`}>
                 <Link2 size={11} />
                 {item.label}

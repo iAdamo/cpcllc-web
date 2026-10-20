@@ -41,6 +41,7 @@ import {
   type EvidenceForm,
   type MessageForm,
 } from "@/lib/disputeCase";
+import { safeExternalUrl } from "@/lib/safeContent";
 
 const field =
   "w-full text-sm border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-md px-3 py-2 outline-none focus:border-brand-400";
@@ -218,10 +219,10 @@ export function CaseDrawer({ caseId, onClose }: { caseId: string | null; onClose
                   <span>
                     <span className="font-medium">{EVIDENCE_TYPES.find((t) => t.value === e.type)?.label ?? e.type}:</span>{" "}
                     {e.description}
-                    {e.url && (
+                    {safeExternalUrl(e.url) && (
                       <>
                         {" "}
-                        <a href={e.url} target="_blank" rel="noreferrer noopener" className="text-brand-600 underline">
+                        <a href={safeExternalUrl(e.url)!} target="_blank" rel="noreferrer noopener" className="text-brand-600 underline">
                           Open
                         </a>
                       </>

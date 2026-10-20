@@ -33,6 +33,8 @@ import MapPanel from "./MapPanel";
 import MobileAppBanner from "@/components/MobileAppBanner";
 import { Filters } from "./FilterSidebar";
 import UniversalSearch from "@/components/UniversalSearch";
+import SvgIcon from "@/components/ui/SvgIcon";
+import { isSvgIcon } from "@/lib/safeContent";
 
 // ─── Category icon map ────────────────────────────────────────────────────────
 
@@ -300,11 +302,11 @@ export default function ServiceProvidersPage() {
                               : undefined
                           }
                         >
-                          {cat.icon ? (
-                            <span
-                              className="w-3.5 h-3.5 [&_svg]:w-full [&_svg]:h-full"
+                          {isSvgIcon(cat.icon) ? (
+                            <SvgIcon
+                              svg={cat.icon}
+                              className="w-3.5 h-3.5"
                               style={{ color: cat.iconColor }}
-                              dangerouslySetInnerHTML={{ __html: cat.icon }}
                             />
                           ) : (
                             <Icon
@@ -363,12 +365,10 @@ export default function ServiceProvidersPage() {
                                         : "bg-white/70 dark:bg-gray-800/70 text-gray-600 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-700 hover:text-brand-800 dark:hover:text-white border border-gray-100 dark:border-gray-700"
                                     }`}
                                   >
-                                    {sub.icon && (
-                                      <span
+                                    {isSvgIcon(sub.icon) && (
+                                      <SvgIcon
+                                        svg={sub.icon}
                                         className="flex-shrink-0 w-4 h-4"
-                                        dangerouslySetInnerHTML={{
-                                          __html: sub.icon,
-                                        }}
                                       />
                                     )}
                                     {sub.name}

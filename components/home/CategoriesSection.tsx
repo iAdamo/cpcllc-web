@@ -7,6 +7,8 @@ import { ArrowRight } from "lucide-react";
 import { getAllCategories } from "@/axios/service";
 import { getCategoryIcon, CATEGORY_TONES } from "@/lib/categoryIcon";
 import { Category } from "@/types";
+import SvgIcon from "@/components/ui/SvgIcon";
+import { isSvgIcon } from "@/lib/safeContent";
 
 const easeOut = [0.22, 1, 0.36, 1] as [number, number, number, number];
 const containerVariants = {
@@ -123,11 +125,11 @@ export default function CategoriesSection() {
                       : undefined
                   }
                 >
-                  {cat.icon ? (
-                    <span
-                      className="w-6 h-6 [&_svg]:w-full [&_svg]:h-full"
+                  {isSvgIcon(cat.icon) ? (
+                    <SvgIcon
+                      svg={cat.icon}
+                      className="w-6 h-6"
                       style={{ color: cat.iconColor }}
-                      dangerouslySetInnerHTML={{ __html: cat.icon }}
                     />
                   ) : (
                     <FallbackIcon className="w-6 h-6" />

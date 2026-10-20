@@ -56,6 +56,7 @@ import {
   bannerFallbackImage,
 } from "@/lib/broadcastPopup";
 import { userMessageOf } from "@/lib/errorService";
+import { plainText } from "@/lib/safeContent";
 
 /** Upload for every image field here; failures carry the API's words. */
 async function uploadImage(file: File): Promise<string> {
@@ -659,7 +660,7 @@ function BroadcastBuilder({
             onChange={(e) => set("subtitle", e.target.value)}
           />
         </Field>
-        <Field label="Body (rich text / basic HTML)">
+        <Field label="Body (text; the app shows text only)">
           <textarea
             className={`${input} resize-none`}
             rows={4}
@@ -981,10 +982,10 @@ function BroadcastDetail({
 
           <div className="text-sm text-slate-700 dark:text-slate-200">
             {b.subtitle && <p className="text-slate-500">{b.subtitle}</p>}
-            <div
-              className="prose prose-sm dark:prose-invert mt-1 max-w-none"
-              dangerouslySetInnerHTML={{ __html: b.body || "" }}
-            />
+            {/* As people get it: the app and pushes show text only. Set as
+                HTML here, one staff member's body ran in the reviewer's
+                console. */}
+            <p className="mt-1 whitespace-pre-line">{plainText(b.body)}</p>
           </div>
 
           {(b.popup || isLegacyOverlay(b)) && (
