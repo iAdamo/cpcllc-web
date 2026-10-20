@@ -43,6 +43,10 @@ export default function TermsAcceptancePage() {
   // Which document's frame has its text on screen. The frame first loads an
   // empty shell; until the text arrives it shows a loading state, not a blank.
   const [renderedFor, setRenderedFor] = useState<ShownTermsType | null>(null);
+  // A document whose frame never showed its text (the server refused the
+  // frame: production's nginx sent X-Frame-Options: DENY, and the page waited
+  // forever, 2026-10-20). It is then opened in a new tab instead.
+  const [frameFailed, setFrameFailed] = useState<ShownTermsType | null>(null);
   const status = useTermsStatus();
   const decide = useDecideTerms();
   const saving = decide.isPending;
@@ -80,8 +84,16 @@ export default function TermsAcceptancePage() {
   // watch for the end marker to appear, then to scroll into view.
   const watchFrame = useCallback((termsType: ShownTermsType) => {
     stopWatching.current?.();
-    const win = frameRef.current?.contentWindow;
-    const frameDoc = win?.document;
+    let win: Window | null | undefined;
+    let frameDoc: Document | undefined;
+    try {
+      win = frameRef.current?.contentWindow;
+      frameDoc = win?.document;
+    } catch {
+      // A refused frame holds the browser's error page, not ours.
+      setFrameFailed(termsType);
+      return;
+    }
     if (!win || !frameDoc) return;
     const check = () => {
       const end = frameDoc.querySelector(`[${LEGAL_END_ATTR}]`);
@@ -114,6 +126,14 @@ export default function TermsAcceptancePage() {
   }, []);
 
   useEffect(() => () => stopWatching.current?.(), []);
+
+  // No text after 12 s: offer the document in a new tab instead of waiting.
+  const currentType = required?.[index]?.termsType;
+  useEffect(() => {
+    if (!currentType || renderedFor === currentType) return;
+    const timer = setTimeout(() => setFrameFailed(currentType), 12_000);
+    return () => clearTimeout(timer);
+  }, [currentType, renderedFor]);
 
   const accept = async () => {
     if (!required) return;
@@ -199,11 +219,35 @@ export default function TermsAcceptancePage() {
             className="w-full h-[60vh] bg-white"
           />
           {renderedFor !== current.termsType && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white dark:bg-slate-900">
-              <Loader2 className="animate-spin text-brand-600" aria-hidden />
-              <p className="text-sm text-slate-500" role="status">
-                Loading the {doc.title}…
-              </p>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white dark:bg-slate-900 px-6 text-center">
+              {frameFailed === current.termsType ? (
+                <>
+                  <p className="text-sm text-slate-700 dark:text-slate-200" role="status">
+                    The {doc.title} couldn&apos;t be shown here.
+                  </p>
+                  <a
+                    href={doc.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() =>
+                      setReadTypes((prev) => new Set(prev).add(current.termsType))
+                    }
+                    className="h-10 px-4 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium inline-flex items-center"
+                  >
+                    Open the {doc.title}
+                  </a>
+                  <p className="text-xs text-slate-500">
+                    Read it in the new tab, then come back here to accept.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <Loader2 className="animate-spin text-brand-600" aria-hidden />
+                  <p className="text-sm text-slate-500" role="status">
+                    Loading the {doc.title}…
+                  </p>
+                </>
+              )}
             </div>
           )}
         </div>

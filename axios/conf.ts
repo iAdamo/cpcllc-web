@@ -2,7 +2,7 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 import { getDeviceId, getSessionId } from "@/utils/Device";
 import { AppErrorService } from "@/lib/errorService";
 import { createSingleFlight } from "@/lib/singleFlight";
-import { TERMS_PAGE, termsPageFor } from "@/lib/terms";
+import { sendsToTermsPage, termsPageFor } from "@/lib/terms";
 
 const PROD_FALLBACK_WARNING =
   "NEXT_PUBLIC_API_URL is not set — API requests will fail. Set it in the deployment environment.";
@@ -90,7 +90,7 @@ const createClient = () => {
         status === 403 &&
         normalized.code === "TERMS_NOT_ACCEPTED" &&
         typeof window !== "undefined" &&
-        !window.location.pathname.startsWith(TERMS_PAGE)
+        sendsToTermsPage(window.location.pathname, window.self !== window.top)
       ) {
         window.location.href = termsPageFor(
           window.location.pathname + window.location.search,

@@ -6,6 +6,8 @@
  * to the end before Accept.
  */
 
+import { LEGAL_PAGES } from "@/lib/legalPages";
+
 export interface RequiredTerms {
   termsType: string;
   version: string;
@@ -84,6 +86,21 @@ export function marketingOptInField(
 /** The acceptance page, coming back to `currentPath` afterwards. */
 export function termsPageFor(currentPath: string): string {
   return `${TERMS_PAGE}?next=${encodeURIComponent(currentPath)}`;
+}
+
+/**
+ * Whether an API answer of TERMS_NOT_ACCEPTED sends this page to the
+ * acceptance page. Never from inside a frame: the acceptance page shows each
+ * policy in a frame, and a framed policy page whose own API call got that
+ * answer moved to /auth/terms, opened another framed policy, and so on; the
+ * outer page waited forever for the text (2026-10-20, "kept on loading").
+ * Never from a legal page either: someone reading the Terms must not be sent
+ * away to accept them. Nor from the acceptance page itself.
+ */
+export function sendsToTermsPage(pathname: string, inFrame: boolean): boolean {
+  if (inFrame) return false;
+  if (pathname.startsWith(TERMS_PAGE)) return false;
+  return !(LEGAL_PAGES as readonly string[]).includes(pathname.replace(/\/+$/, "") || "/");
 }
 
 /** Marks the end of a legal document (components/legal/LegalLayout). It is

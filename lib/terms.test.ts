@@ -6,6 +6,7 @@ import {
   marketingOptInField,
   orderRequired,
   reachedEnd,
+  sendsToTermsPage,
   termsPageFor,
   TERMS_DOCS,
 } from "./terms";
@@ -90,5 +91,35 @@ describe("sign-up marketing box", () => {
   it("sends nothing to an older API or before the versions load", () => {
     expect(marketingOptInField({ terms }, true)).toEqual({});
     expect(marketingOptInField(undefined, true)).toEqual({});
+  });
+});
+
+/**
+ * REGRESSION (2026-10-20): with a new Terms version on, the acceptance page
+ * "kept on loading". Its frame shows the policy page; that page's own API call
+ * got TERMS_NOT_ACCEPTED and the API client moved the frame to /auth/terms,
+ * which framed the policy again, and so on. The outer page never saw the text.
+ */
+describe("which pages a TERMS_NOT_ACCEPTED answer moves", () => {
+  it("never a page inside a frame (the policies shown on the acceptance page)", () => {
+    expect(sendsToTermsPage("/privacy-policy", true)).toBe(false);
+    expect(sendsToTermsPage("/providers", true)).toBe(false);
+  });
+
+  it("never a legal page, nor the acceptance page itself", () => {
+    for (const p of ["/privacy-policy", "/terms-of-service", "/terms-of-service/", "/dmca", "/contact"]) {
+      expect([p, sendsToTermsPage(p, false)]).toEqual([p, false]);
+    }
+    expect(sendsToTermsPage("/auth/terms", false)).toBe(false);
+  });
+
+  it("any other page of the site still goes to accept", () => {
+    expect(sendsToTermsPage("/admin", false)).toBe(true);
+    expect(sendsToTermsPage("/providers/abc", false)).toBe(true);
+  });
+
+  it("the API client asks it, with the frame check", () => {
+    const src = readFileSync(join(__dirname, "..", "axios", "conf.ts"), "utf8");
+    expect(src).toContain("sendsToTermsPage(window.location.pathname, window.self !== window.top)");
   });
 });
