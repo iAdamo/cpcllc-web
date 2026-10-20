@@ -13,6 +13,10 @@ COPY . .
 # NEXT_PUBLIC_* are inlined at build time; pass them as build args per environment.
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+# The socket's address too: the content policy (lib/securityHeaders.mjs) is
+# set at build and allows only the API and socket origins it sees here.
+ARG NEXT_PUBLIC_SOCKET_URL
+ENV NEXT_PUBLIC_SOCKET_URL=${NEXT_PUBLIC_SOCKET_URL}
 RUN npm run build
 
 # ---- Runtime ----

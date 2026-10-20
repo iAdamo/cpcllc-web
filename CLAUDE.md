@@ -58,6 +58,22 @@ error when it is missing in production and falls back to a dev tunnel otherwise.
   `components/legal/LegalLayout.tsx` renders after the text. A new legal page
   goes through `LegalLayout`. Every `next` redirect goes through
   `lib/safeNext.ts`. See cpcllc-backend docs/terms-acceptance.md.
+- **Security headers live in `lib/securityHeaders.mjs`** (next.config applies
+  them to every page): a content policy naming every outside origin (API and
+  socket from the env, Google Maps, OpenStreetMap), no framing by other sites,
+  HSTS; next/image fetches only from the API and our domains. A new outside
+  service goes there or the browser blocks it. The policy is set at build, so
+  `NEXT_PUBLIC_API_URL` / `NEXT_PUBLIC_SOCKET_URL` must be set when building.
+  `frame-ancestors 'self'` is what lets `/auth/terms` frame the policies:
+  production nginx sends `X-Frame-Options: DENY` (2026-10-20, the page "kept
+  on loading"); the page also falls back to a new tab after 12 s.
+- **Typed content is shown, never run** (`lib/safeContent.ts`): links a person
+  typed go through `safeExternalUrl` (http(s) only), SVG icons from the API
+  render with `components/ui/SvgIcon` (a CSS mask), and no page sets API text
+  as HTML (a gate test in `lib/safeContent.test.ts` lists the only fixed
+  scripts allowed).
+- **`npm run check:api`** compares every API call here with the API's routes
+  (needs `../cpcllc-backend`). Run it after an API route changes.
 - **No made-up numbers, uplifts or credentials in copy** (FTC). A gate test
   (`lib/marketingClaims.test.ts`) scans `app`, `components` and `screens`; a real
   figure comes from the API.
