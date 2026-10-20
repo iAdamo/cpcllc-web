@@ -57,39 +57,3 @@ export const getServicesByProvider = async (
   return response.data;
 };
 
-export const getServices = async (
-  page: number,
-  limit: number,
-): Promise<{ services: ServiceData[]; totalPages: number }> => {
-  const response = await axiosInstance.get(
-    `services?page=${page}&limit=${limit}`,
-  );
-  return response.data;
-};
-
-export const updateProposal = async (
-  jobId: string,
-  proposalId: string,
-  data: FormData,
-): Promise<void> => {
-  await axiosInstance.patch(
-    `services/jobs/${jobId}/proposals/${proposalId}`,
-    data,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    },
-  );
-};
-
-export const updateProposalStatus = async (
-  proposalId: string,
-  status: string,
-): Promise<any> => {
-  const response = await axiosInstance.patch(
-    `services/jobs/proposals/${proposalId}`,
-    { status },
-  );
-  return response.data;
-};

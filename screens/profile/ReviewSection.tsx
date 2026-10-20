@@ -8,11 +8,9 @@ import {
   ThumbsUp,
   MessageSquare,
   AlertCircle,
-  Send,
   ChevronDown,
-  Loader2,
 } from "lucide-react";
-import { getReviews, createReview } from "@/axios/reviews";
+import { getProviderReviews } from "@/axios/reviews";
 import { MediaItem, ReviewData } from "@/types";
 
 function Stars({ rating, size = 13 }: { rating: number; size?: number }) {
@@ -28,40 +26,6 @@ function Stars({ rating, size = 13 }: { rating: number; size?: number }) {
               : "text-gray-200 fill-gray-200"
           }
         />
-      ))}
-    </div>
-  );
-}
-
-function StarPicker({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange(v: number): void;
-}) {
-  const [hovered, setHovered] = useState(0);
-  return (
-    <div className="flex items-center gap-1">
-      {[1, 2, 3, 4, 5].map((s) => (
-        <button
-          key={s}
-          type="button"
-          onClick={() => onChange(s)}
-          onMouseEnter={() => setHovered(s)}
-          onMouseLeave={() => setHovered(0)}
-          aria-label={`Rate ${s} star${s !== 1 ? "s" : ""}`}
-          className="transition-transform hover:scale-110"
-        >
-          <Star
-            size={22}
-            className={
-              s <= (hovered || value)
-                ? "text-amber-400 fill-amber-400"
-                : "text-gray-300 fill-gray-100"
-            }
-          />
-        </button>
       ))}
     </div>
   );
@@ -156,7 +120,7 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
               <ThumbsUp size={11} />
               Helpful ({review.helpfulVotes?.length ?? 0})
             </button>
-            {review.providerReply && (
+            {replyOf(review) && (
               <button
                 type="button"
                 onClick={() => setShowReply(!showReply)}
@@ -176,7 +140,7 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
 
           {/* Provider reply */}
           <AnimatePresence>
-            {showReply && review.providerReply && (
+            {showReply && replyOf(review) && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
@@ -189,7 +153,7 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
                     Provider replied
                   </p>
                   <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {review.providerReply}
+                    {replyOf(review)}
                   </p>
                 </div>
               </motion.div>
@@ -202,127 +166,45 @@ function ReviewCard({ review, index }: { review: ReviewData; index: number }) {
 }
 
 interface ReviewSectionProps {
+  /** The business's id (reviews are stored against it, not its owner). */
   providerId: string;
-  newReviews?: ReviewData[];
 }
 
-export default function ReviewSection({
-  providerId,
-  newReviews = [],
-}: ReviewSectionProps) {
+/** The business's reply: `reply.text` now, `providerReply` on older reviews. */
+function replyOf(review: ReviewData): string | undefined {
+  return review.reply?.text || review.providerReply || undefined;
+}
+
+export default function ReviewSection({ providerId }: ReviewSectionProps) {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [text, setText] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (!providerId) return;
     setLoading(true);
     setError(false);
-    getReviews(providerId)
+    getProviderReviews(providerId)
       .then(setReviews)
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, [providerId]);
 
-  const allReviews = [...newReviews, ...reviews];
-
-  const handleSubmit = async () => {
-    if (!rating || !text.trim()) return;
-    try {
-      setSubmitting(true);
-      const fd = new FormData();
-      fd.append("description", text.trim());
-      fd.append("rating", String(rating));
-      const created = await createReview(providerId, fd);
-      setReviews((prev) => [created, ...prev]);
-      setText("");
-      setRating(0);
-      setShowForm(false);
-      setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 3000);
-    } catch {
-      // silently fail — user can retry
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  const allReviews = reviews;
 
   return (
     <div>
-      {/* Write review CTA */}
-      <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3">
-        <div>
-          <p className="text-sm font-black text-gray-900 dark:text-white">
-            {allReviews.length} Review{allReviews.length !== 1 ? "s" : ""}
-          </p>
-          {submitted && (
-            <p className="text-xs text-emerald-600 font-semibold mt-0.5 animate-pulse">
-              Review submitted — thank you!
-            </p>
-          )}
-        </div>
-        <button
-          type="button"
-          onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-1.5 px-4 py-2 bg-brand-900 hover:bg-brand-800 text-white text-xs font-bold rounded-xl transition-all active:scale-95"
-        >
-          <Star size={12} />
-          {showForm ? "Cancel" : "Write a review"}
-        </button>
+      {/* Count, and where reviews come from: customers, in the app, after a
+          completed job. The website only shows them. */}
+      <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+        <p className="text-sm font-black text-gray-900 dark:text-white">
+          {allReviews.length} Review{allReviews.length !== 1 ? "s" : ""}
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+          Customers leave reviews in the Companies Center app after a completed
+          job.
+        </p>
       </div>
-
-      {/* Review form */}
-      <AnimatePresence>
-        {showForm && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22 }}
-            className="overflow-hidden"
-          >
-            <div className="px-5 py-4 bg-brand-50/60 border-b border-brand-100 space-y-3">
-              <div>
-                <p className="text-xs font-bold text-gray-700 dark:text-gray-200 mb-2">
-                  Your rating
-                </p>
-                <StarPicker value={rating} onChange={setRating} />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-gray-700 dark:text-gray-200 mb-1.5">
-                  Your review
-                </p>
-                <textarea
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  rows={3}
-                  placeholder="Share your experience with this provider…"
-                  aria-label="Review text"
-                  className="w-full text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2.5 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 resize-none transition-all"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={!rating || !text.trim() || submitting}
-                className="flex items-center gap-2 px-5 py-2.5 bg-brand-900 hover:bg-brand-800 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl transition-all active:scale-95"
-              >
-                {submitting ? (
-                  <Loader2 size={13} className="animate-spin" />
-                ) : (
-                  <Send size={13} />
-                )}
-                {submitting ? "Submitting…" : "Submit review"}
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Review list */}
       {loading ? (
@@ -350,7 +232,8 @@ export default function ReviewSection({
           </div>
           <p className="text-sm font-bold text-gray-700 dark:text-gray-200">No reviews yet</p>
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-            Be the first to leave a review
+            Reviews appear here after customers complete a job with this
+            business.
           </p>
         </div>
       ) : (

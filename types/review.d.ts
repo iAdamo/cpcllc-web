@@ -8,6 +8,9 @@ export interface ReviewData {
   images: MediaItem[];
   status: "pending" | "approved" | "rejected";
   helpfulVotes: string[];
+  /** The business's reply (since the trust system). */
+  reply?: { text: string; repliedAt?: string };
+  /** Older reviews' reply. */
   providerReply?: string;
   tags: string[];
   isDeleted: boolean;

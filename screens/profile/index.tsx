@@ -79,7 +79,6 @@ export default function ProfilePage() {
 
   const [isUploading, setIsUploading] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("services");
-  const [newReviews, setNewReviews] = useState<never[]>([]);
   const [editingBio, setEditingBio] = useState(false);
   const [bioValue, setBioValue] = useState("");
   const [shareCopied, setShareCopied] = useState(false);
@@ -566,10 +565,7 @@ export default function ProfilePage() {
                       </p>
                     </div>
                     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
-                      <ReviewSection
-                        providerId={ownerIdOf(provider) ?? ""}
-                        newReviews={newReviews}
-                      />
+                      <ReviewSection providerId={provider._id} />
                     </div>
                   </div>
                 )}

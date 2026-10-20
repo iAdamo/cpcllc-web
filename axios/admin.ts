@@ -253,15 +253,6 @@ export const archiveAdminJob = async (id: string) =>
 export const restoreAdminJob = async (id: string) =>
   (await axiosInstance.patch(`admin/marketplace/jobs/${id}/restore`)).data;
 
-/* ───────── Legacy metrics ───────── */
-export const getMetrics = async (
-  params: MetricsRequest,
-): Promise<MetricsResponse> => {
-  const response = await axiosInstance.get<MetricsResponse>(`admin/metrics`, {
-    params,
-  });
-  return response.data;
-};
 
 /* ───────── System health (standalone — overview bundle also includes it) ───────── */
 export const getSystemHealth = async (): Promise<SystemHealthSnapshot> => {
